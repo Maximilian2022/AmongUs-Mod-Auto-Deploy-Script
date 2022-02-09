@@ -33,10 +33,6 @@ AmongUs Mod Auto Deploy Script
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>■[DL] Ver. 1.1.9<br><a rel="noreferrer noopener" href="https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.bat" target="_blank">https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.bat</a><br><br>セキュリティソフト等によりBatがDLできない人向け<br><a rel="noreferrer noopener" href="https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.zip" target="_blank">https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.zip</a><br></p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
 <p>■[導入手順] <br>0.0 クリーンインストール推奨 <br>1. このBatを動作させる <br>2. TOR+かTOR-GMかを選択する<br>3. MODのバージョンを選択する（v3.3.2.2+、等) <br><br>■[このScriptでやってること] <br>０．Script ps1をDLして実行<br>１．Steam/Epicの自動判定機能（両方ある場合はSteamが先に判定されるハズ）<br>       インストールパスがカスタムされてるときにフォルダ選択画面を出すよ <br>　　(itch.ioとMS Storeのユーザーはこれでカバー）<br>２．オリジナルフォルダをコピーしてMod用フォルダの作成<br>　　作成される場所はオリジナルフォルダと同じ階層です<br>　　（すでに作られてたら消して作り直すかユーザー確認する） <br>３．ZIPをDLしてMod用フォルダに解凍 <br>４．（TOR+の場合）元のMod DLLを削除してTOR+のDLLをDL <br>５．DesktopにMod適用したAmongUsへのShortcutを作成するか、<br>　　作成したMod入りフォルダをExplorerで表示して終了（ユーザー選択）<br>6．選択したツールの展開<br>　・BetterCrewLinkを選択するとLatestをDLしてインストールする。<br>　　<a rel="noreferrer noopener" href="https://github.com/OhMyGuus/BetterCrewLink" target="_blank">https://github.com/OhMyGuus/BetterCrewLink</a><br>　・AmongUsReplayInWindowを選択するとLatestをDLしてDocumentsに展開する<br>　　<a rel="noreferrer noopener" href="https://github.com/sawa90/AmongUsReplayInWindow" target="_blank">https://github.com/sawa90/AmongUsReplayInWindow</a><br>　・AmongUsCaptureを選択するとLatestをDLしてDocumentsに展開する<br>　　<a href="https://github.com/automuteus/amonguscapture" target="_blank" rel="noreferrer noopener">https://github.com/automuteus/amonguscapture</a></p>
 <!-- /wp:paragraph -->
 
@@ -60,8 +56,6 @@ AmongUs Mod Auto Deploy Script
 <p></p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
-<p>■PS1の中身（わかる人向け）<br><a href="https://blog.kit-a.net/wp-content/uploads/2021/12/AmongUsModTORplusDeployScript.ps1" target="_blank" rel="noreferrer noopener">https://blog.kit-a.net/wp-content/uploads/2021/12/AmongUsModTORplusDeployScript.ps1</a></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
