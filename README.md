@@ -1,2 +1,121 @@
 # AmongUs-Mod-Auto-Deploy-Script
 AmongUs Mod Auto Deploy Script
+<!-- wp:image {"id":410,"width":519,"height":386,"sizeSlug":"full","linkDestination":"none"} -->
+<figure class="wp-block-image size-full is-resized"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/SnapCrab_Among-Us-Mod-Auto-Deploy-Tool_2022-1-22_21-30-48_No-00.png" alt="" class="wp-image-410" width="519" height="386"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph -->
+<p>■TOR+ Mod入れるのが面倒なので作った自動化Script</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>MODのバージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>このScriptは 以下の環境用のものです<br>・tomarai様のTOR+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">https://github.com/tomarai/TheOtherRoles</a>)<br>・yukinogatari様のThe Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM/">https://github.com/yukinogatari/TheOtherRoles-GM/</a>)<br>・本家TOR (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">https://github.com/Eisbison/TheOtherRoles</a>)<br>・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">https://github.com/eDonnes124/Town-Of-Us-R</a>)<br>・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">https://github.com/yukieiji/ExtremeRoles</a>)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>本ScriptはAmongUs公式及び上記Mod作成者様とは無関係の個人用 Free Scriptです</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"textColor":"vivid-red","fontSize":"medium"} -->
+<p class="has-vivid-red-color has-text-color has-medium-font-size"><strong><span style="text-decoration: underline;">動作不良あったらごめんなさい。<br>このScriptを動作させたことによるいかなるトラブル・被害等について</span></strong><br><strong><span style="text-decoration: underline;">作者は責任を負いません。<br>自己責任でどうぞ。 </span></strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■[前提]<br>Originalフォルダはバニラで過去にModを直で入れたことがないこと </p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■[推奨]<br>最新のPowershell（<a rel="noreferrer noopener" href="https://github.com/PowerShell/PowerShell/releases/tag/v7.2.1" target="_blank">公式HP</a>）（入れないと動かないとかは多分ないハズ）<br>実行前にクリーンインストール</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■[DL] Ver. 1.1.9<br><a rel="noreferrer noopener" href="https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.bat" target="_blank">https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.bat</a><br><br>セキュリティソフト等によりBatがDLできない人向け<br><a rel="noreferrer noopener" href="https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.zip" target="_blank">https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.zip</a><br></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■[導入手順] <br>0.0 クリーンインストール推奨 <br>1. このBatを動作させる <br>2. TOR+かTOR-GMかを選択する<br>3. MODのバージョンを選択する（v3.3.2.2+、等) <br><br>■[このScriptでやってること] <br>０．Script ps1をDLして実行<br>１．Steam/Epicの自動判定機能（両方ある場合はSteamが先に判定されるハズ）<br>       インストールパスがカスタムされてるときにフォルダ選択画面を出すよ <br>　　(itch.ioとMS Storeのユーザーはこれでカバー）<br>２．オリジナルフォルダをコピーしてMod用フォルダの作成<br>　　作成される場所はオリジナルフォルダと同じ階層です<br>　　（すでに作られてたら消して作り直すかユーザー確認する） <br>３．ZIPをDLしてMod用フォルダに解凍 <br>４．（TOR+の場合）元のMod DLLを削除してTOR+のDLLをDL <br>５．DesktopにMod適用したAmongUsへのShortcutを作成するか、<br>　　作成したMod入りフォルダをExplorerで表示して終了（ユーザー選択）<br>6．選択したツールの展開<br>　・BetterCrewLinkを選択するとLatestをDLしてインストールする。<br>　　<a rel="noreferrer noopener" href="https://github.com/OhMyGuus/BetterCrewLink" target="_blank">https://github.com/OhMyGuus/BetterCrewLink</a><br>　・AmongUsReplayInWindowを選択するとLatestをDLしてDocumentsに展開する<br>　　<a rel="noreferrer noopener" href="https://github.com/sawa90/AmongUsReplayInWindow" target="_blank">https://github.com/sawa90/AmongUsReplayInWindow</a><br>　・AmongUsCaptureを選択するとLatestをDLしてDocumentsに展開する<br>　　<a href="https://github.com/automuteus/amonguscapture" target="_blank" rel="noreferrer noopener">https://github.com/automuteus/amonguscapture</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■詳細っぽいもの<br>[BAT]<br>このBlogのホスティングサーバーがたまに落ちるので、DL前にHTTPコードチェック<br>Script本体はPS1で、更新はPS1側でするのでBatさえあればいつでも最新のScriptが動くハズ</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>[PS1]<br>バージョンはGitから引っ張ってきてるのでMod側で更新あっても基本Scriptの更新は不要です<br></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>元々自鯖用に作ったScriptなので、自分でMod入れられない人は触らないほうがよいです<br>気まぐれ更新なので不具合含めて気が向いたら対応します<br>不具合・機能拡張要望等はコメントまでドーゾ</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■PS1の中身（わかる人向け）<br><a href="https://blog.kit-a.net/wp-content/uploads/2021/12/AmongUsModTORplusDeployScript.ps1" target="_blank" rel="noreferrer noopener">https://blog.kit-a.net/wp-content/uploads/2021/12/AmongUsModTORplusDeployScript.ps1</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■Q&amp;A <br>Q. セキュリティソフトが止めてきます<br>A. でしょうね<br>　 真面目に話すと長いけど、Windows Defenderでも止められることがあるよ<br>　 詳細情報を押して実行ボタンを押せば、動くよ<br>　 自己責任でどうぞ<br><br>Q. batでcurl.exeでエラーが出てます<br>A1. Windows 10が古い可能性があります<br>　Win10 1803以降、Win11でないと稼働しません<br>A2. このBlogのサーバーはスペック低いので落ちてることがあります<br><br>Q. Modを入れて起動すると画面が真っ黒になります <br>A. Mod Fileが壊れているか、失敗しています<br>　Scriptを再実行してみてください<br>　やり直しても変わらないときは、まず<strong>クリーンインストール</strong>しましょう<br><br>Q. 手順通りやってもModの起動に失敗したり、固まったりします <br>A. 以下のような場合、BepinExの初動が正しく動いていない可能性があります<br>　Scriptを再実行してみましょう<br>　・BepinExのフォルダにCacheフォルダができていない場合、<br>　・TheOtherHatsが初期状態のままの場合<br>　（多分NW系のエラーの可能性もあるので、時間置くのも大事です）</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■情報募集<br>itch.ioとMS Storeのデフォルトインストールパスあれば双方のAutoDetectに対応予定</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><br>■Credit<br>Special Thanks <br><a href="https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4" target="_blank" rel="noreferrer noopener">https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4</a><br><a href="https://letspowershell.blogspot.com/2015/07/powershell_29.html" target="_blank" rel="noreferrer noopener">https://letspowershell.blogspot.com/2015/07/powershell_29.html</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■ReleaseNote<br>v1.0.6 - Textboxへバージョン入力してもらう形式をやめてDropdownListに変更。<br>v1.0.7 - GM Editionにも対応<br>v1.0.8 - 本家TOR も入れた<br>v1.0.9 - Toolもついでにセットアップできるようにした<br>v1.1.0 - 2022/01/05時点のAmongUsバージョンに対応していないとGithubで言われている<br>　　　  Versionをリストに載せないように修正<br>v1.1.1 - GUI改良：ポップアップで聞くのをやめて、2枚の画面にまとめたよ<br>　　　  インストールパスがデフォルトでない場合、ConfファイルにPathを残すようにしたよ<br>　　　  (次からは自動で読みに行くから面倒じゃないよ、やったね)<br>v1.1.2 - ツールだけ入れれるようにするオプションを追加<br>　　　  動作の進捗をプログレスバーで表示するようにしたよ<br>v1.1.3 - GUI改良：1枚の画面にまとめたよ<br>v1.1.4 - AmongUsCaptureのインスト支援に対応<br>　　　  Town of Us Reactivatedにも対応したよ（誰得。<br>v1.1.5 - 軽微な不具合修正<br>v1.1.6 - Powershell v5で特定の条件でエラーが出る不具合を修正<br>v1.1.7 - ログをtxtでTempフォルダにも吐く仕様に変更<br>v1.1.8 - VC Redistも入れるように変更した<br>　　　  Extreme Rolesにも対応したよ<br>v1.1.9 - TOR+AUShipMODに対応</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>■動作Screenshot</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Batを起動すると、このような画面になります<br>BatはメインのPS1をDLして起動するためだけに使用されます</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":413,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/image-1024x329.png" alt="" class="wp-image-413"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph -->
+<p>インストールしたいModを選択すると、Githubからバージョン一覧をGetして表示します<br>ここ都度取りに行ってるので数十回レベルでガチャガチャ返るとGithub側からNG食らうかも<br>都度GithubにAPIで取りに行ってるので、特別な操作が必要なバージョンがリリースされていなければ、このスクリプトをバージョンアップしなくても、最新のMod入りを作成することが可能です</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":415,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/image-1-1024x327.png" alt="" class="wp-image-415"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph -->
+<p>選択したバージョンのModを構築します<br>AmongUs のデフォルトパスの中身は触れません<br>デフォルトはバニラのままおいといて、コピー元として扱い、コピー先にModを展開します</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":416,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/image-2-1024x398.png" alt="" class="wp-image-416"/></figure>
+<!-- /wp:image -->
