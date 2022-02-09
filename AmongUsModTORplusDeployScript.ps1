@@ -984,7 +984,7 @@ $Bar.Value = "9"
 #bat file auto update
 ####################
 if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
-    Invoke-WebRequest "https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
+    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
 }
 ####################
 
