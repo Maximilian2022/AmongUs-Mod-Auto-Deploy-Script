@@ -1,5 +1,4 @@
 # AmongUs-Mod-Auto-Deploy-Script
-AmongUs Mod Auto Deploy Script
 <!-- wp:image {"id":410,"width":519,"height":386,"sizeSlug":"full","linkDestination":"none"} -->
 <figure class="wp-block-image size-full is-resized"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/SnapCrab_Among-Us-Mod-Auto-Deploy-Tool_2022-1-22_21-30-48_No-00.png" alt="" class="wp-image-410" width="519" height="386"/></figure>
 <!-- /wp:image -->
@@ -17,12 +16,9 @@ AmongUs Mod Auto Deploy Script
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>本ScriptはAmongUs公式及び上記Mod作成者様とは無関係の個人用 Free Scriptです</p>
+<p>本ScriptはAmongUs公式及び上記Mod作成者様とは無関係のScriptです</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"textColor":"vivid-red","fontSize":"medium"} -->
-<p class="has-vivid-red-color has-text-color has-medium-font-size"><strong><span style="text-decoration: underline;">動作不良あったらごめんなさい。<br>このScriptを動作させたことによるいかなるトラブル・被害等について</span></strong><br><strong><span style="text-decoration: underline;">作者は責任を負いません。<br>自己責任でどうぞ。 </span></strong></p>
-<!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
 <p>■[前提]<br>Originalフォルダはバニラで過去にModを直で入れたことがないこと </p>
