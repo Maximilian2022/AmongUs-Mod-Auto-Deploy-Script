@@ -1,8 +1,8 @@
-﻿#################################################################################################
+#################################################################################################
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.1.9"
+$version = "Version 1.2.0"
 #
 #################################################################################################
 
@@ -226,22 +226,27 @@ $form.Controls.Add($MyGroupBox2)
 $MyGroupBox3 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox3.Location = New-Object System.Drawing.Point(400,10)
 $MyGroupBox3.size = New-Object System.Drawing.Size(350,100)
-$MyGroupBox3.text = "既存のフォルダを再作成しますか？"
+$MyGroupBox3.text = "既存のフォルダを上書き/再作成しますか？"
 
 # グループの中のラジオボタンを作る
 $RadioButton5 = New-Object System.Windows.Forms.RadioButton
-$RadioButton5.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton5.Location = New-Object System.Drawing.Point(20,60)
 $RadioButton5.size = New-Object System.Drawing.Size(150,30)
-$RadioButton5.Checked = $True
 $RadioButton5.Text = "再作成する"
 
 $RadioButton6 = New-Object System.Windows.Forms.RadioButton
-$RadioButton6.Location = New-Object System.Drawing.Point(20,60)
+$RadioButton6.Location = New-Object System.Drawing.Point(150,30)
 $RadioButton6.size = New-Object System.Drawing.Size(150,30)
 $RadioButton6.Text = "再作成しない"
 
+$RadioButton7 = New-Object System.Windows.Forms.RadioButton
+$RadioButton7.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton7.size = New-Object System.Drawing.Size(150,30)
+$RadioButton7.Checked = $True
+$RadioButton7.Text = "上書きする"
+
 # グループにラジオボタンを入れる
-$MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6))
+$MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6,$RadioButton7))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox3)
 
@@ -339,6 +344,7 @@ $aupathm=""
 $checkt = $true
 $releasepage =""
 $ausmod = $false
+$ovwrite = $false
 
 $Combo_SelectedIndexChanged= {
     function Output-Log($LogString){
@@ -719,8 +725,13 @@ if($tio){
         ###作り直しを有効にする $trueだと有効になる。デフォルト無効
         if($RadioButton5.Checked){
             $retry = $true
+            $ovwrite = $false
         }elseif($RadioButton6.Checked){
             $retry = $false
+            $ovwrite = $false
+        }elseif($RadioButton7.Checked){
+            $retry = $false
+            $ovwrite = $true
         }else{
             Output-Log "Critical Error: Retry"
         }
@@ -730,14 +741,17 @@ if($tio){
             # フォルダを中身を含めてコピーする
             Copy-Item $aupatho -destination $aupathm -recurse
             Output-Log ($aupatho + 'を' + $aupathm + 'にコピーしました');
-        }
-        else{
+        }else{
             # コピー先のパスにファイルやフォルダが存在する場合は処理を中止
             Output-Log ($aupathm + 'には既にファイル又はフォルダが存在します');
-            Output-Log ("処理を中止しました");
-            $Form2.Close()
-            pause
-            Exit
+            if($ovwrite){
+                Output-Log ("上書き処理が選択されました");
+            }else{
+                Output-Log ("処理を中止しました");
+                $Form2.Close()
+                pause
+                Exit
+            }
         }
     }else{
         # フォルダを中身を含めてコピーする
@@ -984,7 +998,7 @@ $Bar.Value = "9"
 #bat file auto update
 ####################
 if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
-    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
+    Invoke-WebRequest "https://blog.kit-a.net/wp-content/uploads/2021/12/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
 }
 ####################
 
