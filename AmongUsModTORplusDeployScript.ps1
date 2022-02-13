@@ -79,7 +79,7 @@ function Output-Log($logstring){
 }
 
 Output-Log "-----------------------------------------------------------------"
-Output-Log "New Installation Start"
+Output-Log "MOD Installation Script Starts"
 Output-Log "-----------------------------------------------------------------"
 
 #################################################################################################
@@ -1013,7 +1013,7 @@ if($tio){
 }
 
 Output-Log "-----------------------------------------------------------------"
-Output-Log "New Installation Ends"
+Output-Log "MOD Installation Script Ends"
 Output-Log "-----------------------------------------------------------------"
 
 Start-Sleep -s 5
