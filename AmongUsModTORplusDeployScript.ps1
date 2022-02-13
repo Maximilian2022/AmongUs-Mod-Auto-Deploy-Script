@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.0"
+$version = "Version 1.2.1"
 #
 #################################################################################################
 
@@ -25,7 +25,7 @@ if($PSVersionTable.PSVersion.major -eq 5){
         pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongUsModTORplusDeployScript.ps1"
     }else{
         if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
+            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs
         }   
         $v5run = $true
     }
@@ -38,7 +38,7 @@ if($PSVersionTable.PSVersion.major -eq 5){
 if($v5run){
     if(test-path "$env:ProgramFiles\PowerShell\7"){
         if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait 
+            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs
         }
     }
 }else{
@@ -732,6 +732,13 @@ if($tio){
         }elseif($RadioButton7.Checked){
             $retry = $false
             $ovwrite = $true
+            if($scid -eq "TOU-R"){
+                Copy-Item "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" "C:\Temp\com.slushiegoose.townofus.cfg" -Force
+            }elseif($scid -eq "ER"){
+                Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" "C:\Temp\me.yukieiji.extremeroles.cfg" -Force               
+            }else{
+                Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
+            }
         }else{
             Output-Log "Critical Error: Retry"
         }
@@ -782,6 +789,16 @@ if($tio){
 
     if(test-path "$aupathm\BepInEx"){
         Output-Log ("ZIP 解凍OK");
+    }
+
+    if($ovwrite){
+        if($scid -eq "TOU-R"){
+            Copy-Item "C:\Temp\com.slushiegoose.townofus.cfg" "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" -Force
+        }elseif($scid -eq "ER"){
+            Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force               
+        }else{
+            Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
+        }
     }
 
     if($scid -eq "TOR Plus"){
