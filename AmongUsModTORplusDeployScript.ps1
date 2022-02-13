@@ -794,10 +794,13 @@ if($tio){
     if($ovwrite){
         if($scid -eq "TOU-R"){
             Copy-Item "C:\Temp\com.slushiegoose.townofus.cfg" "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" -Force
+            Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force
         }elseif($scid -eq "ER"){
             Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force               
+            Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force
         }else{
             Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
+            Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force
         }
     }
 
