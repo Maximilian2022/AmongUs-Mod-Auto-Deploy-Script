@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.1"
+$version = "Version 1.2.2"
 #
 #################################################################################################
 
@@ -173,55 +173,6 @@ $CancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
 $form.CancelButton = $CancelButton
 $form.Controls.Add($CancelButton)
 
-###作成したModのExeへのショートカットをDesktopに配置する
-# グループを作る
-$MyGroupBox = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox.Location = New-Object System.Drawing.Point(400,130)
-$MyGroupBox.size = New-Object System.Drawing.Size(350,100)
-$MyGroupBox.text = "ショートカットを作成しますか？"
-
-# グループの中のラジオボタンを作る
-$RadioButton1 = New-Object System.Windows.Forms.RadioButton
-$RadioButton1.Location = New-Object System.Drawing.Point(20,30)
-$RadioButton1.size = New-Object System.Drawing.Size(150,30)
-$RadioButton1.Checked = $True
-$RadioButton1.Text = "作成する"
-
-$RadioButton2 = New-Object System.Windows.Forms.RadioButton
-$RadioButton2.Location = New-Object System.Drawing.Point(20,60)
-$RadioButton2.size = New-Object System.Drawing.Size(150,30)
-$RadioButton2.Text = "作成しない"
-
-# グループにラジオボタンを入れる
-$MyGroupBox.Controls.AddRange(@($Radiobutton1,$RadioButton2))
-# フォームに各アイテムを入れる
-$form.Controls.Add($MyGroupBox)
-
-###作成したModを即座に実行する
-#デフォルトでは実行しない
-# グループを作る
-$MyGroupBox2 = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox2.Location = New-Object System.Drawing.Point(400,250)
-$MyGroupBox2.size = New-Object System.Drawing.Size(350,100)
-$MyGroupBox2.text = "作成したModをすぐに起動しますか？"
-
-# グループの中のラジオボタンを作る
-$RadioButton3 = New-Object System.Windows.Forms.RadioButton
-$RadioButton3.Location = New-Object System.Drawing.Point(20,30)
-$RadioButton3.size = New-Object System.Drawing.Size(150,30)
-$RadioButton3.Checked = $True
-$RadioButton3.Text = "起動する"
-
-$RadioButton4 = New-Object System.Windows.Forms.RadioButton
-$RadioButton4.Location = New-Object System.Drawing.Point(20,60)
-$RadioButton4.size = New-Object System.Drawing.Size(150,30)
-$RadioButton4.Text = "起動しない"
-
-# グループにラジオボタンを入れる
-$MyGroupBox2.Controls.AddRange(@($Radiobutton3,$RadioButton4))
-# フォームに各アイテムを入れる
-$form.Controls.Add($MyGroupBox2)
-
 # グループを作る
 $MyGroupBox3 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox3.Location = New-Object System.Drawing.Point(400,10)
@@ -235,7 +186,7 @@ $RadioButton5.size = New-Object System.Drawing.Size(150,30)
 $RadioButton5.Text = "再作成する"
 
 $RadioButton6 = New-Object System.Windows.Forms.RadioButton
-$RadioButton6.Location = New-Object System.Drawing.Point(150,30)
+$RadioButton6.Location = New-Object System.Drawing.Point(180,30)
 $RadioButton6.size = New-Object System.Drawing.Size(150,30)
 $RadioButton6.Text = "再作成しない"
 
@@ -249,6 +200,80 @@ $RadioButton7.Text = "上書きする"
 $MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6,$RadioButton7))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox3)
+
+
+###作成したModのExeへのショートカットをDesktopに配置する
+# グループを作る
+$MyGroupBox = New-Object System.Windows.Forms.GroupBox
+$MyGroupBox.Location = New-Object System.Drawing.Point(400,120)
+$MyGroupBox.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox.text = "ショートカットを作成しますか？"
+
+# グループの中のラジオボタンを作る
+$RadioButton1 = New-Object System.Windows.Forms.RadioButton
+$RadioButton1.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton1.size = New-Object System.Drawing.Size(150,30)
+$RadioButton1.Checked = $True
+$RadioButton1.Text = "作成する"
+
+$RadioButton2 = New-Object System.Windows.Forms.RadioButton
+$RadioButton2.Location = New-Object System.Drawing.Point(180,30)
+$RadioButton2.size = New-Object System.Drawing.Size(150,30)
+$RadioButton2.Text = "作成しない"
+
+# グループにラジオボタンを入れる
+$MyGroupBox.Controls.AddRange(@($Radiobutton1,$RadioButton2))
+# フォームに各アイテムを入れる
+$form.Controls.Add($MyGroupBox)
+
+###作成したModを即座に実行する
+#デフォルトでは実行しない
+# グループを作る
+$MyGroupBox2 = New-Object System.Windows.Forms.GroupBox
+$MyGroupBox2.Location = New-Object System.Drawing.Point(400,205)
+$MyGroupBox2.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox2.text = "作成したModをすぐに起動しますか？"
+
+# グループの中のラジオボタンを作る
+$RadioButton3 = New-Object System.Windows.Forms.RadioButton
+$RadioButton3.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton3.size = New-Object System.Drawing.Size(150,30)
+$RadioButton3.Checked = $True
+$RadioButton3.Text = "起動する"
+
+$RadioButton4 = New-Object System.Windows.Forms.RadioButton
+$RadioButton4.Location = New-Object System.Drawing.Point(180,30)
+$RadioButton4.size = New-Object System.Drawing.Size(150,30)
+$RadioButton4.Text = "起動しない"
+
+# グループにラジオボタンを入れる
+$MyGroupBox2.Controls.AddRange(@($Radiobutton3,$RadioButton4))
+# フォームに各アイテムを入れる
+$form.Controls.Add($MyGroupBox2)
+
+$MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
+$MyGroupBox4.Location = New-Object System.Drawing.Point(400,290)
+$MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox4.text = "AirShipMODを同梱しますか？"
+
+# グループの中のラジオボタンを作る
+$RadioButton8 = New-Object System.Windows.Forms.RadioButton
+$RadioButton8.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton8.size = New-Object System.Drawing.Size(150,30)
+$RadioButton8.Checked = $True
+$RadioButton8.Text = "同梱する"
+
+$RadioButton9 = New-Object System.Windows.Forms.RadioButton
+$RadioButton9.Location = New-Object System.Drawing.Point(180,30)
+$RadioButton9.size = New-Object System.Drawing.Size(150,30)
+$RadioButton9.Text = "同梱しない"
+
+# グループにラジオボタンを入れる
+$MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
+# フォームに各アイテムを入れる
+$form.Controls.Add($MyGroupBox4)
+
+
 
 # ラベルを表示
 $label2 = New-Object System.Windows.Forms.Label
@@ -282,7 +307,6 @@ $Combo.font = $Font
 $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
-[void] $Combo.Items.Add("TOR+AUShipMod:tomarai")
 [void] $Combo.Items.Add("TOR + :tomarai/TheOtherRoles")
 [void] $Combo.Items.Add("TOR GM :yukinogatari/TheOtherRoles-GM")
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
@@ -369,12 +393,6 @@ $Combo_SelectedIndexChanged= {
             $scid = "TOR Plus"
             $aumin = $torpmin
             Output-Log "TOR+ Selected"
-        }"TOR+AUShipMod:tomarai"{
-            $releasepage2 = "https://api.github.com/repos/tomarai/TheOtherRoles/releases"
-            $scid = "TOR Plus"
-            $aumin = $torpmin
-            $script:ausmod = $true
-            Output-Log "TOR+AUShipMod Selected"
         }"TOR GM :yukinogatari/TheOtherRoles-GM"{
             $releasepage2 = "https://api.github.com/repos/yukinogatari/TheOtherRoles-GM/releases"
             $scid = "TOR GM"
@@ -537,6 +555,12 @@ if ($result -eq "OK"){
 Output-Log "$mod が選択されました"
 Output-Log "Version $torpv が選択されました"
 Output-Log $releasepage
+
+if($RadioButton8.Checked){
+    $ausmod = $true
+}else{
+    $ausmod = $false
+}
 #################################################################################################>
 
 
@@ -804,6 +828,20 @@ if($tio){
         }
     }
 
+    #AUShipMOD 配置
+    if($ausmod){
+        Output-Log "AUShipMOD配置開始"
+        #GithubのRelease一覧からぶっこぬいてLatestを置く
+        $rel2 = "https://api.github.com/repos/tomarai/AUShipMod/releases/latest"
+        $webs = Invoke-WebRequest $rel2 -UseBasicParsing
+        $webs2 = ConvertFrom-Json $webs.Content
+        $aus = $webs2.assets.browser_download_url
+        Output-Log "AUShipMOD Latest DLL download start"
+        Output-Log "$aus"
+        Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
+        Output-Log "AUShipMOD Latest DLL download done"
+    }
+
     if($scid -eq "TOR Plus"){
         ###
         #Mod Original DLL削除
@@ -818,19 +856,6 @@ if($tio){
         Output-Log $torplus
         Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
         Output-Log "Download $scid DLL 完了"
-        #AUShipMOD 配置
-        if($ausmod){
-            Output-Log "AUShipMOD配置開始"
-            #GithubのRelease一覧からぶっこぬいてLatestを置く
-            $rel2 = "https://api.github.com/repos/tomarai/AUShipMod/releases/latest"
-            $webs = Invoke-WebRequest $rel2 -UseBasicParsing
-            $webs2 = ConvertFrom-Json $webs.Content
-            $aus = $webs2.assets.browser_download_url
-            Output-Log "AUShipMOD Latest DLL download start"
-            Output-Log "$aus"
-            Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
-            Output-Log "AUShipMOD Latest DLL download done"
-        }
     }elseif($scid -eq "TOR GM"){
         if(test-path "$aupathm\TheOtherRoles-GM.$torv"){
             robocopy "$aupathm\TheOtherRoles-GM.$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
