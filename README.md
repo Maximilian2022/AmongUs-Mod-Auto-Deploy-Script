@@ -17,6 +17,7 @@
 
 <!-- wp:paragraph -->
 <p>本ScriptはAmongUs公式及び上記Mod作成者様とは無関係のScriptです</p>
+<p><a href="https://disboard.org/ja/server/906600951924793444" target="_blank" rel="noreferrer noopener">本来はこのDiscordサーバー用に作ったツールです</a></p>
 <!-- /wp:paragraph -->
 
 
