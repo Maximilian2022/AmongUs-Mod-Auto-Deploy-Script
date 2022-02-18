@@ -6,9 +6,11 @@ $version = "Version 1.2.2"
 #
 #################################################################################################
 
+###v2022.02.08対応minimum version
+$torgmin = "v3.5.2"
+
 ###v2021.12.15対応minimum version
 $torpmin = "v3.3.2.1+"
-$torgmin = "v3.2.6"
 $tormin = "v3.3.2"
 $tourmin = "v2.4.1"
 $ermin = "v1.13.0.0"
@@ -67,7 +69,7 @@ if( -not (Test-Path $LogPath) ) {
 }
 # ログファイル名
 $LogFileName = Join-Path $LogPath $LogFile
-function Output-Log($logstring){
+function Write-Log($logstring){
     $Now = Get-Date
     # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
@@ -78,9 +80,9 @@ function Output-Log($logstring){
     Return $Log
 }
 
-Output-Log "-----------------------------------------------------------------"
-Output-Log "MOD Installation Script Starts"
-Output-Log "-----------------------------------------------------------------"
+Write-Log "-----------------------------------------------------------------"
+Write-Log "MOD Installation Script Starts"
+Write-Log "-----------------------------------------------------------------"
 
 #################################################################################################
 # Folder用Function
@@ -371,7 +373,7 @@ $ausmod = $false
 $ovwrite = $false
 
 $Combo_SelectedIndexChanged= {
-    function Output-Log($LogString){
+    function Write-Log($LogString){
         $Now = Get-Date
         # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
         $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
@@ -392,30 +394,30 @@ $Combo_SelectedIndexChanged= {
             $releasepage2 = "https://api.github.com/repos/tomarai/TheOtherRoles/releases"
             $scid = "TOR Plus"
             $aumin = $torpmin
-            Output-Log "TOR+ Selected"
+            Write-Log "TOR+ Selected"
         }"TOR GM :yukinogatari/TheOtherRoles-GM"{
             $releasepage2 = "https://api.github.com/repos/yukinogatari/TheOtherRoles-GM/releases"
             $scid = "TOR GM"
             $aumin = $torgmin
-            Output-Log "TOR GM Selected"
+            Write-Log "TOR GM Selected"
         }"TOR :Eisbison/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases"
             $scid = "TOR"
             $aumin = $tormin
-            Output-Log "TOR Selected"
+            Write-Log "TOR Selected"
         }"TOU-R :eDonnes124/Town-Of-Us-R"{
             $releasepage2 = "https://api.github.com/repos/eDonnes124/Town-Of-Us-R/releases"
             $scid = "TOU-R"
             $aumin = $tourmin
-            Output-Log "TOU-R Selected"
+            Write-Log "TOU-R Selected"
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
             $aumin = $ermin
-            Output-Log "ER Selected"
+            Write-Log "ER Selected"
         }"Toolインストールのみ"{
             $tio = $false
-            Output-Log "TOI Selected"
+            Write-Log "TOI Selected"
             $combo2.Enabled = $false
         }
     }
@@ -450,9 +452,9 @@ $Combo_SelectedIndexChanged= {
         if(Test-path "$au_path_steam_org\Among Us.exe"){
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
-                Output-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                Output-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
-                Output-Log "処理を中止します"      
+                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+                Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
+                Write-Log "処理を中止します"      
                 pause
                 exit
             }
@@ -461,9 +463,9 @@ $Combo_SelectedIndexChanged= {
         }elseif(Test-path "$au_path_epic_org\Among Us.exe"){
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_epic_org\BepInEx"){
-                Output-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                Output-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
-                Output-Log "処理を中止します"      
+                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+                Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
+                Write-Log "処理を中止します"      
                 pause
                 exit
             }
@@ -477,28 +479,28 @@ $Combo_SelectedIndexChanged= {
                 Remove-Item $fileName
             }else{
                 #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
-                Output-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
-                Output-Log "フォルダをユーザーに選択するようダイアログを出します"      
+                Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
+                Write-Log "フォルダをユーザーに選択するようダイアログを出します"      
                 [System.Windows.Forms.MessageBox]::Show("Modが入っていないAmongUsがインストールされているフォルダを選択してください", "Among Us Mod Auto Deploy Tool")
                 $spath = Get-FolderPathG
             }
             if($spath -eq $null){
-                Output-Log "Failed $spath"
+                Write-Log "Failed $spath"
                 pause
                 Exit
             }
             if(test-path "$spath\Among Us.exe"){
-                Output-Log "$spath にAmongUsのインストールパスを確認しました"
+                Write-Log "$spath にAmongUsのインストールパスを確認しました"
             }else{
-                Output-Log "$spath にAmongUsのインストールが確認できませんでした"
+                Write-Log "$spath にAmongUsのインストールが確認できませんでした"
                 pause
                 Exit
             }
             if(test-path $spath){
                 if(Test-path "$spath\BepInEx"){
-                    Output-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                    Output-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
-                    Output-Log "処理を中止します"      
+                    Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+                    Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
+                    Write-Log "処理を中止します"      
                     pause
                     exit
                 }
@@ -506,18 +508,18 @@ $Combo_SelectedIndexChanged= {
                 Set-Location $spath
                 Set-Location ..
                 $str_path = (Convert-Path .)
-                Output-Log $str_path
+                Write-Log $str_path
                 $aupathm = "$str_path\Among Us $scid Mod"
-                Output-Log "Mod入りAmongUsは以下のフォルダにDeployされます"
-                Output-Log $aupathm
+                Write-Log "Mod入りAmongUsは以下のフォルダにDeployされます"
+                Write-Log $aupathm
 
                 ### Auto Save
                 Write-Output "$aupatho"> $fileName
-                Output-Log "Amongus ModDeployScript Autosave function"
+                Write-Log "Amongus ModDeployScript Autosave function"
 
             }else{
-                Output-Log "選択されたフォルダにAmongUsを見つけることに失敗しました"      
-                Output-Log "処理を中止します"      
+                Write-Log "選択されたフォルダにAmongUsを見つけることに失敗しました"      
+                Write-Log "処理を中止します"      
                 pause
                 exit
             }
@@ -552,9 +554,9 @@ if ($result -eq "OK"){
 }else{
     exit
 }
-Output-Log "$mod が選択されました"
-Output-Log "Version $torpv が選択されました"
-Output-Log $releasepage
+Write-Log "$mod が選択されました"
+Write-Log "Version $torpv が選択されました"
+Write-Log $releasepage
 
 if($RadioButton8.Checked){
     $ausmod = $true
@@ -605,7 +607,7 @@ if($tio){
                 if($torpv -lt $torpmin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Output-Log "処理を中止します"
+                        Write-Log "処理を中止します"
                         $Form2.Close()
                         pause
                         exit
@@ -614,19 +616,19 @@ if($tio){
                 #TORのバージョンをTOR+のバージョンから指定
                 $torv = $torpv.Substring(1,5)
                 $tortmp = $torpv.Substring(0,8)
-                Output-Log "TheOtherRole Version $torv が自動的に選択されました"
+                Write-Log "TheOtherRole Version $torv が自動的に選択されました"
                 $torplus = $web2.assets[$ai].browser_download_url
-                Output-Log $web2.tag_name[$ai]
-                Output-Log $torpv
-                Output-Log $torv
-                Output-Log $tortmp   
+                Write-Log $web2.tag_name[$ai]
+                Write-Log $torpv
+                Write-Log $torv
+                Write-Log $tortmp   
 
                 $checkt = $false
             }elseif($scid -eq "TOR GM"){
                 if($torpv -lt $torgmin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Output-Log "処理を中止します"
+                        Write-Log "処理を中止します"
                         $Form2.Close()
                         pause
                         exit
@@ -634,54 +636,54 @@ if($tio){
                 }
                 if($torpv -eq "v3.4.1.2"){
                     $torv = "v3.4.1"                    
-                    Output-Log "TheOtherRole-GM Version $torpv が選択されました"
+                    Write-Log "TheOtherRole-GM Version $torpv が選択されました"
                 }else{
                     $torv = $torpv
-                    Output-Log "TheOtherRole-GM Version $torv が選択されました"
+                    Write-Log "TheOtherRole-GM Version $torv が選択されました"
                 }
                 $checkt = $false
             }elseif($scid -eq "TOR"){
                 if($torpv -lt $tormin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Output-Log "処理を中止します"
+                        Write-Log "処理を中止します"
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Output-Log "TheOtherRole Version $torv が選択されました"
+                Write-Log "TheOtherRole Version $torv が選択されました"
                 $checkt = $false
             }elseif($scid -eq "TOU-R"){
                 if($torpv -lt $tourmin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Output-Log "処理を中止します"
+                        Write-Log "処理を中止します"
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Output-Log "Town of Us Reactivated Version $torv が選択されました"
+                Write-Log "Town of Us Reactivated Version $torv が選択されました"
                 $checkt = $false
             }elseif($scid -eq "ER"){
                 if($torpv -lt $ermin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Output-Log "処理を中止します"
+                        Write-Log "処理を中止します"
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Output-Log "Extreme Roles Version $torv が選択されました"
+                Write-Log "Extreme Roles Version $torv が選択されました"
                 $checkt = $false
             }else{
-                Output-Log "Critical Error 2"
-                Output-Log "処理を中止します"
+                Write-Log "Critical Error 2"
+                Write-Log "処理を中止します"
                 $Form2.Close()
                 pause
                 exit
@@ -690,8 +692,8 @@ if($tio){
     }
 
     if($checkt){
-        Output-Log "指定されたバージョンは見つかりませんでした"
-        Output-Log "処理を中止します"
+        Write-Log "指定されたバージョンは見つかりませんでした"
+        Write-Log "処理を中止します"
         $Form2.Close()
         pause
         exit
@@ -709,7 +711,7 @@ if($tio){
     }elseif($scid -eq "ER"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
     }else{
-        Output-Log "Critical Error 2"
+        Write-Log "Critical Error 2"
         $Form2.Close()
         pause
         exit
@@ -723,7 +725,7 @@ if($tio){
     }elseif($RadioButton2.Checked){
         $shortcut = $false 
     }else{
-        Output-Log "Critical Error: Shortcut"
+        Write-Log "Critical Error: Shortcut"
     }
     ###作成したModのExeへのショートカットをDesktopに配置する
     ###作成したModを即座に実行する
@@ -734,7 +736,7 @@ if($tio){
     }elseif($RadioButton4.Checked){
         $startexewhendone = $false
     }else{
-        Output-Log "Critical Error: StartCheck"
+        Write-Log "Critical Error: StartCheck"
     }
 
     $Bar.Value = "2"
@@ -756,29 +758,37 @@ if($tio){
         }elseif($RadioButton7.Checked){
             $retry = $false
             $ovwrite = $true
-            if($scid -eq "TOU-R"){
+        }else{
+            Write-Log "Critical Error: Retry"
+        }
+
+        if($scid -eq "TOU-R"){
+            if(test-path "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg"){                
                 Copy-Item "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" "C:\Temp\com.slushiegoose.townofus.cfg" -Force
-            }elseif($scid -eq "ER"){
+            }
+        }elseif($scid -eq "ER"){
+            if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" "C:\Temp\me.yukieiji.extremeroles.cfg" -Force               
-            }else{
-                Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
             }
         }else{
-            Output-Log "Critical Error: Retry"
+            if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
+            }
         }
+
         if ($retry -eq "true"){
-            Output-Log '既存のフォルダを中身を含めて削除します'
+            Write-Log '既存のフォルダを中身を含めて削除します'
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
             Copy-Item $aupatho -destination $aupathm -recurse
-            Output-Log ($aupatho + 'を' + $aupathm + 'にコピーしました');
+            Write-Log ($aupatho + 'を' + $aupathm + 'にコピーしました');
         }else{
             # コピー先のパスにファイルやフォルダが存在する場合は処理を中止
-            Output-Log ($aupathm + 'には既にファイル又はフォルダが存在します');
+            Write-Log ($aupathm + 'には既にファイル又はフォルダが存在します');
             if($ovwrite){
-                Output-Log ("上書き処理が選択されました");
+                Write-Log ("上書き処理が選択されました");
             }else{
-                Output-Log ("処理を中止しました");
+                Write-Log ("処理を中止しました");
                 $Form2.Close()
                 pause
                 Exit
@@ -787,59 +797,63 @@ if($tio){
     }else{
         # フォルダを中身を含めてコピーする
         Copy-Item $aupatho -destination $aupathm -recurse
-        Output-Log ($aupatho + 'を' + $aupathm + 'にコピー完了');
+        Write-Log ($aupatho + 'を' + $aupathm + 'にコピー完了');
     } 
 
     $Bar.Value = "3"
 
     ####
     #まずはTORをDL
-    Output-Log 'Download ZIP 開始'
-    Output-Log $tordlp
+    Write-Log 'Download ZIP 開始'
+    Write-Log $tordlp
     Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
-    Output-Log 'Download ZIP 完了'
+    Write-Log 'Download ZIP 完了'
 
     #DLしたTORを解凍
     if (test-path "$aupathm\TheOtherRoles.zip"){
-        Output-Log ("ZIP DL OK");
-        Output-Log ("ZIP 解凍開始");
+        Write-Log ("ZIP DL OK");
+        Write-Log ("ZIP 解凍開始");
         Expand-Archive -path $aupathm\TheOtherRoles.zip -DestinationPath $aupathm -Force
-        Output-Log ("ZIP 解凍完了");
+        Write-Log ("ZIP 解凍完了");
     }else{
-        Output-Log ("ZIP DL NG $tordlp ");
+        Write-Log ("ZIP DL NG $tordlp ");
     }
 
     $Bar.Value = "4"
 
     if(test-path "$aupathm\BepInEx"){
-        Output-Log ("ZIP 解凍OK");
+        Write-Log ("ZIP 解凍OK");
     }
 
-    if($ovwrite){
-        if($scid -eq "TOU-R"){
+    if($scid -eq "TOU-R"){
+        if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
             Copy-Item "C:\Temp\com.slushiegoose.townofus.cfg" "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" -Force
-            Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force
-        }elseif($scid -eq "ER"){
+            Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force    
+        }
+    }elseif($scid -eq "ER"){
+        if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
             Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force               
-            Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force
-        }else{
+            Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force    
+        }
+    }else{
+        if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
             Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
-            Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force
+            Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force    
         }
     }
 
     #AUShipMOD 配置
     if($ausmod){
-        Output-Log "AUShipMOD配置開始"
+        Write-Log "AUShipMOD配置開始"
         #GithubのRelease一覧からぶっこぬいてLatestを置く
         $rel2 = "https://api.github.com/repos/tomarai/AUShipMod/releases/latest"
         $webs = Invoke-WebRequest $rel2 -UseBasicParsing
         $webs2 = ConvertFrom-Json $webs.Content
         $aus = $webs2.assets.browser_download_url
-        Output-Log "AUShipMOD Latest DLL download start"
-        Output-Log "$aus"
+        Write-Log "AUShipMOD Latest DLL download start"
+        Write-Log "$aus"
         Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
-        Output-Log "AUShipMOD Latest DLL download done"
+        Write-Log "AUShipMOD Latest DLL download done"
     }
 
     if($scid -eq "TOR Plus"){
@@ -850,12 +864,12 @@ if($tio){
             Remove-Item "$aupathm\TheOtherRoles" -recurse
         }
         Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
-        Output-Log 'Delete Original Mod DLL'
+        Write-Log 'Delete Original Mod DLL'
         #TOR+ DLLをDLして配置
-        Output-Log "Download $scid DLL 開始"
-        Output-Log $torplus
+        Write-Log "Download $scid DLL 開始"
+        Write-Log $torplus
         Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
-        Output-Log "Download $scid DLL 完了"
+        Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "TOR GM"){
         if(test-path "$aupathm\TheOtherRoles-GM.$torv"){
             robocopy "$aupathm\TheOtherRoles-GM.$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
@@ -865,13 +879,13 @@ if($tio){
             ###
             #Mod Original DLL削除
             Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
-            Output-Log 'Delete Original Mod DLL'
-            Output-Log $torgmdll
+            Write-Log 'Delete Original Mod DLL'
+            Write-Log $torgmdll
             $torgmdll = "https://github.com/yukinogatari/TheOtherRoles-GM/releases/download/$torpv/TheOtherRolesGM.dll"
             #TOR+ DLLをDLして配置
-            Output-Log "Download $scid DLL 開始"
+            Write-Log "Download $scid DLL 開始"
             Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
-            Output-Log "Download $scid DLL 完了"
+            Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOU-R"){
         if(test-path "$aupathm\ToU $torv"){
@@ -893,11 +907,11 @@ if($tio){
 
     #解凍チェック
     if (test-path "$aupathm\BepInEx\plugins"){
-        Output-Log ("ZIP 解凍OK");
+        Write-Log ("ZIP 解凍OK");
         Remove-item -Path "$aupathm\TheOtherRoles.zip"
-        Output-Log ("DLしたZIPを削除");
+        Write-Log ("DLしたZIPを削除");
     }else{
-      Output-Log ("ZIP 解凍NG");
+      Write-Log ("ZIP 解凍NG");
     }
     $Bar.Value = "5"
 
@@ -907,7 +921,7 @@ if($tio){
 
         if(test-path "$scpath\Among Us Mod $scid.lnk"){
             Remove-item -Path "$scpath\Among Us Mod $scid.lnk"
-            Output-Log '既存のMod用Shortcut削除'
+            Write-Log '既存のMod用Shortcut削除'
         }
 
         # ショートカットを作る
@@ -918,9 +932,9 @@ if($tio){
         $sShortcut.Save()
 
         if(test-path "$scpath\Among Us Mod $scid.lnk"){
-            Output-Log "Shortcut 作成確認OK"
+            Write-Log "Shortcut 作成確認OK"
         }else{
-            Output-Log "Shortcut 作成失敗"
+            Write-Log "Shortcut 作成失敗"
         }
     }else{
         $here = Get-Location
@@ -938,7 +952,7 @@ $Bar.Value = "6"
 if($CheckedBox.CheckedItems.Count -gt 0){
     for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
         if($CheckedBox.CheckedItems[$aa] -eq "BetterCrewLink"){
-            Output-Log "BCL Install Start"
+            Write-Log "BCL Install Start"
             $bcl= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/OhMyGuus/BetterCrewLink/releases/latest" -UseBasicParsing)).assets.browser_download_url
             for($ab=0;$ab -le $bcl.Length;$ab++){
                 if($bcl[$ab] -match ".exe"){
@@ -952,7 +966,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $bclfile = split-path $bcldlp -Leaf
             Invoke-WebRequest $bcldlp -OutFile "$md\$bclfile" -UseBasicParsing
             Start-Process "$md\$bclfile" -wait
-            Output-Log "BCL Install Done"
+            Write-Log "BCL Install Done"
             Remove-Item $md\$bclfile
             $Bar.Value = "7"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsReplayInWindow"){
@@ -964,7 +978,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     .\dotnet-install.ps1
                     Remove-Item .\dotnet-install.ps1
                 }else{
-                    Output-Log "AmongUsReplayInWindowの処理を中止します"
+                    Write-Log "AmongUsReplayInWindowの処理を中止します"
                     $qureq = $false
                 }    
 
@@ -989,7 +1003,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Set-Location -Path $md\$auriwfn
                     Invoke-Item .
                 }else{
-                    Output-Log "AmongUsReplayInWindowの処理を中止します"
+                    Write-Log "AmongUsReplayInWindowの処理を中止します"
                 }
             }
             $Bar.Value = "8"
@@ -1002,7 +1016,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     .\dotnet-install.ps1
                     Remove-Item .\dotnet-install.ps1
                 }else{
-                    Output-Log "AmongUsCaptureの処理を中止します"
+                    Write-Log "AmongUsCaptureの処理を中止します"
                     $qureq = $false
                 }    
 
@@ -1027,7 +1041,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Set-Location -Path $md\$aucapfn
                     Invoke-Item .
                 }else{
-                    Output-Log "AmongUsCaptureの処理を中止します"
+                    Write-Log "AmongUsCaptureの処理を中止します"
                 }
             }
             $Bar.Value = "9"
@@ -1057,9 +1071,9 @@ if($tio){
     }
 }
 
-Output-Log "-----------------------------------------------------------------"
-Output-Log "MOD Installation Script Ends"
-Output-Log "-----------------------------------------------------------------"
+Write-Log "-----------------------------------------------------------------"
+Write-Log "MOD Installation Script Ends"
+Write-Log "-----------------------------------------------------------------"
 
 Start-Sleep -s 5
 
