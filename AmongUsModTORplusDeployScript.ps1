@@ -8,12 +8,12 @@ $version = "Version 1.2.2"
 
 ###v2022.02.08対応minimum version
 $torgmin = "v3.5.2"
+$ermin = "v1.16.1.0"
 
 ###v2021.12.15対応minimum version
 $torpmin = "v3.3.2.1+"
 $tormin = "v3.3.2"
 $tourmin = "v2.4.1"
-$ermin = "v1.13.0.0"
 
 #################################################################################################
 # Run w/ Powershell v7 if available & check VC Redist.
