@@ -431,6 +431,8 @@ $Combo_SelectedIndexChanged= {
         for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
             if($web2.tag_name[$ai] -ge $aumin){
                 $list2 += $($web2.tag_name[$ai])
+            }elseif($web2.tag_name[$ai] -eq "hotfix-0"){
+                $list2 += $($web2.tag_name[$ai])
             }
         }
         $combo2.DataSource = $list2
@@ -604,7 +606,9 @@ if($tio){
     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
         if($web2.tag_name[$ai] -eq "$torpv"){
             if($scid -eq "TOR Plus"){
-                if($torpv -lt $torpmin){
+                if($torpv -eq "hotfix-0"){
+                    Write-Log $torpv
+                }elseif($torpv -lt $torpmin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
@@ -618,6 +622,10 @@ if($tio){
                 $tortmp = $torpv.Substring(0,8)
                 Write-Log "TheOtherRole Version $torv が自動的に選択されました"
                 $torplus = $web2.assets[$ai].browser_download_url
+                if($torpv -eq "hotfix-0"){
+                    $torpv = "hotfix-0"
+                    $torv = "3.4.3"    
+                }
                 Write-Log $web2.tag_name[$ai]
                 Write-Log $torpv
                 Write-Log $torv
