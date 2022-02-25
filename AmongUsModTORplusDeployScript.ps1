@@ -81,7 +81,10 @@ function Write-Log($logstring){
 }
 
 Write-Log "-----------------------------------------------------------------"
-Write-Log "MOD Installation Script Starts"
+Write-Log "                    AmongUs Mod Deploy Script                    "
+Write-Log "                                                Version: $version"
+Write-Log "-----------------------------------------------------------------"
+Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
 
 #################################################################################################
@@ -185,6 +188,7 @@ $MyGroupBox3.text = "既存のフォルダを上書き/再作成しますか？"
 $RadioButton5 = New-Object System.Windows.Forms.RadioButton
 $RadioButton5.Location = New-Object System.Drawing.Point(20,60)
 $RadioButton5.size = New-Object System.Drawing.Size(150,30)
+$RadioButton5.Checked = $True
 $RadioButton5.Text = "再作成する"
 
 $RadioButton6 = New-Object System.Windows.Forms.RadioButton
@@ -195,7 +199,6 @@ $RadioButton6.Text = "再作成しない"
 $RadioButton7 = New-Object System.Windows.Forms.RadioButton
 $RadioButton7.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton7.size = New-Object System.Drawing.Size(150,30)
-$RadioButton7.Checked = $True
 $RadioButton7.Text = "上書きする"
 
 # グループにラジオボタンを入れる
@@ -1080,7 +1083,7 @@ if($tio){
 }
 
 Write-Log "-----------------------------------------------------------------"
-Write-Log "MOD Installation Script Ends"
+Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
 Start-Sleep -s 5
