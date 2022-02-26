@@ -37,7 +37,6 @@ if(!($v5run)){
 }
 #>
 
-Remove-Item "$fpth"
 #################################################################################################
 # Log用Function
 #################################################################################################
@@ -1053,6 +1052,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
                 }   
             }
+            Remove-Item "$fpth"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             $pspth = Join-Path $npl "\PowerShell-7.2.1-win-x64.msi"
             Invoke-WebRequest https://github.com/PowerShell/PowerShell/releases/download/v7.2.1/PowerShell-7.2.1-win-x64.msi -OutFile "$pspth" -UseBasicParsing
