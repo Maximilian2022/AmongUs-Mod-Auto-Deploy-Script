@@ -277,7 +277,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,105"
 
 # 配列を作成
-$RETU = ("AmongUsCapture","VCRedist","BetterCrewLink","AmongUsReplayInWindow","Powershell 7")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","PowerShell 7")
 
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
