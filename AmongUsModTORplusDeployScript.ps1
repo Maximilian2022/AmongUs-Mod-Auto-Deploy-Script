@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.2"
+$version = "Version 1.2.3"
 #
 #################################################################################################
 
@@ -19,16 +19,11 @@ $tormin = "v3.3.2"
 # Run w/ Powershell v7 if available & check VC Redist.
 #################################################################################################
 $npl = Get-Location
-$fpth = Join-Path $npl "\install.ps1"
-Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
 $v5run = $false
 if($PSVersionTable.PSVersion.major -eq 5){
     if(test-path "$env:ProgramFiles\PowerShell\7"){
         pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongUsModTORplusDeployScript.ps1"
     }else{
-        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
-        }   
         $v5run = $true
     }
 }elseif($PSVersionTable.PSVersion.major -gt 5){
@@ -37,17 +32,7 @@ if($PSVersionTable.PSVersion.major -eq 5){
     write-host "ERROR - PowerShell Version : not supported."
 }
 
-if($v5run){
-    if(test-path "$env:ProgramFiles\PowerShell\7"){
-        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
-        }
-    }
-}else{
-    if(test-path "$env:ProgramFiles\PowerShell\7"){
-    }else{
-        Start-Process "https://www.microsoft.com/ja-jp/p/powershell/9mz1snwt0n5d?rtc=1&activetab=pivot:overviewtab"
-    }
+if(!($v5run)){
     exit
 }
 #>
@@ -293,7 +278,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,105"
 
 # 配列を作成
-$RETU = ("BetterCrewLink","AmongUsReplayInWindow","AmongUsCapture")
+$RETU = ("AmongUsCapture","VCRedist","BetterCrewLink","AmongUsReplayInWindow","Powershell 7")
 
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
@@ -1056,6 +1041,23 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
             }
             $Bar.Value = "9"
+        }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
+            $fpth = Join-Path $npl "\install.ps1"
+            Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
+            if(test-path "$env:ProgramFiles\PowerShell\7"){
+                if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
+                }
+            }else{
+                if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
+                }   
+            }
+        }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
+            $pspth = Join-Path $npl "\PowerShell-7.2.1-win-x64.msi"
+            Invoke-WebRequest https://github.com/PowerShell/PowerShell/releases/download/v7.2.1/PowerShell-7.2.1-win-x64.msi -OutFile "$pspth" -UseBasicParsing
+            msiexec.exe /package $pspth /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1
+            Remove-Item $pspth
         }else{
         }
     }
