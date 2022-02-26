@@ -1059,7 +1059,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Write-Log "PS7 Install start"
             $pspth = Join-Path $npl "\PowerShell-7.2.1-win-x64.msi"
             Invoke-WebRequest https://github.com/PowerShell/PowerShell/releases/download/v7.2.1/PowerShell-7.2.1-win-x64.msi -OutFile "$pspth" -UseBasicParsing
-            Start-Process msiexec.exe -ArgumentList "/package $pspth /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1" -Wait
+            msiexec.exe /package $pspth /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1
             Remove-Item $pspth
             Write-Log "PS7 Install ends"
         }else{
