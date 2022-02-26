@@ -1041,6 +1041,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             }
             $Bar.Value = "9"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
+            Write-Log "VC Redist Install start"
             $fpth = Join-Path $npl "\install.ps1"
             Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
             if(test-path "$env:ProgramFiles\PowerShell\7"){
@@ -1053,11 +1054,14 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }   
             }
             Remove-Item "$fpth"
+            Write-Log "VC Redist Install ends"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
+            Write-Log "PS7 Install start"
             $pspth = Join-Path $npl "\PowerShell-7.2.1-win-x64.msi"
             Invoke-WebRequest https://github.com/PowerShell/PowerShell/releases/download/v7.2.1/PowerShell-7.2.1-win-x64.msi -OutFile "$pspth" -UseBasicParsing
-            msiexec.exe /package $pspth /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1
+            Start-Process msiexec.exe -ArgumentList "/package $pspth /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1" -Wait
             Remove-Item $pspth
+            Write-Log "PS7 Install ends"
         }else{
         }
     }
