@@ -6,10 +6,12 @@ $version = "Version 1.2.3"
 #
 #################################################################################################
 
+###v2022.02.23対応minimum version
+$tourmin = "v2.6.2"
+
 ###v2022.02.08対応minimum version
 $torgmin = "v3.5.2"
 $ermin = "v1.17.0.0"
-$tourmin = "v2.6.1"
 
 ###v2021.12.15対応minimum version
 $torpmin = "v3.3.2.1+"
