@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.3"
+$version = "Version 1.2.4"
 #
 #################################################################################################
 
@@ -10,12 +10,11 @@ $version = "Version 1.2.3"
 $tourmin = "v2.6.2"
 $tormin = "v3.4.4"
 $ermin = "v1.18.2.0"
+$torpmin = "v3.4.4.1+"
 
 ###v2022.02.08対応minimum version
 $torgmin = "v3.5.2"
 
-###v2021.12.15対応minimum version
-$torpmin = "v3.3.2.1+"
 
 #################################################################################################
 # Run w/ Powershell v7 if available & check VC Redist.
