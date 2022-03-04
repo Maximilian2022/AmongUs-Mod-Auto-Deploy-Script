@@ -419,7 +419,7 @@ $Combo_SelectedIndexChanged= {
         for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
             if($web2.tag_name[$ai] -ge $aumin){
                 $list2 += $($web2.tag_name[$ai])
-            }elseif($web2.tag_name[$ai] -eq "hotfix-0"){
+            }elseif($web2.tag_name[$ai] -contains "hotfix"){
                 $list2 += $($web2.tag_name[$ai])
             }
         }
@@ -823,16 +823,28 @@ if($tio){
 
     if($scid -eq "TOU-R"){
         if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
+            if(test-path "$aupathm\BepInEx\config"){
+            }else{
+                mkdir "$aupathm\BepInEx\config"
+            }
             Copy-Item "C:\Temp\com.slushiegoose.townofus.cfg" "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" -Force
             Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force    
         }
     }elseif($scid -eq "ER"){
         if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
-            Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force               
+            if(test-path "$aupathm\BepInEx\config"){
+            }else{
+                mkdir "$aupathm\BepInEx\config"
+            }
+            Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force
             Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force    
         }
     }else{
         if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
+            if(test-path "$aupathm\BepInEx\config"){
+            }else{
+                mkdir "$aupathm\BepInEx\config"
+            }
             Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
             Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force    
         }
