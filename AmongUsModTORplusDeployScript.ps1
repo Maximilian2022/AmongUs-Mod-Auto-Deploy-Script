@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.4"
+$version = "Version 1.2.5"
 #
 #################################################################################################
 
@@ -11,10 +11,7 @@ $tourmin = "v2.6.2"
 $tormin = "v3.4.4"
 $ermin = "v1.18.2.0"
 $torpmin = "v3.4.4.1+"
-
-###v2022.02.08対応minimum version
-$torgmin = "v3.5.2"
-
+$torgmin = "v3.5.3"
 
 #################################################################################################
 # Run w/ Powershell v7 if available & check VC Redist.
@@ -769,6 +766,8 @@ if($tio){
         }else{
             if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
+                New-Item -Path "C:\Temp\TheOtherHats" -ItemType Directory
+                Copy-Item "$aupathm\TheOtherHats" -Recurse "C:\Temp\TheOtherHats"
             }
         }
 
@@ -823,30 +822,32 @@ if($tio){
 
     if($scid -eq "TOU-R"){
         if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
-            if(test-path "$aupathm\BepInEx\config"){
-            }else{
-                mkdir "$aupathm\BepInEx\config"
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
             }
             Copy-Item "C:\Temp\com.slushiegoose.townofus.cfg" "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" -Force
             Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force    
         }
     }elseif($scid -eq "ER"){
         if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
-            if(test-path "$aupathm\BepInEx\config"){
-            }else{
-                mkdir "$aupathm\BepInEx\config"
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
             }
             Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force
             Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force    
         }
     }else{
         if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
-            if(test-path "$aupathm\BepInEx\config"){
-            }else{
-                mkdir "$aupathm\BepInEx\config"
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
             }
             Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
             Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force    
+            if(!(Test-Path "$aupathm\TheOtherHats")){
+                New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\TheOtherHats" -Recurse "$aupathm\TheOtherHats"
+            Remove-Item "C:\Temp\TheOtherHats" -Recurse
         }
     }
 
