@@ -12,7 +12,8 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>このScriptは 以下の環境用のものです<br>・tomarai様のTOR+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">https://github.com/tomarai/TheOtherRoles</a>)<br>・yukinogatari様のThe Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM/">https://github.com/yukinogatari/TheOtherRoles-GM/</a>)<br>・本家TOR (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">https://github.com/Eisbison/TheOtherRoles</a>)<br>・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">https://github.com/eDonnes124/Town-Of-Us-R</a>)<br>・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">https://github.com/yukieiji/ExtremeRoles</a>)</p>
+<p>このScriptは 以下の環境用のものです<br>・tomarai様のTOR+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">https://github.com/tomarai/TheOtherRoles</a>)<br>・yukinogatari様のThe Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM/">https://github.com/yukinogatari/TheOtherRoles-GM/</a>)<br>・本家TOR (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">https://github.com/Eisbison/TheOtherRoles</a>)<br>・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">https://github.com/eDonnes124/Town-Of-Us-R</a>)<br>・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">https://github.com/yukieiji/ExtremeRoles</a>)<br>・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">https://github.com/Dolly1016/Nebula</a>)</p>
+
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
