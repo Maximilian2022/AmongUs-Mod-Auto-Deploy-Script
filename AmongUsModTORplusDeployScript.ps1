@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.5"
+$version = "Version 1.2.6"
 #
 #################################################################################################
 
@@ -12,6 +12,7 @@ $tormin = "v3.4.4"
 $ermin = "v1.18.2.0"
 $torpmin = "v3.4.4.1+"
 $torgmin = "v3.5.3"
+$nosmin = "1.4.5,2022.2.24"
 
 #################################################################################################
 # Run w/ Powershell v7 if available & check VC Redist.
@@ -299,6 +300,7 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
+[void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
 [void] $Combo.Items.Add("Toolインストールのみ")
 $Combo.SelectedIndex = 0
 
@@ -400,6 +402,12 @@ $Combo_SelectedIndexChanged= {
             $scid = "ER"
             $aumin = $ermin
             Write-Log "ER Selected"
+        }"NOS :Dolly1016/Nebula"{
+            $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
+            $scid = "NOS"
+            $aumin = $nosmin
+            Write-Log "NOS Selected"
+
         }"Toolインストールのみ"{
             $tio = $false
             Write-Log "TOI Selected"
@@ -413,12 +421,21 @@ $Combo_SelectedIndexChanged= {
     
         $list2 =@()
         # コンボボックスに項目を追加
-        for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-            if($web2.tag_name[$ai] -ge $aumin){
-                $list2 += $($web2.tag_name[$ai])
-            }elseif($web2.tag_name[$ai] -contains "hotfix"){
-                $list2 += $($web2.tag_name[$ai])
+        if($scid -ne "NOS"){
+            for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                if($web2.tag_name[$ai] -ge $aumin){
+                    $list2 += $($web2.tag_name[$ai])
+                }
             }
+        }elseif($scid -eq "NOS"){
+            for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                if($web2.tag_name[$ai] -ge $nosmin){
+                    if($($web2.tag_name[$ai]).indexof("LANG") -lt 0){
+                        $list2 += $($web2.tag_name[$ai])
+                    }        
+                }
+            }            
+        }else{            
         }
         $combo2.DataSource = $list2
         $Combo2.SelectedIndex = 0
@@ -674,6 +691,19 @@ if($tio){
                 $torv = $torpv
                 Write-Log "Extreme Roles Version $torv が選択されました"
                 $checkt = $false
+            }elseif($scid -eq "NOS"){
+                if($torpv -lt $nosmin){
+                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log "Nebula on the Ship Version $torv が選択されました"
+                $checkt = $false
             }else{
                 Write-Log "Critical Error 2"
                 Write-Log "処理を中止します"
@@ -691,7 +721,9 @@ if($tio){
         pause
         exit
     }
-
+    $ziplist=@()
+    $langdata
+    $langbool = $true
     if($scid -eq "TOR Plus"){
         ###TOR DL Path
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/v${torv}/TheOtherRoles.zip"
@@ -703,12 +735,33 @@ if($tio){
         $tordlp = "https://github.com/eDonnes124/Town-Of-Us-R/releases/download/${torv}/ToU.${torv}.zip"
     }elseif($scid -eq "ER"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
+    }elseif($scid -eq "NOS"){
+        $xvar = "0"
+        for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+            if($web2.tag_name[$ai] -eq ${torv}){
+                $xvar = $ai
+            }
+        }
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
+                $ziplist += $web2.assets.browser_download_url[$aii]
+            }  
+            if($($web2.assets.browser_download_url[$aii]).IndexOf("Japanese.dat") -gt 0){
+                if($langbool){
+                    $langdata = $web2.assets.browser_download_url[$aii]
+                    $langbool = $false
+                }
+            }
+        }
+        $tordlp = $($ziplist[$xvar])
     }else{
         Write-Log "Critical Error 2"
         $Form2.Close()
         pause
         exit
     }
+
+    Write-Output $tordlp
 
     $Bar.Value = "1"
 
@@ -762,6 +815,10 @@ if($tio){
         }elseif($scid -eq "ER"){
             if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" "C:\Temp\me.yukieiji.extremeroles.cfg" -Force               
+            }
+        }elseif($scid -eq "NOS"){
+            if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
             }
         }else{
             if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
@@ -836,6 +893,14 @@ if($tio){
             Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force
             Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force    
         }
+    }elseif($scid -eq "NOS"){
+        if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" -Force
+            Remove-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force    
+        }
     }else{
         if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -861,6 +926,9 @@ if($tio){
         $aus = $webs2.assets.browser_download_url
         Write-Log "AUShipMOD Latest DLL download start"
         Write-Log "$aus"
+        if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
+            New-Item "$aupathm\BepInEx\plugins\" -Type Directory
+        }
         Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
         Write-Log "AUShipMOD Latest DLL download done"
     }
@@ -911,7 +979,18 @@ if($tio){
             robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
         }
-    }else{
+    }elseif($scid -eq "NOS"){
+        if(test-path "$aupathm\Nebula"){
+            robocopy "$aupathm\Nebula" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            Remove-Item "$aupathm\Nebula" -recurse
+        }
+        if (!(Test-Path "$aupathm\Language\")) {
+            New-Item "$aupathm\Language\" -Type Directory
+        }
+        Write-Log "日本語 データ Download 開始"
+        Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
+        Write-Log "日本語 データ Download 完了"
+}else{
     }
 
     #解凍チェック
