@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.6"
+$version = "Version 1.2.7"
 #
 #################################################################################################
 
@@ -382,32 +382,37 @@ $Combo_SelectedIndexChanged= {
             $scid = "TOR Plus"
             $aumin = $torpmin
             Write-Log "TOR+ Selected"
+            $RadioButton8.Checked = $True
         }"TOR GM :yukinogatari/TheOtherRoles-GM"{
             $releasepage2 = "https://api.github.com/repos/yukinogatari/TheOtherRoles-GM/releases"
             $scid = "TOR GM"
             $aumin = $torgmin
             Write-Log "TOR GM Selected"
+            $RadioButton8.Checked = $True
         }"TOR :Eisbison/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases"
             $scid = "TOR"
             $aumin = $tormin
             Write-Log "TOR Selected"
+            $RadioButton8.Checked = $True
         }"TOU-R :eDonnes124/Town-Of-Us-R"{
             $releasepage2 = "https://api.github.com/repos/eDonnes124/Town-Of-Us-R/releases"
             $scid = "TOU-R"
             $aumin = $tourmin
             Write-Log "TOU-R Selected"
+            $RadioButton9.Checked = $True
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
             $aumin = $ermin
             Write-Log "ER Selected"
+            $RadioButton9.Checked = $True
         }"NOS :Dolly1016/Nebula"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOS"
             $aumin = $nosmin
             Write-Log "NOS Selected"
-
+            $RadioButton9.Checked = $True
         }"Toolインストールのみ"{
             $tio = $false
             Write-Log "TOI Selected"
