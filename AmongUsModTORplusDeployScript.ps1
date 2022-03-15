@@ -443,7 +443,7 @@ $Combo_SelectedIndexChanged= {
         }elseif($scid -eq "NOS"){
             for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                 if($web2.tag_name[$ai] -ge $nosmin){
-                    if($($web2.tag_name[$ai]).indexof("LANG") -lt 0){
+                    if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
                         $list2 += $($web2.tag_name[$ai])
                     }        
                 }
@@ -1033,6 +1033,7 @@ if($tio){
             New-Item "$aupathm\Language\" -Type Directory
         }
         Write-Log "日本語 データ Download 開始"
+        Write-Log "日本語 データ $langdata"
         Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
         Write-Log "日本語 データ Download 完了"
 }else{
