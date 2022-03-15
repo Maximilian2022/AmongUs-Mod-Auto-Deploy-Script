@@ -1,4 +1,5 @@
-# AmongUs Mod Auto Deploy Script (AmongUs Mod自動導入スクリプト)
+# AmongUs Mod Auto Deploy Script 
+# AmongUs Mod自動導入スクリプト
 <!-- wp:image {"id":410,"width":519,"height":386,"sizeSlug":"full","linkDestination":"none"} -->
 <figure class="wp-block-image size-full is-resized"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/SnapCrab_Among-Us-Mod-Auto-Deploy-Tool_2022-1-22_21-30-48_No-00.png" alt="" class="wp-image-410" width="519" height="386"/></figure>
 <!-- /wp:image -->
