@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.7"
+$version = "Version 1.2.8"
 #
 #################################################################################################
 
@@ -10,12 +10,13 @@ $version = "Version 1.2.7"
 $tourmin = "v2.6.2"
 $tormin = "v3.4.4"
 $ermin = "v1.18.2.0"
+$esmin = "v1.18.5.0"
 $torpmin = "v3.4.4.1+"
 $torgmin = "v3.5.3"
 $nosmin = "1.4.5,2022.2.24"
 
 #################################################################################################
-# Run w/ Powershell v7 if available & check VC Redist.
+# Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
 $v5run = $false
@@ -300,6 +301,7 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
+[void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
 [void] $Combo.Items.Add("Toolインストールのみ")
 $Combo.SelectedIndex = 0
@@ -406,6 +408,12 @@ $Combo_SelectedIndexChanged= {
             $scid = "ER"
             $aumin = $ermin
             Write-Log "ER Selected"
+            $RadioButton9.Checked = $True
+        }"ER+ES :yukieiji/ExtremeRoles"{
+            $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
+            $scid = "ER+ES"
+            $aumin = $esmin
+            Write-Log "ER+ES Selected"
             $RadioButton9.Checked = $True
         }"NOS :Dolly1016/Nebula"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
@@ -696,6 +704,19 @@ if($tio){
                 $torv = $torpv
                 Write-Log "Extreme Roles Version $torv が選択されました"
                 $checkt = $false
+            }elseif($scid -eq "ER+ES"){
+                if($torpv -lt $esmin){
+                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log "Extreme Roles Version $torv with Extreme Skins が選択されました"
+                $checkt = $false
             }elseif($scid -eq "NOS"){
                 if($torpv -lt $nosmin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -740,6 +761,8 @@ if($tio){
         $tordlp = "https://github.com/eDonnes124/Town-Of-Us-R/releases/download/${torv}/ToU.${torv}.zip"
     }elseif($scid -eq "ER"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
+    }elseif($scid -eq "ER+ES"){
+        $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
     }elseif($scid -eq "NOS"){
         $xvar = "0"
         for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
@@ -821,6 +844,10 @@ if($tio){
             if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" "C:\Temp\me.yukieiji.extremeroles.cfg" -Force               
             }
+        }elseif($scid -eq "ER+ES"){
+            if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" "C:\Temp\me.yukieiji.extremeroles.cfg" -Force               
+            }
         }elseif($scid -eq "NOS"){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
@@ -891,6 +918,14 @@ if($tio){
             Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force    
         }
     }elseif($scid -eq "ER"){
+        if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force
+            Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force    
+        }
+    }elseif($scid -eq "ER+ES"){
         if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
                 New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
@@ -980,6 +1015,11 @@ if($tio){
             Remove-Item "$aupathm\TheOtherRoles" -recurse
         }
     }elseif($scid -eq "ER"){
+        if(test-path "$aupathm\ExtremeRoles-$torv"){
+            robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
+        }
+    }elseif($scid -eq "ER+ES"){
         if(test-path "$aupathm\ExtremeRoles-$torv"){
             robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
