@@ -299,7 +299,7 @@ $form.ShowIcon = $False
 # コンボボックスに項目を追加
 [void] $Combo.Items.Add("TOR + :tomarai/TheOtherRoles")
 [void] $Combo.Items.Add("TOR GM :yukinogatari/TheOtherRoles-GM")
-[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
+#[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
