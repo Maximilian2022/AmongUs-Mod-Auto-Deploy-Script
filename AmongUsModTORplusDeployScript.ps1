@@ -456,7 +456,6 @@ $Combo_SelectedIndexChanged= {
                 $tempau = $aumin.split(".")
                 if($web2.tag_name[$ai] -ge $aumin){
                     if([int]$($tempar[1]) -ge [int]$($tempau[1])){
-                        write-host "$($tempar[1]) is bigger than $($tempau[1])"
                         $list2 += $($web2.tag_name[$ai])
                     }
                 }
