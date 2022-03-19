@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "Version 1.2.8"
+$version = "1.2.9"
 #
 #################################################################################################
 
@@ -13,6 +13,7 @@ $ermin = "v1.18.2.0"
 $esmin = "v1.18.5.0"
 $torpmin = "v3.4.4.1+"
 $torgmin = "v3.5.3"
+$torhmin = "v1.11.0"
 $nosmin = "1.4.5,2022.2.24"
 
 #################################################################################################
@@ -66,7 +67,7 @@ function Write-Log($logstring){
 
 Write-Log "-----------------------------------------------------------------"
 Write-Log "                    AmongUs Mod Deploy Script                    "
-Write-Log "                                                Version: $version"
+Write-Log "                                                   Version: $version"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
@@ -298,6 +299,7 @@ $form.ShowIcon = $False
 # コンボボックスに項目を追加
 [void] $Combo.Items.Add("TOR + :tomarai/TheOtherRoles")
 [void] $Combo.Items.Add("TOR GM :yukinogatari/TheOtherRoles-GM")
+[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
@@ -391,6 +393,12 @@ $Combo_SelectedIndexChanged= {
             $aumin = $torgmin
             Write-Log "TOR GM Selected"
             $RadioButton8.Checked = $True
+        }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
+            $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
+            $scid = "TOR GMH"
+            $aumin = $torhmin
+            Write-Log "TOR GMH Selected"
+            $RadioButton8.Checked = $True
         }"TOR :Eisbison/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases"
             $scid = "TOR"
@@ -434,13 +442,7 @@ $Combo_SelectedIndexChanged= {
     
         $list2 =@()
         # コンボボックスに項目を追加
-        if($scid -ne "NOS"){
-            for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-                if($web2.tag_name[$ai] -ge $aumin){
-                    $list2 += $($web2.tag_name[$ai])
-                }
-            }
-        }elseif($scid -eq "NOS"){
+        if($scid -eq "NOS"){
             for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                 if($web2.tag_name[$ai] -ge $nosmin){
                     if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
@@ -448,7 +450,23 @@ $Combo_SelectedIndexChanged= {
                     }        
                 }
             }            
+        }elseif($scid -eq "TOR GMH"){
+            for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                $tempar = $($web2.tag_name[$ai]).split(".")
+                $tempau = $aumin.split(".")
+                if($web2.tag_name[$ai] -ge $aumin){
+                    if([int]$($tempar[1]) -ge [int]$($tempau[1])){
+                        write-host "$($tempar[1]) is bigger than $($tempau[1])"
+                        $list2 += $($web2.tag_name[$ai])
+                    }
+                }
+            }
         }else{            
+            for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                if($web2.tag_name[$ai] -ge $aumin){
+                    $list2 += $($web2.tag_name[$ai])
+                }
+            }
         }
         $combo2.DataSource = $list2
         $Combo2.SelectedIndex = 0
@@ -665,6 +683,19 @@ if($tio){
                     Write-Log "TheOtherRole-GM Version $torv が選択されました"
                 }
                 $checkt = $false
+            }elseif($scid -eq "TOR GMH"){
+                if($torpv -lt $torhmin){
+                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log "TheOtherRole-GM-Haoming Version $torv が選択されました"
+                $checkt = $false
             }elseif($scid -eq "TOR"){
                 if($torpv -lt $tormin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -755,6 +786,8 @@ if($tio){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/v${torv}/TheOtherRoles.zip"
     }elseif($scid -eq "TOR GM"){
         $tordlp = "https://github.com/yukinogatari/TheOtherRoles-GM/releases/download/${torv}/TheOtherRoles-GM.${torv}.zip"    
+    }elseif($scid -eq "TOR GMH"){
+        $tordlp = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/${torv}/TheOtherRoles-GM-Haoming.${torv}.zip"
     }elseif($scid -eq "TOR"){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/${torv}/TheOtherRoles.zip"
     }elseif($scid -eq "TOU-R"){
@@ -1003,6 +1036,11 @@ if($tio){
             Write-Log "Download $scid DLL 開始"
             Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
             Write-Log "Download $scid DLL 完了"
+        }
+    }elseif($scid -eq "TOR GMH"){
+        if(test-path "$aupathm\TheOtherRoles-GM-Haoming.$torv"){
+            robocopy "$aupathm\TheOtherRoles-GM-Haoming.$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            Remove-Item "$aupathm\TheOtherRoles-GM-Haoming.$torv" -recurse
         }
     }elseif($scid -eq "TOU-R"){
         if(test-path "$aupathm\ToU $torv"){
