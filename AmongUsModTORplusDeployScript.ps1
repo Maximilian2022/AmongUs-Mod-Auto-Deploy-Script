@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.2.9"
+$version = "1.3.0"
 #
 #################################################################################################
 
@@ -748,7 +748,6 @@ if($tio){
     }
     $ziplist=@()
     $langdata
-    $langbool = $true
     if($scid -eq "TOR Plus"){
         ###TOR DL Path
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/v${torv}/TheOtherRoles.zip"
@@ -763,17 +762,14 @@ if($tio){
     }elseif($scid -eq "ER+ES"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
     }elseif($scid -eq "NOS"){
-        $xvar = "0"
-        for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-            if($web2.tag_name[$ai] -eq ${torv}){
-                $xvar = $ai
-            }
-        }
         $langhead=@()
         $langtail=@()
+        $torvtmp = $torv.Replace(",","%2C")
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
             if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
-                $ziplist += $web2.assets.browser_download_url[$aii]
+                if($($web2.assets.browser_download_url[$aii]).IndexOf("$torvtmp") -gt 0){
+                    $tordlp = $web2.assets.browser_download_url[$aii]
+                }
             }  
             if($($web2.assets.browser_download_url[$aii]).IndexOf("Japanese.dat") -gt 0){
                 if($($web2.assets.browser_download_url[$aii]).IndexOf("download/LANG") -gt 0){
@@ -787,16 +783,11 @@ if($tio){
         $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
         Write-Output $($langhead|Measure-Object -Maximum).Maximum
         Write-Output $($langtail|Measure-Object -Maximum).Maximum
-        if($langbool){
-            $langdata = $web2.assets.browser_download_url[$aii]
-            $langbool = $false
-        }
         if($lheadnum -gt $ltailnum){
             $langdata = $($langhead|Measure-Object -Maximum).Maximum
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum            
         }
-        $tordlp = $($ziplist[$xvar])
     }else{
         Write-Log "Critical Error 2"
         $Form2.Close()
