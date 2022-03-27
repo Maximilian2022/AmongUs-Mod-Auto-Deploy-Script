@@ -855,7 +855,7 @@ if($tio){
             if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg" "C:\Temp\me.yukieiji.extremeskins.cfg" -Force               
                 New-Item -Path "C:\Temp\ExtremeHat" -ItemType Directory
-                Copy-Item "$aupathm\ExtremeHat" -Recurse "C:\Temp\ExtremeHat"
+                Copy-Item "$aupathm\ExtremeHat\*" -Recurse "C:\Temp\ExtremeHat"
                 }
     }elseif($scid -eq "NOS"){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
@@ -865,7 +865,7 @@ if($tio){
             if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
                 New-Item -Path "C:\Temp\TheOtherHats" -ItemType Directory
-                Copy-Item "$aupathm\TheOtherHats" -Recurse "C:\Temp\TheOtherHats"
+                Copy-Item "$aupathm\TheOtherHats\*" -Recurse "C:\Temp\TheOtherHats"
             }
         }
 
@@ -951,7 +951,7 @@ if($tio){
             if(!(Test-Path "$aupathm\ExtremeHat")){
                 New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
             }
-            Copy-Item "C:\Temp\ExtremeHat" -Recurse "$aupathm\ExtremeHat"
+            Copy-Item "C:\Temp\ExtremeHat\*" -Recurse "$aupathm\ExtremeHat"
             Remove-Item "C:\Temp\ExtremeHat" -Recurse
         }
     }elseif($scid -eq "NOS"){
@@ -972,7 +972,7 @@ if($tio){
             if(!(Test-Path "$aupathm\TheOtherHats")){
                 New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
             }
-            Copy-Item "C:\Temp\TheOtherHats" -Recurse "$aupathm\TheOtherHats"
+            Copy-Item "C:\Temp\TheOtherHats\*" -Recurse "$aupathm\TheOtherHats"
             Remove-Item "C:\Temp\TheOtherHats" -Recurse
         }
     }
