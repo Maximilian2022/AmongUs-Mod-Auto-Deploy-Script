@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.0"
+$version = "1.3.1"
 #
 #################################################################################################
 
@@ -781,8 +781,6 @@ if($tio){
         }
         $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
         $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
-        Write-Output $($langhead|Measure-Object -Maximum).Maximum
-        Write-Output $($langtail|Measure-Object -Maximum).Maximum
         if($lheadnum -gt $ltailnum){
             $langdata = $($langhead|Measure-Object -Maximum).Maximum
         }else{
@@ -853,6 +851,9 @@ if($tio){
         }elseif($scid -eq "ER+ES"){
             if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" "C:\Temp\me.yukieiji.extremeroles.cfg" -Force               
+            }
+            if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg" "C:\Temp\me.yukieiji.extremeskins.cfg" -Force               
             }
         }elseif($scid -eq "NOS"){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
@@ -938,6 +939,13 @@ if($tio){
             }
             Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force
             Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force    
+        }
+        if(test-path "C:\Temp\me.yukieiji.extremeskins.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\me.yukieiji.extremeskins.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg" -Force
+            Remove-Item "C:\Temp\me.yukieiji.extremeskins.cfg" -Force    
         }
     }elseif($scid -eq "NOS"){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
