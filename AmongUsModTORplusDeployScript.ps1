@@ -854,8 +854,10 @@ if($tio){
             }
             if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg" "C:\Temp\me.yukieiji.extremeskins.cfg" -Force               
-            }
-        }elseif($scid -eq "NOS"){
+                New-Item -Path "C:\Temp\ExtremeHat" -ItemType Directory
+                Copy-Item "$aupathm\ExtremeHat" -Recurse "C:\Temp\ExtremeHat"
+                }
+    }elseif($scid -eq "NOS"){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
             }
@@ -946,6 +948,11 @@ if($tio){
             }
             Copy-Item "C:\Temp\me.yukieiji.extremeskins.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg" -Force
             Remove-Item "C:\Temp\me.yukieiji.extremeskins.cfg" -Force    
+            if(!(Test-Path "$aupathm\ExtremeHat")){
+                New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\ExtremeHat" -Recurse "$aupathm\ExtremeHat"
+            Remove-Item "C:\Temp\ExtremeHat" -Recurse
         }
     }elseif($scid -eq "NOS"){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
