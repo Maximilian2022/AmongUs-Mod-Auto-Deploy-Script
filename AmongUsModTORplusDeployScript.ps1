@@ -390,13 +390,13 @@ $Combo_SelectedIndexChanged= {
             $scid = "TOR GM"
             $aumin = $torgmin
             Write-Log "TOR GM Selected"
-            $RadioButton8.Checked = $True
+            $RadioButton9.Checked = $True
         }"TOR :Eisbison/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases"
             $scid = "TOR"
             $aumin = $tormin
             Write-Log "TOR Selected"
-            $RadioButton8.Checked = $True
+            $RadioButton9.Checked = $True
         }"TOU-R :eDonnes124/Town-Of-Us-R"{
             $releasepage2 = "https://api.github.com/repos/eDonnes124/Town-Of-Us-R/releases"
             $scid = "TOU-R"
@@ -951,7 +951,7 @@ if($tio){
             if(!(Test-Path "$aupathm\ExtremeHat")){
                 New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
             }
-            Copy-Item "C:\Temp\ExtremeHat\*" -Recurse "$aupathm\ExtremeHat"
+            robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /E /log+:$LogFileName >nul 2>&1
             Remove-Item "C:\Temp\ExtremeHat" -Recurse
         }
     }elseif($scid -eq "NOS"){
@@ -972,7 +972,7 @@ if($tio){
             if(!(Test-Path "$aupathm\TheOtherHats")){
                 New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
             }
-            Copy-Item "C:\Temp\TheOtherHats\*" -Recurse "$aupathm\TheOtherHats"
+            robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /E /log+:$LogFileName >nul 2>&1
             Remove-Item "C:\Temp\TheOtherHats" -Recurse
         }
     }
