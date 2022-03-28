@@ -396,7 +396,7 @@ $Combo_SelectedIndexChanged= {
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
-            $aumin = $torgmin
+            $aumin = $torhmin
             Write-Log "TOR GMH Selected"
             $RadioButton9.Checked = $True
         }"TOR :Eisbison/TheOtherRoles"{
@@ -615,6 +615,7 @@ $Bar.Minimum = "0"
 $Bar.Style = "Continuous"
 $Form2.Controls.Add($Bar)
 $checkgm = $true
+$torgmdll
 
 if($tio){
 
@@ -792,7 +793,7 @@ if($tio){
                 $checkgm = $false
             }
         }
-        for($aiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
+        for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
             if($($langd[$aiiii]).IndexOf("$torv") -gt 0){
                 $torgmdll = $($langd[$aiiii])
                 $checkdll = $false
@@ -810,9 +811,9 @@ if($tio){
                     Write-Output "ERROR:something wrong."
                     exit
                 }else{
-                    for($aiii = 0;$aiii -lt  $langh.Length;$aiii++){
-                        if($($langh[$aiii]).IndexOf("$torv") -gt 0){
-                            $tordlp = $($langh[$aiii])
+                    for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
+                        if($($langh[$aiv]).IndexOf("$torv") -gt 0){
+                            $tordlp = $($langh[$aiv])
                             $checkzip = $false
                         }
                     }                
