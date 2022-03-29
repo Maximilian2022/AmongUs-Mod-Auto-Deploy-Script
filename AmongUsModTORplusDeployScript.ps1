@@ -805,7 +805,7 @@ if($tio){
             $vermet = @()
             $vermet = $torv.split(".")
             $v3 = $vermet[2] -1
-            $torv = "$($vermet[0]).$($vermet[1]).$3"
+            $torv = "$($vermet[0]).$($vermet[1]).$v3"
             if($checkzip){
                 if($checkdll){
                     Write-Output "ERROR:something wrong."
