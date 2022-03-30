@@ -610,7 +610,7 @@ $form2.FormBorderStyle = "Fixed3D"
 $Bar = New-Object System.Windows.Forms.ProgressBar
 $Bar.Location = "10,20"
 $Bar.Size = "460,30"
-$Bar.Maximum = "10"
+$Bar.Maximum = "30"
 $Bar.Minimum = "0"
 $Bar.Style = "Continuous"
 $Form2.Controls.Add($Bar)
@@ -626,7 +626,7 @@ if($tio){
 
     $web = Invoke-WebRequest $releasepage -UseBasicParsing
     $web2 = ConvertFrom-Json $web.Content
-
+    $Bar.Value = "1"
     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
         if($web2.tag_name[$ai] -eq "$torpv"){
             if($scid -eq "TOR Plus"){
@@ -761,6 +761,7 @@ if($tio){
             }
         }
     }
+    $Bar.Value = "2"
 
     if($checkt){
         Write-Log "指定されたバージョンは見つかりませんでした"
@@ -769,6 +770,7 @@ if($tio){
         pause
         exit
     }
+    $Bar.Value = "3"
     $langdata
     if($scid -eq "TOR Plus"){
         ###TOR DL Path
@@ -869,7 +871,7 @@ if($tio){
 
     Write-Output $tordlp
 
-    $Bar.Value = "1"
+    $Bar.Value = "4"
 
     ###作成したModのExeへのショートカットをDesktopに配置する
     if($RadioButton1.Checked){
@@ -879,6 +881,7 @@ if($tio){
     }else{
         Write-Log "Critical Error: Shortcut"
     }
+    $Bar.Value = "5"
     ###作成したModのExeへのショートカットをDesktopに配置する
     ###作成したModを即座に実行する
     #デフォルトでは実行しない
@@ -891,7 +894,7 @@ if($tio){
         Write-Log "Critical Error: StartCheck"
     }
 
-    $Bar.Value = "2"
+    $Bar.Value = "6"
 
     #################################################################################################
     #処理フェイズ　この下は触らない
@@ -913,6 +916,7 @@ if($tio){
         }else{
             Write-Log "Critical Error: Retry"
         }
+        $Bar.Value = "7"
 
         if($scid -eq "TOU-R"){
             if(test-path "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg"){                
@@ -942,6 +946,7 @@ if($tio){
                 Copy-Item "$aupathm\TheOtherHats\*" -Recurse "C:\Temp\TheOtherHats"
             }
         }
+        $Bar.Value = "8"
 
         if ($retry -eq "true"){
             Write-Log '既存のフォルダを中身を含めて削除します'
@@ -961,13 +966,14 @@ if($tio){
                 Exit
             }
         }
+        $Bar.Value = "9"
     }else{
         # フォルダを中身を含めてコピーする
         Copy-Item $aupatho -destination $aupathm -recurse
         Write-Log ($aupatho + 'を' + $aupathm + 'にコピー完了');
     } 
 
-    $Bar.Value = "3"
+    $Bar.Value = "10"
 
     ####
     #まずはTORをDL
@@ -975,6 +981,7 @@ if($tio){
     Write-Log $tordlp
     Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
     Write-Log 'Download ZIP 完了'
+    $Bar.Value = "11"
 
     #DLしたTORを解凍
     if (test-path "$aupathm\TheOtherRoles.zip"){
@@ -986,11 +993,12 @@ if($tio){
         Write-Log ("ZIP DL NG $tordlp ");
     }
 
-    $Bar.Value = "4"
+    $Bar.Value = "12"
 
     if(test-path "$aupathm\BepInEx"){
         Write-Log ("ZIP 解凍OK");
     }
+    $Bar.Value = "13"
 
     if($scid -eq "TOU-R"){
         if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
@@ -1050,6 +1058,7 @@ if($tio){
             Remove-Item "C:\Temp\TheOtherHats" -Recurse
         }
     }
+    $Bar.Value = "14"
 
     #AUShipMOD 配置
     if($ausmod){
@@ -1067,6 +1076,7 @@ if($tio){
         Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
         Write-Log "AUShipMOD Latest DLL download done"
     }
+    $Bar.Value = "15"
 
     if($scid -eq "TOR Plus"){
         ###
@@ -1148,6 +1158,7 @@ if($tio){
         Write-Log "日本語 データ Download 完了"
     }else{
     }
+    $Bar.Value = "16"
 
     #解凍チェック
     if (test-path "$aupathm\BepInEx\plugins"){
@@ -1157,7 +1168,7 @@ if($tio){
     }else{
       Write-Log ("ZIP 解凍NG");
     }
-    $Bar.Value = "5"
+    $Bar.Value = "17"
 
     if($shortcut -eq $true){
         ##Desktopにショートカットを配置する
@@ -1167,6 +1178,7 @@ if($tio){
             Remove-item -Path "$scpath\Among Us Mod $scid.lnk"
             Write-Log '既存のMod用Shortcut削除'
         }
+        $Bar.Value = "18"
 
         # ショートカットを作る
         $WsShell = New-Object -ComObject WScript.Shell
@@ -1188,10 +1200,12 @@ if($tio){
     }
 }
 
+$Bar.Value = "19"
+
 if($tio -eq $false){
     $Form2.Show()
 }
-$Bar.Value = "6"
+$Bar.Value = "20"
 
 if($CheckedBox.CheckedItems.Count -gt 0){
     for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
@@ -1212,7 +1226,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Start-Process "$md\$bclfile" -wait
             Write-Log "BCL Install Done"
             Remove-Item $md\$bclfile
-            $Bar.Value = "7"
+            $Bar.Value = "21"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsReplayInWindow"){
             $qureq = $true
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
@@ -1250,7 +1264,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Write-Log "AmongUsReplayInWindowの処理を中止します"
                 }
             }
-            $Bar.Value = "8"
+            $Bar.Value = "22"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsCapture"){
             $qureq = $true
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
@@ -1288,7 +1302,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Write-Log "AmongUsCaptureの処理を中止します"
                 }
             }
-            $Bar.Value = "9"
+            $Bar.Value = "23"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
             $fpth = Join-Path $npl "\install.ps1"
@@ -1304,6 +1318,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             }
             Remove-Item "$fpth"
             Write-Log "VC Redist Install ends"
+            $Bar.Value = "24"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
             $pspth = Join-Path $npl "\PowerShell-7.2.1-win-x64.msi"
@@ -1318,13 +1333,13 @@ if($CheckedBox.CheckedItems.Count -gt 0){
 
             Remove-Item $pspth
             Write-Log "PS7 Install ends"
+            $Bar.Value = "25"
         }else{
         }
     }
 }
 
- 
-$Bar.Value = "9"
+$Bar.Value = "26"
 
 ####################
 #bat file auto update
@@ -1334,7 +1349,7 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
 }
 ####################
 
-$Bar.Value = "10"
+$Bar.Value = "27"
 $Form2.Close()
 
 if($tio){
