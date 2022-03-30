@@ -769,7 +769,6 @@ if($tio){
         pause
         exit
     }
-    $ziplist=@()
     $langdata
     if($scid -eq "TOR Plus"){
         ###TOR DL Path
@@ -805,6 +804,10 @@ if($tio){
             $vermet = @()
             $vermet = $torv.split(".")
             $v3 = $vermet[2] -1
+            if($v3 -lt 0){
+                Write-Output "ERROR: Negative version num"
+                exit
+            }
             $torv = "$($vermet[0]).$($vermet[1]).$v3"
             if($checkzip){
                 if($checkdll){
@@ -1101,7 +1104,7 @@ if($tio){
             robocopy "$aupathm\TheOtherRoles-GM-Haoming.$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles-GM-Haoming.$torv" -recurse
         }
-        if(!($checkgm)){
+        if($checkgm){
             #Mod Original DLL削除
             Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
             Write-Log 'Delete Original Mod DLL'
