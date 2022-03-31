@@ -1350,7 +1350,6 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
 ####################
 
 $Bar.Value = "27"
-$Form2.Close()
 
 if($tio){
     if($startexewhendone -eq $true){
@@ -1358,11 +1357,13 @@ if($tio){
     }else{
     }
 }
+$Bar.Value = "28"
 
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
+$Bar.Value = "29"
 Start-Sleep -s 5
-
+$Form2.Close()
 exit
