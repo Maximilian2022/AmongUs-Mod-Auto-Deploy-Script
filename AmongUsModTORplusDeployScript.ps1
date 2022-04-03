@@ -2,19 +2,22 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.2"
+$version = "1.3.3"
 #
 #################################################################################################
+
+
+###v2022.03.29対応minimum version
+$nosmin = "1.7.1,2022.3.29"
+$ermin = "v1.99.90.0"
+$esmin = "v1.99.90.0"
 
 ###v2022.02.23対応minimum version
 $tourmin = "v2.6.2"
 $tormin = "v3.4.4"
-$ermin = "v1.18.2.0"
-$esmin = "v1.18.5.0"
 $torpmin = "v3.4.4.1+"
 $torgmin = "v3.5.3"
 $torhmin = "v1.11.0"
-$nosmin = "1.4.5,2022.2.24"
 
 #################################################################################################
 # Run w/ Powershell v7 if available.
@@ -616,6 +619,7 @@ $Bar.Style = "Continuous"
 $Form2.Controls.Add($Bar)
 $checkgm = $true
 $torgmdll
+$Bar.Value = "0"
 
 if($tio){
 
@@ -1350,6 +1354,8 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
 ####################
 
 $Bar.Value = "27"
+$Bar.Value = "30"
+$Form2.Close()
 
 if($tio){
     if($startexewhendone -eq $true){
@@ -1357,13 +1363,10 @@ if($tio){
     }else{
     }
 }
-$Bar.Value = "28"
 
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
-$Bar.Value = "29"
 Start-Sleep -s 5
-$Form2.Close()
 exit
