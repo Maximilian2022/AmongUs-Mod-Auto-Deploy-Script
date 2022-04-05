@@ -572,6 +572,11 @@ $Combo_SelectedIndexChanged= {
     $script:tio = $tio
 }
 
+if(Test-Path $aupathb){
+}else{
+    New-Item $aupathb -ItemType Directory
+}
+
 # フォームにコンボボックスを追加
 $form.Controls.Add($Combo)
 $form.Controls.Add($Combo2)
