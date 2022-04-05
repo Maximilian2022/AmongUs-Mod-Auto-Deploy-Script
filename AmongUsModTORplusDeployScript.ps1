@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.3"
+$version = "1.3.4"
 #
 #################################################################################################
 
@@ -957,7 +957,7 @@ if($tio){
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
             Copy-Item $aupatho -destination $aupathm -recurse
-            Write-Log ($aupatho + 'を' + $aupathm + 'にコピーしました');
+            Write-Log ($aupatho + 'を' + $aupathm + 'にコピーしました');           
         }else{
             # コピー先のパスにファイルやフォルダが存在する場合は処理を中止
             Write-Log ($aupathm + 'には既にファイル又はフォルダが存在します');
@@ -976,6 +976,35 @@ if($tio){
         Copy-Item $aupatho -destination $aupathm -recurse
         Write-Log ($aupatho + 'を' + $aupathm + 'にコピー完了');
     } 
+
+    #Backup System
+    $datest = Get-Date -Format "yyyyMMdd-hhmmss"
+    $backuptxt = "$aupatho\backuphash.txt"
+    $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
+    Write-Log $ziphash
+    if(test-path "$backuptxt"){
+        $f = (Get-Content $backuptxt) -as [string[]]
+        $zhash = $f[0]
+        Write-Log $zhash
+        $filen = $f[1]
+        Write-Log $filen
+        $curfi = Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
+        if($curfi.Hash -eq $zhash){
+            Remove-Item -Path $(Join-path $aupatho "Among Us-$datest.zip") -Force
+        }else{
+            if(test-path $filen){
+                Remove-Item -Path $filen -Force
+                Remove-Item -Path $backuptxt -Force
+                Write-Output "$($ziphash.Hash)` $($ziphash).Path"> $backuptxt
+            }else{
+                Remove-Item -Path $backuptxt -Force
+                Write-Output "$($ziphash.Hash)` $($ziphash).Path"> $backuptxt
+            }
+        }
+    }else{
+        Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
+        Write-Output "$($ziphash.Hash)` $($ziphash).Path"> $backuptxt
+    }
 
     $Bar.Value = "10"
 
