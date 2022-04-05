@@ -991,8 +991,10 @@ if($tio){
         $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
         Write-Log $ziphash
         if($ziphash.Hash -eq $zhash){
+            Write-Log "古い同一Backupが見つかったのでSkipします"
             Remove-Item -Path $(Join-path $aupatho "Among Us-$datest.zip") -Force
         }else{
+            Write-Log "新しいBackupが見つかったので再生成します"
             if(test-path $filen){
                 Remove-Item -Path $filen -Force
                 Remove-Item -Path $backuptxt -Force
@@ -1003,9 +1005,12 @@ if($tio){
             }
         }
     }else{
+        Write-Log "Backupが見つかりません。生成します。"
         Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
+        $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
         Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
     }
+    Write-Log "Backup Feature Ends"
 
     $Bar.Value = "10"
 
