@@ -572,11 +572,6 @@ $Combo_SelectedIndexChanged= {
     $script:tio = $tio
 }
 
-if(Test-Path $aupathb){
-}else{
-    New-Item $aupathb -ItemType Directory
-}
-
 # フォームにコンボボックスを追加
 $form.Controls.Add($Combo)
 $form.Controls.Add($Combo2)
@@ -993,7 +988,11 @@ if($tio){
     } 
 
     #Backup System
-    Write-Log "Backup Feature Start"
+    if(Test-Path $aupathb){
+    }else{
+        New-Item $aupathb -ItemType Directory
+    }
+        Write-Log "Backup Feature Start"
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
     $backuptxt = "$aupathb\backuphash.txt"
     if(test-path "$backuptxt"){
