@@ -361,6 +361,7 @@ $tio = $true
 $aumin =""
 $aupatho=""
 $aupathm=""
+$aupathb=""
 $checkt = $true
 $releasepage =""
 $ausmod = $false
@@ -471,10 +472,14 @@ $Combo_SelectedIndexChanged= {
         $au_path_steam_org = "C:\Program Files (x86)\Steam\steamapps\common\Among Us"
         #Among Us Modded Path ：Steam Mod用フォルダ
         $au_path_steam_mod = "C:\Program Files (x86)\Steam\steamapps\common\Among Us $scid Mod"
+        #Among Us Backup ：Backup用フォルダ
+        $au_path_steam_back = "C:\Program Files (x86)\Steam\steamapps\common\Among Us Backup"
         #Among Us Original Epic Path
         $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
         #Among Us Modded Path ：Steam Mod用フォルダ
         $au_path_epic_mod = "C:\Program Files\Epic Games\AmongUs $scid Mod"
+        #Among Us Backup ：Backup用フォルダ
+        $au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
   
         if(Test-path "$au_path_steam_org\Among Us.exe"){
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
@@ -487,6 +492,7 @@ $Combo_SelectedIndexChanged= {
             }
             $aupatho = $au_path_steam_org
             $aupathm = $au_path_steam_mod
+            $aupathb = $au_path_steam_back
         }elseif(Test-path "$au_path_epic_org\Among Us.exe"){
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_epic_org\BepInEx"){
@@ -498,6 +504,7 @@ $Combo_SelectedIndexChanged= {
             }
             $aupatho = $au_path_epic_org
             $aupathm = $au_path_epic_mod
+            $aupathb = $au_path_epic_back
         }else{
             $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
             ### Load
@@ -537,8 +544,10 @@ $Combo_SelectedIndexChanged= {
                 $str_path = (Convert-Path .)
                 Write-Log $str_path
                 $aupathm = "$str_path\Among Us $scid Mod"
+                $aupathb = "$str_path\Among Us Backup"
                 Write-Log "Mod入りAmongUsは以下のフォルダにDeployされます"
                 Write-Log $aupathm
+                Write-Log $aupathb
 
                 ### Auto Save
                 Write-Output "$aupatho"> $fileName
@@ -555,6 +564,7 @@ $Combo_SelectedIndexChanged= {
         $label6.Text = $aupathm
         $script:aupatho = $aupatho
         $script:aupathm = $aupathm
+        $script:aupathb = $aupathb
         $script:releasepage = $releasepage2
         $script:scid = $scid
         $script:aumin = $aumin
@@ -980,19 +990,19 @@ if($tio){
     #Backup System
     Write-Log "Backup Feature Start"
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
-    $backuptxt = "$aupatho\backuphash.txt"
+    $backuptxt = "$aupathb\backuphash.txt"
     if(test-path "$backuptxt"){
         $f = (Get-Content $backuptxt) -as [string[]]
         $zhash = $f[0]
         Write-Log $zhash
         $filen = $f[1]
         Write-Log $filen
-        $curfi = Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
-        $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
+        $curfi = Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
+        $ziphash = get-filehash $(Join-path $aupathb "Among Us-$datest.zip")
         Write-Log $ziphash
         if($ziphash.Hash -eq $zhash){
             Write-Log "古い同一Backupが見つかったのでSkipします"
-            Remove-Item -Path $(Join-path $aupatho "Among Us-$datest.zip") -Force
+            Remove-Item -Path $(Join-path $aupathb "Among Us-$datest.zip") -Force
         }else{
             Write-Log "新しいBackupが見つかったので再生成します"
             if(test-path $filen){
@@ -1006,8 +1016,8 @@ if($tio){
         }
     }else{
         Write-Log "Backupが見つかりません。生成します。"
-        Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
-        $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
+        Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
+        $ziphash = get-filehash $(Join-path $aupathb "Among Us-$datest.zip")
         Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
     }
     Write-Log "Backup Feature Ends"
