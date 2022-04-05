@@ -978,9 +978,9 @@ if($tio){
     } 
 
     #Backup System
+    Write-Log "Backup Feature Start"
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
     $backuptxt = "$aupatho\backuphash.txt"
-    $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
     Write-Log $ziphash
     if(test-path "$backuptxt"){
         $f = (Get-Content $backuptxt) -as [string[]]
@@ -989,7 +989,8 @@ if($tio){
         $filen = $f[1]
         Write-Log $filen
         $curfi = Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
-        if($curfi.Hash -eq $zhash){
+        $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
+        if($ziphash.Hash -eq $zhash){
             Remove-Item -Path $(Join-path $aupatho "Among Us-$datest.zip") -Force
         }else{
             if(test-path $filen){
