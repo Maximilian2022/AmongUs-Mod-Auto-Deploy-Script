@@ -981,7 +981,6 @@ if($tio){
     Write-Log "Backup Feature Start"
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
     $backuptxt = "$aupatho\backuphash.txt"
-    Write-Log $ziphash
     if(test-path "$backuptxt"){
         $f = (Get-Content $backuptxt) -as [string[]]
         $zhash = $f[0]
@@ -990,21 +989,22 @@ if($tio){
         Write-Log $filen
         $curfi = Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
         $ziphash = get-filehash $(Join-path $aupatho "Among Us-$datest.zip")
+        Write-Log $ziphash
         if($ziphash.Hash -eq $zhash){
             Remove-Item -Path $(Join-path $aupatho "Among Us-$datest.zip") -Force
         }else{
             if(test-path $filen){
                 Remove-Item -Path $filen -Force
                 Remove-Item -Path $backuptxt -Force
-                Write-Output "$($ziphash.Hash)` $($ziphash).Path"> $backuptxt
+                Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
             }else{
                 Remove-Item -Path $backuptxt -Force
-                Write-Output "$($ziphash.Hash)` $($ziphash).Path"> $backuptxt
+                Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
             }
         }
     }else{
         Compress-Archive -Path $aupatho $(Join-path $aupatho "Among Us-$datest.zip") -Force
-        Write-Output "$($ziphash.Hash)` $($ziphash).Path"> $backuptxt
+        Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
     }
 
     $Bar.Value = "10"
