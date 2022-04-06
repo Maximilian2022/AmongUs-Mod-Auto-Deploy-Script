@@ -111,7 +111,63 @@ function Get-FolderPathG{
     }
 }
 #################################################################################################
+# バイト配列を16進数文字列に変換する. 
+function ToHex([byte[]] $hashBytes)
+{
+    $builder = New-Object System.Text.StringBuilder
+    $hashBytes | ForEach-Object{ [void] $builder.Append($_.ToString("x2")) }
+    $builder.ToString()
+}
 
+# 指定したフォルダ以下の全てのファイルを取得する.
+# (ファイルが指定された場合はファイル自身を返す)
+function GetFilesRecurse([string] $path)
+{
+    Get-ChildItem $path -Recurse |
+        Where-Object -FilterScript {
+            # ディレクトリ以外のみ (ディレクトリのビットマスク値は16)
+            ($_.Attributes -band 16) -eq 0
+        }
+}
+
+function MakeEntry
+{
+    process {
+        New-Object PSObject -Property @{
+            LastWriteTime = $_.LastWriteTime;
+            Length = $_.Length;
+            FullName = $_.FullName;
+        }
+    }
+}
+
+# パイプラインからのファイルのハッシュ情報を取得する.
+#https://gist.github.com/seraphy/4674696
+function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを指定します."))
+{
+    begin {
+        $algo = [System.Security.Cryptography.HashAlgorithm]::Create($algoName)
+
+        # ファイルのハッシュ値を計算するスクリプトブロック(Closure)
+        function CalcurateHash([string] $path) {
+            $inputStream = New-Object IO.StreamReader $path
+            try {
+                $algo.ComputeHash($inputStream.BaseStream)
+         
+            } finally {
+                $inputStream.Close()
+            }
+        }
+    }
+    process { # パイプライン処理
+    $hashVal = ToHex(CalcurateHash $_.FullName)
+        $_ | Add-Member -MemberType NoteProperty -Name $algoName -Value $hashVal
+    return $_
+    }
+    end {
+        [void] $algo.Dispose # voidを指定しないと後続パイプラインにnullが渡される
+    }
+}
 
 #################################################################################################
 ### GM Mod or TOR+ 選択メニュー表示
@@ -548,7 +604,6 @@ $Combo_SelectedIndexChanged= {
                 Write-Log "Mod入りAmongUsは以下のフォルダにDeployされます"
                 Write-Log $aupathm
                 Write-Log $aupathb
-
                 ### Auto Save
                 Write-Output "$aupatho"> $fileName
                 Write-Log "Amongus ModDeployScript Autosave function"
@@ -994,35 +1049,51 @@ if($tio){
     }
         Write-Log "Backup Feature Start"
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
-    $backuptxt = "$aupathb\backuphash.txt"
+    $backhashtxt = "$aupathb\backuphash.txt"
+    $backuptxt = "$aupathb\backupfn.txt"
     if(test-path "$backuptxt"){
         $f = (Get-Content $backuptxt) -as [string[]]
-        $zhash = $f[0]
-        Write-Log $zhash
-        $filen = $f[1]
+        $filen = $f[0]
         Write-Log $filen
-        $curfi = Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
-        $ziphash = get-filehash $(Join-path $aupathb "Among Us-$datest.zip")
-        Write-Log $ziphash
-        if($ziphash.Hash -eq $zhash){
+        Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
+        $t = ""
+        $r = ""
+        $e = ""
+        
+        $t = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+        foreach($l in $t){
+            $r += " $l"
+        }
+        $e = (Get-Content $backhashtxt) -as [string[]]
+
+        if($r -eq $e){
             Write-Log "古い同一Backupが見つかったのでSkipします"
-            Remove-Item -Path $(Join-path $aupathb "Among Us-$datest.zip") -Force
         }else{
             Write-Log "新しいBackupが見つかったので再生成します"
+            write-log $e
+            Write-log $r
+            Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
             if(test-path $filen){
                 Remove-Item -Path $filen -Force
+                Remove-Item -Path $backhashtxt -Force
                 Remove-Item -Path $backuptxt -Force
-                Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
+                $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+                Write-Output " $thash"> $backhashtxt
+                Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
             }else{
+                Remove-Item -Path $backhashtxt -Force
                 Remove-Item -Path $backuptxt -Force
-                Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
+                $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+                Write-Output " $thash"> $backhashtxt
+                Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
             }
         }
     }else{
         Write-Log "Backupが見つかりません。生成します。"
+        $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+        Write-Output " $thash"> $backhashtxt
+        Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
         Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
-        $ziphash = get-filehash $(Join-path $aupathb "Among Us-$datest.zip")
-        Write-Output "$($ziphash.Hash)`n$($ziphash.Path)"> $backuptxt
     }
     Write-Log "Backup Feature Ends"
 
