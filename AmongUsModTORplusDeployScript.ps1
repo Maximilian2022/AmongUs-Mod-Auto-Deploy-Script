@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.4"
+$version = "1.3.5"
 #
 #################################################################################################
 
@@ -11,6 +11,7 @@ $version = "1.3.4"
 $nosmin = "1.7.1,2022.3.29"
 $ermin = "v1.99.90.0"
 $esmin = "v1.99.90.0"
+$aummin = "v1.0.0"
 
 ###v2022.02.23対応minimum version
 $tourmin = "v2.6.2"
@@ -67,8 +68,10 @@ function Write-Log($logstring){
     # echo させるために出力したログを戻す
     Return $Log
 }
-
+Write-Log "Running With Powershell Version $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)"
+Write-Log "                                                                 "
 Write-Log "-----------------------------------------------------------------"
+Write-Log "                                                                 "
 Write-Log "                    AmongUs Mod Deploy Script                    "
 Write-Log "                                                   Version: $version"
 Write-Log "-----------------------------------------------------------------"
@@ -357,6 +360,7 @@ $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
 [void] $Combo.Items.Add("TOR + :tomarai/TheOtherRoles")
+[void] $Combo.Items.Add("AUM :tomarai/AUMod")
 [void] $Combo.Items.Add("TOR GM :yukinogatari/TheOtherRoles-GM")
 [void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
@@ -447,6 +451,12 @@ $Combo_SelectedIndexChanged= {
             $aumin = $torpmin
             Write-Log "TOR+ Selected"
             $RadioButton8.Checked = $True
+        }"AUM :tomarai/AUMod"{
+            $releasepage2 = "https://api.github.com/repos/tomarai/AUMod/releases"
+            $scid = "AUM"
+            $aumin = $aummin
+            Write-Log "AUM Selected"
+            $RadioButton9.Checked = $True
         }"TOR GM :yukinogatari/TheOtherRoles-GM"{
             $releasepage2 = "https://api.github.com/repos/yukinogatari/TheOtherRoles-GM/releases"
             $scid = "TOR GM"
@@ -725,6 +735,25 @@ if($tio){
                 Write-Log $tortmp   
 
                 $checkt = $false
+            }elseif($scid -eq "AUM"){
+                if($torpv -lt $aummin){
+                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                #TORのバージョンをTOR+のバージョンから指定
+                $torv = "3.4.4"
+                Write-Log "TheOtherRole Version latest が自動的に選択されました"
+                $torplus = $web2.assets[$ai].browser_download_url
+                Write-Log $web2.tag_name[$ai]
+                Write-Log $torpv
+                Write-Log $torv
+
+                $checkt = $false
             }elseif($scid -eq "TOR GM"){
                 if($torpv -lt $torgmin){
                     if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -842,6 +871,9 @@ if($tio){
     $Bar.Value = "3"
     $langdata
     if($scid -eq "TOR Plus"){
+        ###TOR DL Path
+        $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/v${torv}/TheOtherRoles.zip"
+    }elseif($scid -eq "AUM"){
         ###TOR DL Path
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/v${torv}/TheOtherRoles.zip"
     }elseif($scid -eq "TOR GMH"){
@@ -1204,6 +1236,19 @@ if($tio){
 
     if($scid -eq "TOR Plus"){
         ###
+        #Mod Original DLL削除
+        if(test-path "$aupathm\TheOtherRoles"){
+            robocopy "$aupathm\TheOtherRoles" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            Remove-Item "$aupathm\TheOtherRoles" -recurse
+        }
+        Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
+        Write-Log 'Delete Original Mod DLL'
+        #TOR+ DLLをDLして配置
+        Write-Log "Download $scid DLL 開始"
+        Write-Log $torplus
+        Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
+        Write-Log "Download $scid DLL 完了"
+    }elseif($scid -eq "AUM"){
         #Mod Original DLL削除
         if(test-path "$aupathm\TheOtherRoles"){
             robocopy "$aupathm\TheOtherRoles" "$aupathm" /E /log+:$LogFileName >nul 2>&1
