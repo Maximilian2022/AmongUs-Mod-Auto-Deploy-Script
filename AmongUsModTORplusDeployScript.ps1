@@ -340,7 +340,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,105"
 
 # 配列を作成
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","PowerShell 7")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","PowerShell 7","dotNetFramework")
 
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
@@ -893,20 +893,26 @@ if($tio){
                 $tordlp = $($langh[$aiii])
                 $checkzip = $false
                 $checkgm = $false
-            }
-        }
-        for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
-            if($($langd[$aiiii]).IndexOf("$torv") -gt 0){
-                $torgmdll = $($langd[$aiiii])
                 $checkdll = $false
             }
         }
-
+        if($checkdll){
+            for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
+                if($($langd[$aiiii]).IndexOf("$torv") -gt 0){
+                    $torgmdll = $($langd[$aiiii])
+                    $checkdll = $false
+                }
+            }
+        }
         $wvar = $true
         while($wvar){
             $vermet = @()
             $vermet = $torv.split(".")
-            $v3 = $vermet[2] -1
+            if($($vermet[2]) -ne 0){
+                $v3 = $vermet[2] -1
+            }else{
+                $v3 = 0
+            }
             if($v3 -lt 0){
                 Write-Output "ERROR: Negative version num"
                 exit
@@ -1101,24 +1107,15 @@ if($tio){
         if($r -eq $e){
             Write-Log "古い同一Backupが見つかったのでSkipします"
         }else{
-            Write-Log "新しいBackupが見つかったので再生成します"
+            Write-Log "新しいBackupが見つかったので生成します"
             write-log $e
             Write-log $r
             Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
-            if(test-path $filen){
-                Remove-Item -Path $filen -Force
-                Remove-Item -Path $backhashtxt -Force
-                Remove-Item -Path $backuptxt -Force
-                $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-                Write-Output " $thash"> $backhashtxt
-                Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
-            }else{
-                Remove-Item -Path $backhashtxt -Force
-                Remove-Item -Path $backuptxt -Force
-                $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-                Write-Output " $thash"> $backhashtxt
-                Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
-            }
+            Remove-Item -Path $backhashtxt -Force
+            Remove-Item -Path $backuptxt -Force
+            $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+            Write-Output " $thash"> $backhashtxt
+            Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
         }
     }else{
         Write-Log "Backupが見つかりません。生成します。"
@@ -1490,25 +1487,23 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $Bar.Value = "24"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
-            $pspth = Join-Path $npl "\PowerShell-7.2.1-win-x64.msi"
-            Invoke-WebRequest https://github.com/PowerShell/PowerShell/releases/download/v7.2.1/PowerShell-7.2.1-win-x64.msi -OutFile "$pspth" -UseBasicParsing
-            $arguments = @(
-                      "/i"
-                      "`"$pspth`""
-                      "/passive"
-            )
-            Start-Process -FilePath msiexec.exe -Wait -PassThru -ArgumentList $arguments
-            Or the preview version:
-
-            Remove-Item $pspth
+            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI"
             Write-Log "PS7 Install ends"
             $Bar.Value = "25"
+        }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
+            Write-Log ".Net Framework Install start"
+            $fpth = Join-Path $npl "\dotnet-install.ps1"
+            Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile $fpth -UseBasicParsing
+            .\dotnet-install.ps1
+            Remove-Item "$fpth"
+            Write-Log ".Net Framework Install ends"
+            $Bar.Value = "26"
         }else{
         }
     }
 }
 
-$Bar.Value = "26"
+$Bar.Value = "27"
 
 ####################
 #bat file auto update
@@ -1518,7 +1513,7 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
 }
 ####################
 
-$Bar.Value = "27"
+$Bar.Value = "28"
 $Bar.Value = "30"
 $Form2.Close()
 
