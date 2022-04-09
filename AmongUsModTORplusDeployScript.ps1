@@ -12,13 +12,13 @@ $nosmin = "1.7.1,2022.3.29"
 $ermin = "v1.99.90.0"
 $esmin = "v1.99.90.0"
 $aummin = "v1.0.0"
+$torhmin = "v2.0.0"
+$tormin = "v3.4.5"
 
 ###v2022.02.23対応minimum version
 $tourmin = "v2.6.2"
-$tormin = "v3.4.4"
 $torpmin = "v3.4.4.1+"
 $torgmin = "v3.5.3"
-$torhmin = "v1.11.0"
 
 #################################################################################################
 # Run w/ Powershell v7 if available.
