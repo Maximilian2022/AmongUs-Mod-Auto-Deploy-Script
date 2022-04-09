@@ -5,6 +5,28 @@
 $version = "1.0.0"
 #
 #################################################################################################
+# Run w/ Powershell v7 if available.
+#################################################################################################
+$npl = Get-Location
+$v5run = $false
+if($PSVersionTable.PSVersion.major -eq 5){
+    if(test-path "$env:ProgramFiles\PowerShell\7"){
+        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+    }else{
+        $v5run = $true
+    }
+}elseif($PSVersionTable.PSVersion.major -gt 5){
+    $v5run = $true
+}else{
+    write-host "ERROR - PowerShell Version : not supported."
+}
+
+if(!($v5run)){
+    exit
+}
+#>
+
+#################################################################################################
 # Log用Function
 #################################################################################################
 # ログの出力先
