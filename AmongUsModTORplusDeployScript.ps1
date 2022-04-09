@@ -563,7 +563,8 @@ $Combo_SelectedIndexChanged= {
                     Write-Log "処理を中止します"
                     pause
                     exit
-                }                
+                }     
+                Remove-Item "$npl\AmongusCleanInstall_Steam.ps1"
             }
             $aupatho = $au_path_steam_org
             $aupathm = $au_path_steam_mod
