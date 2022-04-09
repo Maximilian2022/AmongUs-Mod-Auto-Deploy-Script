@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.5"
+$version = "1.3.6"
 #
 #################################################################################################
 
@@ -369,7 +369,7 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
 [void] $Combo.Items.Add("Toolインストールのみ")
-$Combo.SelectedIndex = 0
+$Combo.SelectedIndex = 3
 
 ##############################################
 
@@ -551,10 +551,19 @@ $Combo_SelectedIndexChanged= {
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
-                Write-Log "処理を中止します"      
-                pause
-                exit
+                if([System.Windows.Forms.MessageBox]::Show("クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
+                    if(test-path "$env:ProgramFiles\PowerShell\7"){
+                        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                    }else{
+                        powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                    }
+                }else{
+                    Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
+                    Write-Log "処理を中止します"
+                    pause
+                    exit
+                }                
             }
             $aupatho = $au_path_steam_org
             $aupathm = $au_path_steam_mod
