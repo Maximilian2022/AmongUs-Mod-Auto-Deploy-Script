@@ -14,10 +14,10 @@ $esmin = "v1.99.90.0"
 $aummin = "v1.0.0"
 $torhmin = "v2.0.0"
 $tormin = "v3.4.5"
+$torpmin = "v3.4.5.1+"
 
 ###v2022.02.23対応minimum version
 $tourmin = "v2.6.2"
-$torpmin = "v3.4.4.1+"
 $torgmin = "v3.5.3"
 
 #################################################################################################
@@ -30,9 +30,17 @@ if($PSVersionTable.PSVersion.major -eq 5){
         pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongUsModTORplusDeployScript.ps1"
     }else{
         $v5run = $true
+        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+            exit
+        }
     }
 }elseif($PSVersionTable.PSVersion.major -gt 5){
     $v5run = $true
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+        exit
+    }
 }else{
     write-host "ERROR - PowerShell Version : not supported."
 }
@@ -180,6 +188,7 @@ function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを�
 # アセンブリのロード
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+$platform = ""
 
 # フォントの指定
 $Font = New-Object System.Drawing.Font("メイリオ",12)
@@ -551,7 +560,7 @@ $Combo_SelectedIndexChanged= {
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                if([System.Windows.Forms.MessageBox]::Show("クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
                         pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
@@ -559,7 +568,7 @@ $Combo_SelectedIndexChanged= {
                         powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
                     }
                 }else{
-                    Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
+                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
                     Write-Log "処理を中止します"
                     pause
                     exit
@@ -569,18 +578,30 @@ $Combo_SelectedIndexChanged= {
             $aupatho = $au_path_steam_org
             $aupathm = $au_path_steam_mod
             $aupathb = $au_path_steam_back
+            $script:platform = "steam"
         }elseif(Test-path "$au_path_epic_org\Among Us.exe"){
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_epic_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
-                Write-Log "処理を中止します"      
-                pause
-                exit
+                if([System.Windows.Forms.MessageBox]::Show("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+                    if(test-path "$env:ProgramFiles\PowerShell\7"){
+                        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                    }else{
+                        powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                    }
+                }else{
+                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
+                    Write-Log "処理を中止します"
+                    pause
+                    exit
+                }     
+                Remove-Item "$npl\AmongusCleanInstall_Epic.ps1"
             }
             $aupatho = $au_path_epic_org
             $aupathm = $au_path_epic_mod
             $aupathb = $au_path_epic_back
+            $script:platform = "epic"
         }else{
             $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
             ### Load
@@ -601,6 +622,12 @@ $Combo_SelectedIndexChanged= {
             }
             if(test-path "$spath\Among Us.exe"){
                 Write-Log "$spath にAmongUsのインストールパスを確認しました"
+                if([System.Windows.Forms.MessageBox]::Show("PlatformはEpicですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    $script:platform = "Epic"
+                }else{
+                    $script:platform = "Steam"
+                }
+
             }else{
                 Write-Log "$spath にAmongUsのインストールが確認できませんでした"
                 pause
@@ -1359,9 +1386,21 @@ if($tio){
         # ショートカットを作る
         $WsShell = New-Object -ComObject WScript.Shell
         $sShortcut = $WsShell.CreateShortcut("$scpath\Among Us Mod $scid.lnk")
-        $sShortcut.TargetPath = "$aupathm\Among Us.exe"
+
+        if($platform -eq "Steam"){
+            $sShortcut.TargetPath = "$aupathm\Among Us.exe"
+        }elseif($platform -eq "Epic"){
+            $sShortcut.TargetPath = "$aupathb\legendary.exe"
+            $sShortcut.Arguments = "-y launch Among Us"
+            $sShortcut.WorkingDirectory = $aupathb
+        }else{
+            Write-Log "ERROR: Critical Shortcut"
+        }
+
         $sShortcut.IconLocation = "$aupathm\Among Us.exe"
         $sShortcut.Save()
+
+        $aupathb
 
         if(test-path "$scpath\Among Us Mod $scid.lnk"){
             Write-Log "Shortcut 作成確認OK"
@@ -1524,12 +1563,29 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
 ####################
 
 $Bar.Value = "28"
+if($platform -eq "Epic"){
+    if(!(Test-Path "$aupathb\legendary.exe")){
+        Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$aupathb\legendary.exe"
+    }
+    Set-Location "$aupathb"
+    .\legendary.exe auth --import
+    .\legendary.exe -y uninstall Among Us --keep-files 
+    .\legendary.exe -y import "Among Us" $aupathm
+}
 $Bar.Value = "30"
 $Form2.Close()
 
+
 if($tio){
     if($startexewhendone -eq $true){
-        Start-Process "$aupathm\Among Us.exe"   
+        if($platform -eq "Steam"){
+            Start-Process "$aupathm\Among Us.exe"   
+        }elseif($platform -eq "Epic"){
+            Set-Location "$aupathb"
+            .\legendary.exe launch Among Us
+        }else{
+            Write-Log "ERROR:Critical run apps"
+        }
     }else{
     }
 }
