@@ -41,7 +41,7 @@
 
 
 <!-- wp:paragraph -->
-<p>■Q&amp;A <br>Q. セキュリティソフトが止めてきます<br>A. でしょうね<br>　 真面目に話すと長いけど、Windows Defenderでも止められることがあるよ<br>　 詳細情報を押して実行ボタンを押せば、動くよ<br>　 自己責任でどうぞ<br><br>Q. batでcurl.exeでエラーが出てます<br>A. Windows 10が古い可能性があります<br>　Win10 1803以降、Win11でないと稼働しません<br><br>Q. Modを入れて起動すると画面が真っ黒になります <br>A. Mod Fileが壊れているか、失敗しています<br>　Scriptを再実行してみてください<br>　やり直しても変わらないときは、まず<strong>クリーンインストール</strong>しましょう<br><br>Q. 手順通りやってもModの起動に失敗したり、固まったりします <br>A. 以下のような場合、BepinExの初動が正しく動いていない可能性があります<br>　Scriptを再実行してみましょう<br>　・BepinExのフォルダにCacheフォルダができていない場合、<br>　・TheOtherHatsが初期状態のままの場合<br>　（多分NW系のエラーの可能性もあるので、時間置くのも大事です）<br><br>Q. EPIC版でも使えますか？<br>A. Steam版に最適化されていますが、動きます。ただEPIC版はEPICのランチャーから起動しないといけないので、手動での操作が必要です。　　</p>
+<p>■Q&amp;A <br>Q. セキュリティソフトが止めてきます<br>A. でしょうね<br>　 真面目に話すと長いけど、Windows Defenderでも止められることがあるよ<br>　 詳細情報を押して実行ボタンを押せば、動くよ<br>　 自己責任でどうぞ<br><br>Q. batでcurl.exeでエラーが出てます<br>A. Windows 10が古い可能性があります<br>　Win10 1803以降、Win11でないと稼働しません<br><br>Q. Modを入れて起動すると画面が真っ黒になります <br>A. Mod Fileが壊れているか、失敗しています<br>　Scriptを再実行してみてください<br>　やり直しても変わらないときは、まず<strong>クリーンインストール</strong>しましょう<br><br>Q. 手順通りやってもModの起動に失敗したり、固まったりします <br>A. 以下のような場合、BepinExの初動が正しく動いていない可能性があります<br>　Scriptを再実行してみましょう<br>　・BepinExのフォルダにCacheフォルダができていない場合、<br>　・TheOtherHatsが初期状態のままの場合<br>　（多分NW系のエラーの可能性もあるので、時間置くのも大事です）<br><br>Q. EPIC版でも使えますか？<br>A. 使えるようになりました　　</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
