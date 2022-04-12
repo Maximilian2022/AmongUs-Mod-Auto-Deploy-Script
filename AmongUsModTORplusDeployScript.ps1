@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.6"
+$version = "1.3.7"
 #
 #################################################################################################
 
@@ -15,10 +15,10 @@ $aummin = "v1.0.0"
 $torhmin = "v2.0.0"
 $tormin = "v3.4.5"
 $torpmin = "v3.4.5.1+"
+$torgmin = "v3.5.5"
 
 ###v2022.02.23対応minimum version
 $tourmin = "v2.6.2"
-$torgmin = "v3.5.3"
 
 #################################################################################################
 # Run w/ Powershell v7 if available.
@@ -242,23 +242,28 @@ $MyGroupBox3.text = "既存のフォルダを上書き/再作成しますか？"
 
 # グループの中のラジオボタンを作る
 $RadioButton5 = New-Object System.Windows.Forms.RadioButton
-$RadioButton5.Location = New-Object System.Drawing.Point(20,60)
-$RadioButton5.size = New-Object System.Drawing.Size(150,30)
+$RadioButton5.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton5.size = New-Object System.Drawing.Size(120,30)
 $RadioButton5.Checked = $True
 $RadioButton5.Text = "再作成する"
 
 $RadioButton6 = New-Object System.Windows.Forms.RadioButton
-$RadioButton6.Location = New-Object System.Drawing.Point(180,30)
-$RadioButton6.size = New-Object System.Drawing.Size(150,30)
+$RadioButton6.Location = New-Object System.Drawing.Point(20,60)
+$RadioButton6.size = New-Object System.Drawing.Size(130,30)
 $RadioButton6.Text = "再作成しない"
 
 $RadioButton7 = New-Object System.Windows.Forms.RadioButton
-$RadioButton7.Location = New-Object System.Drawing.Point(20,30)
-$RadioButton7.size = New-Object System.Drawing.Size(150,30)
+$RadioButton7.Location = New-Object System.Drawing.Point(150,30)
+$RadioButton7.size = New-Object System.Drawing.Size(120,30)
 $RadioButton7.Text = "上書きする"
 
+$RadioButton17 = New-Object System.Windows.Forms.RadioButton
+$RadioButton17.Location = New-Object System.Drawing.Point(150,60)
+$RadioButton17.size = New-Object System.Drawing.Size(190,30)
+$RadioButton17.Text = "クリーンインストール"
+
 # グループにラジオボタンを入れる
-$MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6,$RadioButton7))
+$MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6,$RadioButton7,$RadioButton17))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox3)
 
@@ -333,8 +338,6 @@ $RadioButton9.Text = "同梱しない"
 $MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox4)
-
-
 
 # ラベルを表示
 $label2 = New-Object System.Windows.Forms.Label
@@ -1051,12 +1054,19 @@ if($tio){
         if($RadioButton5.Checked){
             $retry = $true
             $ovwrite = $false
+            $clean = $false
         }elseif($RadioButton6.Checked){
             $retry = $false
             $ovwrite = $false
+            $clean = $false
         }elseif($RadioButton7.Checked){
             $retry = $false
             $ovwrite = $true
+            $clean = $false
+        }elseif($RadioButton17.Checked){
+            $retry = $false
+            $ovwrite = $false
+            $clean = $true
         }else{
             Write-Log "Critical Error: Retry"
         }
@@ -1091,6 +1101,48 @@ if($tio){
             }
         }
         $Bar.Value = "8"
+        if($clean -eq $true){
+            if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
+                $rn = "steam"
+                Write-Log "Assume E$rn is used."
+                $stm = $true
+            }
+
+            if (Test-Path "C:\Program Files (x86)\Epic Games"){
+                $rn = "epic"
+                Write-Log "Assume E$rn is used."
+                $epc = $true
+            }
+            
+            if($stm -and $epc){
+                Write-Log "Both Steam and Epic is detected. ASk User."
+                if([System.Windows.Forms.MessageBox]::Show("SteamとEpic両方のインストールが確認されました。どちらのAmongusをクリーンインストールしますか？\nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。", "Among Us Clean Install Tool",4) -eq "Yes"){
+                    $rn = "steam"
+                }else{
+                    $rn = "epic"
+                }                
+            }
+
+            if($rn -eq "steam"){
+                Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
+                if(test-path "$env:ProgramFiles\PowerShell\7"){
+                    pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                }else{
+                    powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                }
+            }elseif($rn -eq "epic"){
+                Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+                if(test-path "$env:ProgramFiles\PowerShell\7"){
+                    pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                }else{
+                    powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                }
+            }else{
+                Write-Log "Critical Platform Selection"
+                Pause
+                Exit
+            }
+        }
 
         if ($retry -eq "true"){
             Write-Log '既存のフォルダを中身を含めて削除します'
