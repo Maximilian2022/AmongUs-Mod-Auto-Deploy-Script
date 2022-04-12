@@ -1104,19 +1104,19 @@ if($tio){
         if($clean -eq $true){
             if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
                 $rn = "steam"
-                Write-Log "Assume E$rn is used."
+                Write-Log "Assume $rn is used."
                 $stm = $true
             }
 
             if (Test-Path "C:\Program Files (x86)\Epic Games"){
                 $rn = "epic"
-                Write-Log "Assume E$rn is used."
+                Write-Log "Assume $rn is used."
                 $epc = $true
             }
             
             if($stm -and $epc){
                 Write-Log "Both Steam and Epic is detected. ASk User."
-                if([System.Windows.Forms.MessageBox]::Show("SteamとEpic両方のインストールが確認されました。どちらのAmongusをクリーンインストールしますか？\nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。", "Among Us Clean Install Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show("SteamとEpic両方のインストールが確認されました。どちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。", "Among Us Clean Install Tool",4) -eq "Yes"){
                     $rn = "steam"
                 }else{
                     $rn = "epic"
@@ -1125,17 +1125,19 @@ if($tio){
 
             if($rn -eq "steam"){
                 Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
+                $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
                 if(test-path "$env:ProgramFiles\PowerShell\7"){
-                    pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                 }else{
-                    powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                 }
             }elseif($rn -eq "epic"){
                 Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+                $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
                 if(test-path "$env:ProgramFiles\PowerShell\7"){
-                    pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                 }else{
-                    powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                 }
             }else{
                 Write-Log "Critical Platform Selection"
