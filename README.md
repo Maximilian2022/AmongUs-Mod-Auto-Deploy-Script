@@ -49,7 +49,6 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>■情報募集<br>itch.ioとMS Storeのデフォルトインストールパスあれば双方のAutoDetectに対応予定</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
