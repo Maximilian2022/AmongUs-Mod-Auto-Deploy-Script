@@ -99,7 +99,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding Default -append
+    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
@@ -117,10 +117,13 @@ Write-Log "-----------------------------------------------------------------"
 
 #Among Us Original Epic Path
 $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
+#Among Us Backup ：Backup用フォルダ
+$au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
 $spath = ""
 
 if(Test-path "$au_path_epic_org\Among Us.exe"){
     $spath = $au_path_epic_org
+    $sback = $au_path_epic_back
 }else{
     $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
     ### Load
@@ -143,6 +146,12 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
     }else{
         Write-Log "$spath にAmongUsのインストールが確認できませんでした"
     }
+    $curloc = Get-Location
+    Set-Location $spath
+    Set-Location ../
+    $str_path = Get-Location   
+    $sback = "$str_path\Among Us Backup"
+    Set-Location $curloc
 }
 
 Write-Log "Delete AmongUs First"
@@ -152,18 +161,34 @@ if([System.Windows.Forms.MessageBox]::Show("クリーンインストールのた
     exit
 }
 
-Set-Location $npl
-Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$npl\legendary.exe" 
-./legendary.exe auth --import
-Remove-Item -Path $spath -Recurse -Force
+Start-Transcript -Append -Path "$LogFileName"
+
+if(Test-Path "$sback\legendary.exe"){
+    Set-Location $sback
+    $legflag = $true
+}else{
+    Set-Location $npl
+    Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$npl\legendary.exe" 
+    ./legendary.exe auth --import    
+}
+
 $currentLoc = Get-Location
 Set-Location $spath
 Set-Location ../
 $spath = Get-Location
 Set-Location $currentLoc
-./legendary.exe uninstall Among Us --keep-files -y
+Remove-Item -Path $spath -Recurse -Force
+Start-Sleep -Seconds 1
+./legendary.exe uninstall Among Us --keep-files -y 
+Start-Sleep -Seconds 1
 ./legendary.exe install Among Us -y --base-path "$spath"
-Remove-item "$npl\legendary.exe" -Force
+Start-Sleep -Seconds 1
+./legendary.exe -y egl-sync
+Stop-Transcript
+if (!($legflag)){
+    Remove-item "$npl\legendary.exe" -Force
+}
+
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Clean Installation Ends"
 Write-Log "-----------------------------------------------------------------"
