@@ -72,7 +72,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding Default -append
+    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
@@ -445,8 +445,8 @@ $Combo_SelectedIndexChanged= {
         # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
         $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
         $Log += $LogString
-            # ログ出力
-        Write-Output $Log | Out-File -FilePath $script:LogFileName -Encoding Default -append
+        # ログ出力
+        Write-Output $Log | Out-File -FilePath $script:LogFileName -Encoding Default -Append
         # echo させるために出力したログを戻す
         Write-Host $Log
     }
@@ -565,11 +565,19 @@ $Combo_SelectedIndexChanged= {
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
                 if([System.Windows.Forms.MessageBox]::Show("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
+                    $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
-                        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                     }else{
-                        powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
+                        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                     }
+                    Start-Sleep -Seconds 10
+                    while (!(test-path "$aupatho\Among Us.exe")){
+                        Start-Sleep -Seconds 10
+                        Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
+                        Pause
+                    }
+                    Remove-Item $fpth2 -Force
                 }else{
                     Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
                     Write-Log "処理を中止します"
@@ -588,11 +596,13 @@ $Combo_SelectedIndexChanged= {
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
                 if([System.Windows.Forms.MessageBox]::Show("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+                    $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
-                        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                     }else{
-                        powershell.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
+                        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                     }
+                    Remove-Item $fpth2 -Force
                 }else{
                     Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
                     Write-Log "処理を中止します"
@@ -676,6 +686,8 @@ $Combo_SelectedIndexChanged= {
     }
     $script:tio = $tio
 }
+
+$sttime = Get-Date
 
 # フォームにコンボボックスを追加
 $form.Controls.Add($Combo)
@@ -1064,7 +1076,7 @@ if($tio){
             $ovwrite = $true
             $clean = $false
         }elseif($RadioButton17.Checked){
-            $retry = $false
+            $retry = $true
             $ovwrite = $false
             $clean = $true
         }else{
@@ -1116,7 +1128,7 @@ if($tio){
             
             if($stm -and $epc){
                 Write-Log "Both Steam and Epic is detected. ASk User."
-                if([System.Windows.Forms.MessageBox]::Show("SteamとEpic両方のインストールが確認されました。どちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。", "Among Us Clean Install Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。", "Among Us Clean Install Tool",4) -eq "Yes"){
                     $rn = "steam"
                 }else{
                     $rn = "epic"
@@ -1131,6 +1143,16 @@ if($tio){
                 }else{
                     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                 }
+                Start-Sleep -Seconds 10
+                while (!(test-path "$aupatho\Among Us.exe")){
+                    Start-Sleep -Seconds 10
+                    Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
+                    write-log (test-path "$aupatho\Among Us.exe")
+                    write-log "$aupathm\Among Us.exe"
+                    
+                    Pause
+                }
+                Remove-Item $fpth2 -Force
             }elseif($rn -eq "epic"){
                 Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
@@ -1139,11 +1161,13 @@ if($tio){
                 }else{
                     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                 }
+                Remove-Item $fpth2 -Force
             }else{
                 Write-Log "Critical Platform Selection"
                 Pause
                 Exit
             }
+            Start-Sleep -Seconds 10
         }
 
         if ($retry -eq "true"){
@@ -1574,18 +1598,16 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $Bar.Value = "23"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
+            Start-Transcript -Append -Path "$LogFileName"
             $fpth = Join-Path $npl "\install.ps1"
             Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
             if(test-path "$env:ProgramFiles\PowerShell\7"){
-                if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
-                }
+                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
             }else{
-                if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
-                }   
+                Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
             }
             Remove-Item "$fpth"
+            Stop-Transcript
             Write-Log "VC Redist Install ends"
             $Bar.Value = "24"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
@@ -1595,10 +1617,12 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $Bar.Value = "25"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
             Write-Log ".Net Framework Install start"
+            Start-Transcript -Append -Path "$LogFileName"
             $fpth = Join-Path $npl "\dotnet-install.ps1"
             Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile $fpth -UseBasicParsing
             .\dotnet-install.ps1
             Remove-Item "$fpth"
+            Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "26"
         }else{
@@ -1621,14 +1645,21 @@ if($platform -eq "Epic"){
     if(!(Test-Path "$aupathb\legendary.exe")){
         Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$aupathb\legendary.exe"
     }
+    Start-Transcript -Append -Path "$LogFileName"
     Set-Location "$aupathb"
     .\legendary.exe auth --import
     .\legendary.exe -y uninstall Among Us --keep-files 
     .\legendary.exe -y import "Among Us" $aupathm
+    .\legendary.exe -y egl-sync
+    Stop-Transcript
 }
 $Bar.Value = "30"
-$Form2.Close()
 
+$fntime = Get-Date
+$difftime = ($fntime - $sttime).TotalSeconds
+
+$Form2.Close()
+Write-Log "$difftime 秒で完了しました。"
 
 if($tio){
     if($startexewhendone -eq $true){
