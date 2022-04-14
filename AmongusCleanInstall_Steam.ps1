@@ -1,6 +1,6 @@
 #################################################################################################
 #
-# Among Us Clean Install Script
+# Among Us Clean Install Script Steam
 #
 $version = "1.0.0"
 #
@@ -25,6 +25,41 @@ if(!($v5run)){
     exit
 }
 #>
+#################################################################################################
+# Folder用Function
+#################################################################################################
+#Special Thanks
+#https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4
+Add-Type -AssemblyName System.Windows.Forms
+function Get-FolderPathG{
+    param(
+        [Parameter(ValueFromPipeline=$true)]
+        [string]$Description = "フォルダを選択してください",
+        [boolean]$CurrentDefault = $false
+    )
+    # メインウィンドウ取得
+    $process = [Diagnostics.Process]::GetCurrentProcess()
+    $window = New-Object Windows.Forms.NativeWindow
+    $window.AssignHandle($process.MainWindowHandle)
+
+    $fd = New-Object System.Windows.Forms.FolderBrowserDialog
+    $fd.Description = $Description
+
+    if($CurrentDefault -eq $true){
+        # カレントディレクトリを初期フォルダとする
+        $fd.SelectedPath = (Get-Item $PWD).FullName
+    }
+
+    # フォルダ選択ダイアログ表示
+    $ret = $fd.ShowDialog($window)
+
+    if($ret -eq [System.Windows.Forms.DialogResult]::OK){
+        return $fd.SelectedPath
+    }
+    else{
+        return $null
+    }
+}
 
 #################################################################################################
 # Log用Function
@@ -48,7 +83,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding Default -append
+    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
@@ -58,7 +93,7 @@ Write-Log "Running With Powershell Version $($PSVersionTable.PSVersion.Major).$(
 Write-Log "                                                                 "
 Write-Log "-----------------------------------------------------------------"
 Write-Log "                                                                 "
-Write-Log "                  AmongUs Clean Install Script                   "
+Write-Log "               AmongUs Clean Install Script Steam                "
 Write-Log "                                                   Version: $version"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Clean Installation Starts"
@@ -132,10 +167,14 @@ if([System.Windows.Forms.MessageBox]::Show("クリーンインストールのた
     exit
 }
 Remove-Item -Path $spath -Recurse -Force
+Start-Sleep -Seconds 1
 
 Write-Log "Validate AmongUs"
-Start-Process $steampth -argument "+app_start_validation 945360"
+Start-Transcript -Append -Path "$LogFileName"
+Start-Process $steampth -argument "+app_start_validation 945360" 
+Stop-Transcript
 
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Clean Installation Ends"
 Write-Log "-----------------------------------------------------------------"
+Start-Sleep -Seconds 10
