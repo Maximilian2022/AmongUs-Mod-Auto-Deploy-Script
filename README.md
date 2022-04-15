@@ -20,14 +20,8 @@
 <p>本ScriptはAmongUs公式及び上記Mod作成者様とは無関係のScriptです</p>
 <p><a href="https://disboard.org/ja/server/906600951924793444" target="_blank" rel="noreferrer noopener">本来はこのDiscordサーバー用に作ったツールです</a></p>
 <!-- /wp:paragraph -->
-
-
 <!-- wp:paragraph -->
-<p>■[前提]<br>Originalフォルダはバニラで過去にModを直で入れたことがないこと </p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>■[推奨]<br>最新のPowershell（<a rel="noreferrer noopener" href="https://github.com/PowerShell/PowerShell/releases/tag/v7.2.2" target="_blank">公式HP</a>）（入れないと動かないとかは多分ないハズ）<br>実行前にクリーンインストール</p>
+<p>■[推奨]<br>最新のPowershell（<a rel="noreferrer noopener" href="https://github.com/PowerShell/PowerShell/releases/tag/v7.2.2" target="_blank">公式HP</a>）（入れないと動かないとかは多分ないハズ）</p><p>初回動作時や動作不良の際はクリーンインストール推奨です</p>
 <!-- /wp:paragraph -->
 
 <p>■Download<br>
@@ -36,7 +30,7 @@
 <a href="https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.zip" target="_blank" rel="noreferrer noopener">https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.zip</a>
 </p>
 <!-- wp:paragraph -->
-<p>■[導入手順] <br>0.0 クリーンインストール推奨 <br>1. このBatを動作させる <br>2. InstallするModを選択する<br>3. MODのバージョンを選択する（v3.3.2.2+、等) <br><br>■[このScriptでやってること] <br>０．Script ps1をDLして実行<br>１．Steam/Epicの自動判定機能（両方ある場合はSteamが先に判定されるハズ）<br>       インストールパスがカスタムされてるときにフォルダ選択画面を出すよ <br>　　(itch.ioとMS Storeのユーザーはこれでカバー）<br>２．オリジナルフォルダをコピーしてMod用フォルダの作成<br>　　作成される場所はオリジナルフォルダと同じ階層です<br>　　（すでに作られてたら消して作り直すかユーザー確認する） <br>３．ZIPをDLしてMod用フォルダに解凍 <br>４．（TOR+の場合）元のMod DLLを削除してTOR+のDLLをDL <br>５．DesktopにMod適用したAmongUsへのShortcutを作成するか、<br>　　作成したMod入りフォルダをExplorerで表示して終了（ユーザー選択）<br>6．選択したツールの展開<br>　・BetterCrewLinkを選択するとLatestをDLしてインストールする。<br>　　<a rel="noreferrer noopener" href="https://github.com/OhMyGuus/BetterCrewLink" target="_blank">https://github.com/OhMyGuus/BetterCrewLink</a><br>　・AmongUsReplayInWindowを選択するとLatestをDLしてDocumentsに展開する<br>　　<a rel="noreferrer noopener" href="https://github.com/sawa90/AmongUsReplayInWindow" target="_blank">https://github.com/sawa90/AmongUsReplayInWindow</a><br>　・AmongUsCaptureを選択するとLatestをDLしてDocumentsに展開する<br>　　<a href="https://github.com/automuteus/amonguscapture" target="_blank" rel="noreferrer noopener">https://github.com/automuteus/amonguscapture</a><br>　・VC Redist(Modの動作に必要)<br>　・Powershell 7</p>
+<p>■[導入手順] <br>1. このBatを動作させる <br>2. InstallするModを選択する<br>3. MODのバージョンを選択する（v3.3.2.2+、等) <br><br>■[このScriptでやってること] <br>０．Script ps1をDLして実行<br>１．Steam/Epicの自動判定機能（両方ある場合はSteamが先に判定されるハズ）<br>       インストールパスがカスタムされてるときにフォルダ選択画面を出すよ <br>　　(itch.ioとMS Storeのユーザーはこれでカバー）<br>２．オリジナルフォルダをコピーしてMod用フォルダの作成<br>　　作成される場所はオリジナルフォルダと同じ階層です<br>　　（すでに作られてたら消して作り直すかユーザー確認する） <br>３．ZIPをDLしてMod用フォルダに解凍 <br>４．（TOR+の場合）元のMod DLLを削除してTOR+のDLLをDL <br>５．DesktopにMod適用したAmongUsへのShortcutを作成するか、<br>　　作成したMod入りフォルダをExplorerで表示して終了（ユーザー選択）<br>6．選択したツールの展開<br>　・BetterCrewLinkを選択するとLatestをDLしてインストールする。<br>　　<a rel="noreferrer noopener" href="https://github.com/OhMyGuus/BetterCrewLink" target="_blank">https://github.com/OhMyGuus/BetterCrewLink</a><br>　・AmongUsReplayInWindowを選択するとLatestをDLしてDocumentsに展開する<br>　　<a rel="noreferrer noopener" href="https://github.com/sawa90/AmongUsReplayInWindow" target="_blank">https://github.com/sawa90/AmongUsReplayInWindow</a><br>　・AmongUsCaptureを選択するとLatestをDLしてDocumentsに展開する<br>　　<a href="https://github.com/automuteus/amonguscapture" target="_blank" rel="noreferrer noopener">https://github.com/automuteus/amonguscapture</a><br>　・VC Redist(Modの動作に必要)<br>　・Powershell 7</p>
 <!-- /wp:paragraph -->
 
 
