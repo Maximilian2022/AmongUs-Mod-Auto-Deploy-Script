@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.7"
+$version = "1.3.8"
 #
 #################################################################################################
 
@@ -16,9 +16,7 @@ $torhmin = "v2.0.0"
 $tormin = "v3.4.5"
 $torpmin = "v3.4.5.1+"
 $torgmin = "v3.5.5"
-
-###v2022.02.23対応minimum version
-$tourmin = "v2.6.2"
+$tourmin = "v3.0.0"
 
 #################################################################################################
 # Run w/ Powershell v7 if available.
@@ -964,10 +962,6 @@ if($tio){
                 $v3 = $vermet[2] -1
             }else{
                 $v3 = 0
-            }
-            if($v3 -lt 0){
-                Write-Output "ERROR: Negative version num"
-                exit
             }
             $torv = "$($vermet[0]).$($vermet[1]).$v3"
             if($checkzip){
