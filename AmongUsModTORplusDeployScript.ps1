@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.8"
+$version = "1.3.9"
 #
 #################################################################################################
 
@@ -184,6 +184,10 @@ function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを�
 #Special Thanks
 #https://letspowershell.blogspot.com/2015/07/powershell_29.html
 # アセンブリのロード
+#　アセンブリの読み込み
+[void][System.Reflection.Assembly]::Load("Microsoft.VisualBasic, Version=8.0.0.0, Culture=Neutral, PublicKeyToken=b03f5f7f11d50a3a")
+[System.Windows.Forms.Application]::EnableVisualStyles()
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 $platform = ""
@@ -194,7 +198,7 @@ $Font = New-Object System.Drawing.Font("メイリオ",12)
 # フォーム全体の設定
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Among Us Mod Auto Deploy Tool"
-$form.Size = New-Object System.Drawing.Size(800,580)
+$form.Size = New-Object System.Drawing.Size(800,680)
 $form.StartPosition = "CenterScreen"
 $form.font = $Font
 $form.FormBorderStyle = "Fixed3D"
@@ -216,7 +220,7 @@ $form.Controls.Add($label)
 
 # OKボタンの設定
 $OKButton = New-Object System.Windows.Forms.Button
-$OKButton.Location = New-Object System.Drawing.Point(580,490)
+$OKButton.Location = New-Object System.Drawing.Point(580,590)
 $OKButton.Size = New-Object System.Drawing.Size(75,30)
 $OKButton.Text = "OK"
 $OKButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
@@ -225,7 +229,7 @@ $form.Controls.Add($OKButton)
 
 # キャンセルボタンの設定
 $CancelButton = New-Object System.Windows.Forms.Button
-$CancelButton.Location = New-Object System.Drawing.Point(680,490)
+$CancelButton.Location = New-Object System.Drawing.Point(680,590)
 $CancelButton.Size = New-Object System.Drawing.Size(75,30)
 $CancelButton.Text = "Cancel"
 $CancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
@@ -337,6 +341,29 @@ $MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox4)
 
+$MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
+$MyGroupBox24.Location = New-Object System.Drawing.Point(400,380)
+$MyGroupBox24.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox24.text = "Submergedを同梱しますか？"
+
+# グループの中のラジオボタンを作る
+$RadioButton28 = New-Object System.Windows.Forms.RadioButton
+$RadioButton28.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton28.size = New-Object System.Drawing.Size(150,30)
+$RadioButton28.Text = "同梱する"
+
+$RadioButton29 = New-Object System.Windows.Forms.RadioButton
+$RadioButton29.Location = New-Object System.Drawing.Point(180,30)
+$RadioButton29.size = New-Object System.Drawing.Size(150,30)
+$RadioButton29.Text = "同梱しない"
+$RadioButton29.Checked = $True
+
+# グループにラジオボタンを入れる
+$MyGroupBox24.Controls.AddRange(@($Radiobutton28,$RadioButton29))
+# フォームに各アイテムを入れる
+$form.Controls.Add($MyGroupBox24)
+
+
 # ラベルを表示
 $label2 = New-Object System.Windows.Forms.Label
 $label2.Location = New-Object System.Drawing.Point(15,240)
@@ -347,7 +374,7 @@ $form.Controls.Add($label2)
 # チェックボックスを作成
 $CheckedBox = New-Object System.Windows.Forms.CheckedListBox
 $CheckedBox.Location = "55,270"
-$CheckedBox.Size = "270,105"
+$CheckedBox.Size = "270,205"
 
 # 配列を作成
 $RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","PowerShell 7","dotNetFramework")
@@ -400,28 +427,28 @@ $Combo2.font = $Font
 
 # ラベルを表示
 $label3 = New-Object System.Windows.Forms.Label
-$label3.Location = New-Object System.Drawing.Point(15,370)
+$label3.Location = New-Object System.Drawing.Point(15,470)
 $label3.Size = New-Object System.Drawing.Size(570,20)
 $label3.Text = "オリジナルのAmongUsは以下の場所に検出されました"
 $form.Controls.Add($label3)
 
 # ラベルを表示
 $label4 = New-Object System.Windows.Forms.Label
-$label4.Location = New-Object System.Drawing.Point(20,390)
+$label4.Location = New-Object System.Drawing.Point(20,490)
 $label4.Size = New-Object System.Drawing.Size(770,50)
 $label4.Text = ""
 $form.Controls.Add($label4)
 
 # ラベルを表示
 $label5 = New-Object System.Windows.Forms.Label
-$label5.Location = New-Object System.Drawing.Point(15,440)
+$label5.Location = New-Object System.Drawing.Point(15,540)
 $label5.Size = New-Object System.Drawing.Size(570,20)
 $label5.Text = "Mod化バージョンは以下の場所に作成されます"
 $form.Controls.Add($label5)
 
 # ラベルを表示
 $label6 = New-Object System.Windows.Forms.Label
-$label6.Location = New-Object System.Drawing.Point(20,460)
+$label6.Location = New-Object System.Drawing.Point(20,560)
 $label6.Size = New-Object System.Drawing.Size(770,50)
 $label6.Text = ""
 $form.Controls.Add($label6)
@@ -461,6 +488,7 @@ $Combo_SelectedIndexChanged= {
             $aumin = $torpmin
             Write-Log "TOR+ Selected"
             $RadioButton8.Checked = $True
+            $RadioButton28.Checked = $True
         }"AUM :tomarai/AUMod"{
             $releasepage2 = "https://api.github.com/repos/tomarai/AUMod/releases"
             $scid = "AUM"
@@ -473,18 +501,21 @@ $Combo_SelectedIndexChanged= {
             $aumin = $torgmin
             Write-Log "TOR GM Selected"
             $RadioButton9.Checked = $True
+            $RadioButton28.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
             $aumin = $torhmin
             Write-Log "TOR GMH Selected"
             $RadioButton9.Checked = $True
+            $RadioButton28.Checked = $True
         }"TOR :Eisbison/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases"
             $scid = "TOR"
             $aumin = $tormin
             Write-Log "TOR Selected"
             $RadioButton9.Checked = $True
+            $RadioButton28.Checked = $True
         }"TOU-R :eDonnes124/Town-Of-Us-R"{
             $releasepage2 = "https://api.github.com/repos/eDonnes124/Town-Of-Us-R/releases"
             $scid = "TOU-R"
@@ -633,10 +664,10 @@ $Combo_SelectedIndexChanged= {
             }
             if(test-path "$spath\Among Us.exe"){
                 Write-Log "$spath にAmongUsのインストールパスを確認しました"
-                if([System.Windows.Forms.MessageBox]::Show("PlatformはEpicですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    $script:platform = "Epic"
-                }else{
+                if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     $script:platform = "Steam"
+                }else{
+                    $script:platform = "Epic"
                 }
 
             }else{
@@ -717,16 +748,7 @@ if($RadioButton8.Checked){
 }
 #################################################################################################>
 
-
-
-#　アセンブリの読み込み
-[void][System.Reflection.Assembly]::Load("Microsoft.VisualBasic, Version=8.0.0.0, Culture=Neutral, PublicKeyToken=b03f5f7f11d50a3a")
-
 # プログレスバー
-
-Add-Type -AssemblyName System.Windows.Forms
-[System.Windows.Forms.Application]::EnableVisualStyles()
-
 $Form2 = New-Object System.Windows.Forms.Form
 $Form2.Size = "500,100"
 $Form2.Startposition = "CenterScreen"
@@ -738,7 +760,7 @@ $form2.FormBorderStyle = "Fixed3D"
 $Bar = New-Object System.Windows.Forms.ProgressBar
 $Bar.Location = "10,20"
 $Bar.Size = "460,30"
-$Bar.Maximum = "30"
+$Bar.Maximum = "100"
 $Bar.Minimum = "0"
 $Bar.Style = "Continuous"
 $Form2.Controls.Add($Bar)
@@ -749,13 +771,13 @@ $Bar.Value = "0"
 if($tio){
 
     $Form2.Show()
-    $Bar.Value = "0"
+    $Bar.Value = "10"
 
     #################################################################################################
 
     $web = Invoke-WebRequest $releasepage -UseBasicParsing
     $web2 = ConvertFrom-Json $web.Content
-    $Bar.Value = "1"
+    $Bar.Value = "14"
     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
         if($web2.tag_name[$ai] -eq "$torpv"){
             if($scid -eq "TOR Plus"){
@@ -909,7 +931,7 @@ if($tio){
             }
         }
     }
-    $Bar.Value = "2"
+    $Bar.Value = "17"
 
     if($checkt){
         Write-Log "指定されたバージョンは見つかりませんでした"
@@ -918,7 +940,7 @@ if($tio){
         pause
         exit
     }
-    $Bar.Value = "3"
+    $Bar.Value = "20"
     $langdata
     if($scid -eq "TOR Plus"){
         ###TOR DL Path
@@ -1024,7 +1046,7 @@ if($tio){
 
     Write-Output $tordlp
 
-    $Bar.Value = "4"
+    $Bar.Value = "23"
 
     ###作成したModのExeへのショートカットをDesktopに配置する
     if($RadioButton1.Checked){
@@ -1034,7 +1056,7 @@ if($tio){
     }else{
         Write-Log "Critical Error: Shortcut"
     }
-    $Bar.Value = "5"
+    $Bar.Value = "27"
     ###作成したModのExeへのショートカットをDesktopに配置する
     ###作成したModを即座に実行する
     #デフォルトでは実行しない
@@ -1047,7 +1069,7 @@ if($tio){
         Write-Log "Critical Error: StartCheck"
     }
 
-    $Bar.Value = "6"
+    $Bar.Value = "32"
 
     #################################################################################################
     #処理フェイズ　この下は触らない
@@ -1076,7 +1098,7 @@ if($tio){
         }else{
             Write-Log "Critical Error: Retry"
         }
-        $Bar.Value = "7"
+        $Bar.Value = "36"
 
         if($scid -eq "TOU-R"){
             if(test-path "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg"){                
@@ -1106,7 +1128,7 @@ if($tio){
                 Copy-Item "$aupathm\TheOtherHats\*" -Recurse "C:\Temp\TheOtherHats"
             }
         }
-        $Bar.Value = "8"
+        $Bar.Value = "42"
         if($clean -eq $true){
             if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
                 $rn = "steam"
@@ -1182,7 +1204,7 @@ if($tio){
                 Exit
             }
         }
-        $Bar.Value = "9"
+        $Bar.Value = "48"
     }else{
         # フォルダを中身を含めてコピーする
         Copy-Item $aupatho -destination $aupathm -recurse
@@ -1202,7 +1224,6 @@ if($tio){
         $f = (Get-Content $backuptxt) -as [string[]]
         $filen = $f[0]
         Write-Log $filen
-        Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
         $t = ""
         $r = ""
         $e = ""
@@ -1217,6 +1238,7 @@ if($tio){
             Write-Log "古い同一Backupが見つかったのでSkipします"
         }else{
             Write-Log "新しいBackupが見つかったので生成します"
+            Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
             write-log $e
             Write-log $r
             Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
@@ -1235,7 +1257,7 @@ if($tio){
     }
     Write-Log "Backup Feature Ends"
 
-    $Bar.Value = "10"
+    $Bar.Value = "53"
 
     ####
     #まずはTORをDL
@@ -1243,7 +1265,7 @@ if($tio){
     Write-Log $tordlp
     Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
     Write-Log 'Download ZIP 完了'
-    $Bar.Value = "11"
+    $Bar.Value = "57"
 
     #DLしたTORを解凍
     if (test-path "$aupathm\TheOtherRoles.zip"){
@@ -1255,12 +1277,12 @@ if($tio){
         Write-Log ("ZIP DL NG $tordlp ");
     }
 
-    $Bar.Value = "12"
+    $Bar.Value = "59"
 
     if(test-path "$aupathm\BepInEx"){
         Write-Log ("ZIP 解凍OK");
     }
-    $Bar.Value = "13"
+    $Bar.Value = "60"
 
     if($scid -eq "TOU-R"){
         if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
@@ -1320,7 +1342,7 @@ if($tio){
             Remove-Item "C:\Temp\TheOtherHats" -Recurse
         }
     }
-    $Bar.Value = "14"
+    $Bar.Value = "64"
 
     #AUShipMOD 配置
     if($ausmod){
@@ -1338,7 +1360,29 @@ if($tio){
         Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
         Write-Log "AUShipMOD Latest DLL download done"
     }
-    $Bar.Value = "15"
+    $Bar.Value = "68"
+
+    if($RadioButton28.Checked){
+        Write-Log "Submerged配置開始"
+        #GithubのRelease一覧からぶっこぬいてLatestを置く
+        $rel2 = "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest"
+        $webs = Invoke-WebRequest $rel2 -UseBasicParsing
+        $webs2 = ConvertFrom-Json $webs.Content
+        $aus = $webs2.assets.browser_download_url
+        Write-Log "Submerged Latest DLL download start"
+        Write-Log "$aus"
+        if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
+            New-Item "$aupathm\BepInEx\plugins\" -Type Directory
+        }
+        for($aaai = 0;$aaai -lt $aus.Length;$aaai++){
+            if($($aus[$aaai]).IndexOf(".dll") -gt 0){
+                Invoke-WebRequest $($aus[$aaai]) -Outfile "$aupathm\BepInEx\plugins\Submerged.dll" -UseBasicParsing
+            }
+        }
+        Write-Log "Submerged Latest DLL download done"
+    }
+    $Bar.Value = "69"
+
 
     if($scid -eq "TOR Plus"){
         ###
@@ -1433,7 +1477,7 @@ if($tio){
         Write-Log "日本語 データ Download 完了"
     }else{
     }
-    $Bar.Value = "16"
+    $Bar.Value = "71"
 
     #解凍チェック
     if (test-path "$aupathm\BepInEx\plugins"){
@@ -1443,7 +1487,7 @@ if($tio){
     }else{
       Write-Log ("ZIP 解凍NG");
     }
-    $Bar.Value = "17"
+    $Bar.Value = "77"
 
     if($shortcut -eq $true){
         ##Desktopにショートカットを配置する
@@ -1453,7 +1497,7 @@ if($tio){
             Remove-item -Path "$scpath\Among Us Mod $scid.lnk"
             Write-Log '既存のMod用Shortcut削除'
         }
-        $Bar.Value = "18"
+        $Bar.Value = "79"
 
         # ショートカットを作る
         $WsShell = New-Object -ComObject WScript.Shell
@@ -1487,12 +1531,12 @@ if($tio){
     }
 }
 
-$Bar.Value = "19"
+$Bar.Value = "80"
 
 if($tio -eq $false){
     $Form2.Show()
 }
-$Bar.Value = "20"
+$Bar.Value = "82"
 
 if($CheckedBox.CheckedItems.Count -gt 0){
     for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
@@ -1513,7 +1557,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Start-Process "$md\$bclfile" -wait
             Write-Log "BCL Install Done"
             Remove-Item $md\$bclfile
-            $Bar.Value = "21"
+            $Bar.Value = "83"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsReplayInWindow"){
             $qureq = $true
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
@@ -1551,7 +1595,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Write-Log "AmongUsReplayInWindowの処理を中止します"
                 }
             }
-            $Bar.Value = "22"
+            $Bar.Value = "84"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsCapture"){
             $qureq = $true
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
@@ -1589,7 +1633,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Write-Log "AmongUsCaptureの処理を中止します"
                 }
             }
-            $Bar.Value = "23"
+            $Bar.Value = "85"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
             Start-Transcript -Append -Path "$LogFileName"
@@ -1603,28 +1647,25 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Remove-Item "$fpth"
             Stop-Transcript
             Write-Log "VC Redist Install ends"
-            $Bar.Value = "24"
+            $Bar.Value = "86"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
             Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI"
             Write-Log "PS7 Install ends"
-            $Bar.Value = "25"
+            $Bar.Value = "87"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
             Write-Log ".Net Framework Install start"
             Start-Transcript -Append -Path "$LogFileName"
-            $fpth = Join-Path $npl "\dotnet-install.ps1"
-            Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile $fpth -UseBasicParsing
-            .\dotnet-install.ps1
-            Remove-Item "$fpth"
+            Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
-            $Bar.Value = "26"
+            $Bar.Value = "88"
         }else{
         }
     }
 }
 
-$Bar.Value = "27"
+$Bar.Value = "90"
 
 ####################
 #bat file auto update
@@ -1634,7 +1675,7 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
 }
 ####################
 
-$Bar.Value = "28"
+$Bar.Value = "93"
 if($platform -eq "Epic"){
     if(!(Test-Path "$aupathb\legendary.exe")){
         Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$aupathb\legendary.exe"
@@ -1647,10 +1688,10 @@ if($platform -eq "Epic"){
     .\legendary.exe -y egl-sync
     Stop-Transcript
 }
-$Bar.Value = "30"
-
+$Bar.Value = "97"
 $fntime = Get-Date
 $difftime = ($fntime - $sttime).TotalSeconds
+$Bar.Value = "100"
 
 $Form2.Close()
 Write-Log "$difftime 秒で完了しました。"
