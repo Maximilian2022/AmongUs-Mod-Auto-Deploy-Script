@@ -1370,13 +1370,13 @@ if($tio){
         $webs2 = ConvertFrom-Json $webs.Content
         $aus = $webs2.assets.browser_download_url
         Write-Log "Submerged Latest DLL download start"
-        Write-Log "$aus"
         if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
             New-Item "$aupathm\BepInEx\plugins\" -Type Directory
         }
         for($aaai = 0;$aaai -lt $aus.Length;$aaai++){
             if($($aus[$aaai]).IndexOf(".dll") -gt 0){
                 Invoke-WebRequest $($aus[$aaai]) -Outfile "$aupathm\BepInEx\plugins\Submerged.dll" -UseBasicParsing
+                Write-Log "$($aus[$aaai])"
             }
         }
         Write-Log "Submerged Latest DLL download done"
