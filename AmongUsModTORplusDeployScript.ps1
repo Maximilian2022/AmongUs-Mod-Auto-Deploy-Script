@@ -746,6 +746,11 @@ if($RadioButton8.Checked){
 }else{
     $ausmod = $false
 }
+if($RadioButton28.Checked){
+    $submerged = $true
+}else{
+    $submerged = $false
+}
 #################################################################################################>
 
 # プログレスバー
@@ -1317,8 +1322,10 @@ if($tio){
             if(!(Test-Path "$aupathm\ExtremeHat")){
                 New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
             }
-            robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /E /log+:$LogFileName >nul 2>&1
-            Remove-Item "C:\Temp\ExtremeHat" -Recurse
+            if(test-path "C:\Temp\ExtremeHat"){
+                robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /E /log+:$LogFileName >nul 2>&1
+                Remove-Item "C:\Temp\ExtremeHat" -Recurse
+            }
         }
     }elseif($scid -eq "NOS"){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
@@ -1338,8 +1345,10 @@ if($tio){
             if(!(Test-Path "$aupathm\TheOtherHats")){
                 New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
             }
-            robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /E /log+:$LogFileName >nul 2>&1
-            Remove-Item "C:\Temp\TheOtherHats" -Recurse
+            if(test-path "C:\Temp\TheOtherHats"){
+                robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /E /log+:$LogFileName >nul 2>&1
+                Remove-Item "C:\Temp\TheOtherHats" -Recurse
+            }
         }
     }
     $Bar.Value = "64"
@@ -1362,7 +1371,7 @@ if($tio){
     }
     $Bar.Value = "68"
 
-    if($RadioButton28.Checked){
+    if($submerged){
         Write-Log "Submerged配置開始"
         #GithubのRelease一覧からぶっこぬいてLatestを置く
         $rel2 = "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest"
