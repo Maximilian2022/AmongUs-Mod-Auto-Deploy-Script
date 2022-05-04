@@ -1,7 +1,6 @@
 # AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
 <!-- wp:image {"id":410,"width":519,"height":386,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full is-resized"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/SnapCrab_Among-Us-Mod-Auto-Deploy-Tool_2022-1-22_21-30-48_No-00.png" alt="" class="wp-image-410" width="519" height="386"/></figure>
-<!-- /wp:image -->
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jdL7YCdV7qw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><!-- /wp:image -->
 
 <!-- wp:paragraph -->
 <p>■TOR系 Mod入れるのが面倒なので作った自動化Script</p>
