@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.3.9"
+$version = "1.4.0"
 #
 #################################################################################################
 
@@ -322,7 +322,7 @@ $form.Controls.Add($MyGroupBox2)
 $MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox4.Location = New-Object System.Drawing.Point(400,290)
 $MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox4.text = "AirShipMODを同梱しますか？"
+$MyGroupBox4.text = "AUShipMODを同梱しますか？"
 
 # グループの中のラジオボタンを作る
 $RadioButton8 = New-Object System.Windows.Forms.RadioButton
@@ -495,20 +495,21 @@ $Combo_SelectedIndexChanged= {
             $aumin = $aummin
             Write-Log "AUM Selected"
             $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
         }"TOR GM :yukinogatari/TheOtherRoles-GM"{
             $releasepage2 = "https://api.github.com/repos/yukinogatari/TheOtherRoles-GM/releases"
             $scid = "TOR GM"
             $aumin = $torgmin
             Write-Log "TOR GM Selected"
             $RadioButton9.Checked = $True
-            $RadioButton28.Checked = $True
+            $RadioButton29.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
             $aumin = $torhmin
             Write-Log "TOR GMH Selected"
             $RadioButton9.Checked = $True
-            $RadioButton28.Checked = $True
+            $RadioButton29.Checked = $True
         }"TOR :Eisbison/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases"
             $scid = "TOR"
@@ -522,24 +523,28 @@ $Combo_SelectedIndexChanged= {
             $aumin = $tourmin
             Write-Log "TOU-R Selected"
             $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
             $aumin = $ermin
             Write-Log "ER Selected"
             $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
         }"ER+ES :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER+ES"
             $aumin = $esmin
             Write-Log "ER+ES Selected"
             $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
         }"NOS :Dolly1016/Nebula"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOS"
             $aumin = $nosmin
             Write-Log "NOS Selected"
             $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
         }"Toolインストールのみ"{
             $tio = $false
             Write-Log "TOI Selected"
@@ -1268,7 +1273,8 @@ if($tio){
     #まずはTORをDL
     Write-Log 'Download ZIP 開始'
     Write-Log $tordlp
-    Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
+    #Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
+    curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
     Write-Log 'Download ZIP 完了'
     $Bar.Value = "57"
 
@@ -1366,7 +1372,8 @@ if($tio){
         if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
             New-Item "$aupathm\BepInEx\plugins\" -Type Directory
         }
-        Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
+        #Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
+        curl.exe -L $aus -o "$aupathm\BepInEx\plugins\AUShipMod.dll"
         Write-Log "AUShipMOD Latest DLL download done"
     }
     $Bar.Value = "68"
@@ -1384,7 +1391,8 @@ if($tio){
         }
         for($aaai = 0;$aaai -lt $aus.Length;$aaai++){
             if($($aus[$aaai]).IndexOf(".dll") -gt 0){
-                Invoke-WebRequest $($aus[$aaai]) -Outfile "$aupathm\BepInEx\plugins\Submerged.dll" -UseBasicParsing
+                #Invoke-WebRequest $($aus[$aaai]) -Outfile "$aupathm\BepInEx\plugins\Submerged.dll" -UseBasicParsing
+                curl.exe -L $($aus[$aaai]) -o "$aupathm\BepInEx\plugins\Submerged.dll"
                 Write-Log "$($aus[$aaai])"
             }
         }
@@ -1405,7 +1413,8 @@ if($tio){
         #TOR+ DLLをDLして配置
         Write-Log "Download $scid DLL 開始"
         Write-Log $torplus
-        Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
+        #Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
+        curl.exe -L $torplus -o "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
         Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "AUM"){
         #Mod Original DLL削除
@@ -1418,7 +1427,8 @@ if($tio){
         #TOR+ DLLをDLして配置
         Write-Log "Download $scid DLL 開始"
         Write-Log $torplus
-        Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
+        #Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
+        curl.exe -L $torplus -o "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
         Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "TOR GM"){
         if(test-path "$aupathm\TheOtherRoles-GM.$torv"){
@@ -1434,7 +1444,8 @@ if($tio){
             $torgmdll = "https://github.com/yukinogatari/TheOtherRoles-GM/releases/download/$torpv/TheOtherRolesGM.dll"
             #TOR+ DLLをDLして配置
             Write-Log "Download $scid DLL 開始"
-            Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
+            #Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
+            curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
             Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOR GMH"){
@@ -1449,7 +1460,8 @@ if($tio){
             Write-Log $torgmdll
             #TOR+ DLLをDLして配置
             Write-Log "Download $scid DLL 開始"
-            Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
+            #Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
+            curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
             Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOU-R"){
@@ -1482,7 +1494,8 @@ if($tio){
         }
         Write-Log "日本語 データ Download 開始"
         Write-Log "日本語 データ $langdata"
-        Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
+        #Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
+        curl.exe -L $langdata -o "$aupathm\Language\Japanese.dat"
         Write-Log "日本語 データ Download 完了"
     }else{
     }
