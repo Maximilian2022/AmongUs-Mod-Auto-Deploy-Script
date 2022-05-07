@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.0"
+$version = "1.4.1"
 #
 #################################################################################################
 
@@ -1709,6 +1709,10 @@ if($platform -eq "Epic"){
     .\legendary.exe -y import "Among Us" $aupathm
     .\legendary.exe -y egl-sync
     Stop-Transcript
+}elseif($platform -eq "Steam"){
+    if(!(Test-Path "$aupathm\steam_appid.txt")){
+        Write-Output "945360"> "$aupathm\steam_appid.txt"
+    }
 }
 $Bar.Value = "97"
 $fntime = Get-Date
