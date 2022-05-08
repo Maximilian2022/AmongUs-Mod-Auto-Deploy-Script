@@ -70,7 +70,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
+    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding SJIS -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
@@ -1176,8 +1176,7 @@ if($tio){
                     Start-Sleep -Seconds 10
                     Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
                     write-log (test-path "$aupatho\Among Us.exe")
-                    write-log "$aupathm\Among Us.exe"
-                    
+                    write-log "$aupathm\Among Us.exe"                  
                     Pause
                 }
                 Remove-Item $fpth2 -Force
@@ -1199,18 +1198,18 @@ if($tio){
         }
 
         if ($retry -eq "true"){
-            Write-Log '既存のフォルダを中身を含めて削除します'
+            Write-Log "既存のフォルダを中身を含めて削除します"
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
             Copy-Item $aupatho -destination $aupathm -recurse
-            Write-Log ($aupatho + 'を' + $aupathm + 'にコピーしました');           
+            Write-Log "$aupatho を $aupathm にコピーしました"           
         }else{
             # コピー先のパスにファイルやフォルダが存在する場合は処理を中止
-            Write-Log ($aupathm + 'には既にファイル又はフォルダが存在します');
+            Write-Log "$aupathm には既にファイル又はフォルダが存在します"
             if($ovwrite){
-                Write-Log ("上書き処理が選択されました");
+                Write-Log "上書き処理が選択されました"
             }else{
-                Write-Log ("処理を中止しました");
+                Write-Log "処理を中止しました"
                 $Form2.Close()
                 pause
                 Exit
@@ -1220,7 +1219,7 @@ if($tio){
     }else{
         # フォルダを中身を含めてコピーする
         Copy-Item $aupatho -destination $aupathm -recurse
-        Write-Log ($aupatho + 'を' + $aupathm + 'にコピー完了');
+        Write-Log "$aupatho を $aupathm にコピー完了"
     } 
 
     #Backup System
@@ -1273,27 +1272,27 @@ if($tio){
 
     ####
     #まずはTORをDL
-    Write-Log 'Download ZIP 開始'
+    Write-Log "Download ZIP 開始"
     Write-Log $tordlp
     #Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
     curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
-    Write-Log 'Download ZIP 完了'
+    Write-Log "Download ZIP 完了"
     $Bar.Value = "57"
 
     #DLしたTORを解凍
     if (test-path "$aupathm\TheOtherRoles.zip"){
-        Write-Log ("ZIP DL OK");
-        Write-Log ("ZIP 解凍開始");
+        Write-Log "ZIP DL OK"
+        Write-Log "ZIP 解凍開始"
         Expand-Archive -path $aupathm\TheOtherRoles.zip -DestinationPath $aupathm -Force
-        Write-Log ("ZIP 解凍完了");
+        Write-Log "ZIP 解凍完了"
     }else{
-        Write-Log ("ZIP DL NG $tordlp ");
+        Write-Log "ZIP DL NG $tordlp "
     }
 
     $Bar.Value = "59"
 
     if(test-path "$aupathm\BepInEx"){
-        Write-Log ("ZIP 解凍OK");
+        Write-Log "ZIP 解凍OK"
     }
     $Bar.Value = "60"
 
@@ -1714,6 +1713,7 @@ if($platform -eq "Epic"){
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
         Write-Output "945360"> "$aupathm\steam_appid.txt"
+        Write-Log "Steam AppID Patched."
     }
 }
 $Bar.Value = "97"
