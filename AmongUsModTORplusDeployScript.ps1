@@ -1132,6 +1132,8 @@ if($tio){
         }elseif($scid -eq "NOS"){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
+                New-Item -Path "C:\Temp\MoreCosmic" -ItemType Directory
+                Copy-Item "$aupathm\MoreCosmic\*" -Recurse "C:\Temp\MoreCosmic"
             }
         }else{
             if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
@@ -1341,6 +1343,13 @@ if($tio){
             }
             Copy-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" -Force
             Remove-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force    
+            if(!(Test-Path "$aupathm\MoreCosmic")){
+                New-Item -Path "$aupathm\MoreCosmic" -ItemType Directory
+            }
+            if(test-path "C:\Temp\MoreCosmic"){
+                robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /E /log+:$LogFileName >nul 2>&1
+                Remove-Item "C:\Temp\MoreCosmic" -Recurse
+            }
         }
     }else{
         if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
