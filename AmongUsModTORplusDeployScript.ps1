@@ -606,10 +606,12 @@ $Combo_SelectedIndexChanged= {
                         Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                     }
                     Start-Sleep -Seconds 10
-                    while (!(test-path "$aupatho\Among Us.exe")){
+                    $fichk = Test-Path "$aupatho\Among Us.exe"
+                    while ($fichk){
                         Start-Sleep -Seconds 10
                         Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
                         Pause
+                        $fichk = Test-Path "$aupatho\Among Us.exe"
                     }
                     Remove-Item $fpth2 -Force
                 }else{
