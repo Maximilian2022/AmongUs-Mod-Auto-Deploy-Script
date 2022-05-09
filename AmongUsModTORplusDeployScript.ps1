@@ -1751,5 +1751,20 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
-Start-Sleep -s 5
+Start-Sleep -s 60
+Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
+powershell ".\gmhtechsupport.ps1 "$scid" "$aupathm" "$platform";exit $LASTEXITCODE"
+Remove-Item .\gmhtechsupport.ps1 -Force
+$erchk = Select-String -Path $LASTEXITCODE -Pattern `error`
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Error Check"
+Write-Log "-----------------------------------------------------------------"
+Write-Log $LASTEXITCODE
+if($erchk.LastIndexOf("error") -gt 0){
+    Write-Log "Error founds."
+    Write-Log $erchk
+}else{
+    Write-Log "No Error founds."
+}
+
 exit
