@@ -13,8 +13,7 @@ $npl = Get-Location
 # Folder用Function
 #################################################################################################
 #Special Thanks
-#https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4
-Add-Type -AssemblyName System.Windows.Forms
+#https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4Add-Type -AssemblyName System.Windows.Forms
 function Get-FolderPathG{
     param(
         [Parameter(ValueFromPipeline=$true)]
@@ -216,4 +215,4 @@ Write-Log "-----------------------------------------------------------------"
 #post API(Discord or Git issue)
 
 
-exit $LogFileName
+return $LogFileName
