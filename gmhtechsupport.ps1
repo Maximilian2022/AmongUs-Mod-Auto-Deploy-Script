@@ -2,10 +2,11 @@
 #
 # Among Us Mod Tech Support Script
 #
-$version = "1.0.0"
+$version = "1.0.1"
 #
 #################################################################################################
 
+Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
 $npl = Get-Location
 
 #################################################################################################
@@ -65,15 +66,19 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
+    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding SJIS -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
 #################################################################################################
 #Mod Selecter
 
-$scid = ""
-$scid = "TOR GMH"
+if($null -ne $Arg1){
+    $scid = $Arg1
+}else{
+    $scid = "TOR GMH"
+}
+
 
 #################################################################################################
 #AutoDetect用Static
@@ -93,7 +98,18 @@ $au_path_steam_mod = "C:\Program Files (x86)\Steam\steamapps\common\Among Us $sc
 #Among Us Modded Path ：Steam Mod用フォルダ
 $au_path_epic_mod = "C:\Program Files\Epic Games\AmongUs $scid Mod"
 
-if(Test-path "$au_path_steam_mod\Among Us.exe"){
+if($null -ne $Arg2){
+    $aupathm = $Arg2   
+    if($null -ne $Arg3){
+        $platform = $Arg3
+    }else{
+        if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            $platform = "Steam"
+        }else{
+            $platform = "Epic"
+        }
+    }
+}elseif(Test-path "$au_path_steam_mod\Among Us.exe"){
     $aupathm = $au_path_steam_mod
     $platform = "steam"
 }elseif(Test-path "$au_path_epic_mod\Among Us.exe"){
@@ -200,4 +216,4 @@ Write-Log "-----------------------------------------------------------------"
 #post API(Discord or Git issue)
 
 
-
+exit $LogFileName
