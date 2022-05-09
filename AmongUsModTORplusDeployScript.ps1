@@ -1751,20 +1751,22 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
-Start-Sleep -s 60
-Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
-powershell ".\gmhtechsupport.ps1 "$scid" "$aupathm" "$platform";exit $LASTEXITCODE"
-Remove-Item .\gmhtechsupport.ps1 -Force
-$erchk = Select-String -Path $LASTEXITCODE -Pattern `error`
-Write-Log "-----------------------------------------------------------------"
-Write-Log "Error Check"
-Write-Log "-----------------------------------------------------------------"
-Write-Log $LASTEXITCODE
-if($erchk.LastIndexOf("error") -gt 0){
-    Write-Log "Error founds."
-    Write-Log $erchk
-}else{
-    Write-Log "No Error founds."
-}
+if($startexewhendone -eq $true){
+    Write-Output "終了まで１分ほどかかります。（終了時チェック処理中。このまま放置してください。）"
+    Start-Sleep -s 60
+    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
 
+    $tsp = &"$npl\gmhtechsupport.ps1" $scid $aupathm $platform |Select-Object -Last 1
+    Remove-Item "$npl\gmhtechsupport.ps1" -Force
+    $erchk = Get-content "$tsp" -Raw
+    Write-Log "-----------------------------------------------------------------"
+    Write-Log "Error Check"
+    Write-Log "-----------------------------------------------------------------"
+    Write-Log $tsp
+    if($erchk.LastIndexOf("error") -gt 0){
+        Write-Log "Done."
+    }else{
+        Write-Log "No Error founds."
+    }
+}
 exit
