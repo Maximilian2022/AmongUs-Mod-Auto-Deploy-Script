@@ -70,7 +70,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding SJIS -Append
+    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding utf8 -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
@@ -1332,8 +1332,10 @@ if($tio){
                 New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
             }
             if(test-path "C:\Temp\ExtremeHat"){
-                robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /E /log+:$LogFileName >nul 2>&1
-                Remove-Item "C:\Temp\ExtremeHat" -Recurse
+                robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
             }
         }
     }elseif($scid -eq "NOS"){
@@ -1347,8 +1349,11 @@ if($tio){
                 New-Item -Path "$aupathm\MoreCosmic" -ItemType Directory
             }
             if(test-path "C:\Temp\MoreCosmic"){
-                robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /E /log+:$LogFileName >nul 2>&1
+                robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\MoreCosmic" -Recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
             }
         }
     }else{
@@ -1362,8 +1367,11 @@ if($tio){
                 New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
             }
             if(test-path "C:\Temp\TheOtherHats"){
-                robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /E /log+:$LogFileName >nul 2>&1
+                robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\TheOtherHats" -Recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
             }
         }
     }
@@ -1415,8 +1423,11 @@ if($tio){
         ###
         #Mod Original DLL削除
         if(test-path "$aupathm\TheOtherRoles"){
-            robocopy "$aupathm\TheOtherRoles" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\TheOtherRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
         Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
         Write-Log 'Delete Original Mod DLL'
@@ -1429,8 +1440,11 @@ if($tio){
     }elseif($scid -eq "AUM"){
         #Mod Original DLL削除
         if(test-path "$aupathm\TheOtherRoles"){
-            robocopy "$aupathm\TheOtherRoles" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\TheOtherRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
         Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
         Write-Log 'Delete Original Mod DLL'
@@ -1442,8 +1456,11 @@ if($tio){
         Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "TOR GM"){
         if(test-path "$aupathm\TheOtherRoles-GM.$torv"){
-            robocopy "$aupathm\TheOtherRoles-GM.$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\TheOtherRoles-GM.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles-GM.$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
         if($torpv -eq "v3.4.1.2"){
             ###
@@ -1460,8 +1477,11 @@ if($tio){
         }
     }elseif($scid -eq "TOR GMH"){
         if(test-path "$aupathm\TheOtherRoles-GM-Haoming.$torv"){
-            robocopy "$aupathm\TheOtherRoles-GM-Haoming.$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\TheOtherRoles-GM-Haoming.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles-GM-Haoming.$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
         if($checkgm){
             #Mod Original DLL削除
@@ -1476,28 +1496,43 @@ if($tio){
         }
     }elseif($scid -eq "TOU-R"){
         if(test-path "$aupathm\ToU $torv"){
-            robocopy "$aupathm\ToU $torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\ToU $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ToU $torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "TOR"){
         if(test-path "$aupathm\TheOtherRoles"){
-            robocopy "$aupathm\TheOtherRoles" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\TheOtherRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "ER"){
         if(test-path "$aupathm\ExtremeRoles-$torv"){
-            robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "ER+ES"){
         if(test-path "$aupathm\ExtremeRoles-$torv"){
-            robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "NOS"){
         if(test-path "$aupathm\Nebula"){
-            robocopy "$aupathm\Nebula" "$aupathm" /E /log+:$LogFileName >nul 2>&1
+            robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\Nebula" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
         if (!(Test-Path "$aupathm\Language\")) {
             New-Item "$aupathm\Language\" -Type Directory
@@ -1756,7 +1791,7 @@ if($startexewhendone -eq $true){
     Start-Sleep -s 60
     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
 
-    $tsp = &"$npl\gmhtechsupport.ps1" $scid $aupathm $platform |Select-Object -Last 1
+    $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
     Remove-Item "$npl\gmhtechsupport.ps1" -Force
     $erchk = Get-content "$tsp" -Raw
     Write-Log "-----------------------------------------------------------------"
@@ -1769,4 +1804,5 @@ if($startexewhendone -eq $true){
         Write-Log "No Error founds."
     }
 }
+
 exit
