@@ -1,3 +1,4 @@
+Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
 #################################################################################################
 #
 # Among Us Mod Tech Support Script
@@ -6,14 +7,14 @@ $version = "1.0.1"
 #
 #################################################################################################
 
-Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
 $npl = Get-Location
 
 #################################################################################################
 # Folder用Function
 #################################################################################################
 #Special Thanks
-#https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4Add-Type -AssemblyName System.Windows.Forms
+#https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4
+Add-Type -AssemblyName System.Windows.Forms
 function Get-FolderPathG{
     param(
         [Parameter(ValueFromPipeline=$true)]
@@ -65,7 +66,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding SJIS -Append
+    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding utf8 -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
@@ -91,6 +92,9 @@ Write-Log "                                                   Version: $version"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Gathering Tech Support Information Starts"
 Write-Log "-----------------------------------------------------------------"
+Write-Log "$Arg1"
+Write-Log "$Arg2"
+Write-Log "$Arg3"
 
 #Among Us Modded Path ：Steam Mod用フォルダ
 $au_path_steam_mod = "C:\Program Files (x86)\Steam\steamapps\common\Among Us $scid Mod"
@@ -102,7 +106,7 @@ if($null -ne $Arg2){
     if($null -ne $Arg3){
         $platform = $Arg3
     }else{
-        if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+        if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか?", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
             $platform = "Steam"
         }else{
             $platform = "Epic"
