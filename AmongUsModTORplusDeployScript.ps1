@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.2"
+$version = "1.4.3"
 #
 #################################################################################################
 
@@ -280,17 +280,22 @@ $MyGroupBox.text = "ショートカットを作成しますか？"
 # グループの中のラジオボタンを作る
 $RadioButton1 = New-Object System.Windows.Forms.RadioButton
 $RadioButton1.Location = New-Object System.Drawing.Point(20,30)
-$RadioButton1.size = New-Object System.Drawing.Size(150,30)
+$RadioButton1.size = New-Object System.Drawing.Size(100,30)
 $RadioButton1.Checked = $True
 $RadioButton1.Text = "作成する"
 
 $RadioButton2 = New-Object System.Windows.Forms.RadioButton
-$RadioButton2.Location = New-Object System.Drawing.Point(180,30)
-$RadioButton2.size = New-Object System.Drawing.Size(150,30)
+$RadioButton2.Location = New-Object System.Drawing.Point(120,30)
+$RadioButton2.size = New-Object System.Drawing.Size(110,30)
 $RadioButton2.Text = "作成しない"
 
+$RadioButton42 = New-Object System.Windows.Forms.RadioButton
+$RadioButton42.Location = New-Object System.Drawing.Point(230,30)
+$RadioButton42.size = New-Object System.Drawing.Size(150,30)
+$RadioButton42.Text = "デバッグ"
+
 # グループにラジオボタンを入れる
-$MyGroupBox.Controls.AddRange(@($Radiobutton1,$RadioButton2))
+$MyGroupBox.Controls.AddRange(@($Radiobutton1,$RadioButton2,$RadioButton42))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox)
 
@@ -1060,12 +1065,15 @@ if($tio){
     Write-Output $tordlp
 
     $Bar.Value = "23"
-
+    $debugc = $false
     ###作成したModのExeへのショートカットをDesktopに配置する
     if($RadioButton1.Checked){
         $shortcut = $true
     }elseif($RadioButton2.Checked){
         $shortcut = $false 
+    }elseif($RadioButton42.Checked){
+        $shortcut = $true
+        $debugc = $true
     }else{
         Write-Log "Critical Error: Shortcut"
     }
@@ -1571,14 +1579,118 @@ if($tio){
         $WsShell = New-Object -ComObject WScript.Shell
         $sShortcut = $WsShell.CreateShortcut("$scpath\Among Us Mod $scid.lnk")
 
-        if($platform -eq "Steam"){
-            $sShortcut.TargetPath = "$aupathm\Among Us.exe"
-        }elseif($platform -eq "Epic"){
-            $sShortcut.TargetPath = "$aupathb\legendary.exe"
-            $sShortcut.Arguments = "-y launch Among Us"
-            $sShortcut.WorkingDirectory = $aupathb
+        $scid2 = $scid.replace(" ","_")
+
+        if($debugc){
+            if(Test-Path $aupathb){
+                if(test-path "C:\temp\gmhtechsupport.ps1"){
+                    Remove-Item "C:\temp\gmhtechsupport.ps1"
+                }
+                if(test-path "C:\temp\amongusrun_$scid2.ps1"){
+                    Remove-Item "C:\temp\amongusrun_$scid2.ps1"
+                }
+                if(test-path "C:\temp\startamongusrun_$scid2.bat"){
+                    Remove-Item "C:\temp\startamongusrun_$scid2.bat"
+                }
+                Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "C:\temp\gmhtechsupport.ps1" -UseBasicParsing
+                $batscript = "chcp 65001`r`n@echo off`r`npowershell -NoProfile -ExecutionPolicy Unrestricted `"C:\temp\amongusrun_$scid2.ps1`"`r`nexit"
+                $batscript | Out-File -Encoding "UTF8BOM" -FilePath "C:\temp\startamongusrun_$scid2.bat" 
+                $ps1script = '$platform="'
+                $ps1script += "$platform`"`r`n"
+                $ps1script += '$aupathb="'
+                $ps1script += "$aupathb`"`r`n"
+                $ps1script += '$aupathm="'
+                $ps1script += "$aupathm`"`r`n"
+                $ps1script += '$scid="'
+                $ps1script += "$scid`"`r`n"
+                $ps1name = "C:\temp\amongusrun_$scid2.ps1"
+                $ps1script += '
+                #################################################################################################
+                # Run w/ Powershell v7 if available.
+                #################################################################################################
+                $npl = Get-Location
+                $v5run = $false
+                if($PSVersionTable.PSVersion.major -eq 5){
+                    if(test-path "$env:ProgramFiles\PowerShell\7"){
+                        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted '
+                $ps1script += "$ps1name"
+                $ps1script += '
+                    }else{
+                        $v5run = $true
+                        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+                            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `'
+                $ps1script += "$ps1name"
+                $ps1script += '`"" -Verb RunAs -Wait
+                            exit
+                        }
+                    }
+                }elseif($PSVersionTable.PSVersion.major -gt 5){
+                    $v5run = $true
+                    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `'
+                $ps1script += "$ps1name"
+                $ps1script += '`"" -Verb RunAs -Wait
+                        exit
+                    }
+                }else{
+                    write-host "ERROR - PowerShell Version : not supported."
+                }
+                
+                if(!($v5run)){
+                    exit
+                }
+                #>
+                
+                if($platform -eq "Steam"){
+                    Start-Process "$aupathm\Among Us.exe"
+                }elseif($platform -eq "Epic"){
+                    Set-Location "$aupathb"
+                    .\legendary.exe launch Among Us
+                }else{
+                    Write-Output "ERROR:Critical run apps"
+                }
+                Start-Sleep -Seconds 2
+                Write-Output "`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"
+                $procName = "Among Us"
+                $execPath = "$aupathm\Among Us.exe"
+                $checkpro = $true
+                $tsp = &"C:\temp\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
+                Write-Output "Game Start:$tsp"
+                while($checkpro){
+                    try{
+                        $p = Get-Process $procName -ErrorAction SilentlyContinue
+                        $p.WaitForExit()
+                    }
+                    catch{
+                        Write-Output "No Process"
+                    }
+                    finally{
+                        $tsp = &"C:\temp\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
+                        $erchk = Get-content "$tsp" -Raw
+                        Write-Output "Game Exit:$tsp"
+                        if($erchk.LastIndexOf("error") -gt 0){
+                            Write-Output "Done."
+                        }else{
+                            Write-Output "No Error founds."
+                        }
+                        $checkpro = $false
+                    }
+                }'
+                $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "C:\temp\amongusrun_$scid2.ps1" 
+            }else{
+                Write-Log "Something Wrong. Check Path."
+            }
+            $sShortcut.TargetPath = "C:\temp\startamongusrun_$scid2.bat"
         }else{
-            Write-Log "ERROR: Critical Shortcut"
+            if($platform -eq "Steam"){
+                $sShortcut.TargetPath = "$aupathm\Among Us.exe"
+            }elseif($platform -eq "Epic"){
+                $sShortcut.TargetPath = "$aupathb\legendary.exe"
+                $sShortcut.Arguments = "-y launch Among Us"
+                $sShortcut.WorkingDirectory = $aupathb
+            }else{
+                Write-Log "ERROR: Critical Shortcut"
+            }                
         }
 
         $sShortcut.IconLocation = "$aupathm\Among Us.exe"
