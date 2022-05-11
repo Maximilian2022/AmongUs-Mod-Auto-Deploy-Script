@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.1"
+$version = "1.4.2"
 #
 #################################################################################################
 
@@ -670,13 +670,14 @@ $Combo_SelectedIndexChanged= {
                 Exit
             }
             if(test-path "$spath\Among Us.exe"){
-                Write-Log "$spath にAmongUsのインストールパスを確認しました"
-                if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    $script:platform = "Steam"
-                }else{
-                    $script:platform = "Epic"
+                Write-Log "$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"
+                if($null -eq $script:platform){
+                    if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                        $script:platform = "Steam"
+                    }else{
+                        $script:platform = "Epic"
+                    }
                 }
-
             }else{
                 Write-Log "$spath にAmongUsのインストールが確認できませんでした"
                 pause
@@ -1787,22 +1788,43 @@ Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
 if($startexewhendone -eq $true){
-    Write-Output "終了まで１分ほどかかります。（終了時チェック処理中。このまま放置してください。）"
-    Start-Sleep -s 60
+    Write-Output "`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"
+    #監視プロセス名
+    $procName = "Among Us"
+    #実行ファイル
+    $execPath = "$aupathm\Among Us.exe"
+    $checkpro = $true
     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
-
     $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
-    Remove-Item "$npl\gmhtechsupport.ps1" -Force
-    $erchk = Get-content "$tsp" -Raw
     Write-Log "-----------------------------------------------------------------"
     Write-Log "Error Check"
     Write-Log "-----------------------------------------------------------------"
-    Write-Log $tsp
-    if($erchk.LastIndexOf("error") -gt 0){
-        Write-Log "Done."
-    }else{
-        Write-Log "No Error founds."
+    Write-Log "After Installation:$tsp"
+    #監視&自動起動
+    while($checkpro){
+        try{
+            #プロセスを取得
+            $p = Get-Process $procName -ErrorAction SilentlyContinue
+            #始したプロセスが終了するまで待機するように指示
+            $p.WaitForExit()
+        }
+        catch{
+            Write-Output "No Process"
+        }
+        finally{
+            $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
+            Remove-Item "$npl\gmhtechsupport.ps1" -Force
+            $erchk = Get-content "$tsp" -Raw
+            Write-Log "After Game Exit:$tsp"
+            if($erchk.LastIndexOf("error") -gt 0){
+                Write-Log "Done."
+            }else{
+                Write-Log "No Error founds."
+            }
+            $checkpro = $false
+        }
     }
 }
 
+Start-Sleep -Seconds 2
 exit
