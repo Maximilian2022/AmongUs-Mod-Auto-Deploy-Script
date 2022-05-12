@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.3"
+$version = "1.4.4"
 #
 #################################################################################################
 
@@ -22,6 +22,21 @@ $tourmin = "v3.0.0"
 # Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
+Write-Output "実行前チェック開始"
+if(!(Test-Path "$env:ProgramFiles\PowerShell\7")){
+    Write-Output "Powershell 7を導入中・・・。"
+    $com = 'Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"'
+    $com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
+    Remove-Item "$npl\ps.ps1" -Force
+    Write-Output "再度batファイルを実行してください"
+    Write-Output "再度batファイルを実行してください"
+    Write-Output "再度batファイルを実行してください"
+    Start-Sleep -Seconds 10
+    Exit
+}
+Write-Output "実行前チェック完了"
+
 $v5run = $false
 if($PSVersionTable.PSVersion.major -eq 5){
     if(test-path "$env:ProgramFiles\PowerShell\7"){
@@ -291,7 +306,7 @@ $RadioButton2.Text = "作成しない"
 
 $RadioButton42 = New-Object System.Windows.Forms.RadioButton
 $RadioButton42.Location = New-Object System.Drawing.Point(230,30)
-$RadioButton42.size = New-Object System.Drawing.Size(150,30)
+$RadioButton42.size = New-Object System.Drawing.Size(100,30)
 $RadioButton42.Text = "デバッグ"
 
 # グループにラジオボタンを入れる
@@ -327,7 +342,7 @@ $form.Controls.Add($MyGroupBox2)
 $MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox4.Location = New-Object System.Drawing.Point(400,290)
 $MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox4.text = "AUShipMODを同梱しますか？"
+$MyGroupBox4.text = "AUShipMOD を同梱しますか？"
 
 # グループの中のラジオボタンを作る
 $RadioButton8 = New-Object System.Windows.Forms.RadioButton
@@ -349,22 +364,27 @@ $form.Controls.Add($MyGroupBox4)
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox24.Location = New-Object System.Drawing.Point(400,380)
 $MyGroupBox24.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox24.text = "Submergedを同梱しますか？"
+$MyGroupBox24.text = "Submerged を同梱しますか？"
 
 # グループの中のラジオボタンを作る
 $RadioButton28 = New-Object System.Windows.Forms.RadioButton
 $RadioButton28.Location = New-Object System.Drawing.Point(20,30)
-$RadioButton28.size = New-Object System.Drawing.Size(150,30)
+$RadioButton28.size = New-Object System.Drawing.Size(100,30)
 $RadioButton28.Text = "同梱する"
 
 $RadioButton29 = New-Object System.Windows.Forms.RadioButton
-$RadioButton29.Location = New-Object System.Drawing.Point(180,30)
-$RadioButton29.size = New-Object System.Drawing.Size(150,30)
+$RadioButton29.Location = New-Object System.Drawing.Point(120,30)
+$RadioButton29.size = New-Object System.Drawing.Size(110,30)
 $RadioButton29.Text = "同梱しない"
 $RadioButton29.Checked = $True
 
+$RadioButton27 = New-Object System.Windows.Forms.RadioButton
+$RadioButton27.Location = New-Object System.Drawing.Point(230,30)
+$RadioButton27.size = New-Object System.Drawing.Size(100,30)
+$RadioButton27.Text = "除去する"
+
 # グループにラジオボタンを入れる
-$MyGroupBox24.Controls.AddRange(@($Radiobutton28,$RadioButton29))
+$MyGroupBox24.Controls.AddRange(@($Radiobutton28,$RadioButton29,$RadioButton27))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox24)
 
@@ -383,9 +403,15 @@ $CheckedBox.Size = "270,205"
 
 # 配列を作成
 $RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","PowerShell 7","dotNetFramework")
-
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
+
+$pwshv2 = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases" -UseBasicParsing)).tag_name
+$pwshv = $pwshv2[0]
+
+if("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv"){
+    $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)
+}
 
 # すべての既存の選択をクリア
 $CheckedBox.ClearSelected()
@@ -660,7 +686,10 @@ $Combo_SelectedIndexChanged= {
             $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
             ### Load
             if(test-path "$fileName"){
-                $spath = Get-content "$fileName"
+                $spath2 = Get-content "$fileName"
+                $spath3 = $spath2.split("_:_")
+                $spath = $spath3[0] 
+                $script:platform = $spath3[1]
                 Remove-Item $fileName
             }else{
                 #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
@@ -676,7 +705,7 @@ $Combo_SelectedIndexChanged= {
             }
             if(test-path "$spath\Among Us.exe"){
                 Write-Log "$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"
-                if($null -eq $script:platform){
+                if(($script:platform -ne "Steam") -and ($script:platform -ne "Epic")){
                     if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                         $script:platform = "Steam"
                     }else{
@@ -707,7 +736,10 @@ $Combo_SelectedIndexChanged= {
                 Write-Log $aupathm
                 Write-Log $aupathb
                 ### Auto Save
-                Write-Output "$aupatho"> $fileName
+                $confcont = $aupatho
+                $confcont += "_:_"
+                $confcont += $script:platform
+                Write-Output "$confcont"> $fileName
                 Write-Log "Amongus ModDeployScript Autosave function"
 
             }else{
@@ -725,6 +757,16 @@ $Combo_SelectedIndexChanged= {
         $script:releasepage = $releasepage2
         $script:scid = $scid
         $script:aumin = $aumin
+        $ym = Get-Date -Format yyyyMM
+        if(!(Test-Path "$aupathb\chk$ym.txt")){
+            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"),$true)
+            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"),$true)                       
+            Write-Output $ym |Out-File -FilePath "$aupathb\chk$ym.txt"
+            $ym2 = $ym -1
+            if(Test-Path "$aupathb\chk$ym2.txt"){
+                Remove-Item "$aupathb\chk$ym2.txt" -Force
+            }
+        }
     }
     $script:tio = $tio
 }
@@ -1343,6 +1385,7 @@ if($tio){
             if(test-path "C:\Temp\ExtremeHat"){
                 robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+    
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
@@ -1361,6 +1404,7 @@ if($tio){
                 robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\MoreCosmic" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+    
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
@@ -1379,6 +1423,7 @@ if($tio){
                 robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\TheOtherHats" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+    
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
@@ -1427,6 +1472,11 @@ if($tio){
     }
     $Bar.Value = "69"
 
+    if($RadioButton27.Checked){
+        if(Test-Path "$aupathm\BepInEx\plugins\Submerged.dll"){
+            Remove-item "$aupathm\BepInEx\plugins\Submerged.dll" -Force
+        }        
+    }
 
     if($scid -eq "TOR Plus"){
         ###
@@ -1435,6 +1485,7 @@ if($tio){
             robocopy "$aupathm\TheOtherRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1452,6 +1503,7 @@ if($tio){
             robocopy "$aupathm\TheOtherRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1468,6 +1520,7 @@ if($tio){
             robocopy "$aupathm\TheOtherRoles-GM.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles-GM.$torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1489,6 +1542,7 @@ if($tio){
             robocopy "$aupathm\TheOtherRoles-GM-Haoming.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles-GM-Haoming.$torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1508,6 +1562,7 @@ if($tio){
             robocopy "$aupathm\ToU $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ToU $torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1516,6 +1571,7 @@ if($tio){
             robocopy "$aupathm\TheOtherRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1524,6 +1580,7 @@ if($tio){
             robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1532,6 +1589,7 @@ if($tio){
             robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1540,6 +1598,7 @@ if($tio){
             robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\Nebula" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
@@ -1583,6 +1642,13 @@ if($tio){
 
         if($debugc){
             if(Test-Path $aupathb){
+                if(($platform -ne "Steam") -and ($platform -eq "Steam")){
+                    if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか?", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                        $platform = "Steam"
+                    }else{
+                        $platform = "Epic"
+                    }
+                }
                 if(test-path "C:\temp\gmhtechsupport.ps1"){
                     Remove-Item "C:\temp\gmhtechsupport.ps1"
                 }
@@ -1594,7 +1660,7 @@ if($tio){
                 }
                 Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "C:\temp\gmhtechsupport.ps1" -UseBasicParsing
                 $batscript = "chcp 65001`r`n@echo off`r`npowershell -NoProfile -ExecutionPolicy Unrestricted `"C:\temp\amongusrun_$scid2.ps1`"`r`nexit"
-                $batscript | Out-File -Encoding "UTF8BOM" -FilePath "C:\temp\startamongusrun_$scid2.bat" 
+                $batscript | Out-File -Encoding default -FilePath "C:\temp\startamongusrun_$scid2.bat" 
                 $ps1script = '$platform="'
                 $ps1script += "$platform`"`r`n"
                 $ps1script += '$aupathb="'
@@ -1830,7 +1896,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $Bar.Value = "86"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
-            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI"
+            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
