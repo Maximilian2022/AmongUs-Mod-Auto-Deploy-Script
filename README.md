@@ -24,7 +24,7 @@
 <!-- /wp:html -->
 
 <!-- wp:paragraph -->
-<p>■[推奨]<br>最新のPowershell（<a rel="noreferrer noopener" href="https://github.com/PowerShell/PowerShell/releases/tag/v7.2.3" target="_blank">公式HP</a>）（入れないと動かないとかは多分ないハズ）</p>
+<p>■[推奨]<br>最新のPowershell（<a rel="noreferrer noopener" href="https://github.com/PowerShell/PowerShell/releases/tag/v7.2.3" target="_blank">公式HP</a>）（Bat起動時に自動インストール）</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
