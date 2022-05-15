@@ -3,7 +3,7 @@ Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
 #
 # Among Us Mod Tech Support Script
 #
-$version = "1.0.2"
+$version = "1.0."
 #
 #################################################################################################
 
@@ -222,8 +222,10 @@ if($($chkenabled.Content).LastIndexOf("true") -gt 0){
         $agree = $true
         $usnm = Get-content "C:\Temp\agreement.txt" -Raw
     }
+    Write-Log "Posting Debug Info is enabled globaly."
 }else{
     $dispost = $false
+    Write-Log "Posting Debug Info is not enabled globaly.."
 }
 
 if($dispost){
