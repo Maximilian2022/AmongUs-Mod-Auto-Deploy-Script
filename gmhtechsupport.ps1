@@ -217,8 +217,9 @@ Write-Log "Script Ends"
 Write-Log "-----------------------------------------------------------------"
 
 #post API(Discord or Git issue)
+$chkenabled = ""
 $chkenabled = invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/enabledebug.txt
-if($chkenabled.Content -eq "true"){
+if($($chkenabled.Content).LastIndexOf("true") -gt 0){
     $dispost = $true
 }else{
     $dispost = $false
@@ -253,7 +254,7 @@ if($dispost){
         
         $stringHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
         $stringHeader.Name = "payload_json"
-        $stringContent = [System.Net.Http.StringContent]::new("{`"content`":`"Post from debug mode.`"}")
+        $stringContent = [System.Net.Http.StringContent]::new("{`"content`":`"$usnm posts info from debug mode.`"}")
         $stringContent.Headers.ContentDisposition = $stringHeader
         $multipartContent.Add($stringContent)
         
