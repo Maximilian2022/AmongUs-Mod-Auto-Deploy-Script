@@ -1,1 +1,1 @@
-true
+Debug Mode is true
