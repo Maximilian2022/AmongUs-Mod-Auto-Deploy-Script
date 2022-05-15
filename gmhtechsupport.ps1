@@ -160,15 +160,6 @@ if($null -ne $Arg2){
 }
 Write-Log "Platform:$platform"
 
-Write-Log "`r`n`r`n "
-Write-Log "-----------------------------------------------------------------"
-Write-Log "Check Tree"
-Write-Log "-----------------------------------------------------------------"
-Write-Log "$aupathm"
-
-#フォルダ/ファイル構成チェック
-Set-Location $aupathm
-tree /F | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
 
 Write-Log "`r`n`r`n "
 Write-Log "-----------------------------------------------------------------"
@@ -182,6 +173,15 @@ if(!(Test-Path "$aupathm\BepInEx\LogOutput.log")){
     $content = Get-content "$aupathm\BepInEx\LogOutput.log" -Raw
     Write-Log "`r`n $content"
 }
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Check Tree"
+Write-Log "-----------------------------------------------------------------"
+Write-Log "$aupathm"
+
+#フォルダ/ファイル構成チェック
+Set-Location $aupathm
+tree /F | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
 
 Write-Log "`r`n`r`n "
 Write-Log "-----------------------------------------------------------------"
@@ -212,31 +212,43 @@ Write-Log "`r`n $content"
 Write-Log "`r`n`r`n "
 
 
-Write-Log "-----------------------------------------------------------------"
-Write-Log "Script Ends"
-Write-Log "-----------------------------------------------------------------"
 
 #post API(Discord or Git issue)
 $chkenabled = ""
 $chkenabled = invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/enabledebug.txt
 if($($chkenabled.Content).LastIndexOf("true") -gt 0){
     $dispost = $true
+    If(Test-Path "C:\Temp\agreement.txt"){
+        $agree = $true
+        $usnm = Get-content "C:\Temp\agreement.txt" -Raw
+    }
 }else{
     $dispost = $false
 }
 
 if($dispost){
-    if([System.Windows.Forms.MessageBox]::Show("結果を健康ランドにPostしますか？`r`n`r`n投稿される情報は個人情報を含む場合がありますが、`r`n当方では何かあった場合の責任について一切感知しません。", "Among Us Mod Debug Bot",4) -eq "Yes"){
+    Write-Log "-----------------------------------------------------------------"
+    Write-Log "Posting Data"
+    Write-Log "-----------------------------------------------------------------"
+    
+    if(!($agree)){
+        if([System.Windows.Forms.MessageBox]::Show("結果を健康ランドにPostしますか？`r`n`r`n投稿される情報は個人情報を含む場合がありますが、`r`n当方では何かあった場合の責任について一切感知しません。`r`nここで押した選択は記録され、今後同じ質問はされません。", "Among Us Mod Debug Bot",4) -eq "Yes"){
+            $agree = $true
+            #　インプットボックスの表示
+            $usnm = [Microsoft.VisualBasic.Interaction]::InputBox("プレイヤー名を記載してください`r`nプレイヤー名が記載されていない場合は投稿をキャンセルします`r`nここで記載した名前は記録され、今後同じ質問はされません。", "Among Us Mod Debug Bot")
+            if($usnm -eq ""){
+                return $LogFileName
+            }    
+            $usnm | Out-File -FilePath "C:\Temp\agreement.txt" -Encoding UTF8 -Append
+        }
+    }
+
+    if($agree){
         $dishook = "https://discord.com/api/webhooks/975204305265102868/BzMgrQ8Ul15YVzpcL8P2BNTb21P-amVeROUAz7QQrSrUgbiLHzzo8Kc1AWTs9fM6unUF"
 
         #　アセンブリの読み込み
         [void][System.Reflection.Assembly]::Load("Microsoft.VisualBasic, Version=8.0.0.0, Culture=Neutral, PublicKeyToken=b03f5f7f11d50a3a")
 
-        #　インプットボックスの表示
-        $usnm = [Microsoft.VisualBasic.Interaction]::InputBox("プレイヤー名を記載してください`r`nプレイヤー名が記載されていない場合は投稿をキャンセルします", "Among Us Mod Debug Bot")
-        if($usnm -eq ""){
-            return $LogFileName
-        }    
 
         $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
         $headers.Add("content-type", "multipart/form-data")
@@ -260,9 +272,14 @@ if($dispost){
         
         $body = $multipartContent
         
-        $response = Invoke-RestMethod $dishook -Method 'POST' -Headers $headers -Body $body
-        $response | ConvertTo-Json   
+        $response = (Invoke-RestMethod $dishook -Method 'POST' -Headers $headers -Body $body) | ConvertTo-Json  
+        Write-Log $response 
     }
 }
 
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Script Ends"
+Write-Log "-----------------------------------------------------------------"
+
 return $LogFileName
+
