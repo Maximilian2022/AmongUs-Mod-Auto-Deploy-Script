@@ -3,7 +3,7 @@ Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
 #
 # Among Us Mod Tech Support Script
 #
-$version = "1.0.1"
+$version = "1.0.2"
 #
 #################################################################################################
 
@@ -217,6 +217,51 @@ Write-Log "Script Ends"
 Write-Log "-----------------------------------------------------------------"
 
 #post API(Discord or Git issue)
+$chkenabled = invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/enabledebug.txt
+if($chkenabled.Content -eq "true"){
+    $dispost = $true
+}else{
+    $dispost = $false
+}
 
+if($dispost){
+    if([System.Windows.Forms.MessageBox]::Show("結果を健康ランドにPostしますか？`r`n`r`n投稿される情報は個人情報を含む場合がありますが、`r`n当方では何かあった場合の責任について一切感知しません。", "Among Us Mod Debug Bot",4) -eq "Yes"){
+        $dishook = "https://discord.com/api/webhooks/975204305265102868/BzMgrQ8Ul15YVzpcL8P2BNTb21P-amVeROUAz7QQrSrUgbiLHzzo8Kc1AWTs9fM6unUF"
+
+        #　アセンブリの読み込み
+        [void][System.Reflection.Assembly]::Load("Microsoft.VisualBasic, Version=8.0.0.0, Culture=Neutral, PublicKeyToken=b03f5f7f11d50a3a")
+
+        #　インプットボックスの表示
+        $usnm = [Microsoft.VisualBasic.Interaction]::InputBox("プレイヤー名を記載してください`r`nプレイヤー名が記載されていない場合は投稿をキャンセルします", "Among Us Mod Debug Bot")
+        if($usnm -eq ""){
+            return $LogFileName
+        }    
+
+        $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+        $headers.Add("content-type", "multipart/form-data")
+        $headers.Add("Cookie", "__cfruid=6db5c6ada0d4c320afee521f14a55d58b856331f-1652577557; __dcfduid=0bf11ba09d7011ec8c31dac48d8e8976; __sdcfduid=0bf11ba09d7011ec8c31dac48d8e89764d55a8c8ef95cdfce9060d40f6b7bcde5325c65b689704f560aaa40f23128113")
+        
+        $multipartContent = [System.Net.Http.MultipartFormDataContent]::new()
+        $multipartFile = $LogFileName
+        $FileStream = [System.IO.FileStream]::new($multipartFile, [System.IO.FileMode]::Open)
+        $fileHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
+        $fileHeader.Name = "file"
+        $fileHeader.FileName = "$LogFileName"
+        $fileContent = [System.Net.Http.StreamContent]::new($FileStream)
+        $fileContent.Headers.ContentDisposition = $fileHeader
+        $multipartContent.Add($fileContent)
+        
+        $stringHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
+        $stringHeader.Name = "payload_json"
+        $stringContent = [System.Net.Http.StringContent]::new("{`"content`":`"Post from debug mode.`"}")
+        $stringContent.Headers.ContentDisposition = $stringHeader
+        $multipartContent.Add($stringContent)
+        
+        $body = $multipartContent
+        
+        $response = Invoke-RestMethod $dishook -Method 'POST' -Headers $headers -Body $body
+        $response | ConvertTo-Json   
+    }
+}
 
 return $LogFileName
