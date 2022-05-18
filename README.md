@@ -40,7 +40,13 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>■[導入手順] <br>1. このBatを動作させる <br>2. InstallするModを選択する<br>3. MODのバージョンを選択する（v3.3.2.2+、等) <br><br>■[このScriptでやってること] <br>０．Script ps1をDLして実行<br><br>１．Steam/Epicの自動判定機能（両方ある場合はSteamが先に判定されます）<br>       インストールパスがカスタムされてるときにフォルダ選択画面を出すよ <br><br>２．オリジナルフォルダをバックアップする<br>　　すでにバックアップ済みの場合はスキップされる<br><br>３．オリジナルフォルダをコピーしてMod用フォルダの作成<br>　　作成される場所はオリジナルフォルダと同じ階層です<br>　　（すでに作られてたら消して作り直すかユーザー確認する） <br><br>４．ZIPをDLしてMod用フォルダに解凍 <br><br>５．必要に応じて元のMod DLLを削除してTOR+のDLLをDL <br><br>６．DesktopにMod適用したAmongUsへのShortcutを作成するか、<br>　　作成したMod入りフォルダをExplorerで表示して終了（ユーザー選択）<br><br>７．選択したツールの展開<br>　・BetterCrewLinkを選択するとLatestをDLしてインストールする。<br>　　<a rel="noreferrer noopener" href="https://github.com/OhMyGuus/BetterCrewLink" target="_blank">https://github.com/OhMyGuus/BetterCrewLink</a><br>　・AmongUsReplayInWindowを選択するとLatestをDLしてDocumentsに展開する<br>　　<a rel="noreferrer noopener" href="https://github.com/sawa90/AmongUsReplayInWindow" target="_blank">https://github.com/sawa90/AmongUsReplayInWindow</a><br>　・AmongUsCaptureを選択するとLatestをDLしてDocumentsに展開する<br>　　<a rel="noreferrer noopener" href="https://github.com/automuteus/amonguscapture" target="_blank">https://github.com/automuteus/amonguscapture</a><br>　・VC Redist(Modの動作に必要)<br>　・Powershell 7</p>
+<p>■[導入手順]<br>
+1. このBatを動作させる(PS7がない場合、入れる動作の後再度Batを動作させる）<br>
+1.1 初回はWindowsから安全じゃないと必ず言われるので、詳細から実行を選択する（これはWindowsの仕様。）<br>
+1.2 入れているセキュリティソフトによってはそっちも文句を言うので、そこは良しなにしてください。<br>
+2. Modを選ぶ<br>
+2.1 初回、および月初めの実行時はクリーンインストール、VC Redist,  dotNetFramework が選択されます<br>
+3. MODのバージョンをListから選ぶ<br></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
