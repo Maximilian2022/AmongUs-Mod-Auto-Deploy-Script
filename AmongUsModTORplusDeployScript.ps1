@@ -22,7 +22,8 @@ $tourmin = "v3.0.0"
 #################################################################################################
 # Translate Function
 #################################################################################################
-$Cult  = Get-Culture
+#$Cult  = Get-Culture
+$Cult  = "en-US"
 function Get-Translate($transtext){
     if($Cult -ne "ja-JP"){
         $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
@@ -103,7 +104,7 @@ function Write-Log($logstring){
         # ログ出力
     Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding utf8 -Append
     # echo させるために出力したログを戻す
-    Return $Log
+    Return $(Get-Translate($Log))
 }
 Write-Log "Running With Powershell Version $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)"
 Write-Log "                                                                 "
