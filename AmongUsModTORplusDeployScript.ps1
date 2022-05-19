@@ -29,9 +29,9 @@ if(!(Test-Path "$env:ProgramFiles\PowerShell\7")){
     $com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
     Remove-Item "$npl\ps.ps1" -Force
-    Write-Output "再度batファイルを実行してください"
-    Write-Output "再度batファイルを実行してください"
-    Write-Output "再度batファイルを実行してください"
+    Write-Output "`r`n"
+    Write-Output "`r`n再度batファイルを実行してください`r`n"
+    Write-Output "`r`n"
     Start-Sleep -Seconds 10
     Exit
 }
