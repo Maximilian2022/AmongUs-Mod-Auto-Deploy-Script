@@ -2,12 +2,12 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.4"
+$version = "1.4.5"
 #
 #################################################################################################
 
 
-###v2022.03.29対応minimum version
+### minimum version for v2022.03.29
 $nosmin = "1.7.1,2022.3.29"
 $ermin = "v1.99.90.0"
 $esmin = "v1.99.90.0"
@@ -18,24 +18,40 @@ $torpmin = "v3.4.5.1+"
 $torgmin = "v3.5.5"
 $tourmin = "v3.0.0"
 
+
+#################################################################################################
+# Translate Function
+#################################################################################################
+$Cult  = Get-Culture
+function Get-Translate($transtext){
+    if($Cult -ne "ja-JP"){
+        $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
+        $Response = (Invoke-WebRequest -Uri $Uri -Method Get).Content
+        $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
+        return $Resulttxt[0]
+    }else{
+        return $transtext
+    }
+}
+
 #################################################################################################
 # Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
-Write-Output "実行前チェック開始"
+Write-Output $(Get-Translate("実行前チェック開始"))
 if(!(Test-Path "$env:ProgramFiles\PowerShell\7")){
-    Write-Output "Powershell 7を導入中・・・。"
+    Write-Output $(Get-Translate("Powershell 7を導入中・・・。"))
     $com = 'Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"'
     $com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
     Remove-Item "$npl\ps.ps1" -Force
     Write-Output "`r`n"
-    Write-Output "`r`n再度batファイルを実行してください`r`n"
+    Write-Output $(Get-Translate("`r`n再度batファイルを実行してください`r`n"))
     Write-Output "`r`n"
     Start-Sleep -Seconds 10
     Exit
 }
-Write-Output "実行前チェック完了"
+Write-Output $(Get-Translate("実行前チェック完了"))
 
 $v5run = $false
 if($PSVersionTable.PSVersion.major -eq 5){
@@ -55,7 +71,7 @@ if($PSVersionTable.PSVersion.major -eq 5){
         exit
     }
 }else{
-    write-host "ERROR - PowerShell Version : not supported."
+    write-host $(Get-Translate("ERROR - PowerShell Version : not supported."))
 }
 
 if(!($v5run)){
@@ -85,7 +101,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding utf8 -Append
+    Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding utf8 -Append
     # echo させるために出力したログを戻す
     Return $Log
 }
@@ -108,7 +124,7 @@ Add-Type -AssemblyName System.Windows.Forms
 function Get-FolderPathG{
     param(
         [Parameter(ValueFromPipeline=$true)]
-        [string]$Description = "フォルダを選択してください",
+        [string]$Description = $(Get-Translate("フォルダを選択してください")),
         [boolean]$CurrentDefault = $false
     )
     # メインウィンドウ取得
@@ -230,7 +246,7 @@ $form.Controls.Add($label8)
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(15,55)
 $label.Size = New-Object System.Drawing.Size(370,40)
-$label.Text = "インストールしたいModを選択してください"
+$label.Text = $(Get-Translate("インストールしたいModを選択してください"))
 $form.Controls.Add($label)
 
 # OKボタンの設定
@@ -255,29 +271,29 @@ $form.Controls.Add($CancelButton)
 $MyGroupBox3 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox3.Location = New-Object System.Drawing.Point(400,10)
 $MyGroupBox3.size = New-Object System.Drawing.Size(350,100)
-$MyGroupBox3.text = "既存のフォルダを上書き/再作成しますか？"
+$MyGroupBox3.text = $(Get-Translate("既存のフォルダを上書き/再作成しますか？"))
 
 # グループの中のラジオボタンを作る
 $RadioButton5 = New-Object System.Windows.Forms.RadioButton
 $RadioButton5.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton5.size = New-Object System.Drawing.Size(120,30)
 $RadioButton5.Checked = $True
-$RadioButton5.Text = "再作成する"
+$RadioButton5.Text = $(Get-Translate("再作成する"))
 
 $RadioButton6 = New-Object System.Windows.Forms.RadioButton
 $RadioButton6.Location = New-Object System.Drawing.Point(20,60)
 $RadioButton6.size = New-Object System.Drawing.Size(130,30)
-$RadioButton6.Text = "再作成しない"
+$RadioButton6.Text = $(Get-Translate("再作成しない"))
 
 $RadioButton7 = New-Object System.Windows.Forms.RadioButton
 $RadioButton7.Location = New-Object System.Drawing.Point(150,30)
 $RadioButton7.size = New-Object System.Drawing.Size(120,30)
-$RadioButton7.Text = "上書きする"
+$RadioButton7.Text = $(Get-Translate("上書きする"))
 
 $RadioButton17 = New-Object System.Windows.Forms.RadioButton
 $RadioButton17.Location = New-Object System.Drawing.Point(150,60)
 $RadioButton17.size = New-Object System.Drawing.Size(190,30)
-$RadioButton17.Text = "クリーンインストール"
+$RadioButton17.Text = $(Get-Translate("クリーンインストール"))
 
 # グループにラジオボタンを入れる
 $MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6,$RadioButton7,$RadioButton17))
@@ -290,24 +306,24 @@ $form.Controls.Add($MyGroupBox3)
 $MyGroupBox = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox.Location = New-Object System.Drawing.Point(400,120)
 $MyGroupBox.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox.text = "ショートカットを作成しますか？"
+$MyGroupBox.text = $(Get-Translate("ショートカットを作成しますか？"))
 
 # グループの中のラジオボタンを作る
 $RadioButton1 = New-Object System.Windows.Forms.RadioButton
 $RadioButton1.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton1.size = New-Object System.Drawing.Size(100,30)
 $RadioButton1.Checked = $True
-$RadioButton1.Text = "作成する"
+$RadioButton1.Text = $(Get-Translate("作成する"))
 
 $RadioButton2 = New-Object System.Windows.Forms.RadioButton
 $RadioButton2.Location = New-Object System.Drawing.Point(120,30)
 $RadioButton2.size = New-Object System.Drawing.Size(110,30)
-$RadioButton2.Text = "作成しない"
+$RadioButton2.Text = $(Get-Translate("作成しない"))
 
 $RadioButton42 = New-Object System.Windows.Forms.RadioButton
 $RadioButton42.Location = New-Object System.Drawing.Point(230,30)
 $RadioButton42.size = New-Object System.Drawing.Size(100,30)
-$RadioButton42.Text = "デバッグ"
+$RadioButton42.Text = $(Get-Translate("デバッグ"))
 
 # グループにラジオボタンを入れる
 $MyGroupBox.Controls.AddRange(@($Radiobutton1,$RadioButton2,$RadioButton42))
@@ -320,19 +336,19 @@ $form.Controls.Add($MyGroupBox)
 $MyGroupBox2 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox2.Location = New-Object System.Drawing.Point(400,205)
 $MyGroupBox2.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox2.text = "作成したModをすぐに起動しますか？"
+$MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動しますか？"))
 
 # グループの中のラジオボタンを作る
 $RadioButton3 = New-Object System.Windows.Forms.RadioButton
 $RadioButton3.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton3.size = New-Object System.Drawing.Size(150,30)
 $RadioButton3.Checked = $True
-$RadioButton3.Text = "起動する"
+$RadioButton3.Text = $(Get-Translate("起動する"))
 
 $RadioButton4 = New-Object System.Windows.Forms.RadioButton
 $RadioButton4.Location = New-Object System.Drawing.Point(180,30)
 $RadioButton4.size = New-Object System.Drawing.Size(150,30)
-$RadioButton4.Text = "起動しない"
+$RadioButton4.Text = $(Get-Translate("起動しない"))
 
 # グループにラジオボタンを入れる
 $MyGroupBox2.Controls.AddRange(@($Radiobutton3,$RadioButton4))
@@ -342,19 +358,19 @@ $form.Controls.Add($MyGroupBox2)
 $MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox4.Location = New-Object System.Drawing.Point(400,290)
 $MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox4.text = "AUShipMOD を同梱しますか？"
+$MyGroupBox4.text = $(Get-Translate("AUShipMOD を同梱しますか？"))
 
 # グループの中のラジオボタンを作る
 $RadioButton8 = New-Object System.Windows.Forms.RadioButton
 $RadioButton8.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton8.size = New-Object System.Drawing.Size(150,30)
 $RadioButton8.Checked = $True
-$RadioButton8.Text = "同梱する"
+$RadioButton8.Text = $(Get-Translate("同梱する"))
 
 $RadioButton9 = New-Object System.Windows.Forms.RadioButton
 $RadioButton9.Location = New-Object System.Drawing.Point(180,30)
 $RadioButton9.size = New-Object System.Drawing.Size(150,30)
-$RadioButton9.Text = "同梱しない"
+$RadioButton9.Text = $(Get-Translate("同梱しない"))
 
 # グループにラジオボタンを入れる
 $MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
@@ -364,24 +380,24 @@ $form.Controls.Add($MyGroupBox4)
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox24.Location = New-Object System.Drawing.Point(400,380)
 $MyGroupBox24.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox24.text = "Submerged を同梱しますか？"
+$MyGroupBox24.text = $(Get-Translate("Submerged を同梱しますか？"))
 
 # グループの中のラジオボタンを作る
 $RadioButton28 = New-Object System.Windows.Forms.RadioButton
 $RadioButton28.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton28.size = New-Object System.Drawing.Size(100,30)
-$RadioButton28.Text = "同梱する"
+$RadioButton28.Text = $(Get-Translate("同梱する"))
 
 $RadioButton29 = New-Object System.Windows.Forms.RadioButton
 $RadioButton29.Location = New-Object System.Drawing.Point(120,30)
 $RadioButton29.size = New-Object System.Drawing.Size(110,30)
-$RadioButton29.Text = "同梱しない"
+$RadioButton29.Text = $(Get-Translate("同梱しない"))
 $RadioButton29.Checked = $True
 
 $RadioButton27 = New-Object System.Windows.Forms.RadioButton
 $RadioButton27.Location = New-Object System.Drawing.Point(230,30)
 $RadioButton27.size = New-Object System.Drawing.Size(100,30)
-$RadioButton27.Text = "除去する"
+$RadioButton27.Text = $(Get-Translate("除去する"))
 
 # グループにラジオボタンを入れる
 $MyGroupBox24.Controls.AddRange(@($Radiobutton28,$RadioButton29,$RadioButton27))
@@ -393,7 +409,7 @@ $form.Controls.Add($MyGroupBox24)
 $label2 = New-Object System.Windows.Forms.Label
 $label2.Location = New-Object System.Drawing.Point(15,240)
 $label2.Size = New-Object System.Drawing.Size(370,30)
-$label2.Text = "インストールしたいToolを選択してください"
+$label2.Text = $(Get-Translate("インストールしたいToolを選択してください"))
 $form.Controls.Add($label2)
 
 # チェックボックスを作成
@@ -436,7 +452,7 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
-[void] $Combo.Items.Add("Toolインストールのみ")
+[void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 3
 
 ##############################################
@@ -445,7 +461,7 @@ $Combo.SelectedIndex = 3
 $label7 = New-Object System.Windows.Forms.Label
 $label7.Location = New-Object System.Drawing.Point(15,140)
 $label7.Size = New-Object System.Drawing.Size(370,30)
-$label7.Text = "インストールしたいVersionを選択してください"
+$label7.Text = $(Get-Translate("インストールしたいVersionを選択してください"))
 $form.Controls.Add($label7)
 
 # コンボボックスを作成
@@ -460,7 +476,7 @@ $Combo2.font = $Font
 $label3 = New-Object System.Windows.Forms.Label
 $label3.Location = New-Object System.Drawing.Point(15,470)
 $label3.Size = New-Object System.Drawing.Size(570,20)
-$label3.Text = "オリジナルのAmongUsは以下の場所に検出されました"
+$label3.Text = $(Get-Translate("オリジナルのAmongUsは以下の場所に検出されました"))
 $form.Controls.Add($label3)
 
 # ラベルを表示
@@ -474,7 +490,7 @@ $form.Controls.Add($label4)
 $label5 = New-Object System.Windows.Forms.Label
 $label5.Location = New-Object System.Drawing.Point(15,540)
 $label5.Size = New-Object System.Drawing.Size(570,20)
-$label5.Text = "Mod化バージョンは以下の場所に作成されます"
+$label5.Text = $(Get-Translate("Mod化バージョンは以下の場所に作成されます"))
 $form.Controls.Add($label5)
 
 # ラベルを表示
@@ -576,7 +592,7 @@ $Combo_SelectedIndexChanged= {
             Write-Log "NOS Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
-        }"Toolインストールのみ"{
+        }"Tool Install Only"{
             $tio = $false
             Write-Log "TOI Selected"
             $combo2.Enabled = $false
@@ -628,7 +644,7 @@ $Combo_SelectedIndexChanged= {
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                if([System.Windows.Forms.MessageBox]::Show("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
@@ -661,7 +677,7 @@ $Combo_SelectedIndexChanged= {
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_epic_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                if([System.Windows.Forms.MessageBox]::Show("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
@@ -695,7 +711,7 @@ $Combo_SelectedIndexChanged= {
                 #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
                 Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
                 Write-Log "フォルダをユーザーに選択するようダイアログを出します"      
-                [System.Windows.Forms.MessageBox]::Show("Modが入っていないAmongUsがインストールされているフォルダを選択してください", "Among Us Mod Auto Deploy Tool")
+                [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Mod Auto Deploy Tool")
                 $spath = Get-FolderPathG
             }
             if($spath -eq $null){
@@ -706,7 +722,7 @@ $Combo_SelectedIndexChanged= {
             if(test-path "$spath\Among Us.exe"){
                 Write-Log "$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"
                 if(($script:platform -ne "Steam") -and ($script:platform -ne "Epic")){
-                    if([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("PlatformはSteamですか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                         $script:platform = "Steam"
                     }else{
                         $script:platform = "Epic"
@@ -844,7 +860,7 @@ if($tio){
                 if($torpv -eq "hotfix-0"){
                     Write-Log $torpv
                 }elseif($torpv -lt $torpmin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -869,7 +885,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "AUM"){
                 if($torpv -lt $aummin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -888,7 +904,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "TOR GM"){
                 if($torpv -lt $torgmin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -906,7 +922,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "TOR GMH"){
                 if($torpv -lt $torhmin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -919,7 +935,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "TOR"){
                 if($torpv -lt $tormin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -932,7 +948,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "TOU-R"){
                 if($torpv -lt $tourmin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -945,7 +961,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "ER"){
                 if($torpv -lt $ermin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -958,7 +974,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "ER+ES"){
                 if($torpv -lt $esmin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -971,7 +987,7 @@ if($tio){
                 $checkt = $false
             }elseif($scid -eq "NOS"){
                 if($torpv -lt $nosmin){
-                    if([System.Windows.Forms.MessageBox]::Show("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log "処理を中止します"
                         $Form2.Close()
@@ -1209,7 +1225,7 @@ if($tio){
             
             if($stm -and $epc){
                 Write-Log "Both Steam and Epic is detected. ASk User."
-                if([System.Windows.Forms.MessageBox]::Show("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。", "Among Us Clean Install Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Clean Install Tool",4) -eq "Yes"){
                     $rn = "steam"
                 }else{
                     $rn = "epic"
@@ -1808,7 +1824,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $qureq = $true
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
             }else{
-                if([System.Windows.Forms.MessageBox]::Show("必要な.Net 5 Frameworkがインストールされていません。インストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("必要な.Net 5 Frameworkがインストールされていません。インストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
                     .\dotnet-install.ps1
                     Remove-Item .\dotnet-install.ps1
@@ -1825,7 +1841,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 $md = [System.Environment]::GetFolderPath("MyDocuments")
                 $aurcheck = $true
                 if(Test-Path $md\$auriwfn){
-                    if([System.Windows.Forms.MessageBox]::Show("既に存在するようです。上書き展開しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("既に存在するようです。上書き展開しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                         $aurcheck = $true
                     }else{
                         $aurcheck = $false
@@ -1846,7 +1862,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $qureq = $true
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
             }else{
-                if([System.Windows.Forms.MessageBox]::Show("必要な.Net 5 Frameworkがインストールされていません。インストールしますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("必要な.Net 5 Frameworkがインストールされていません。インストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
                     .\dotnet-install.ps1
                     Remove-Item .\dotnet-install.ps1
@@ -1863,7 +1879,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 $md = [System.Environment]::GetFolderPath("MyDocuments")
                 $aucapcheck = $true
                 if(Test-Path $md\$aucapfn){
-                    if([System.Windows.Forms.MessageBox]::Show("既に存在するようです。上書き展開しますか？", "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("既に存在するようです。上書き展開しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                         $aucapcheck = $true
                     }else{
                         $aucapcheck = $false
@@ -1966,11 +1982,9 @@ Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
 if($startexewhendone -eq $true){
-    Write-Output "`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"
+    Write-Output $(Get-Translate("`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"))
     #監視プロセス名
     $procName = "Among Us"
-    #実行ファイル
-    $execPath = "$aupathm\Among Us.exe"
     $checkpro = $true
     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
     $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1

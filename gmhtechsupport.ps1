@@ -3,7 +3,7 @@ Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
 #
 # Among Us Mod Tech Support Script
 #
-$version = "1.0."
+$version = "1.0.2"
 #
 #################################################################################################
 
