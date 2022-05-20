@@ -5,6 +5,21 @@
 $version = "1.0.0"
 #
 #################################################################################################
+# Translate Function
+#################################################################################################
+$Cult  = Get-Culture
+#$Cult  = "en-US"
+function Get-Translate($transtext){
+    if($Cult -ne "ja-JP"){
+        $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
+        $Response = (Invoke-WebRequest -Uri $Uri -Method Get).Content
+        $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
+        return $Resulttxt[0]
+    }else{
+        return $transtext
+    }
+}
+#################################################################################################
 # Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
@@ -50,7 +65,7 @@ Add-Type -AssemblyName System.Windows.Forms
 function Get-FolderPathG{
     param(
         [Parameter(ValueFromPipeline=$true)]
-        [string]$Description = "フォルダを選択してください",
+        [string]$Description = $(Get-Translate("フォルダを選択してください")),
         [boolean]$CurrentDefault = $false
     )
     # メインウィンドウ取得
@@ -99,9 +114,9 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
         # ログ出力
-    Write-Output $Log | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
+    Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
     # echo させるために出力したログを戻す
-    Return $Log
+    Return $(Get-Translate($Log))
 }
 #################################################################################################
 
@@ -133,7 +148,7 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
         #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
         Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
         Write-Log "フォルダをユーザーに選択するようダイアログを出します"      
-        [System.Windows.Forms.MessageBox]::Show("Modが入っていないAmongUsがインストールされているフォルダを選択してください", "Among Us Clean Install Tool")
+        [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Clean Install Tool")
         $spath = Get-FolderPathG
     }
     if($null -eq $spath){
@@ -155,7 +170,7 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
 }
 
 Write-Log "Delete AmongUs First"
-if([System.Windows.Forms.MessageBox]::Show("クリーンインストールのために選択したFolderは削除されます`n続行しますか？", "Among Us Clean Install Tool",4) -eq "Yes"){
+if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("クリーンインストールのために選択したFolderは削除されます`n続行しますか？")), "Among Us Clean Install Tool",4) -eq "Yes"){
 }else{
     Write-Log "処理を中止します"
     exit

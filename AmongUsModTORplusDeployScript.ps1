@@ -23,6 +23,7 @@ $tourmin = "v3.0.0"
 # Translate Function
 #################################################################################################
 $Cult  = Get-Culture
+#$Cult  = "en-US"
 function Get-Translate($transtext){
     if($Cult -ne "ja-JP"){
         $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
