@@ -1,4 +1,4 @@
-Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
+﻿Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
 #################################################################################################
 #
 # Among Us Mod Tech Support Script
