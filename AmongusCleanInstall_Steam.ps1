@@ -161,7 +161,7 @@ if(Test-path "$au_path_steam_org\Among Us.exe"){
         #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
         Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
         Write-Log "フォルダをユーザーに選択するようダイアログを出します"      
-        [System.Windows.Forms.MessageBox]::Show$(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Clean Install Tool")
+        [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Clean Install Tool")
         $spath = Get-FolderPathG
     }
     if($null -eq $spath){
