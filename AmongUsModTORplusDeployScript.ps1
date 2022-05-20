@@ -1723,7 +1723,33 @@ if($tio){
                     exit
                 }
                 #>
-                
+                #################################################################################################
+                # Translate Function
+                #################################################################################################
+                $Cult  = Get-Culture
+                function Get-Translate($transtext){
+                    if($Cult -ne "ja-JP"){
+                        $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
+                        $Response = (Invoke-WebRequest -Uri $Uri -Method Get).Content
+                        $Resulttxt = $Response -split '
+                $ps1script += "'"
+                $ps1script += '\\r\\n'
+                $ps1script += "'"
+                $ps1script += ' -replace'
+                $ps1script += "'"
+                $ps1script += ' ^(","?)|(null.*?\[")|\[{3}"'
+                $ps1script += "'"
+                $ps1script += ' -split '
+                $ps1script += "'"
+                $ps1script += '","'
+                $ps1script += "'"
+                $ps1script += '
+                        return $Resulttxt[0]
+                    }else{
+                        return $transtext
+                    }
+                }
+
                 if($platform -eq "Steam"){
                     Start-Process "$aupathm\Among Us.exe"
                 }elseif($platform -eq "Epic"){
