@@ -237,6 +237,7 @@ if($Cult -eq "ja-JP"){
         If(Test-Path "C:\Temp\agreement.txt"){
             $agree = $true
             $usnm = Get-content "C:\Temp\agreement.txt" -Raw
+            $usnm = $usnm.Replace("`r`n","")
         }
         Write-Log "Posting Debug Info is enabled globaly."
     }else{
@@ -281,10 +282,10 @@ if($Cult -eq "ja-JP"){
             $fileContent = [System.Net.Http.StreamContent]::new($FileStream)
             $fileContent.Headers.ContentDisposition = $fileHeader
             $multipartContent.Add($fileContent)
-            
+            $Now = Get-Date
             $stringHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
             $stringHeader.Name = "payload_json"
-            $stringContent = [System.Net.Http.StringContent]::new("{`"content`":`"$usnm posts info from debug mode.`"}")
+            $stringContent = [System.Net.Http.StringContent]::new("{`"content`":`"$($Now.ToString("yyyy-MM-dd-HH-mm-ss")): $usnm posts info from debug mode.`"}")
             $stringContent.Headers.ContentDisposition = $stringHeader
             $multipartContent.Add($stringContent)
             
