@@ -262,7 +262,7 @@ if($Cult -eq "ja-JP"){
         }
 
         if($agree){
-            $dishook = "https://discord.com/api/webhooks/975204305265102868/BzMgrQ8Ul15YVzpcL8P2BNTb21P-amVeROUAz7QQrSrUgbiLHzzo8Kc1AWTs9fM6unUF"
+            $dishook = "https://discord.com/api/webhooks/978249789361754172/Ae0qSR5YmfrtjLU44oTol_p70ciE1agNsg7-__rV_-K4wZHfKWc-cZN5a-9BdMmY7tig"
 
             #　アセンブリの読み込み
             [void][System.Reflection.Assembly]::Load("Microsoft.VisualBasic, Version=8.0.0.0, Culture=Neutral, PublicKeyToken=b03f5f7f11d50a3a")
