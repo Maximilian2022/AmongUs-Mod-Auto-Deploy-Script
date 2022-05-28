@@ -211,6 +211,31 @@ function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを�
 }
 
 #################################################################################################
+### 高速Download
+#################################################################################################
+
+if(Test-Path "C:\Temp"){
+    if(!(Test-Path "C:\Temp\aria2\aria2c.exe")){
+        $ar2 = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/aria2/aria2/releases/latest" -UseBasicParsing)).assets.browser_download_url
+        for($arxx=0;$arxx -lt $ar2.Length;$arxx++ ){
+            if($($ar2[$arxx]).Contains("64bit")){
+                $ardl = $($ar2[$arxx])
+            }
+        }
+        curl.exe -L $ardl -o "C:\Temp\aria2.zip"
+        Expand-Archive -path "C:\Temp\aria2.zip" -DestinationPath "C:\Temp\aria2" -Force
+        $ar2fol = split-path $ardl -Leaf
+        $ar2fol = $ar2fol.Substring(0,$ar2fol.Length -4)
+        robocopy "C:\Temp\aria2\$ar2fol" "C:\Temp\aria2" /E >nul 2>&1 
+        Remove-Item "C:\Temp\aria2\$ar2fol" -Recurse
+        if(Test-Path "C:\Temp\aria2\aria2c.exe"){
+            write-host "ar2 setup done"
+        }
+    }
+}
+
+
+#################################################################################################
 ### GM Mod or TOR+ 選択メニュー表示
 #################################################################################################
 #Special Thanks
@@ -423,8 +448,7 @@ $RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
-$pwshv2 = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases" -UseBasicParsing)).tag_name
-$pwshv = $pwshv2[0]
+$pwshv = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases/latest" -UseBasicParsing)).tag_name
 
 if("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv"){
     $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)
@@ -1345,7 +1369,12 @@ if($tio){
     Write-Log "Download ZIP 開始"
     Write-Log $tordlp
     #Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
-    curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
+    #curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
+    C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
+
+#    C:\Temp\aria2\aria2c.exe -x3 -V --dir "C:\Temp" -o "TheOtherRoles.zip" "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.1.56/TheOtherRoles-GM-Haoming.v2.1.56.zip"
+
+
     Write-Log "Download ZIP 完了"
     $Bar.Value = "57"
 
@@ -1357,6 +1386,8 @@ if($tio){
         Write-Log "ZIP 解凍完了"
     }else{
         Write-Log "ZIP DL NG $tordlp "
+        Write-Log "Something Wrong."
+        exit
     }
 
     $Bar.Value = "59"
@@ -1401,6 +1432,7 @@ if($tio){
             }
             if(test-path "C:\Temp\ExtremeHat"){
                 robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
+                Remove-Item "C:\Temp\ExtremeHat" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
     
                 Write-Log "`r`n $content"
