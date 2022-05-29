@@ -229,9 +229,11 @@ if(Test-Path "C:\Temp"){
         robocopy "C:\Temp\aria2\$ar2fol" "C:\Temp\aria2" /E >nul 2>&1 
         Remove-Item "C:\Temp\aria2\$ar2fol" -Recurse
         if(Test-Path "C:\Temp\aria2\aria2c.exe"){
-            write-host "ar2 setup done"
+            write-host "ar2 loading done"
         }
     }
+}else{
+    write-host "error no temp folder on C."
 }
 
 
@@ -1372,9 +1374,6 @@ if($tio){
     #curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
     C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
 
-#    C:\Temp\aria2\aria2c.exe -x3 -V --dir "C:\Temp" -o "TheOtherRoles.zip" "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.1.56/TheOtherRoles-GM-Haoming.v2.1.56.zip"
-
-
     Write-Log "Download ZIP 完了"
     $Bar.Value = "57"
 
@@ -1494,7 +1493,8 @@ if($tio){
             New-Item "$aupathm\BepInEx\plugins\" -Type Directory
         }
         #Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
-        curl.exe -L $aus -o "$aupathm\BepInEx\plugins\AUShipMod.dll"
+        #curl.exe -L $aus -o "$aupathm\BepInEx\plugins\AUShipMod.dll"
+        C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUShipMod.dll" $aus
         Write-Log "AUShipMOD Latest DLL download done"
     }
     $Bar.Value = "68"
@@ -1513,7 +1513,8 @@ if($tio){
         for($aaai = 0;$aaai -lt $aus.Length;$aaai++){
             if($($aus[$aaai]).IndexOf(".dll") -gt 0){
                 #Invoke-WebRequest $($aus[$aaai]) -Outfile "$aupathm\BepInEx\plugins\Submerged.dll" -UseBasicParsing
-                curl.exe -L $($aus[$aaai]) -o "$aupathm\BepInEx\plugins\Submerged.dll"
+                #curl.exe -L $($aus[$aaai]) -o "$aupathm\BepInEx\plugins\Submerged.dll"
+                C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $($aus[$aaai])
                 Write-Log "$($aus[$aaai])"
             }
         }
@@ -1544,7 +1545,8 @@ if($tio){
         Write-Log "Download $scid DLL 開始"
         Write-Log $torplus
         #Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
-        curl.exe -L $torplus -o "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
+        #curl.exe -L $torplus -o "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
+        C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRoles.dll" $torplus
         Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "AUM"){
         #Mod Original DLL削除
@@ -1562,7 +1564,8 @@ if($tio){
         Write-Log "Download $scid DLL 開始"
         Write-Log $torplus
         #Invoke-WebRequest $torplus -Outfile "$aupathm\BepInEx\plugins\TheOtherRoles.dll" -UseBasicParsing
-        curl.exe -L $torplus -o "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
+        #curl.exe -L $torplus -o "$aupathm\BepInEx\plugins\TheOtherRoles.dll"
+        C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRoles.dll" $torplus
         Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "TOR GM"){
         if(test-path "$aupathm\TheOtherRoles-GM.$torv"){
@@ -1583,7 +1586,8 @@ if($tio){
             #TOR+ DLLをDLして配置
             Write-Log "Download $scid DLL 開始"
             #Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
-            curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
+            #curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
+            C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
             Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOR GMH"){
@@ -1603,7 +1607,8 @@ if($tio){
             #TOR+ DLLをDLして配置
             Write-Log "Download $scid DLL 開始"
             #Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
-            curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
+            #curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
+            C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
             Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOU-R"){
@@ -1657,7 +1662,8 @@ if($tio){
         Write-Log "日本語 データ Download 開始"
         Write-Log "日本語 データ $langdata"
         #Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
-        curl.exe -L $langdata -o "$aupathm\Language\Japanese.dat"
+        #curl.exe -L $langdata -o "$aupathm\Language\Japanese.dat"
+        C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
         Write-Log "日本語 データ Download 完了"
     }else{
     }
