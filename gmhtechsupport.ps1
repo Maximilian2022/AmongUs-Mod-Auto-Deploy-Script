@@ -64,7 +64,7 @@ function Get-FolderPathG{
 # Log用Function
 #################################################################################################
 # ログの出力先
-$LogPath = "C:\Temp"
+$LogPath = "C:\Temp\AUM_Tech"
 # ログファイル名
 $LogName = "AmongUs_TechSupportLog"
 $Now = Get-Date

@@ -96,7 +96,7 @@ function Get-FolderPathG{
 # Log用Function
 #################################################################################################
 # ログの出力先
-$LogPath = "C:\Temp"
+$LogPath = "C:\Temp\AUM_Clean"
 # ログファイル名
 $LogName = "AmongUsClean_InstallLog"
 $Now = Get-Date

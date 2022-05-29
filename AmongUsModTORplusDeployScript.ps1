@@ -84,7 +84,7 @@ if(!($v5run)){
 # Log用Function
 #################################################################################################
 # ログの出力先
-$LogPath = "C:\Temp"
+$LogPath = "C:\Temp\AUM_Deploy"
 # ログファイル名
 $LogName = "AmongUsMod_DeployLog"
 $Now = Get-Date
