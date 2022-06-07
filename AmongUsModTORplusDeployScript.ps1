@@ -17,6 +17,7 @@ $tormin = "v3.4.5"
 $torpmin = "v3.4.5.1+"
 $torgmin = "v3.5.5"
 $tourmin = "v3.0.0"
+$tormmin = "MR_v2.0.0"
 
 
 #################################################################################################
@@ -474,6 +475,7 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("AUM :tomarai/AUMod")
 [void] $Combo.Items.Add("TOR GM :yukinogatari/TheOtherRoles-GM")
 [void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
+[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
@@ -575,6 +577,13 @@ $Combo_SelectedIndexChanged= {
             $scid = "TOR GM"
             $aumin = $torgmin
             Write-Log "TOR GM Selected"
+            $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
+        }"TOR MR :miru-y/TheOtherRoles-MR"{
+            $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
+            $scid = "TOR MR"
+            $aumin = $tormmin
+            Write-Log "TOR MR Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
@@ -1025,6 +1034,19 @@ if($tio){
                 $torv = $torpv
                 Write-Log "Nebula on the Ship Version $torv が選択されました"
                 $checkt = $false
+            }elseif($scid -eq "TOR MR"){
+                if($torpv -lt $tormmin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log "The Other Roles: MR Edition Version $torv が選択されました"
+                $checkt = $false
             }else{
                 Write-Log "Critical Error 2"
                 Write-Log "処理を中止します"
@@ -1107,6 +1129,8 @@ if($tio){
         }
     }elseif($scid -eq "TOR GM"){
         $tordlp = "https://github.com/yukinogatari/TheOtherRoles-GM/releases/download/${torv}/TheOtherRoles-GM.${torv}.zip"    
+    }elseif($scid -eq "TOR MR"){
+        $tordlp = "https://github.com/miru-y/TheOtherRoles-MR/releases/download/${torv}/TheOtherRolesMR.zip"
     }elseif($scid -eq "TOR"){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/${torv}/TheOtherRoles.zip"
     }elseif($scid -eq "TOU-R"){
@@ -1624,6 +1648,15 @@ if($tio){
         if(test-path "$aupathm\TheOtherRoles"){
             robocopy "$aupathm\TheOtherRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }elseif($scid -eq "TOR MR"){
+        if(test-path "$aupathm\TheOtherRolesMR"){
+            robocopy "$aupathm\TheOtherRolesMR" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\TheOtherRolesMR" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
