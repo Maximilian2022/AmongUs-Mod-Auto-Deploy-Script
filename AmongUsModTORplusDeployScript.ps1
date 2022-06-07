@@ -41,16 +41,18 @@ function Get-Translate($transtext){
 #################################################################################################
 $npl = Get-Location
 Write-Output $(Get-Translate("実行前チェック開始"))
-if(!(Test-Path "$env:ProgramFiles\PowerShell\7")){
+try{
+    pwsh -Command '$PSVersionTable.PSVersion.major'
+}
+catch{
     Write-Output $(Get-Translate("Powershell 7を導入中・・・。"))
     $com = 'Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"'
     $com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
     Remove-Item "$npl\ps.ps1" -Force
     Write-Output "`r`n"
-    Write-Output $(Get-Translate("`r`n再度batファイルを実行してください`r`n"))
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
-    Start-Sleep -Seconds 10
     Exit
 }
 Write-Output $(Get-Translate("実行前チェック完了"))
