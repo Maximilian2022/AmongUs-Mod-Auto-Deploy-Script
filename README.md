@@ -11,7 +11,18 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>このScriptは 以下の環境用のものです<br>・tomarai様のTOR+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">tomarai/TheOtherRoles</a>)<br>・yukinogatari様のThe Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM">yukinogatari/TheOtherRoles-GM</a>)<br>・haoming37様のThe Other Roles: GM Haoming Edition (<a href="https://github.com/haoming37/TheOtherRoles-GM-Haoming">haoming37/TheOtherRoles-GM-Haoming</a>)<br>・本家TOR (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>・Extreme Roles with Extreme Skins (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>・tomarai様のAUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)</p>
+<p>このScriptは 以下の環境用のものです<br>
+ ・tomarai様のTOR+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">tomarai/TheOtherRoles</a>)<br>
+ ・yukinogatari様のThe Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM">yukinogatari/TheOtherRoles-GM</a>)<br>
+ ・haoming37様のThe Other Roles: GM Haoming Edition (<a href="https://github.com/haoming37/TheOtherRoles-GM-Haoming">haoming37/TheOtherRoles-GM-Haoming</a>)<br>
+ ・miru-y様のTheOtherRoles MR (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)
+ ・本家TOR (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
+ ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
+ ・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
+ ・Extreme Roles with Extreme Skins (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
+ ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
+ ・tomarai様のAUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
+</p>
 <p>Option<br>
   ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>)<br>
   ・Submerged (<a rel="noreferrer noopener" href="https://github.com/SubmergedAmongUs/Submerged" target="_blank">SubmergedAmongUs/Submerged</a>)<br>
