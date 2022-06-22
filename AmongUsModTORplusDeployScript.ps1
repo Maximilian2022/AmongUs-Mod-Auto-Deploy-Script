@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.6"
+$version = "1.4.7"
 #
 #################################################################################################
 ### minimum version for v2022.06.21
@@ -1311,6 +1311,16 @@ if($tio){
                 New-Item -Path "C:\Temp\MoreCosmic" -ItemType Directory
                 Copy-Item "$aupathm\MoreCosmic\*" -Recurse "C:\Temp\MoreCosmic"
             }
+        }elseif($scid -eq "SNR"){
+            if(test-path "$aupathm\BepInEx\config\jp.ykundesu.supernewroles.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\jp.ykundesu.supernewroles.cfg" "C:\Temp\jp.ykundesu.supernewroles.cfg" -Force               
+                New-Item -Path "C:\Temp\SuperNewRoles" -ItemType Directory
+                Copy-Item "$aupathm\SuperNewRoles\*" -Recurse "C:\Temp\SuperNewRoles"
+            }
+        }elseif($scid -eq "TOH"){
+            if(test-path "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" "C:\Temp\com.emptybottle.townofhost.cfg" -Force               
+            }
         }else{
             if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
@@ -1533,6 +1543,33 @@ if($tio){
             if(test-path "C:\Temp\MoreCosmic"){
                 robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\MoreCosmic" -Recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+    
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
+            }
+        }
+    }elseif($scid -eq "TOH"){
+        if(test-path "C:\Temp\com.emptybottle.townofhost.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\com.emptybottle.townofhost.cfg" "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" -Force
+            Remove-Item "C:\com.emptybottle.townofhost.cfg" -Force    
+        }
+    }elseif($scid -eq "SNR"){
+        if(test-path "C:\Temp\jp.ykundesu.supernewroles.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\jp.ykundesu.supernewroles.cfg" "$aupathm\BepInEx\config\jp.ykundesu.supernewroles.cfg" -Force
+            Remove-Item "C:\Temp\jp.ykundesu.supernewroles.cfg" -Force    
+            if(!(Test-Path "$aupathm\SuperNewRoles")){
+                New-Item -Path "$aupathm\SuperNewRoles" -ItemType Directory
+            }
+            if(test-path "C:\Temp\SuperNewRoles"){
+                robocopy "C:\Temp\SuperNewRoles" "$aupathm\SuperNewRoles" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "C:\Temp\SuperNewRoles" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
     
                 Write-Log "`r`n $content"
