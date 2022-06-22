@@ -5,6 +5,7 @@
 $version = "1.4.6"
 #
 #################################################################################################
+### minimum version for v2022.06.21
 
 
 ### minimum version for v2022.03.29
@@ -18,7 +19,8 @@ $torpmin = "v3.4.5.1+"
 $torgmin = "v3.5.5"
 $tourmin = "v3.0.0"
 $tormmin = "MR_v2.0.0"
-
+$snrmin = "1.4.0.8"
+$tohmin = "v2.0.3"
 
 #################################################################################################
 # Translate Function
@@ -491,6 +493,8 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
+[void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
+[void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 3
 
@@ -638,12 +642,27 @@ $Combo_SelectedIndexChanged= {
             Write-Log "NOS Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
+        }"SNR :ykundesu/SuperNewRoles"{
+            $releasepage2 = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
+            $scid = "NOS"
+            $aumin = $nosmin
+            Write-Log "NOS Selected"
+            $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
+        }"TOH :tukasa0001/TownOfHost"{
+            $releasepage2 = "https://api.github.com/repos/tukasa0001/TownOfHost/releases"
+            $scid = "NOS"
+            $aumin = $nosmin
+            Write-Log "NOS Selected"
+            $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
         }"Tool Install Only"{
             $tio = $false
             Write-Log "TOI Selected"
             $combo2.Enabled = $false
         }
     }
+
     if($tio){
         #GithubのRelease一覧からぶっこぬく
         $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
@@ -1044,6 +1063,32 @@ if($tio){
                 $torv = $torpv
                 Write-Log "Nebula on the Ship Version $torv が選択されました"
                 $checkt = $false
+            }elseif($scid -eq "TOH"){
+                if($torpv -lt $tohmin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log "Town of Host Version $torv が選択されました"
+                $checkt = $false
+            }elseif($scid -eq "SNR"){
+                if($torpv -lt $snrmin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log "Super New Roles Version $torv が選択されました"
+                $checkt = $false
             }elseif($scid -eq "TOR MR"){
                 if($torpv -lt $tormmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -1149,6 +1194,10 @@ if($tio){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
     }elseif($scid -eq "ER+ES"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
+    }elseif($scid -eq "TOH"){
+        $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
+    }elseif($scid -eq "SNR"){
+        $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
     }elseif($scid -eq "NOS"){
         $langhead=@()
         $langtail=@()
@@ -1212,9 +1261,8 @@ if($tio){
     $Bar.Value = "32"
 
     #################################################################################################
-    #処理フェイズ　この下は触らない
+    #処理フェイズ
     #################################################################################################
-
 
     #OriginalのAmongusをフォルダ毎コピーして新規Mod用フォルダを作成する
     if(Test-Path $aupathm){
@@ -1685,6 +1733,24 @@ if($tio){
         if(test-path "$aupathm\ExtremeRoles-$torv"){
             robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }elseif($scid -eq "TOH"){
+        if(test-path "$aupathm\TownOfHost-$torv"){
+            robocopy "$aupathm\TownOfHost-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\TownOfHost-$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }elseif($scid -eq "SNR"){
+        if(test-path "$aupathm\SuperNewRoles-v$torv"){
+            robocopy "$aupathm\SuperNewRoles-v$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\SuperNewRoles-v$torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
