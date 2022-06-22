@@ -55,6 +55,14 @@ catch{
     Write-Output "`r`n"
     Exit
 }
+
+try{
+    choco -v
+}catch{
+    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh -y" -Verb RunAs -Wait
+}
+
 Write-Output $(Get-Translate("実行前チェック完了"))
 
 $v5run = $false
