@@ -644,16 +644,16 @@ $Combo_SelectedIndexChanged= {
             $RadioButton29.Checked = $True
         }"SNR :ykundesu/SuperNewRoles"{
             $releasepage2 = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
-            $scid = "NOS"
-            $aumin = $nosmin
-            Write-Log "NOS Selected"
+            $scid = "SNR"
+            $aumin = $snrmin
+            Write-Log "SNR Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOH :tukasa0001/TownOfHost"{
             $releasepage2 = "https://api.github.com/repos/tukasa0001/TownOfHost/releases"
-            $scid = "NOS"
-            $aumin = $nosmin
-            Write-Log "NOS Selected"
+            $scid = "TOH"
+            $aumin = $tohmin
+            Write-Log "TOH Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"Tool Install Only"{
