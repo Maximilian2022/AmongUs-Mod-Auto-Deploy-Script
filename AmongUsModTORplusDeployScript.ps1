@@ -2124,6 +2124,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
             Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh -y" -Verb RunAs -Wait
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
