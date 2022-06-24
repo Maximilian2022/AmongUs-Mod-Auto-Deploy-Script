@@ -6,21 +6,20 @@ $version = "1.4.7"
 #
 #################################################################################################
 ### minimum version for v2022.06.21
-
+$snrmin = "1.4.0.9"
+$tohmin = "v2.1.0"
+$tormin = "v4.1.5"
+$ermin = "v3.0.0.0"
+$esmin = "v3.0.0.0"
 
 ### minimum version for v2022.03.29
 $nosmin = "1.7.1,2022.3.29"
-$ermin = "v1.99.90.0"
-$esmin = "v1.99.90.0"
 $aummin = "v1.0.0"
 $torhmin = "v2.0.0"
-$tormin = "v3.4.5"
 $torpmin = "v3.4.5.1+"
 $torgmin = "v3.5.5"
 $tourmin = "v3.0.0"
 $tormmin = "MR_v2.0.0"
-$snrmin = "1.4.0.8"
-$tohmin = "v2.0.3"
 
 #################################################################################################
 # Translate Function
@@ -2123,7 +2122,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $Bar.Value = "86"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
-            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
+            #Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh -y" -Verb RunAs -Wait
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
