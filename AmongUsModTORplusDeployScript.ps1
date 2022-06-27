@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.7"
+$version = "1.4.8"
 #
 #################################################################################################
 ### minimum version for v2022.06.21
@@ -11,15 +11,17 @@ $tohmin = "v2.1.0"
 $tormin = "v4.1.5"
 $ermin = "v3.0.0.0"
 $esmin = "v3.0.0.0"
+$torhmin = "v2.1.60"
+$nosmin = "1.9.6,2022.6.21"
 
 ### minimum version for v2022.03.29
-$nosmin = "1.7.1,2022.3.29"
-$aummin = "v1.0.0"
-$torhmin = "v2.0.0"
-$torpmin = "v3.4.5.1+"
-$torgmin = "v3.5.5"
 $tourmin = "v3.0.0"
 $tormmin = "MR_v2.0.0"
+
+### END
+$aummin = "v1.0.0"
+$torpmin = "v3.4.5.1+"
+$torgmin = "v3.5.5"
 
 #################################################################################################
 # Translate Function
@@ -62,6 +64,7 @@ try{
 }catch{
     Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh -y" -Verb RunAs -Wait
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade powershell-core -y" -Verb RunAs -Wait
 }
 
 Write-Output $(Get-Translate("実行前チェック完了"))
@@ -415,7 +418,7 @@ $RadioButton9.Text = $(Get-Translate("同梱しない"))
 # グループにラジオボタンを入れる
 $MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
 # フォームに各アイテムを入れる
-$form.Controls.Add($MyGroupBox4)
+#$form.Controls.Add($MyGroupBox4)
 
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox24.Location = New-Object System.Drawing.Point(400,380)
@@ -482,9 +485,9 @@ $Combo.font = $Font
 $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
-[void] $Combo.Items.Add("TOR + :tomarai/TheOtherRoles")
-[void] $Combo.Items.Add("AUM :tomarai/AUMod")
-[void] $Combo.Items.Add("TOR GM :yukinogatari/TheOtherRoles-GM")
+#[void] $Combo.Items.Add("TOR + :tomarai/TheOtherRoles")
+#[void] $Combo.Items.Add("AUM :tomarai/AUMod")
+#[void] $Combo.Items.Add("TOR GM :yukinogatari/TheOtherRoles-GM")
 [void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
@@ -495,7 +498,7 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
 [void] $Combo.Items.Add("Tool Install Only")
-$Combo.SelectedIndex = 3
+$Combo.SelectedIndex = 0
 
 ##############################################
 
@@ -578,6 +581,10 @@ $Combo_SelectedIndexChanged= {
             Write-Log "TOR+ Selected"
             $RadioButton8.Checked = $True
             $RadioButton28.Checked = $True
+            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("現行のAmongUsでは動作しません。旧バージョンへのデプロイであることを確認ください。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            }else{
+                exit
+            }  
         }"AUM :tomarai/AUMod"{
             $releasepage2 = "https://api.github.com/repos/tomarai/AUMod/releases"
             $scid = "AUM"
@@ -585,6 +592,10 @@ $Combo_SelectedIndexChanged= {
             Write-Log "AUM Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
+            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("現行のAmongUsでは動作しません。旧バージョンへのデプロイであることを確認ください。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            }else{
+                exit
+            }  
         }"TOR GM :yukinogatari/TheOtherRoles-GM"{
             $releasepage2 = "https://api.github.com/repos/yukinogatari/TheOtherRoles-GM/releases"
             $scid = "TOR GM"
@@ -592,6 +603,10 @@ $Combo_SelectedIndexChanged= {
             Write-Log "TOR GM Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
+            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("現行のAmongUsでは動作しません。旧バージョンへのデプロイであることを確認ください。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            }else{
+                exit
+            }  
         }"TOR MR :miru-y/TheOtherRoles-MR"{
             $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
             $scid = "TOR MR"
@@ -2122,8 +2137,9 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $Bar.Value = "86"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
-            #Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
+            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh -y" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade powershell-core -y" -Verb RunAs -Wait
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
