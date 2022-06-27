@@ -5,7 +5,7 @@
 <!-- wp:paragraph -->
 <p>■TOR系 Mod入れるのが面倒なので作った自動化Script</p>
 <!-- /wp:paragraph -->
-
+<p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=en&_x_tr_tl=ja&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
 <!-- wp:paragraph -->
 <p>MODとバージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
 <!-- /wp:paragraph -->
