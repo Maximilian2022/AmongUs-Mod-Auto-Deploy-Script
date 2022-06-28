@@ -1614,21 +1614,22 @@ if($tio){
 
     #AUShipMOD 配置
     if($ausmod){
-        Write-Log "AUShipMOD配置開始"
+        Write-Log "AUShipMOD is depricated."
+#        Write-Log "AUShipMOD配置開始"
         #GithubのRelease一覧からぶっこぬいてLatestを置く
-        $rel2 = "https://api.github.com/repos/tomarai/AUShipMod/releases/latest"
-        $webs = Invoke-WebRequest $rel2 -UseBasicParsing
-        $webs2 = ConvertFrom-Json $webs.Content
-        $aus = $webs2.assets.browser_download_url
-        Write-Log "AUShipMOD Latest DLL download start"
-        Write-Log "$aus"
-        if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
-            New-Item "$aupathm\BepInEx\plugins\" -Type Directory
-        }
-        #Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
-        #curl.exe -L $aus -o "$aupathm\BepInEx\plugins\AUShipMod.dll"
-        C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUShipMod.dll" $aus
-        Write-Log "AUShipMOD Latest DLL download done"
+#        $rel2 = "https://api.github.com/repos/tomarai/AUShipMod/releases/latest"
+#        $webs = Invoke-WebRequest $rel2 -UseBasicParsing
+#        $webs2 = ConvertFrom-Json $webs.Content
+#        $aus = $webs2.assets.browser_download_url
+#        Write-Log "AUShipMOD Latest DLL download start"
+ #       Write-Log "$aus"
+ #       if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
+ #           New-Item "$aupathm\BepInEx\plugins\" -Type Directory
+ #       }
+ #       #Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
+ #       #curl.exe -L $aus -o "$aupathm\BepInEx\plugins\AUShipMod.dll"
+ #       C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUShipMod.dll" $aus
+ #       Write-Log "AUShipMOD Latest DLL download done"
     }
     $Bar.Value = "68"
 
