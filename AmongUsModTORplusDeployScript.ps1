@@ -13,9 +13,9 @@ $ermin = "v3.0.0.0"
 $esmin = "v3.0.0.0"
 $torhmin = "v2.1.60"
 $nosmin = "1.9.6,2022.6.21"
+$tourmin = "v3.2.0"
 
 ### minimum version for v2022.03.29
-$tourmin = "v3.0.0"
 $tormmin = "MR_v2.0.0"
 
 ### END
@@ -385,12 +385,12 @@ $MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動します�
 $RadioButton3 = New-Object System.Windows.Forms.RadioButton
 $RadioButton3.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton3.size = New-Object System.Drawing.Size(150,30)
-$RadioButton3.Checked = $True
 $RadioButton3.Text = $(Get-Translate("起動する"))
 
 $RadioButton4 = New-Object System.Windows.Forms.RadioButton
 $RadioButton4.Location = New-Object System.Drawing.Point(180,30)
 $RadioButton4.size = New-Object System.Drawing.Size(150,30)
+$RadioButton4.Checked = $True
 $RadioButton4.Text = $(Get-Translate("起動しない"))
 
 # グループにラジオボタンを入れる
