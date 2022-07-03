@@ -60,6 +60,33 @@ catch{
 }
 
 Unblock-File "$npl\AmongUsModTORplusDeployScript.ps1"
+function IsZenkaku
+{
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateLength(1, 1)]
+        [string]
+        $Text
+    )
+    process
+    {
+        $shiftJis = [System.Text.Encoding]::GetEncoding("Shift_JIS")
+        $shiftJis.GetByteCount($Text) -eq 2
+    }
+}
+
+$a = hostname
+$achk = $false
+for ($x=0; $x -lt $a.Length; $x++){
+    if(IsZenkaku $($a.Split())[$x]){
+        $achk = $true
+        break;
+    }
+}
+if ($achk){
+    Write-Output $(Get-Translate("PCの名前に全角が含まれています。Modがうまく起動しない場合があります。"))
+    Start-Process "https://support.lenovo.com/jp/ja/solutions/ht105079"
+}
 
 Write-Output $(Get-Translate("実行前チェック完了"))
 
