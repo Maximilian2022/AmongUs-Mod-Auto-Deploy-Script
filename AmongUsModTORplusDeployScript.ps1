@@ -460,7 +460,7 @@ $form.Controls.Add($label2)
 # チェックボックスを作成
 $CheckedBox = New-Object System.Windows.Forms.CheckedListBox
 $CheckedBox.Location = "55,270"
-$CheckedBox.Size = "270,205"
+$CheckedBox.Size = "270,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS"
 $RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","PowerShell 7","dotNetFramework")
@@ -521,28 +521,28 @@ $Combo2.font = $Font
 
 # ラベルを表示
 $label3 = New-Object System.Windows.Forms.Label
-$label3.Location = New-Object System.Drawing.Point(15,470)
+$label3.Location = New-Object System.Drawing.Point(15,460)
 $label3.Size = New-Object System.Drawing.Size(570,20)
 $label3.Text = $(Get-Translate("オリジナルのAmongUsは以下の場所に検出されました"))
 $form.Controls.Add($label3)
 
 # ラベルを表示
 $label4 = New-Object System.Windows.Forms.Label
-$label4.Location = New-Object System.Drawing.Point(20,490)
+$label4.Location = New-Object System.Drawing.Point(20,480)
 $label4.Size = New-Object System.Drawing.Size(770,50)
 $label4.Text = ""
 $form.Controls.Add($label4)
 
 # ラベルを表示
 $label5 = New-Object System.Windows.Forms.Label
-$label5.Location = New-Object System.Drawing.Point(15,540)
+$label5.Location = New-Object System.Drawing.Point(15,530)
 $label5.Size = New-Object System.Drawing.Size(570,20)
 $label5.Text = $(Get-Translate("Mod化バージョンは以下の場所に作成されます"))
 $form.Controls.Add($label5)
 
 # ラベルを表示
 $label6 = New-Object System.Windows.Forms.Label
-$label6.Location = New-Object System.Drawing.Point(20,560)
+$label6.Location = New-Object System.Drawing.Point(20,550)
 $label6.Size = New-Object System.Drawing.Size(770,50)
 $label6.Text = ""
 $form.Controls.Add($label6)
