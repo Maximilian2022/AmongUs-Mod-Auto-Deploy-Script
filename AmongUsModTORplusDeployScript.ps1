@@ -67,6 +67,8 @@ try{
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade powershell-core -y" -Verb RunAs -Wait
 }
 
+Unblock-File "$npl\AmongUsModTORplusDeployScript.ps1"
+
 Write-Output $(Get-Translate("実行前チェック完了"))
 
 $v5run = $false
