@@ -223,6 +223,10 @@ function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを�
 ### 高速Download
 #################################################################################################
 
+if(!(Test-Path "C:\Temp")){
+    New-Item "C:\Temp" -Type Directory
+}
+
 if(Test-Path "C:\Temp"){
     if(!(Test-Path "C:\Temp\aria2\aria2c.exe")){
         $ar2 = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/aria2/aria2/releases/latest" -UseBasicParsing)).assets.browser_download_url
@@ -850,6 +854,7 @@ $Combo_SelectedIndexChanged= {
         if(!(Test-Path "$aupathb\chk$ym.txt")){
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"),$true)
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"),$true)                       
+            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)                       
             Write-Output $ym |Out-File -FilePath "$aupathb\chk$ym.txt"
             $ym2 = $ym -1
             if(Test-Path "$aupathb\chk$ym2.txt"){
