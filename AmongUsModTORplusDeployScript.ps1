@@ -59,14 +59,6 @@ catch{
     Exit
 }
 
-try{
-    choco -v
-}catch{
-    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh -y" -Verb RunAs -Wait
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade powershell-core -y" -Verb RunAs -Wait
-}
-
 Unblock-File "$npl\AmongUsModTORplusDeployScript.ps1"
 
 Write-Output $(Get-Translate("実行前チェック完了"))
@@ -2141,8 +2133,12 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
             Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh -y" -Verb RunAs -Wait
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade powershell-core -y" -Verb RunAs -Wait
+            try{
+                choco -v
+            }catch{
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core -A" -Verb RunAs -Wait
+            }
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
