@@ -350,7 +350,7 @@ $form.Controls.Add($MyGroupBox3)
 # グループを作る
 $MyGroupBox = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox.Location = New-Object System.Drawing.Point(400,120)
-$MyGroupBox.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox.size = New-Object System.Drawing.Size(350,90)
 $MyGroupBox.text = $(Get-Translate("ショートカットを作成しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -379,8 +379,8 @@ $form.Controls.Add($MyGroupBox)
 #デフォルトでは実行しない
 # グループを作る
 $MyGroupBox2 = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox2.Location = New-Object System.Drawing.Point(400,205)
-$MyGroupBox2.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox2.Location = New-Object System.Drawing.Point(400,230)
+$MyGroupBox2.size = New-Object System.Drawing.Size(350,90)
 $MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -423,8 +423,8 @@ $MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
 #$form.Controls.Add($MyGroupBox4)
 
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox24.Location = New-Object System.Drawing.Point(400,380)
-$MyGroupBox24.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox24.Location = New-Object System.Drawing.Point(400,340)
+$MyGroupBox24.size = New-Object System.Drawing.Size(350,90)
 $MyGroupBox24.text = $(Get-Translate("Submerged を同梱しますか？"))
 
 # グループの中のラジオボタンを作る
