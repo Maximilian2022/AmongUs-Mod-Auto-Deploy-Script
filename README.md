@@ -1,5 +1,6 @@
 # AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
 
+<p>導入動画</p>
 [![alt](http://img.youtube.com/vi/jdL7YCdV7qw/0.jpg)](https://www.youtube.com/watch?v=jdL7YCdV7qw)
 
 <!-- wp:paragraph -->
@@ -19,21 +20,12 @@
  ・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
  ・Extreme Roles with Extreme Skins (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
  ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
- ・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
- ・SNR<br>
- ・TOH<br>
+ ・SuperNewRoles (<a rel="noreferrer noopener" href="https://github.com/ykundesu/SuperNewRoles" target="_blank">ykundesu/SuperNewRoles</a>)<br>
+ ・TownOfHost (<a rel="noreferrer noopener" href="https://github.com/tukasa0001/TownOfHost" target="_blank">tukasa0001/TownOfHost</a>)<br>
 </p>
 <p>Option<br>
   ・Submerged (<a rel="noreferrer noopener" href="https://github.com/SubmergedAmongUs/Submerged" target="_blank">SubmergedAmongUs/Submerged</a>)<br>
 </p>
-
-<p>更新終了<br>
- ・The Other Roles+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">tomarai/TheOtherRoles</a>)<br>
- ・The Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM">yukinogatari/TheOtherRoles-GM</a>)<br>
- ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>)<br>
-<br>
-</p>
-
 <!-- /wp:paragraph -->
 
 <!-- wp:html -->
@@ -58,12 +50,13 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>■[導入手順]<br>
-1. このBatを動作させる(PS7がない場合、入れる動作の後再度Batを動作させる）<br>
+<p>■[使い方]<br>
+1. このBatをDesktop等にDownloadし、ダブルクリックで動作させる<br>
 1.1 初回はWindowsから安全じゃないと必ず言われるので、詳細から実行を選択する（これはWindowsの仕様。）<br>
 1.2 入れているセキュリティソフトによってはそっちも文句を言うので、そこは良しなにしてください。<br>
 2. Modを選ぶ<br>
 2.1 初回、および月初めの実行時はクリーンインストール、VC Redist,  dotNetFramework が選択されます<br>
+2.2 必要なライブラリを過分に入れるので何度かOKやら続行やらボタン押す必要あります
 3. MODのバージョンをListから選ぶ<br></p>
 <!-- /wp:paragraph -->
 
@@ -118,3 +111,13 @@
 <!-- wp:image {"id":416,"sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large"><img src="https://blog.kit-a.net/wp-content/uploads/2022/01/image-2-1024x398.png" alt="" class="wp-image-416"/></figure>
 <!-- /wp:image -->
+
+
+<p>更新終了<br>
+ ・The Other Roles+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">tomarai/TheOtherRoles</a>)<br>
+ ・The Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM">yukinogatari/TheOtherRoles-GM</a>)<br>
+ ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>) <br>
+・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
+<br>
+</p>
+
