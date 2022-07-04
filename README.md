@@ -31,8 +31,10 @@
 <!-- wp:paragraph -->
 <p>初回動作時や動作不良の際はクリーンインストール推奨です</p>
 <!-- /wp:paragraph -->
+
 ■導入動画<br>
 [![alt](http://img.youtube.com/vi/jdL7YCdV7qw/0.jpg)](https://www.youtube.com/watch?v=jdL7YCdV7qw)
+
 
 <!-- wp:paragraph -->
 <p>■Download<br><a href="https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat" target="_blank" rel="noreferrer noopener">https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat</a></p>
