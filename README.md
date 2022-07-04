@@ -1,17 +1,9 @@
 # AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
 
-<p>導入動画</p>
-[![alt](http://img.youtube.com/vi/jdL7YCdV7qw/0.jpg)](https://www.youtube.com/watch?v=jdL7YCdV7qw)
-
-<!-- wp:paragraph -->
 <p>■TOR系 Mod入れるのが面倒なので作った自動化Script</p>
-<!-- /wp:paragraph -->
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
-<!-- wp:paragraph -->
 <p>MODとバージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>このScriptは 以下の環境用のものです<br>
  ・The Other Roles: GM Haoming Edition (<a href="https://github.com/haoming37/TheOtherRoles-GM-Haoming">haoming37/TheOtherRoles-GM-Haoming</a>)<br>
  ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
@@ -26,9 +18,8 @@
 <p>Option<br>
   ・Submerged (<a rel="noreferrer noopener" href="https://github.com/SubmergedAmongUs/Submerged" target="_blank">SubmergedAmongUs/Submerged</a>)<br>
 </p>
-<!-- /wp:paragraph -->
 
-<!-- wp:html -->
+
 <p>本ScriptはAmongUs公式及び上記Mod作成者様とは無関係のScriptです</p>
 <p><a href="https://disboard.org/ja/server/906600951924793444" target="_blank" rel="noreferrer noopener">本来はこのDiscordサーバー用に作ったツールです</a></p>
 <!-- /wp:html -->
@@ -40,6 +31,8 @@
 <!-- wp:paragraph -->
 <p>初回動作時や動作不良の際はクリーンインストール推奨です</p>
 <!-- /wp:paragraph -->
+■導入動画<br>
+[![alt](http://img.youtube.com/vi/jdL7YCdV7qw/0.jpg)](https://www.youtube.com/watch?v=jdL7YCdV7qw)
 
 <!-- wp:paragraph -->
 <p>■Download<br><a href="https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat" target="_blank" rel="noreferrer noopener">https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat</a></p>
