@@ -48,7 +48,7 @@ try{
     pwsh -Command '$PSVersionTable.PSVersion.major'
 }
 catch{
-    Write-Output $(Get-Translate("Powershell 7を導入中・・・。"))
+    Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
     $com = 'Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"'
     $com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
@@ -84,7 +84,7 @@ for ($x=0; $x -lt $a.Length; $x++){
     }
 }
 if ($achk){
-    Write-Output $(Get-Translate("PCの名前に全角が含まれています。Modがうまく起動しない場合があります。"))
+    Write-Output $(Get-Translate("PCの名前に全角が含まれています。Modがうまく起動しない場合があります。英数字への名前変更を推奨します。"))
     Start-Process "https://support.lenovo.com/jp/ja/solutions/ht105079"
 }
 
@@ -410,12 +410,12 @@ $MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動します�
 $RadioButton3 = New-Object System.Windows.Forms.RadioButton
 $RadioButton3.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton3.size = New-Object System.Drawing.Size(150,30)
+$RadioButton3.Checked = $True
 $RadioButton3.Text = $(Get-Translate("起動する"))
 
 $RadioButton4 = New-Object System.Windows.Forms.RadioButton
 $RadioButton4.Location = New-Object System.Drawing.Point(180,30)
 $RadioButton4.size = New-Object System.Drawing.Size(150,30)
-$RadioButton4.Checked = $True
 $RadioButton4.Text = $(Get-Translate("起動しない"))
 
 # グループにラジオボタンを入れる
@@ -2111,18 +2111,14 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             }
             $Bar.Value = "84"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsCapture"){
-            $qureq = $true
+            $qureq = $false
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
+                $qureq = $true
             }else{
-                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("必要な.Net 5 Frameworkがインストールされていません。インストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
-                    .\dotnet-install.ps1
-                    Remove-Item .\dotnet-install.ps1
-                }else{
-                    Write-Log "AmongUsCaptureの処理を中止します"
-                    $qureq = $false
-                }    
-
+                Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
+                .\dotnet-install.ps1
+                Remove-Item .\dotnet-install.ps1
+                $qureq = $true
             }
             if($qureq){
                 $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/automuteus/amonguscapture/releases/latest" -UseBasicParsing)).assets.browser_download_url
@@ -2153,11 +2149,17 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Start-Transcript -Append -Path "$LogFileName"
             $fpth = Join-Path $npl "\install.ps1"
             Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
-            if(test-path "$env:ProgramFiles\PowerShell\7"){
-                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
-            }else{
-                Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
+            try{
+                pwsh -Command '$PSVersionTable.PSVersion.major'
             }
+            catch{
+                Write-Output $(Get-Translate("Powershell 7を導入中・・・。"))
+                $com = 'Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"'
+                $com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
+                Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
+                Remove-Item "$npl\ps.ps1" -Force
+            }
+            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
             Remove-Item "$fpth"
             Stop-Transcript
             Write-Log "VC Redist Install ends"
@@ -2169,8 +2171,8 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 choco -v
             }catch{
                 Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
-                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core -A" -Verb RunAs -Wait
             }
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core -A" -Verb RunAs -Wait
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
@@ -2239,39 +2241,41 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
 
-if($startexewhendone -eq $true){
-    Write-Output $(Get-Translate("`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"))
-    #監視プロセス名
-    $procName = "Among Us"
-    $checkpro = $true
-    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
-    $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
-    Write-Log "-----------------------------------------------------------------"
-    Write-Log "Error Check"
-    Write-Log "-----------------------------------------------------------------"
-    Write-Log "After Installation:$tsp"
-    #監視&自動起動
-    while($checkpro){
-        try{
-            #プロセスを取得
-            $p = Get-Process $procName -ErrorAction SilentlyContinue
-            #始したプロセスが終了するまで待機するように指示
-            $p.WaitForExit()
-        }
-        catch{
-            Write-Output "No Process"
-        }
-        finally{
-            $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
-            Remove-Item "$npl\gmhtechsupport.ps1" -Force
-            $erchk = Get-content "$tsp" -Raw
-            Write-Log "After Game Exit:$tsp"
-            if($erchk.LastIndexOf("error") -gt 0){
-                Write-Log "Done."
-            }else{
-                Write-Log "No Error founds."
+if($debugc){
+    if($startexewhendone -eq $true){
+        Write-Output $(Get-Translate("`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"))
+        #監視プロセス名
+        $procName = "Among Us"
+        $checkpro = $true
+        Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
+        $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
+        Write-Log "-----------------------------------------------------------------"
+        Write-Log "Error Check"
+        Write-Log "-----------------------------------------------------------------"
+        Write-Log "After Installation:$tsp"
+        #監視&自動起動
+        while($checkpro){
+            try{
+                #プロセスを取得
+                $p = Get-Process $procName -ErrorAction SilentlyContinue
+                #始したプロセスが終了するまで待機するように指示
+                $p.WaitForExit()
             }
-            $checkpro = $false
+            catch{
+                Write-Output "No Process"
+            }
+            finally{
+                $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
+                Remove-Item "$npl\gmhtechsupport.ps1" -Force
+                $erchk = Get-content "$tsp" -Raw
+                Write-Log "After Game Exit:$tsp"
+                if($erchk.LastIndexOf("error") -gt 0){
+                    Write-Log "Done."
+                }else{
+                    Write-Log "No Error founds."
+                }
+                $checkpro = $false
+            }
         }
     }
 }
