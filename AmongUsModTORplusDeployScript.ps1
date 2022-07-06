@@ -14,9 +14,8 @@ $esmin = "v3.0.0.0"
 $torhmin = "v2.1.60"
 $nosmin = "1.9.6,2022.6.21"
 $tourmin = "v3.2.0"
+$tormmin = "MR_v2.1.2"
 
-### minimum version for v2022.03.29
-$tormmin = "MR_v2.0.0"
 
 ### END
 $aummin = "v1.0.0"
