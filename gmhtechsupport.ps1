@@ -176,7 +176,6 @@ if($null -ne $Arg2){
 }
 Write-Log "Platform:$platform"
 
-
 Write-Log "`r`n`r`n "
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Bepin Log"
@@ -224,6 +223,33 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "Player-prev"
 Write-Log "-----------------------------------------------------------------"
 $content = Get-content "$env:APPDATA\..\LocalLow\Innersloth\Among Us\Player-prev.log" -Raw
+Write-Log "`r`n $content"
+Write-Log "`r`n`r`n "
+
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Dxdiag"
+Write-Log "-----------------------------------------------------------------"
+$diag = "$LogPath\dxdiag.txt"
+dxdiag.exe /t $diag
+$nid = (get-process dxdiag).id
+wait-process -id $nid
+$content = Get-content "$diag" -Encoding UTF8
+Write-Log "`r`n $content"
+Write-Log "`r`n`r`n "
+Remove-file $diag -Force
+
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Ping/Tracert check"
+Write-Log "-----------------------------------------------------------------"
+$content = ping.exe 1.1.1.1
+Write-Log "`r`n $content"
+$content = ping.exe 8.8.8.8
+Write-Log "`r`n $content"
+$content = tracert.exe 1.1.1.1
+Write-Log "`r`n $content"
+$content = tracert.exe 8.8.8.8
 Write-Log "`r`n $content"
 Write-Log "`r`n`r`n "
 
