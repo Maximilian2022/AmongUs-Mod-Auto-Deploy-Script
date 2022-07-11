@@ -50,7 +50,7 @@
 1.1 初回はWindowsから安全じゃないと必ず言われるので、詳細から実行を選択する（これはWindowsの仕様。）<br>
 1.2 入れているセキュリティソフトによってはそっちも文句を言うので、そこは良しなにしてください。<br>
 2. Modを選ぶ<br>
-2.1 初回、および月初めの実行時はクリーンインストール、VC Redist,  dotNetFramework が選択されます<br>
+2.1 初回はクリーンインストール推奨、月初めの実行時はVC Redist,  dotNetFramework が選択されます<br>
 2.2 必要なライブラリを過分に入れるので何度かOKやら続行やらボタン押す必要あります
 3. MODのバージョンをListから選ぶ<br></p>
 <!-- /wp:paragraph -->
@@ -108,7 +108,7 @@
 <!-- /wp:image -->
 
 
-<p>更新終了<br>
+<p>対応終了<br>
  ・The Other Roles+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">tomarai/TheOtherRoles</a>)<br>
  ・The Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM">yukinogatari/TheOtherRoles-GM</a>)<br>
  ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>) <br>
