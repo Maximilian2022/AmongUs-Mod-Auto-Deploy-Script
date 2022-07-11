@@ -234,25 +234,33 @@ $diag = "$LogPath\dxdiag.txt"
 dxdiag.exe /t $diag
 $nid = (get-process dxdiag).id
 wait-process -id $nid
-$content = Get-content "$diag" -Encoding UTF8
+$content = Get-content "$diag" -Encoding Shift_JIS -Raw
 Write-Log "`r`n $content"
 Write-Log "`r`n`r`n "
-Remove-file $diag -Force
+Remove-Item $diag -Force
 
 Write-Log "`r`n`r`n "
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Ping/Tracert check"
 Write-Log "-----------------------------------------------------------------"
-$content = ping.exe 1.1.1.1
+ping.exe 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
 Write-Log "`r`n $content"
-$content = ping.exe 8.8.8.8
+ping.exe 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
 Write-Log "`r`n $content"
-$content = tracert.exe 1.1.1.1
+tracert.exe -d 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
 Write-Log "`r`n $content"
-$content = tracert.exe 8.8.8.8
+tracert.exe -d 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
 Write-Log "`r`n $content"
-Write-Log "`r`n`r`n "
 
+Write-Log "`r`n`r`n "
 
 if($Cult -eq "ja-JP"){
     #post API(Discord or Git issue)
