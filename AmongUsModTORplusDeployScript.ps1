@@ -249,6 +249,19 @@ if(!(Test-Path "C:\Temp")){
     New-Item "C:\Temp" -Type Directory
 }
 
+try{
+    aria2c -v
+}
+catch{
+    try{
+        choco -v
+    }catch{
+        Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+    }
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install aria2 -y" -Verb RunAs -Wait   
+}
+
+<#
 if(Test-Path "C:\Temp"){
     if(!(Test-Path "C:\Temp\aria2\aria2c.exe")){
         $ar2 = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/aria2/aria2/releases/latest" -UseBasicParsing)).assets.browser_download_url
@@ -272,7 +285,7 @@ if(Test-Path "C:\Temp"){
 }else{
     write-host "error no temp folder on C."
 }
-
+#>
 
 #################################################################################################
 ### GM Mod or TOR+ 選択メニュー表示
@@ -1399,7 +1412,7 @@ if($tio){
     Write-Log $tordlp
     #Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
     #curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
-    C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
+    aria2c -x5 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
 
     Write-Log "Download ZIP 完了"
     $Bar.Value = "57"
@@ -1549,7 +1562,7 @@ if($tio){
  #       }
  #       #Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
  #       #curl.exe -L $aus -o "$aupathm\BepInEx\plugins\AUShipMod.dll"
- #       C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUShipMod.dll" $aus
+ #       aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUShipMod.dll" $aus
  #       Write-Log "AUShipMOD Latest DLL download done"
     }
     $Bar.Value = "68"
@@ -1569,7 +1582,7 @@ if($tio){
             if($($aus[$aaai]).IndexOf(".dll") -gt 0){
                 #Invoke-WebRequest $($aus[$aaai]) -Outfile "$aupathm\BepInEx\plugins\Submerged.dll" -UseBasicParsing
                 #curl.exe -L $($aus[$aaai]) -o "$aupathm\BepInEx\plugins\Submerged.dll"
-                C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $($aus[$aaai])
+                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $($aus[$aaai])
                 Write-Log "$($aus[$aaai])"
             }
         }
@@ -1601,7 +1614,7 @@ if($tio){
             Write-Log "Download $scid DLL 開始"
             #Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
             #curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
-            C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
             Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOU-R"){
@@ -1683,7 +1696,7 @@ if($tio){
         Write-Log "日本語 データ $langdata"
         #Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
         #curl.exe -L $langdata -o "$aupathm\Language\Japanese.dat"
-        C:\Temp\aria2\aria2c.exe -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
+        aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
         Write-Log "日本語 データ Download 完了"
     }else{
     }
