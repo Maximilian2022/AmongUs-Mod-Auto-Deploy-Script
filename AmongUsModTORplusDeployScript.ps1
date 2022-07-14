@@ -1825,7 +1825,7 @@ if($tio){
                     Start-Process "$aupathm\Among Us.exe"
                 }elseif($platform -eq "Epic"){
                     Set-Location "$aupathb"
-                    .\legendary.exe launch Among Us
+                    legendary launch Among Us
                 }else{
                     Write-Output "ERROR:Critical run apps"
                 }
@@ -1865,8 +1865,8 @@ if($tio){
             if($platform -eq "Steam"){
                 $sShortcut.TargetPath = "$aupathm\Among Us.exe"
             }elseif($platform -eq "Epic"){
-                $sShortcut.TargetPath = "$aupathb\legendary.exe"
-                $sShortcut.Arguments = "-y launch Among Us"
+                $sShortcut.TargetPath = "pwsh.exe"
+                $sShortcut.Arguments = "-Command legendary -y launch Among Us"
                 $sShortcut.WorkingDirectory = $aupathb
             }else{
                 Write-Log "ERROR: Critical Shortcut"
@@ -2045,15 +2045,30 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
 
 $Bar.Value = "93"
 if($platform -eq "Epic"){
+
+    try{
+        legendary -V
+    }
+    catch{
+        try{
+            choco -v
+        }catch{
+            Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+        }
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
+    }
+    
+<#
     if(!(Test-Path "$aupathb\legendary.exe")){
         Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$aupathb\legendary.exe"
     }
+#>
     Start-Transcript -Append -Path "$LogFileName"
     Set-Location "$aupathb"
-    .\legendary.exe auth --import
-    .\legendary.exe -y uninstall Among Us --keep-files 
-    .\legendary.exe -y import "Among Us" $aupathm
-    .\legendary.exe -y egl-sync
+    legendary auth --import
+    legendary -y uninstall Among Us --keep-files 
+    legendary -y import "Among Us" $aupathm
+    legendary -y egl-sync
     Stop-Transcript
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
@@ -2075,7 +2090,7 @@ if($tio){
             Start-Process "$aupathm\Among Us.exe"   
         }elseif($platform -eq "Epic"){
             Set-Location "$aupathb"
-            .\legendary.exe launch Among Us
+            legendary launch Among Us
         }else{
             Write-Log "ERROR:Critical run apps"
         }
