@@ -1932,7 +1932,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
                     }
         
-                    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -A" -Verb RunAs -Wait        
+                    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -y" -Verb RunAs -Wait        
                 }else{
                     Write-Log "AmongUsReplayInWindowの処理を中止します"
                     $qureq = $false
@@ -1977,7 +1977,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
                 }
     
-                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -A" -Verb RunAs -Wait   
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -y" -Verb RunAs -Wait   
                 $qureq = $true
             }
             if($qureq){
@@ -2026,7 +2026,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
 
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade vcredist-all -A" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade vcredist-all -y" -Verb RunAs -Wait
 #            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
 #            Remove-Item "$fpth"
             Stop-Transcript
@@ -2053,7 +2053,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
 
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -A" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -y" -Verb RunAs -Wait
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
