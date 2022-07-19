@@ -250,7 +250,7 @@ if(!(Test-Path "C:\Temp")){
 }
 
 try{
-    aria2c -v
+    aria2c -v | Out-Null
 }
 catch{
     try{
