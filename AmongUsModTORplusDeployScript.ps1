@@ -1923,9 +1923,16 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
             }else{
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("必要な.Net 5 Frameworkがインストールされていません。インストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
-                    .\dotnet-install.ps1
-                    Remove-Item .\dotnet-install.ps1
+                    #Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
+                    #.\dotnet-install.ps1
+                    #Remove-Item .\dotnet-install.ps1
+                    try{
+                        choco -v
+                    }catch{
+                        Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+                    }
+        
+                    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -A" -Verb RunAs -Wait        
                 }else{
                     Write-Log "AmongUsReplayInWindowの処理を中止します"
                     $qureq = $false
@@ -1961,9 +1968,16 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
                 $qureq = $true
             }else{
-                Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
-                .\dotnet-install.ps1
-                Remove-Item .\dotnet-install.ps1
+                #Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
+                #.\dotnet-install.ps1
+                #Remove-Item .\dotnet-install.ps1
+                try{
+                    choco -v
+                }catch{
+                    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+                }
+    
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -A" -Verb RunAs -Wait   
                 $qureq = $true
             }
             if($qureq){
@@ -1993,8 +2007,8 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
             Start-Transcript -Append -Path "$LogFileName"
-            $fpth = Join-Path $npl "\install.ps1"
-            Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
+#            $fpth = Join-Path $npl "\install.ps1"
+#            Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
             try{
                 pwsh -Command '$PSVersionTable.PSVersion.major'
             }
@@ -2005,8 +2019,16 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
                 Remove-Item "$npl\ps.ps1" -Force
             }
-            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
-            Remove-Item "$fpth"
+
+            try{
+                choco -v
+            }catch{
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+            }
+
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade vcredist-all -A" -Verb RunAs -Wait
+#            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
+#            Remove-Item "$fpth"
             Stop-Transcript
             Write-Log "VC Redist Install ends"
             $Bar.Value = "86"
@@ -2024,7 +2046,14 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
             Write-Log ".Net Framework Install start"
             Start-Transcript -Append -Path "$LogFileName"
-            Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
+            #Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
+            try{
+                choco -v
+            }catch{
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+            }
+
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade dotnet-desktopruntime -A" -Verb RunAs -Wait
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
