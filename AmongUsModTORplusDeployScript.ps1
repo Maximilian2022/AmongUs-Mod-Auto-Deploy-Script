@@ -2099,6 +2099,9 @@ if($platform -eq "Epic"){
     legendary -y import "Among Us" $aupathm
     legendary -y egl-sync
     Stop-Transcript
+    Start-Sleep -Seconds 1
+    Get-Process EpicGamesLauncher | foreach { Stop-Process $_; Start-Process $_.Path }
+    Start-Sleep -Seconds 20
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
         Write-Output "945360"> "$aupathm\steam_appid.txt"
