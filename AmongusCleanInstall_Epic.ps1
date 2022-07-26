@@ -201,11 +201,8 @@ if(Test-Path "$sback\legendary.exe"){
 }
 #>
 
-$currentLoc = Get-Location
 Set-Location $spath
 Set-Location ../
-$spath = Get-Location
-Set-Location $currentLoc
 Remove-Item -Path $spath -Recurse -Force
 Start-Sleep -Seconds 1
 legendary uninstall Among Us --keep-files -y 
