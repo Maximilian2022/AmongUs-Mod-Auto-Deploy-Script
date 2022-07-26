@@ -178,6 +178,19 @@ if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("クリーンイン�
 
 Start-Transcript -Append -Path "$LogFileName"
 
+
+try{
+    legendary -V
+}
+catch{
+    try{
+        choco -v
+    }catch{
+        Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+    }
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
+}
+<#
 if(Test-Path "$sback\legendary.exe"){
     Set-Location $sback
     $legflag = $true
@@ -186,6 +199,7 @@ if(Test-Path "$sback\legendary.exe"){
     Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$npl\legendary.exe" 
     ./legendary.exe auth --import    
 }
+#>
 
 $currentLoc = Get-Location
 Set-Location $spath
@@ -194,15 +208,12 @@ $spath = Get-Location
 Set-Location $currentLoc
 Remove-Item -Path $spath -Recurse -Force
 Start-Sleep -Seconds 1
-./legendary.exe uninstall Among Us --keep-files -y 
+legendary uninstall Among Us --keep-files -y 
 Start-Sleep -Seconds 1
-./legendary.exe install Among Us -y --base-path "$spath"
+legendary install Among Us -y --base-path "$spath"
 Start-Sleep -Seconds 1
-./legendary.exe -y egl-sync
+legendary -y egl-sync
 Stop-Transcript
-if (!($legflag)){
-    Remove-item "$npl\legendary.exe" -Force
-}
 
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Clean Installation Ends"
