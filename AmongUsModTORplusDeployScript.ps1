@@ -2100,7 +2100,9 @@ if($platform -eq "Epic"){
     legendary -y egl-sync
     Stop-Transcript
     Start-Sleep -Seconds 1
+    Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
     Get-Process EpicGamesLauncher | foreach { Stop-Process $_; Start-Process $_.Path }
+    Write-Output $(Get-Translate("`r`nEGL再起動完了`r`n"))
     Start-Sleep -Seconds 20
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
