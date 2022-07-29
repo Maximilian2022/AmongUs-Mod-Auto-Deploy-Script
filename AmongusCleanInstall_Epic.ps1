@@ -203,11 +203,14 @@ if(Test-Path "$sback\legendary.exe"){
 
 Set-Location $spath
 Set-Location ../
+$instpath = Get-Location
+write-log $spath
+Write-Log $instpath
 Remove-Item -Path $spath -Recurse -Force
 Start-Sleep -Seconds 1
 legendary uninstall Among Us --keep-files -y 
 Start-Sleep -Seconds 1
-legendary install Among Us -y --base-path "$spath"
+legendary install Among Us -y --base-path "$instpath"
 Start-Sleep -Seconds 1
 legendary -y egl-sync
 Stop-Transcript

@@ -1866,7 +1866,7 @@ if($tio){
                 $sShortcut.TargetPath = "$aupathm\Among Us.exe"
             }elseif($platform -eq "Epic"){
                 $sShortcut.TargetPath = "pwsh.exe"
-                $sShortcut.Arguments = "-Command legendary -y launch Among Us"
+                $sShortcut.Arguments = "-Command legendary auth --import && legendary -y egl-sync && legendary launch Among Us"
                 $sShortcut.WorkingDirectory = $aupathb
             }else{
                 Write-Log "ERROR: Critical Shortcut"
@@ -2099,7 +2099,7 @@ if($platform -eq "Epic"){
     legendary -y import "Among Us" $aupathm
     legendary -y egl-sync
     Stop-Transcript
-    Start-Sleep -Seconds 1
+    Start-Sleep -Seconds 5
     Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
     Get-Process EpicGamesLauncher | foreach { Stop-Process $_; Start-Process $_.Path }
     Write-Output $(Get-Translate("`r`nEGL再起動完了`r`n"))
@@ -2135,6 +2135,7 @@ if($tio){
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Ends"
 Write-Log "-----------------------------------------------------------------"
+Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command cup all -y" -Verb RunAs
 
 if($debugc){
     if($startexewhendone -eq $true){
