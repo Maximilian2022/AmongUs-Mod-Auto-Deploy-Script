@@ -290,6 +290,8 @@ if(Test-Path "C:\Temp"){
 # Clock Sync
 #################################################################################################
 
+$ntpchk = w32tm /monitor /computers:time.google.com
+Write-Log $ntpchk
 w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /update
 w32tm /resync
 $ntpres = w32tm /query /status 
