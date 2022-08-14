@@ -290,12 +290,11 @@ if(Test-Path "C:\Temp"){
 # Clock Sync
 #################################################################################################
 
-$ntpchk = w32tm /monitor /computers:time.google.com
-Write-Log $ntpchk
-w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /update
+w32tm /query /status 
+w32tm /monitor /computers:time.google.com
+w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /reliable:yes /update
 w32tm /resync
-$ntpres = w32tm /query /status 
-Write-Log $ntpres
+w32tm /query /status 
 
 #################################################################################################
 ### GM Mod or TOR+ 選択メニュー表示
