@@ -286,6 +286,14 @@ if(Test-Path "C:\Temp"){
     write-host "error no temp folder on C."
 }
 #>
+#################################################################################################
+# Clock Sync
+#################################################################################################
+
+w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /update
+w32tm /resync
+$ntpres = w32tm /query /status 
+Write-Log $ntpres
 
 #################################################################################################
 ### GM Mod or TOR+ 選択メニュー表示
@@ -522,7 +530,7 @@ $form.ShowIcon = $False
 # コンボボックスに項目を追加
 [void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
-[void] $Combo.Items.Add("TOR :Eisbison/TheOtherRoles")
+[void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
@@ -627,7 +635,7 @@ $Combo_SelectedIndexChanged= {
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOR :Eisbison/TheOtherRoles"{
-            $releasepage2 = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases"
+            $releasepage2 = "https://api.github.com/repos/TheOtherRolesAU/TheOtherRoles/releases"
             $scid = "TOR"
             $aumin = $tormin
             Write-Log "TOR Selected"
