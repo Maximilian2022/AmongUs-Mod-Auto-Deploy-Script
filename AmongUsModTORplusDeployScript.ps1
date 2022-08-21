@@ -429,13 +429,13 @@ $MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動します�
 $RadioButton3 = New-Object System.Windows.Forms.RadioButton
 $RadioButton3.Location = New-Object System.Drawing.Point(20,30)
 $RadioButton3.size = New-Object System.Drawing.Size(150,30)
-$RadioButton3.Checked = $True
 $RadioButton3.Text = $(Get-Translate("起動する"))
 
 $RadioButton4 = New-Object System.Windows.Forms.RadioButton
 $RadioButton4.Location = New-Object System.Drawing.Point(180,30)
 $RadioButton4.size = New-Object System.Drawing.Size(150,30)
 $RadioButton4.Text = $(Get-Translate("起動しない"))
+$RadioButton4.Checked = $True
 
 # グループにラジオボタンを入れる
 $MyGroupBox2.Controls.AddRange(@($Radiobutton3,$RadioButton4))
