@@ -1888,6 +1888,11 @@ if($tio){
 
         $sShortcut.IconLocation = "$aupathm\Among Us.exe"
         $sShortcut.Save()
+        if($platform -eq "epic"){
+            $bytes = [System.IO.File]::ReadAllBytes("$scpath\Among Us Mod $scid.lnk")
+            $bytes[0x15] = $bytes[0x15] -bor 0x20 #set byte 21 (0x15) bit 6 (0x20) ON
+            [System.IO.File]::WriteAllBytes("$scpath\Among Us Mod $scid.lnk", $bytes)    
+        }
 
         $aupathb
 
