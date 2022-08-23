@@ -293,12 +293,17 @@ if(Test-Path "C:\Temp"){
 $l = w32tm /query /status 
 if ($l.contains("0x80070426")){
     net start "windows time"
+    start-sleep -Seconds 5
 }
 Write-Log $l
-w32tm /monitor /computers:time.google.com
-w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /reliable:yes /update
-w32tm /resync
-w32tm /query /status 
+$l = w32tm /monitor /computers:time.google.com
+Write-Log $l
+$l = w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /reliable:yes /update
+Write-Log $l
+$l = w32tm /resync
+Write-Log $l
+$l = w32tm /query /status 
+Write-Log $l
 
 #################################################################################################
 ### GM Mod or TOR+ 選択メニュー表示
