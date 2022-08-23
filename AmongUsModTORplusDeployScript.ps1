@@ -17,7 +17,7 @@ $tourmin = "v3.2.0"
 $tormmin = "MR_v2.1.2"
 
 #TOR plus, TOR GM, AUM is depricated.
-
+$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 #################################################################################################
 # Translate Function
 #################################################################################################
@@ -290,7 +290,11 @@ if(Test-Path "C:\Temp"){
 # Clock Sync
 #################################################################################################
 
-w32tm /query /status 
+$l = w32tm /query /status 
+if ($l.contains("0x80070426")){
+    net start "windows time"
+}
+Write-Log $l
 w32tm /monitor /computers:time.google.com
 w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /reliable:yes /update
 w32tm /resync
