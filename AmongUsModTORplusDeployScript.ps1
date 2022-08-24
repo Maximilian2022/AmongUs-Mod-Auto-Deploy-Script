@@ -5,12 +5,15 @@
 $version = "1.4.8"
 #
 #################################################################################################
+### minimum version for v2022.08.23
+$ermin = "v3.0.0.0"
+$esmin = "v3.0.0.0"
+
+
 ### minimum version for v2022.06.21
 $snrmin = "1.4.0.9"
 $tohmin = "v2.1.0"
 $tormin = "v4.1.5"
-$ermin = "v3.0.0.0"
-$esmin = "v3.0.0.0"
 $torhmin = "v2.1.60"
 $nosmin = "1.9.6,2022.6.21"
 $tourmin = "v3.2.0"
@@ -18,6 +21,17 @@ $tormmin = "MR_v2.1.2"
 
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+
+#################################################################################################
+# 権限チェック
+#################################################################################################
+if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
+}else{
+    write-host "このユーザアカウントでは本Scriptは動作しません。"
+    pause
+    exit
+}
+
 #################################################################################################
 # Translate Function
 #################################################################################################
@@ -261,31 +275,7 @@ catch{
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install aria2 -y" -Verb RunAs -Wait   
 }
 
-<#
-if(Test-Path "C:\Temp"){
-    if(!(Test-Path "C:\Temp\aria2\aria2c.exe")){
-        $ar2 = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/aria2/aria2/releases/latest" -UseBasicParsing)).assets.browser_download_url
-        for($arxx=0;$arxx -lt $ar2.Length;$arxx++ ){
-            if($($ar2[$arxx]).Contains("64bit")){
-                $ardl = $($ar2[$arxx])
-            }
-        }
-        curl.exe -L $ardl -o "C:\Temp\aria2.zip"
-        Expand-Archive -path "C:\Temp\aria2.zip" -DestinationPath "C:\Temp\aria2" -Force
-        $ar2fol = split-path $ardl -Leaf
-        $ar2fol = $ar2fol.Substring(0,$ar2fol.Length -4)
-        robocopy "C:\Temp\aria2\$ar2fol" "C:\Temp\aria2" /E >nul 2>&1 
-        Remove-Item "C:\Temp\aria2\$ar2fol" -Recurse
-        if(Test-Path "C:\Temp\aria2\aria2c.exe"){
-            write-host "ar2 loading done"
-        }
-    }else{
-        write-host "aria2 loaded."
-    }
-}else{
-    write-host "error no temp folder on C."
-}
-#>
+
 #################################################################################################
 # Clock Sync
 #################################################################################################
@@ -471,8 +461,6 @@ $RadioButton9.Text = $(Get-Translate("同梱しない"))
 # グループにラジオボタンを入れる
 $MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
 # フォームに各アイテムを入れる
-#$form.Controls.Add($MyGroupBox4)
-
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox24.Location = New-Object System.Drawing.Point(400,340)
 $MyGroupBox24.size = New-Object System.Drawing.Size(350,90)
