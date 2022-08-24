@@ -7,6 +7,7 @@ $version = "1.0.0"
 #################################################################################################
 # Translate Function
 #################################################################################################
+$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $Cult  = Get-Culture
 #$Cult  = "en-US"
 function Get-Translate($transtext){

@@ -6,6 +6,7 @@
 $version = "1.0.2"
 #
 #################################################################################################
+$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
 $npl = Get-Location
 
