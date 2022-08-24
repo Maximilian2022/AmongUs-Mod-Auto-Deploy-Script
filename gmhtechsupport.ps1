@@ -132,6 +132,9 @@ if($null -ne $Arg1){
     $scid = "TOR GMH"
 }
 
+Write-Log $Arg1
+Write-Log $Arg2
+Write-Log $Arg3
 
 #################################################################################################
 #AutoDetect用Static
