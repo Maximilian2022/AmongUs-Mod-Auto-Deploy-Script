@@ -2092,6 +2092,7 @@ curl.exe -O -L https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/
 pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
 $ps1script += "`"$scid`" `"$aupathm`" `"$platform`"" 
 $ps1script += '
+
 del .\gmhtechsupport.ps1
 '
 $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$npl\StartAmongUsGetLogScript_$scid.bat" 
