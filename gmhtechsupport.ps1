@@ -7,9 +7,45 @@ $version = "1.0.2"
 #
 #################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
-
+#################################################################################################
+# 権限チェック
+#################################################################################################
+if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
+}else{
+    write-host "このユーザアカウントでは本Scriptは動作しません。"
+    pause
+    exit
+}
+#################################################################################################
+# Run w/ Powershell v7 if available.
+#################################################################################################
 $npl = Get-Location
+Unblock-File "$npl\gmhtechsupport.ps1"
 
+$v5run = $false
+if($PSVersionTable.PSVersion.major -eq 5){
+    if(test-path "$env:ProgramFiles\PowerShell\7"){
+        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\gmhtechsupport.ps1"
+    }else{
+        $v5run = $true
+        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\gmhtechsupport.ps1`"" -Verb RunAs -Wait
+            exit
+        }
+    }
+}elseif($PSVersionTable.PSVersion.major -gt 5){
+    $v5run = $true
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\gmhtechsupport.ps1`"" -Verb RunAs -Wait
+        exit
+    }
+}else{
+    write-host $(Get-Translate("ERROR - PowerShell Version : not supported."))
+}
+
+if(!($v5run)){
+    exit
+}
 #################################################################################################
 # Translate Function
 #################################################################################################
