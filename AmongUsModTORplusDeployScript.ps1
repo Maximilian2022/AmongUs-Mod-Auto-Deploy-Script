@@ -2080,6 +2080,7 @@ $Bar.Value = "90"
 ####################
 if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
     Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
+    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsGetLogScript.bat" -OutFile "$npl\StartAmongUsGetLogScript.bat" -UseBasicParsing
 }
 ####################
 
