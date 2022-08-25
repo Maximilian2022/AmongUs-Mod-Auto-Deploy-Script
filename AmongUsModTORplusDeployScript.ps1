@@ -736,7 +736,7 @@ $Combo_SelectedIndexChanged= {
             if(Test-path "$au_path_steam_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
+                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
                         Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
@@ -769,7 +769,7 @@ $Combo_SelectedIndexChanged= {
             if(Test-path "$au_path_epic_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
                         Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
@@ -1307,7 +1307,7 @@ if($tio){
             }
 
             if($rn -eq "steam"){
-                Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
                 if(test-path "$env:ProgramFiles\PowerShell\7"){
                     Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
@@ -1324,7 +1324,7 @@ if($tio){
                 }
                 Remove-Item $fpth2 -Force
             }elseif($rn -eq "epic"){
-                Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
                 if(test-path "$env:ProgramFiles\PowerShell\7"){
                     Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
@@ -1753,7 +1753,7 @@ if($tio){
                 if(test-path "C:\temp\startamongusrun_$scid2.bat"){
                     Remove-Item "C:\temp\startamongusrun_$scid2.bat"
                 }
-                Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "C:\temp\gmhtechsupport.ps1" -UseBasicParsing
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1" -OutFile "C:\temp\gmhtechsupport.ps1" -UseBasicParsing
                 $batscript = "chcp 65001`r`n@echo off`r`npowershell -NoProfile -ExecutionPolicy Unrestricted `"C:\temp\amongusrun_$scid2.ps1`"`r`nexit"
                 $batscript | Out-File -Encoding default -FilePath "C:\temp\startamongusrun_$scid2.bat" 
                 $ps1script = '$platform="'
@@ -2080,15 +2080,15 @@ $Bar.Value = "90"
 #bat file auto update
 ####################
 if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
-    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
-#    Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsGetLogScript.bat" -OutFile "$npl\StartAmongUsGetLogScript.bat" -UseBasicParsing
+    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
+#    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsGetLogScript.bat" -OutFile "$npl\StartAmongUsGetLogScript.bat" -UseBasicParsing
 
 $ps1script += 'chcp 65001
 
 @echo off
 
 
-curl.exe -O -L https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1
+curl.exe -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1
 
 pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
 $ps1script += "`"$scid`" `"$aupathm`" `"$platform`"" 
@@ -2170,7 +2170,7 @@ if($debugc){
         #監視プロセス名
         $procName = "Among Us"
         $checkpro = $true
-        Invoke-WebRequest "https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
+        Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1" -OutFile "$npl\gmhtechsupport.ps1" -UseBasicParsing
         $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
         Write-Log "-----------------------------------------------------------------"
         Write-Log "Error Check"
