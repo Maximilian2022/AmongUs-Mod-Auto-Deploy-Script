@@ -10,11 +10,11 @@ $ermin = "v3.2.2.0"
 $esmin = "v3.2.2.0"
 $snrmin = "1.4.2.0"
 $nosmin = "1.12.11,2022.8.24"
+$torhmin = "v2.2.102"
 
 ### minimum version for v2022.06.21
 $tohmin = "v2.1.0"
 $tormin = "v4.1.5"
-$torhmin = "v2.1.60"
 $tourmin = "v3.2.0"
 $tormmin = "MR_v2.1.2"
 
