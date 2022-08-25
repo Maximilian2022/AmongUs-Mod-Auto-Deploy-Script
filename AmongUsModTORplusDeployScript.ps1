@@ -2081,22 +2081,16 @@ $Bar.Value = "90"
 ####################
 if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
-#    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsGetLogScript.bat" -OutFile "$npl\StartAmongUsGetLogScript.bat" -UseBasicParsing
+    $ps1script += 'chcp 65001
+    @echo off
+    curl.exe -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1
+    pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
+    $ps1script += "`"$scid`" `"$aupathm`" `"$platform`"" 
+    $ps1script += '
 
-$ps1script += 'chcp 65001
-
-@echo off
-
-
-curl.exe -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1
-
-pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
-$ps1script += "`"$scid`" `"$aupathm`" `"$platform`"" 
-$ps1script += '
-
-del .\gmhtechsupport.ps1
-'
-$ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$npl\StartAmongUsGetLogScript_$scid.bat" 
+    del .\gmhtechsupport.ps1
+    '
+    $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$npl\StartAmongUsGetLogScript_$scid.bat" 
 }
 ####################
 
@@ -2115,11 +2109,6 @@ if($platform -eq "Epic"){
         Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
     }
     
-<#
-    if(!(Test-Path "$aupathb\legendary.exe")){
-        Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$aupathb\legendary.exe"
-    }
-#>
     Start-Transcript -Append -Path "$LogFileName"
     Set-Location "$aupathb"
     legendary auth --import
