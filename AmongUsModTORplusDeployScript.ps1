@@ -6,16 +6,15 @@ $version = "1.4.8"
 #
 #################################################################################################
 ### minimum version for v2022.08.23
-$ermin = "v3.0.0.0"
-$esmin = "v3.0.0.0"
-
+$ermin = "v3.2.2.0"
+$esmin = "v3.2.2.0"
+$snrmin = "1.4.2.0"
+$nosmin = "1.12.11,2022.8.24"
 
 ### minimum version for v2022.06.21
-$snrmin = "1.4.0.9"
 $tohmin = "v2.1.0"
 $tormin = "v4.1.5"
 $torhmin = "v2.1.60"
-$nosmin = "1.9.6,2022.6.21"
 $tourmin = "v3.2.0"
 $tormmin = "MR_v2.1.2"
 
@@ -99,10 +98,16 @@ if ($achk){
 
 Write-Output $(Get-Translate("実行前チェック完了"))
 
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+    exit
+}
+
+<#
 $v5run = $false
 if($PSVersionTable.PSVersion.major -eq 5){
     if(test-path "$env:ProgramFiles\PowerShell\7"){
-        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongUsModTORplusDeployScript.ps1"
+        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     }else{
         $v5run = $true
         if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
@@ -112,10 +117,6 @@ if($PSVersionTable.PSVersion.major -eq 5){
     }
 }elseif($PSVersionTable.PSVersion.major -gt 5){
     $v5run = $true
-    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
-        exit
-    }
 }else{
     write-host $(Get-Translate("ERROR - PowerShell Version : not supported."))
 }
