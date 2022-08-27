@@ -633,7 +633,7 @@ $Combo_SelectedIndexChanged= {
             Write-Log "TOR GMH Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
-        }"TOR :Eisbison/TheOtherRoles"{
+        }"TOR :TheOtherRolesAU/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/TheOtherRolesAU/TheOtherRoles/releases"
             $scid = "TOR"
             $aumin = $tormin
