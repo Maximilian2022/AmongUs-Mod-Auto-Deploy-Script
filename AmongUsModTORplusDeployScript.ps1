@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.4.9.1"
+$version = "1.4.9.2"
 #
 #################################################################################################
 ### minimum version for v2022.08.23
@@ -14,9 +14,7 @@ $torhmin = "v2.2.102"
 $tormin = "v4.1.7"
 $tourmin = "v3.3.0"
 $tormmin = "MR_v2.3.0"
-
-### minimum version for v2022.06.21
-$tohmin = "v2.1.0"
+$tohmin = "v2.2.2"
 
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
