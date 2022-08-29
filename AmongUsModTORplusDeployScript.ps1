@@ -627,7 +627,7 @@ $Combo_SelectedIndexChanged= {
             $RadioButton29.Checked = $True
         }"TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
-            $scid = "TOR GMHT"
+            $scid = "TOR GMT"
             $aumin = $torhmin
             Write-Log "TOR GMH Test Selected"
             $RadioButton9.Checked = $True
@@ -967,7 +967,7 @@ if($tio){
                 $torv = $torpv
                 Write-Log "TheOtherRole-GM-Haoming Version $torv が選択されました"
                 $checkt = $false
-            }if($scid -eq "TOR GMHT"){
+            }if($scid -eq "TOR GMT"){
                 if($torpv -lt $torhmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
@@ -1158,7 +1158,7 @@ if($tio){
                 $wvar = $false
             }
         }
-    }elseif($scid -eq "TOR GMHT"){
+    }elseif($scid -eq "TOR GMT"){
         $langh=@()
         $langd=@()
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
@@ -1678,7 +1678,7 @@ if($tio){
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
             Write-Log "Download $scid DLL 完了"
         }
-    }elseif($scid -eq "TOR GMH"){
+    }elseif($scid -eq "TOR GMT"){
         if(test-path "$aupathm\TheOtherRoles-GM-Haoming.$torv"){
             robocopy "$aupathm\TheOtherRoles-GM-Haoming.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TheOtherRoles-GM-Haoming.$torv" -recurse
