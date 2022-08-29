@@ -37,7 +37,7 @@
 
 
 <!-- wp:paragraph -->
-<p>■Download<br><a href="https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat" target="_blank" rel="noreferrer noopener">https://github.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/releases/download/latest/StartAmongUsModTORplusDeployScript.bat</a></p>
+<p>■Download<br><a href="https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" target="_blank" rel="noreferrer noopener">https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat</a></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -51,7 +51,7 @@
 1.2 入れているセキュリティソフトによってはそっちも文句を言うので、そこは良しなにしてください。<br>
 2. Modを選ぶ<br>
 2.1 初回はクリーンインストール推奨、月初めの実行時はVC Redist,  dotNetFramework が選択されます<br>
-2.2 必要なライブラリを過分に入れるので何度かOKやら続行やらボタン押す必要あります
+2.2 必要なライブラリを過分に入れるので何度かOKやら続行やらボタン押す必要あります<br>
 3. MODのバージョンをListから選ぶ<br></p>
 <!-- /wp:paragraph -->
 
