@@ -526,6 +526,7 @@ $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
 [void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
+[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
@@ -622,6 +623,13 @@ $Combo_SelectedIndexChanged= {
             $scid = "TOR MR"
             $aumin = $tormmin
             Write-Log "TOR MR Selected"
+            $RadioButton9.Checked = $True
+            $RadioButton29.Checked = $True
+        }"TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test"{
+            $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
+            $scid = "TOR GMHT"
+            $aumin = $torhmin
+            Write-Log "TOR GMH Test Selected"
             $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
@@ -959,6 +967,19 @@ if($tio){
                 $torv = $torpv
                 Write-Log "TheOtherRole-GM-Haoming Version $torv が選択されました"
                 $checkt = $false
+            }if($scid -eq "TOR GMHT"){
+                if($torpv -lt $torhmin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log "処理を中止します"
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log "TheOtherRole-GM-Haoming Test Version $torv が選択されました"
+                $checkt = $false
             }elseif($scid -eq "TOR"){
                 if($torpv -lt $tormin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -1084,6 +1105,60 @@ if($tio){
     $Bar.Value = "20"
     $langdata
     if($scid -eq "TOR GMH"){
+        $langh=@()
+        $langd=@()
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
+                $langh += $web2.assets.browser_download_url[$aii]
+            }elseif($($web2.assets.browser_download_url[$aii]).IndexOf(".dll") -gt 0){
+                $langd += $web2.assets.browser_download_url[$aii]
+            }
+        }
+        $checkzip = $true
+        $checkdll = $true
+        for($aiii = 0;$aiii -lt  $langh.Length;$aiii++){
+            if($($langh[$aiii]).IndexOf("$torv") -gt 0){
+                $tordlp = $($langh[$aiii])
+                $checkzip = $false
+                $checkgm = $false
+                $checkdll = $false
+            }
+        }
+        if($checkdll){
+            for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
+                if($($langd[$aiiii]).IndexOf("$torv") -gt 0){
+                    $torgmdll = $($langd[$aiiii])
+                    $checkdll = $false
+                }
+            }
+        }
+        $wvar = $true
+        while($wvar){
+            $vermet = @()
+            $vermet = $torv.split(".")
+            if($($vermet[2]) -ne 0){
+                $v3 = $vermet[2] -1
+            }else{
+                $v3 = 0
+            }
+            $torv = "$($vermet[0]).$($vermet[1]).$v3"
+            if($checkzip){
+                if($checkdll){
+                    Write-Output "ERROR:something wrong."
+                    exit
+                }else{
+                    for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
+                        if($($langh[$aiv]).IndexOf("$torv") -gt 0){
+                            $tordlp = $($langh[$aiv])
+                            $checkzip = $false
+                        }
+                    }                
+                }
+            }else{
+                $wvar = $false
+            }
+        }
+    }elseif($scid -eq "TOR GMHT"){
         $langh=@()
         $langd=@()
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
@@ -1554,21 +1629,6 @@ if($tio){
     #AUShipMOD 配置
     if($ausmod){
         Write-Log "AUShipMOD is depricated."
-#        Write-Log "AUShipMOD配置開始"
-        #GithubのRelease一覧からぶっこぬいてLatestを置く
-#        $rel2 = "https://api.github.com/repos/tomarai/AUShipMod/releases/latest"
-#        $webs = Invoke-WebRequest $rel2 -UseBasicParsing
-#        $webs2 = ConvertFrom-Json $webs.Content
-#        $aus = $webs2.assets.browser_download_url
-#        Write-Log "AUShipMOD Latest DLL download start"
- #       Write-Log "$aus"
- #       if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
- #           New-Item "$aupathm\BepInEx\plugins\" -Type Directory
- #       }
- #       #Invoke-WebRequest $aus -Outfile "$aupathm\BepInEx\plugins\AUShipMod.dll" -UseBasicParsing
- #       #curl.exe -L $aus -o "$aupathm\BepInEx\plugins\AUShipMod.dll"
- #       aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUShipMod.dll" $aus
- #       Write-Log "AUShipMOD Latest DLL download done"
     }
     $Bar.Value = "68"
 
@@ -1585,8 +1645,6 @@ if($tio){
         }
         for($aaai = 0;$aaai -lt $aus.Length;$aaai++){
             if($($aus[$aaai]).IndexOf(".dll") -gt 0){
-                #Invoke-WebRequest $($aus[$aaai]) -Outfile "$aupathm\BepInEx\plugins\Submerged.dll" -UseBasicParsing
-                #curl.exe -L $($aus[$aaai]) -o "$aupathm\BepInEx\plugins\Submerged.dll"
                 aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $($aus[$aaai])
                 Write-Log "$($aus[$aaai])"
             }
@@ -1617,11 +1675,27 @@ if($tio){
             Write-Log $torgmdll
             #TOR+ DLLをDLして配置
             Write-Log "Download $scid DLL 開始"
-            #Invoke-WebRequest $torgmdll -Outfile "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll" -UseBasicParsing
-            #curl.exe -L $torgmdll -o "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
             Write-Log "Download $scid DLL 完了"
         }
+    }elseif($scid -eq "TOR GMH"){
+        if(test-path "$aupathm\TheOtherRoles-GM-Haoming.$torv"){
+            robocopy "$aupathm\TheOtherRoles-GM-Haoming.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\TheOtherRoles-GM-Haoming.$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+        #Mod Original DLL削除
+        Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
+        Write-Log 'Delete Original Mod DLL'
+        $torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1013087062188101702/TheOtherRolesGM.dll"
+        Write-Log $torgmdll
+        #TOR+ DLLをDLして配置
+        Write-Log "Download $scid DLL 開始"
+        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
+        Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "TOU-R"){
         if(test-path "$aupathm\ToU $torv"){
             robocopy "$aupathm\ToU $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
