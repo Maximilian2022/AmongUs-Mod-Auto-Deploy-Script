@@ -1690,7 +1690,7 @@ if($tio){
         #Mod Original DLL削除
         Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
         Write-Log 'Delete Original Mod DLL'
-        $torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1013087062188101702/TheOtherRolesGM.dll"
+        $torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1014937849184911380/TheOtherRolesGM.dll"
         Write-Log $torgmdll
         #TOR+ DLLをDLして配置
         Write-Log "Download $scid DLL 開始"
