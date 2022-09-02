@@ -967,7 +967,7 @@ if($tio){
                 $torv = $torpv
                 Write-Log "TheOtherRole-GM-Haoming Version $torv が選択されました"
                 $checkt = $false
-            }if($scid -eq "TOR GMT"){
+            }elseif($scid -eq "TOR GMT"){
                 if($torpv -lt $torhmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
