@@ -500,8 +500,8 @@ $CheckedBox = New-Object System.Windows.Forms.CheckedListBox
 $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,185"
 
-# 配列を作成 ,"OBS","Streamlabs OBS"
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","AmongUsReplayInWindow","PowerShell 7","dotNetFramework")
+# 配列を作成 ,"OBS","Streamlabs OBS""AmongUsReplayInWindow",
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
