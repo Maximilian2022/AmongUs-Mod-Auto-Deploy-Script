@@ -283,7 +283,10 @@ try{
 }
 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade speedtest -y" -Verb RunAs -Wait   
 
-Write-Log speedtest
+speedtest | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
+Write-Log "`r`n $content"
 
 
 if($Cult -eq "ja-JP"){
