@@ -276,6 +276,16 @@ Write-Log "`r`n $content"
 
 Write-Log "`r`n`r`n "
 
+try{
+    choco -v
+}catch{
+    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+}
+Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade speedtest -y" -Verb RunAs -Wait   
+
+Write-Log speedtest
+
+
 if($Cult -eq "ja-JP"){
     #post API(Discord or Git issue)
     $chkenabled = ""
