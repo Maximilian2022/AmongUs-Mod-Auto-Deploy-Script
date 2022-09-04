@@ -2,10 +2,10 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.1"
+$version = "1.5.2"
 #
 #################################################################################################
-### minimum version for v2022.08.23
+### minimum version for v2022.08.24
 $ermin = "v3.2.2.0"
 $esmin = "v3.2.2.0"
 $snrmin = "1.4.2.0"
@@ -1443,7 +1443,14 @@ if($tio){
     }else{
         New-Item $aupathb -ItemType Directory
     }
-        Write-Log "Backup Feature Start"
+    Write-Log "Backup Feature Start"
+
+    #version detect
+    $tt = (Format-Hex -Path "$aupatho\Among Us_Data\globalgamemanagers").Bytes
+    $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
+    $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
+    $amver = $tt3[1].Value
+
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
     $backhashtxt = "$aupathb\backuphash.txt"
     $backuptxt = "$aupathb\backupfn.txt"
@@ -1465,7 +1472,7 @@ if($tio){
             Write-Log "古い同一Backupが見つかったのでSkipします"
         }else{
             Write-Log "新しいBackupが見つかったので生成します"
-            Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
+            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
             write-log $e
             Write-log $r
             Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
