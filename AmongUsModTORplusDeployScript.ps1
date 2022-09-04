@@ -1452,7 +1452,9 @@ if($tio){
     $tt = (Format-Hex -Path "$aupatho\Among Us_Data\globalgamemanagers").Bytes
     $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
     $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
+    Write-Log $tt3
     $amver = $tt3[1].Value
+    write-log $amver
 
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
     $backhashtxt = "$aupathb\backuphash.txt"
@@ -1478,19 +1480,19 @@ if($tio){
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
             write-log $e
             Write-log $r
-            Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
+            Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
             Remove-Item -Path $backhashtxt -Force
             Remove-Item -Path $backuptxt -Force
             $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
             Write-Output " $thash"> $backhashtxt
-            Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
+            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
         }
     }else{
         Write-Log "Backupが見つかりません。生成します。"
         $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
         Write-Output " $thash"> $backhashtxt
-        Write-Output $(Join-path $aupathb "Among Us-$datest.zip") > $backuptxt
-        Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest.zip") -Force
+        Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
+        Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
     }
     Write-Log "Backup Feature Ends"
 
