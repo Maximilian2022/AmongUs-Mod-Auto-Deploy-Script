@@ -1476,7 +1476,7 @@ if($tio){
         Write-Log $(Get-Content $backuptxt)
         Write-Log $(Get-Content $backuptxt).IndexOf($amver)
         
-        if($(Get-Content $backuptxt).IndexOf($amver) -eq 0){
+        if($(Get-Content $backuptxt).IndexOf($amver) -lt 0){
             $e = "retake"
         }
 
