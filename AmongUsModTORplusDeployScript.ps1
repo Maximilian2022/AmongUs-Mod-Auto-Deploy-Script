@@ -875,6 +875,9 @@ $Combo_SelectedIndexChanged= {
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"),$true)
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"),$true)                       
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)                       
+            if"(!(Test-Path "$aupathb")){
+                mkdir "$aupathb"
+            }
             Write-Output $ym |Out-File -FilePath "$aupathb\chk$ym.txt"
             $ym2 = $ym -1
             if(Test-Path "$aupathb\chk$ym2.txt"){
