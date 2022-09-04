@@ -1477,16 +1477,7 @@ if($tio){
         Write-Log $(Get-Content $backuptxt).IndexOf($amver)
         
         if($(Get-Content $backuptxt).IndexOf($amver) -eq 0){
-            Write-Log "NF:再生成します"
-            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
-            write-log $e
-            Write-log $r
-            Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
-            Remove-Item -Path $backhashtxt -Force
-            Remove-Item -Path $backuptxt -Force
-            $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-            Write-Output " $thash"> $backhashtxt
-            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
+            $e = "retake"
         }
 
         if($r -eq $e){
