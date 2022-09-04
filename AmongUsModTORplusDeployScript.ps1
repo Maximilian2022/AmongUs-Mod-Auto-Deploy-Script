@@ -1473,8 +1473,11 @@ if($tio){
         }
         $e = (Get-Content $backhashtxt) -as [string[]]
 
-        if($backupfn.IndexOf($amver) -eq 0){
-            $e = ""
+        Write-Log $(Get-Content $backuptxt)
+        Write-Log $(Get-Content $backuptxt).IndexOf($amver)
+        
+        if($(Get-Content $backuptxt).IndexOf($amver) -eq 0){
+            $e = "retake"
         }
 
         if($r -eq $e){
