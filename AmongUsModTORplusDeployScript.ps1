@@ -1473,6 +1473,10 @@ if($tio){
         }
         $e = (Get-Content $backhashtxt) -as [string[]]
 
+        if($backupfn.IndexOf($amver) -eq 0){
+            $e = ""
+        }
+
         if($r -eq $e){
             Write-Log "古い同一Backupが見つかったのでSkipします"
         }else{
