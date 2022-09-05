@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.3"
+$version = "1.5.4"
 #
 #################################################################################################
 ### minimum version for v2022.08.24
@@ -314,6 +314,8 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 $platform = ""
 
+
+
 # フォントの指定
 $Font = New-Object System.Drawing.Font("メイリオ",12)
 
@@ -391,12 +393,35 @@ $MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6,$RadioButton7,$Radi
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox3)
 
+###本体バージョン！
+# グループを作る
+$MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
+$MyGroupBox4.Location = New-Object System.Drawing.Point(400,120)
+$MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox4.text = $(Get-Translate("本体Version選択"))
+
+# グループの中のラジオボタンを作る
+$RadioButton114 = New-Object System.Windows.Forms.RadioButton
+$RadioButton114.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton114.size = New-Object System.Drawing.Size(150,30)
+$RadioButton114.Text = $(Get-Translate("A"))
+$RadioButton114.Checked = $True
+
+$RadioButton115 = New-Object System.Windows.Forms.RadioButton
+$RadioButton115.Location = New-Object System.Drawing.Point(180,30)
+$RadioButton115.size = New-Object System.Drawing.Size(150,30)
+$RadioButton115.Text = $(Get-Translate("B"))
+
+# グループにラジオボタンを入れる
+$MyGroupBox4.Controls.AddRange(@($Radiobutton114,$RadioButton115))
+# フォームに各アイテムを入れる
+$form.Controls.Add($MyGroupBox4)
 
 ###作成したModのExeへのショートカットをDesktopに配置する
 # グループを作る
 $MyGroupBox = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox.Location = New-Object System.Drawing.Point(400,120)
-$MyGroupBox.size = New-Object System.Drawing.Size(350,90)
+$MyGroupBox.Location = New-Object System.Drawing.Point(400,200)
+$MyGroupBox.size = New-Object System.Drawing.Size(350,70)
 $MyGroupBox.text = $(Get-Translate("ショートカットを作成しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -425,8 +450,8 @@ $form.Controls.Add($MyGroupBox)
 #デフォルトでは実行しない
 # グループを作る
 $MyGroupBox2 = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox2.Location = New-Object System.Drawing.Point(400,230)
-$MyGroupBox2.size = New-Object System.Drawing.Size(350,90)
+$MyGroupBox2.Location = New-Object System.Drawing.Point(400,280)
+$MyGroupBox2.size = New-Object System.Drawing.Size(350,70)
 $MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -446,29 +471,10 @@ $MyGroupBox2.Controls.AddRange(@($Radiobutton3,$RadioButton4))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox2)
 
-$MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox4.Location = New-Object System.Drawing.Point(400,290)
-$MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox4.text = $(Get-Translate("AUShipMOD を同梱しますか？"))
-
-# グループの中のラジオボタンを作る
-$RadioButton8 = New-Object System.Windows.Forms.RadioButton
-$RadioButton8.Location = New-Object System.Drawing.Point(20,30)
-$RadioButton8.size = New-Object System.Drawing.Size(150,30)
-$RadioButton8.Checked = $True
-$RadioButton8.Text = $(Get-Translate("同梱する"))
-
-$RadioButton9 = New-Object System.Windows.Forms.RadioButton
-$RadioButton9.Location = New-Object System.Drawing.Point(180,30)
-$RadioButton9.size = New-Object System.Drawing.Size(150,30)
-$RadioButton9.Text = $(Get-Translate("同梱しない"))
-
-# グループにラジオボタンを入れる
-$MyGroupBox4.Controls.AddRange(@($Radiobutton8,$RadioButton9))
 # フォームに各アイテムを入れる
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
-$MyGroupBox24.Location = New-Object System.Drawing.Point(400,340)
-$MyGroupBox24.size = New-Object System.Drawing.Size(350,90)
+$MyGroupBox24.Location = New-Object System.Drawing.Point(400,360)
+$MyGroupBox24.size = New-Object System.Drawing.Size(350,70)
 $MyGroupBox24.text = $(Get-Translate("Submerged を同梱しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -599,6 +605,8 @@ $checkt = $true
 $releasepage =""
 $ausmod = $false
 $ovwrite = $false
+$amver = ""
+$prebool = $false
 
 $Combo_SelectedIndexChanged= {
     function Write-Log($LogString){
@@ -622,77 +630,66 @@ $Combo_SelectedIndexChanged= {
             $scid = "TOR GMH"
             $aumin = $torhmin
             Write-Log "TOR GMH Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOR MR :miru-y/TheOtherRoles-MR"{
             $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
             $scid = "TOR MR"
             $aumin = $tormmin
             Write-Log "TOR MR Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMT"
             $aumin = $torhmin
             Write-Log "TOR GMH Test Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
             $aumin = $torhmin
             Write-Log "TOR GMH Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOR :TheOtherRolesAU/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/TheOtherRolesAU/TheOtherRoles/releases"
             $scid = "TOR"
             $aumin = $tormin
             Write-Log "TOR Selected"
-            $RadioButton9.Checked = $True
             $RadioButton28.Checked = $True
         }"TOU-R :eDonnes124/Town-Of-Us-R"{
             $releasepage2 = "https://api.github.com/repos/eDonnes124/Town-Of-Us-R/releases"
             $scid = "TOU-R"
             $aumin = $tourmin
             Write-Log "TOU-R Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
             $aumin = $ermin
             Write-Log "ER Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"ER+ES :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER+ES"
             $aumin = $esmin
             Write-Log "ER+ES Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"NOS :Dolly1016/Nebula"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOS"
             $aumin = $nosmin
             Write-Log "NOS Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"SNR :ykundesu/SuperNewRoles"{
             $releasepage2 = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
             $scid = "SNR"
             $aumin = $snrmin
             Write-Log "SNR Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"TOH :tukasa0001/TownOfHost"{
             $releasepage2 = "https://api.github.com/repos/tukasa0001/TownOfHost/releases"
             $scid = "TOH"
             $aumin = $tohmin
             Write-Log "TOH Selected"
-            $RadioButton9.Checked = $True
             $RadioButton29.Checked = $True
         }"Tool Install Only"{
             $tio = $false
@@ -892,6 +889,15 @@ $Combo_SelectedIndexChanged= {
         }
     }
     $script:tio = $tio
+    #version detect
+    $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
+    $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
+    $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
+    Write-Log $tt3
+    $script:amver = $tt3[1].Value
+    write-log $script:amver
+    $RadioButton114.Text = $(Get-Translate("$script:amver"))
+    $RadioButton115.Text = $(Get-Translate("$script:prever"))        
 }
 
 $sttime = Get-Date
@@ -915,6 +921,42 @@ if ($result -eq "OK"){
 }else{
     exit
 }
+
+$prefpth = ""
+if($RadioButton115.Checked){
+    #ファイル一覧
+    $items = Get-ChildItem $aupathb -File
+    $nbool = $false
+    foreach ($item in $items) {
+        if(($item.Name).IndexOf("$prever") -gt 0){
+            if(($item.Name).IndexOf(".zip") -gt 0){
+                $prefpth = $item.Name 
+                Write-Log $prefpth
+                $nbool = $true
+            }
+        }
+    }
+    #chk pth
+    if($nbool){
+        if(Test-Path "$aupathb\$prefpth"){
+            $prebool = $true
+            Write-Log "本体バージョン v$prever が選択されています"
+        }else{
+            $prebool = $false    
+            Write-Log "本体バージョン v$amver が選択されています"
+        }    
+    }else{
+        $prebool = $false    
+        Write-Log "本体バージョン v$amver が選択されています"
+    }
+}elseif($RadioButton114.Checked){
+    $prebool = $false
+    Write-Log "本体バージョン v$amver が選択されています"
+}else{
+    Write-Log "Critical:AU ver chk"
+    exit
+}
+
 Write-Log "$mod が選択されました"
 Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
@@ -1426,8 +1468,17 @@ if($tio){
             Write-Log "既存のフォルダを中身を含めて削除します"
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
-            Copy-Item $aupatho -destination $aupathm -recurse
-            Write-Log "$aupatho を $aupathm にコピーしました"           
+            if($prebool){
+                Expand-Archive -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
+                robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "$aupathm\depot_945361" -recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force    
+            }else{
+                Copy-Item $aupatho -destination $aupathm -recurse
+                Write-Log "$aupatho を $aupathm にコピーしました"               
+            }
         }else{
             # コピー先のパスにファイルやフォルダが存在する場合は処理を中止
             Write-Log "$aupathm には既にファイル又はフォルダが存在します"
@@ -1443,9 +1494,18 @@ if($tio){
         $Bar.Value = "48"
     }else{
         # フォルダを中身を含めてコピーする
-        Copy-Item $aupatho -destination $aupathm -recurse
-        Write-Log "$aupatho を $aupathm にコピー完了"
-    } 
+        if($prebool){
+            Expand-Archive -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
+            robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\depot_945361" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }else{
+            Copy-Item $aupatho -destination $aupathm -recurse
+            Write-Log "$aupatho を $aupathm にコピーしました"               
+        }
+} 
 
     #Backup System
     if(Test-Path $aupathb){
@@ -1453,14 +1513,6 @@ if($tio){
         New-Item $aupathb -ItemType Directory
     }
     Write-Log "Backup Feature Start"
-
-    #version detect
-    $tt = (Format-Hex -Path "$aupatho\Among Us_Data\globalgamemanagers").Bytes
-    $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
-    $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
-    Write-Log $tt3
-    $amver = $tt3[1].Value
-    write-log $amver
 
     #Current Ver check
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
