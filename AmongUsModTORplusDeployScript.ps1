@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.2"
+$version = "1.5.3"
 #
 #################################################################################################
 ### minimum version for v2022.08.24
@@ -18,6 +18,12 @@ $tohmin = "v2.2.2"
 
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+#Frequent changing parameter
+#$prever = "2022.8.24"
+$prever = "2022.7.12"
+#0713target id 6859044017310390774 
+#0824target id 	6036212755012520093
+$prevtargetid = "6859044017310390774"
 
 #################################################################################################
 # 権限チェック
@@ -1456,6 +1462,7 @@ if($tio){
     $amver = $tt3[1].Value
     write-log $amver
 
+    #Current Ver check
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
     $backhashtxt = "$aupathb\backuphash.txt"
     $backuptxt = "$aupathb\backupfn.txt"
@@ -1501,6 +1508,72 @@ if($tio){
         Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
         Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
     }
+
+    #Previous ver check
+    $items = Get-ChildItem $aupathb -File
+    $prevchk = $true
+    foreach ($item in $items) {        
+        if(($item.Name).IndexOf("$prever") -gt 0 ){
+            $prevchk = $false
+        }
+    }
+    if($prevchk){
+        if($platform = "steam"){
+            $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
+            if (Test-Path $steampth){
+                Write-Log "Steam Application is found on $steampth"
+            }else{
+                Write-Log "Steam Application is not on default location"
+                Param(
+                    [Parameter()]
+                    [String] $FilePath
+                )     
+                # $FilePath が設定されていない、又はファイルが存在しない
+                if([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
+                    [void][System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")    
+                    $dialog = New-Object System.Windows.Forms.OpenFileDialog
+                    $dialog.Filter = $(Get-Translate("EXE ファイル(*.EXE)|*.EXE"))
+                    $dialog.InitialDirectory = "C:\"
+                    $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
+                
+                    # キャンセルを押された時は処理を止める
+                    if($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG){
+                        exit 1
+                    }
+                
+                    # 選択したファイルパスを $FilePath に設定
+                    $steampth = $dialog.FileName
+                }
+            }
+
+            #Among Us app id 945360
+            #main depot id 945361
+            Start-Process $steampth -argument "+download_depot 945360 945361 $prevtargetid" 
+            Start-Sleep -Seconds 2
+
+            $stfolder = Split-Path $steampth -Parent
+            $bupfolder = Join-Path $stfolder "steamapps\content\app_945360\depot_945361"
+            $delfoldser = Join-Path $stfolder "steamapps\content\app_945360"
+            $counter = 0;
+            while(!(Test-Path $bupfolder)){
+                Start-Sleep -Seconds 2
+            }
+            Write-Log "Steam.exe now downloading previous release....please wait."
+            while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
+                Start-sleep -Seconds 15
+                if($counter -lt 300){
+                    $counter++
+                    Write-Log "Steam.exe now downloading previous release....please wait."
+                }else{
+                    break
+                }
+            }
+            Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
+            Start-Sleep -Seconds 2
+            Remove-Item -Path $delfoldser -Recurse -Force
+        }
+    }
+
     Write-Log "Backup Feature Ends"
 
     $Bar.Value = "53"
