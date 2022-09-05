@@ -26,16 +26,6 @@ $prever = "2022.7.12"
 $prevtargetid = "6859044017310390774"
 
 #################################################################################################
-# 権限チェック
-#################################################################################################
-if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
-}else{
-    write-host "このユーザアカウントでは本Scriptは動作しません。"
-    pause
-    exit
-}
-
-#################################################################################################
 # Translate Function
 #################################################################################################
 $Cult  = Get-Culture
@@ -49,6 +39,16 @@ function Get-Translate($transtext){
     }else{
         return $transtext
     }
+}
+
+#################################################################################################
+# 権限チェック
+#################################################################################################
+if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
+}else{
+    write-host $(Get-Translate("このユーザアカウントでは本Scriptは動作しません。"))
+    pause
+    exit
 }
 
 #################################################################################################
@@ -106,29 +106,6 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     exit
 }
-
-<#
-$v5run = $false
-if($PSVersionTable.PSVersion.major -eq 5){
-    if(test-path "$env:ProgramFiles\PowerShell\7"){
-        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
-    }else{
-        $v5run = $true
-        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
-            exit
-        }
-    }
-}elseif($PSVersionTable.PSVersion.major -gt 5){
-    $v5run = $true
-}else{
-    write-host $(Get-Translate("ERROR - PowerShell Version : not supported."))
-}
-
-if(!($v5run)){
-    exit
-}
-#>
 
 #################################################################################################
 # Log用Function
@@ -398,7 +375,7 @@ $form.Controls.Add($MyGroupBox3)
 $MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox4.Location = New-Object System.Drawing.Point(400,120)
 $MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
-$MyGroupBox4.text = $(Get-Translate("本体Version選択"))
+$MyGroupBox4.text = $(Get-Translate("本体Versionを選択してください"))
 
 # グループの中のラジオボタンを作る
 $RadioButton114 = New-Object System.Windows.Forms.RadioButton
@@ -603,7 +580,6 @@ $aupathm=""
 $aupathb=""
 $checkt = $true
 $releasepage =""
-$ausmod = $false
 $ovwrite = $false
 $amver = ""
 $prebool = $false
@@ -743,7 +719,7 @@ $Combo_SelectedIndexChanged= {
         if(Test-path "$au_path_steam_org\Among Us.exe"){
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
-                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+                Write-Log $(Get-Translate("オリジナルのAmong Usではないフォルダが指定されている可能性があります"))
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
@@ -756,14 +732,14 @@ $Combo_SelectedIndexChanged= {
                     $fichk = Test-Path "$aupatho\Among Us.exe"
                     while ($fichk){
                         Start-Sleep -Seconds 10
-                        Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
+                        Write-Log $(Get-Translate("再インストールが完了したことを確認してから以下の動作を実行してください"))
                         Pause
                         $fichk = Test-Path "$aupatho\Among Us.exe"
                     }
                     Remove-Item $fpth2 -Force
                 }else{
-                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
-                    Write-Log "処理を中止します"
+                    Write-Log $(Get-Translate("フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"))
+                    Write-Log $(Get-Translate("処理を中止します"))
                     pause
                     exit
                 }     
@@ -776,7 +752,7 @@ $Combo_SelectedIndexChanged= {
         }elseif(Test-path "$au_path_epic_org\Among Us.exe"){
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_epic_org\BepInEx"){
-                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+                Write-Log $(Get-Translate("オリジナルのAmong Usではないフォルダが指定されている可能性があります"))
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
@@ -787,8 +763,8 @@ $Combo_SelectedIndexChanged= {
                     }
                     Remove-Item $fpth2 -Force
                 }else{
-                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
-                    Write-Log "処理を中止します"
+                    Write-Log $(Get-Translate("フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"))
+                    Write-Log $(Get-Translate("処理を中止します"))
                     pause
                     exit
                 }     
@@ -809,8 +785,8 @@ $Combo_SelectedIndexChanged= {
                 Remove-Item $fileName
             }else{
                 #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
-                Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
-                Write-Log "フォルダをユーザーに選択するようダイアログを出します"      
+                Write-Log $(Get-Translate("デフォルトフォルダにAmongUsを見つけることに失敗しました"))
+                Write-Log $(Get-Translate("フォルダをユーザーに選択するようダイアログを出します"))
                 [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Mod Auto Deploy Tool")
                 $spath = Get-FolderPathG
             }
@@ -820,7 +796,7 @@ $Combo_SelectedIndexChanged= {
                 Exit
             }
             if(test-path "$spath\Among Us.exe"){
-                Write-Log "$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"
+                Write-Log $(Get-Translate("$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"))
                 if(($script:platform -ne "Steam") -and ($script:platform -ne "Epic")){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("PlatformはSteamですか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                         $script:platform = "Steam"
@@ -829,15 +805,15 @@ $Combo_SelectedIndexChanged= {
                     }
                 }
             }else{
-                Write-Log "$spath にAmongUsのインストールが確認できませんでした"
+                Write-Log $(Get-Translate("$spath にAmongUsのインストールが確認できませんでした"))
                 pause
                 Exit
             }
             if(test-path $spath){
                 if(Test-path "$spath\BepInEx"){
-                    Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                    Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
-                    Write-Log "処理を中止します"      
+                    Write-Log $(Get-Translate("オリジナルのAmong Usではないフォルダが指定されている可能性があります"))
+                    Write-Log $(Get-Translate("フォルダ指定が正しい場合は、クリーンインストールを試してみてください"))
+                    Write-Log $(Get-Translate("処理を中止します"))
                     pause
                     exit
                 }
@@ -848,7 +824,7 @@ $Combo_SelectedIndexChanged= {
                 Write-Log $str_path
                 $aupathm = "$str_path\Among Us $scid Mod"
                 $aupathb = "$str_path\Among Us Backup"
-                Write-Log "Mod入りAmongUsは以下のフォルダにDeployされます"
+                Write-Log $(Get-Translate("Mod入りAmongUsは以下のフォルダにDeployされます"))
                 Write-Log $aupathm
                 Write-Log $aupathb
                 ### Auto Save
@@ -859,8 +835,8 @@ $Combo_SelectedIndexChanged= {
                 Write-Log "Amongus ModDeployScript Autosave function"
 
             }else{
-                Write-Log "選択されたフォルダにAmongUsを見つけることに失敗しました"      
-                Write-Log "処理を中止します"      
+                Write-Log $(Get-Translate("選択されたフォルダにAmongUsを見つけることに失敗しました"))
+                Write-Log $(Get-Translate("処理を中止します"))
                 pause
                 exit
             }
@@ -940,32 +916,27 @@ if($RadioButton115.Checked){
     if($nbool){
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
-            Write-Log "本体バージョン v$prever が選択されています"
+            Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
         }else{
             $prebool = $false    
-            Write-Log "本体バージョン v$amver が選択されています"
+            Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
         }    
     }else{
         $prebool = $false    
-        Write-Log "本体バージョン v$amver が選択されています"
+        Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
     }
 }elseif($RadioButton114.Checked){
     $prebool = $false
-    Write-Log "本体バージョン v$amver が選択されています"
+    Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
 }else{
-    Write-Log "Critical:AU ver chk"
+    Write-Log $(Get-Translate("Critical:AU ver chk"))
     exit
 }
 
-Write-Log "$mod が選択されました"
-Write-Log "Version $torpv が選択されました"
+Write-Log $(Get-Translate("$mod が選択されました"))
+Write-Log $(Get-Translate("Version $torpv が選択されました"))
 Write-Log $releasepage
 
-if($RadioButton8.Checked){
-    $ausmod = $true
-}else{
-    $ausmod = $false
-}
 if($RadioButton28.Checked){
     $submerged = $true
 }else{
@@ -1009,135 +980,135 @@ if($tio){
                 if($torpv -lt $torhmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "TheOtherRole-GM-Haoming Version $torv が選択されました"
+                Write-Log $(Get-Translate("TheOtherRole-GM-Haoming Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "TOR GMT"){
                 if($torpv -lt $torhmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "TheOtherRole-GM-Haoming Test Version $torv が選択されました"
+                Write-Log $(Get-Translate("TheOtherRole-GM-Haoming Test Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "TOR"){
                 if($torpv -lt $tormin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "TheOtherRole Version $torv が選択されました"
+                Write-Log $(Get-Translate("TheOtherRole Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "TOU-R"){
                 if($torpv -lt $tourmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "Town of Us Reactivated Version $torv が選択されました"
+                Write-Log $(Get-Translate("Town of Us Reactivated Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "ER"){
                 if($torpv -lt $ermin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "Extreme Roles Version $torv が選択されました"
+                Write-Log $(Get-Translate("Extreme Roles Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "ER+ES"){
                 if($torpv -lt $esmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "Extreme Roles Version $torv with Extreme Skins が選択されました"
+                Write-Log $(Get-Translate("Extreme Roles Version $torv with Extreme Skins が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "NOS"){
                 if($torpv -lt $nosmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "Nebula on the Ship Version $torv が選択されました"
+                Write-Log $(Get-Translate("Nebula on the Ship Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "TOH"){
                 if($torpv -lt $tohmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "Town of Host Version $torv が選択されました"
+                Write-Log $(Get-Translate("Town of Host Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "SNR"){
                 if($torpv -lt $snrmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "Super New Roles Version $torv が選択されました"
+                Write-Log $(Get-Translate("Super New Roles Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "TOR MR"){
                 if($torpv -lt $tormmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
-                        Write-Log "処理を中止します"
+                        Write-Log $(Get-Translate("処理を中止します"))
                         $Form2.Close()
                         pause
                         exit
                     }  
                 }
                 $torv = $torpv
-                Write-Log "The Other Roles: MR Edition Version $torv が選択されました"
+                Write-Log $(Get-Translate("The Other Roles: MR Edition Version $torv が選択されました"))
                 $checkt = $false
             }else{
-                Write-Log "Critical Error 2"
-                Write-Log "処理を中止します"
+                Write-Log $(Get-Translate("Critical Error 2"))
+                Write-Log $(Get-Translate("処理を中止します"))
                 $Form2.Close()
                 pause
                 exit
@@ -1147,8 +1118,8 @@ if($tio){
     $Bar.Value = "17"
 
     if($checkt){
-        Write-Log "指定されたバージョンは見つかりませんでした"
-        Write-Log "処理を中止します"
+        Write-Log $(Get-Translate("指定されたバージョンは見つかりませんでした"))
+        Write-Log $(Get-Translate("処理を中止します"))
         $Form2.Close()
         pause
         exit
@@ -1195,7 +1166,7 @@ if($tio){
             $torv = "$($vermet[0]).$($vermet[1]).$v3"
             if($checkzip){
                 if($checkdll){
-                    Write-Output "ERROR:something wrong."
+                    Write-Output $(Get-Translate("ERROR:something wrong."))
                     exit
                 }else{
                     for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
@@ -1249,7 +1220,7 @@ if($tio){
             $torv = "$($vermet[0]).$($vermet[1]).$v3"
             if($checkzip){
                 if($checkdll){
-                    Write-Output "ERROR:something wrong."
+                    Write-Output $(Get-Translate("ERROR:something wrong."))
                     exit
                 }else{
                     for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
@@ -1303,7 +1274,7 @@ if($tio){
             $langdata = $($langtail|Measure-Object -Maximum).Maximum            
         }
     }else{
-        Write-Log "Critical Error 2"
+        Write-Log $(Get-Translate("Critical Error 2"))
         $Form2.Close()
         pause
         exit
@@ -1322,7 +1293,7 @@ if($tio){
         $shortcut = $true
         $debugc = $true
     }else{
-        Write-Log "Critical Error: Shortcut"
+        Write-Log $(Get-Translate("Critical Error: Shortcut"))
     }
     $Bar.Value = "27"
     ###作成したModのExeへのショートカットをDesktopに配置する
@@ -1334,7 +1305,7 @@ if($tio){
     }elseif($RadioButton4.Checked){
         $startexewhendone = $false
     }else{
-        Write-Log "Critical Error: StartCheck"
+        Write-Log $(Get-Translate("Critical Error: StartCheck"))
     }
 
     $Bar.Value = "32"
@@ -1363,7 +1334,7 @@ if($tio){
             $ovwrite = $false
             $clean = $true
         }else{
-            Write-Log "Critical Error: Retry"
+            Write-Log $(Get-Translate("Critical Error: Retry"))
         }
         $Bar.Value = "36"
 
@@ -1411,18 +1382,18 @@ if($tio){
         if($clean -eq $true){
             if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
                 $rn = "steam"
-                Write-Log "Assume $rn is used."
+                Write-Log $(Get-Translate("Assume $rn is used."))
                 $stm = $true
             }
 
             if (Test-Path "C:\Program Files (x86)\Epic Games"){
                 $rn = "epic"
-                Write-Log "Assume $rn is used."
+                Write-Log $(Get-Translate("Assume $rn is used."))
                 $epc = $true
             }
             
             if($stm -and $epc){
-                Write-Log "Both Steam and Epic is detected. ASk User."
+                Write-Log $(Get-Translate("Both Steam and Epic is detected. Ask User."))
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Clean Install Tool",4) -eq "Yes"){
                     $rn = "steam"
                 }else{
@@ -1441,7 +1412,7 @@ if($tio){
                 Start-Sleep -Seconds 10
                 while (!(test-path "$aupatho\Among Us.exe")){
                     Start-Sleep -Seconds 10
-                    Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
+                    Write-Log $(Get-Translate("再インストールが完了したことを確認してから以下の動作を実行してください"))
                     write-log (test-path "$aupatho\Among Us.exe")
                     write-log "$aupathm\Among Us.exe"                  
                     Pause
@@ -1457,7 +1428,7 @@ if($tio){
                 }
                 Remove-Item $fpth2 -Force
             }else{
-                Write-Log "Critical Platform Selection"
+                Write-Log $(Get-Translate("Critical Platform Selection"))
                 Pause
                 Exit
             }
@@ -1465,7 +1436,7 @@ if($tio){
         }
 
         if ($retry -eq "true"){
-            Write-Log "既存のフォルダを中身を含めて削除します"
+            Write-Log $(Get-Translate("既存のフォルダを中身を含めて削除します"))
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
             if($prebool){
@@ -1477,15 +1448,15 @@ if($tio){
                 Remove-Item "C:\Temp\temp.log" -Force    
             }else{
                 Copy-Item $aupatho -destination $aupathm -recurse
-                Write-Log "$aupatho を $aupathm にコピーしました"               
+                Write-Log $(Get-Translate("$aupatho を $aupathm にコピーしました"))
             }
         }else{
             # コピー先のパスにファイルやフォルダが存在する場合は処理を中止
-            Write-Log "$aupathm には既にファイル又はフォルダが存在します"
+            Write-Log $(Get-Translate("$aupathm には既にファイル又はフォルダが存在します"))
             if($ovwrite){
-                Write-Log "上書き処理が選択されました"
+                Write-Log $(Get-Translate("上書き処理が選択されました"))
             }else{
-                Write-Log "処理を中止しました"
+                Write-Log $(Get-Translate("処理を中止しました"))
                 $Form2.Close()
                 pause
                 Exit
@@ -1503,16 +1474,16 @@ if($tio){
             Remove-Item "C:\Temp\temp.log" -Force
         }else{
             Copy-Item $aupatho -destination $aupathm -recurse
-            Write-Log "$aupatho を $aupathm にコピーしました"               
+            Write-Log $(Get-Translate("$aupatho を $aupathm にコピーしました"))
         }
-} 
+    }    
 
     #Backup System
     if(Test-Path $aupathb){
     }else{
         New-Item $aupathb -ItemType Directory
     }
-    Write-Log "Backup Feature Start"
+    Write-Log $(Get-Translate("Backup Feature Start"))
 
     #Current Ver check
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
@@ -1540,9 +1511,9 @@ if($tio){
         }
 
         if($r -eq $e){
-            Write-Log "古い同一Backupが見つかったのでSkipします"
+            Write-Log $(Get-Translate("古い同一Backupが見つかったのでSkipします"))
         }else{
-            Write-Log "新しいBackupが見つかったので生成します"
+            Write-Log $(Get-Translate("新しいBackupが見つかったので生成します"))
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
             write-log $e
             Write-log $r
@@ -1554,7 +1525,7 @@ if($tio){
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
         }
     }else{
-        Write-Log "Backupが見つかりません。生成します。"
+        Write-Log $(Get-Translate("Backupが見つかりません。生成します。"))
         $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
         Write-Output " $thash"> $backhashtxt
         Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
@@ -1573,9 +1544,9 @@ if($tio){
         if($platform -eq "steam"){
             $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
             if (Test-Path $steampth){
-                Write-Log "Steam Application is found on $steampth"
+                Write-Log $(Get-Translate("Steam Application is found on $steampth"))
             }else{
-                Write-Log "Steam Application is not on default location"
+                Write-Log $(Get-Translate("Steam Application is not on default location"))
                 Param(
                     [Parameter()]
                     [String] $FilePath
@@ -1610,12 +1581,12 @@ if($tio){
             while(!(Test-Path $bupfolder)){
                 Start-Sleep -Seconds 2
             }
-            Write-Log "Steam.exe now downloading previous release....please wait."
+            Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
             while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
                 Start-sleep -Seconds 15
                 if($counter -lt 300){
                     $counter++
-                    Write-Log "Steam.exe now downloading previous release....please wait."
+                    Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
                 }else{
                     break
                 }
@@ -1626,37 +1597,37 @@ if($tio){
         }
     }
 
-    Write-Log "Backup Feature Ends"
+    Write-Log $(Get-Translate("Backup Feature Ends"))
 
     $Bar.Value = "53"
 
     ####
     #まずはTORをDL
-    Write-Log "Download ZIP 開始"
+    Write-Log $(Get-Translate("Download ZIP 開始"))
     Write-Log $tordlp
     #Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
     #curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
     aria2c -x5 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
 
-    Write-Log "Download ZIP 完了"
+    Write-Log $(Get-Translate("Download ZIP 完了"))
     $Bar.Value = "57"
 
     #DLしたTORを解凍
     if (test-path "$aupathm\TheOtherRoles.zip"){
-        Write-Log "ZIP DL OK"
-        Write-Log "ZIP 解凍開始"
+        Write-Log $(Get-Translate("ZIP DL OK"))
+        Write-Log $(Get-Translate("ZIP 解凍開始"))
         Expand-Archive -path $aupathm\TheOtherRoles.zip -DestinationPath $aupathm -Force
-        Write-Log "ZIP 解凍完了"
+        Write-Log $(Get-Translate("ZIP 解凍完了"))
     }else{
-        Write-Log "ZIP DL NG $tordlp "
-        Write-Log "Something Wrong."
+        Write-Log $(Get-Translate("ZIP DL NG $tordlp "))
+        Write-Log $(Get-Translate("Something Wrong."))
         exit
     }
 
     $Bar.Value = "59"
 
     if(test-path "$aupathm\BepInEx"){
-        Write-Log "ZIP 解凍OK"
+        Write-Log $(Get-Translate("ZIP 解凍OK"))
     }
     $Bar.Value = "60"
 
@@ -1697,7 +1668,7 @@ if($tio){
                 robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
                 Remove-Item "C:\Temp\ExtremeHat" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-    
+
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
@@ -1716,7 +1687,7 @@ if($tio){
                 robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\MoreCosmic" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-    
+
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
@@ -1743,7 +1714,7 @@ if($tio){
                 robocopy "C:\Temp\SuperNewRoles" "$aupathm\SuperNewRoles" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\SuperNewRoles" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-    
+
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
@@ -1762,22 +1733,17 @@ if($tio){
                 robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\TheOtherHats" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-    
+
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
         }
     }
     $Bar.Value = "64"
-
-    #AUShipMOD 配置
-    if($ausmod){
-        Write-Log "AUShipMOD is depricated."
-    }
     $Bar.Value = "68"
 
     if($submerged){
-        Write-Log "Submerged配置開始"
+        Write-Log $(Get-Translate("Submerged配置開始"))
         #GithubのRelease一覧からぶっこぬいてLatestを置く
         $rel2 = "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest"
         $webs = Invoke-WebRequest $rel2 -UseBasicParsing
@@ -1793,7 +1759,7 @@ if($tio){
                 Write-Log "$($aus[$aaai])"
             }
         }
-        Write-Log "Submerged Latest DLL download done"
+        Write-Log $(Get-Translate("Submerged Latest DLL download done"))
     }
     $Bar.Value = "69"
 
@@ -1815,12 +1781,12 @@ if($tio){
         if($checkgm){
             #Mod Original DLL削除
             Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
-            Write-Log 'Delete Original Mod DLL'
+            Write-Log $(Get-Translate('Delete Original Mod DLL'))
             Write-Log $torgmdll
             #TOR+ DLLをDLして配置
-            Write-Log "Download $scid DLL 開始"
+            Write-Log $(Get-Translate("Download $scid DLL 開始"))
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
-            Write-Log "Download $scid DLL 完了"
+            Write-Log $(Get-Translate("Download $scid DLL 完了"))
         }
     }elseif($scid -eq "TOR GMT"){
         if(test-path "$aupathm\TheOtherRoles-GM-Haoming.$torv"){
@@ -1833,13 +1799,13 @@ if($tio){
         }
         #Mod Original DLL削除
         Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
-        Write-Log 'Delete Original Mod DLL'
+        Write-Log $(Get-Translate('Delete Original Mod DLL'))
         $torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1014937849184911380/TheOtherRolesGM.dll"
         Write-Log $torgmdll
         #TOR+ DLLをDLして配置
-        Write-Log "Download $scid DLL 開始"
+        Write-Log $(Get-Translate("Download $scid DLL 開始"))
         aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
-        Write-Log "Download $scid DLL 完了"
+        Write-Log $(Get-Translate("Download $scid DLL 完了"))
     }elseif($scid -eq "TOU-R"){
         if(test-path "$aupathm\ToU $torv"){
             robocopy "$aupathm\ToU $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -1915,23 +1881,23 @@ if($tio){
         if (!(Test-Path "$aupathm\Language\")) {
             New-Item "$aupathm\Language\" -Type Directory
         }
-        Write-Log "日本語 データ Download 開始"
-        Write-Log "日本語 データ $langdata"
+        Write-Log $(Get-Translate("日本語 データ Download 開始"))
+        Write-Log $(Get-Translate("日本語 データ $langdata"))
         #Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
         #curl.exe -L $langdata -o "$aupathm\Language\Japanese.dat"
         aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
-        Write-Log "日本語 データ Download 完了"
+        Write-Log $(Get-Translate("日本語 データ Download 完了"))
     }else{
     }
     $Bar.Value = "71"
 
     #解凍チェック
     if (test-path "$aupathm\BepInEx\plugins"){
-        Write-Log ("ZIP 解凍OK");
+        Write-Log $(Get-Translate("ZIP 解凍OK"))
         Remove-item -Path "$aupathm\TheOtherRoles.zip"
-        Write-Log ("DLしたZIPを削除");
+        Write-Log $(Get-Translate("DLしたZIPを削除"))
     }else{
-      Write-Log ("ZIP 解凍NG");
+        Write-Log $(Get-Translate("ZIP 解凍NG"))
     }
     $Bar.Value = "77"
 
@@ -1941,7 +1907,7 @@ if($tio){
 
         if(test-path "$scpath\Among Us Mod $scid.lnk"){
             Remove-item -Path "$scpath\Among Us Mod $scid.lnk"
-            Write-Log '既存のMod用Shortcut削除'
+            Write-Log $(Get-Translate('既存のMod用Shortcut削除'))
         }
         $Bar.Value = "79"
 
@@ -2081,7 +2047,7 @@ if($tio){
                 }'
                 $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "C:\temp\amongusrun_$scid2.ps1" 
             }else{
-                Write-Log "Something Wrong. Check Path."
+                Write-Log $(Get-Translate("Something Wrong. Check Path."))
             }
             $sShortcut.TargetPath = "C:\temp\startamongusrun_$scid2.bat"
         }else{
@@ -2092,7 +2058,7 @@ if($tio){
                 $sShortcut.Arguments = "-Command legendary auth --import && legendary -y egl-sync && legendary launch Among Us"
                 $sShortcut.WorkingDirectory = $aupathb
             }else{
-                Write-Log "ERROR: Critical Shortcut"
+                Write-Log $(Get-Translate("ERROR: Critical Shortcut"))
             }                
         }
 
@@ -2107,9 +2073,9 @@ if($tio){
         $aupathb
 
         if(test-path "$scpath\Among Us Mod $scid.lnk"){
-            Write-Log "Shortcut 作成確認OK"
+            Write-Log $(Get-Translate("Shortcut 作成確認OK"))
         }else{
-            Write-Log "Shortcut 作成失敗"
+            Write-Log $(Get-Translate("Shortcut 作成失敗"))
         }
     }else{
         $here = Get-Location
@@ -2162,7 +2128,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         
                     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime -y" -Verb RunAs -Wait        
                 }else{
-                    Write-Log "AmongUsReplayInWindowの処理を中止します"
+                    Write-Log $(Get-Translate("AmongUsReplayInWindowの処理を中止します"))
                     $qureq = $false
                 }    
 
@@ -2187,7 +2153,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Set-Location -Path $md\$auriwfn
                     Invoke-Item .
                 }else{
-                    Write-Log "AmongUsReplayInWindowの処理を中止します"
+                    Write-Log $(Get-Translate("AmongUsReplayInWindowの処理を中止します"))
                 }
             }
             $Bar.Value = "84"
@@ -2228,7 +2194,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Set-Location -Path $md\$aucapfn
                     Invoke-Item .
                 }else{
-                    Write-Log "AmongUsCaptureの処理を中止します"
+                    Write-Log $(Get-Translate("AmongUsCaptureの処理を中止します"))
                 }
             }
             $Bar.Value = "85"
@@ -2340,7 +2306,7 @@ if($platform -eq "Epic"){
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
         Write-Output "945360"> "$aupathm\steam_appid.txt"
-        Write-Log "Steam AppID Patched."
+        Write-Log $(Get-Translate("Steam AppID Patched."))
     }
 }
 $Bar.Value = "97"
@@ -2349,7 +2315,7 @@ $difftime = ($fntime - $sttime).TotalSeconds
 $Bar.Value = "100"
 
 $Form2.Close()
-Write-Log "$difftime 秒で完了しました。"
+Write-Log $(Get-Translate("$difftime 秒で完了しました。"))
 
 if($tio){
     if($startexewhendone -eq $true){
@@ -2359,7 +2325,7 @@ if($tio){
             Set-Location "$aupathb"
             legendary launch Among Us
         }else{
-            Write-Log "ERROR:Critical run apps"
+            Write-Log $(Get-Translate("ERROR:Critical run apps"))
         }
     }else{
     }
@@ -2380,7 +2346,7 @@ if($debugc){
         Write-Log "-----------------------------------------------------------------"
         Write-Log "Error Check"
         Write-Log "-----------------------------------------------------------------"
-        Write-Log "After Installation:$tsp"
+        Write-Log $(Get-Translate("After Installation:$tsp"))
         #監視&自動起動
         while($checkpro){
             try{
@@ -2390,17 +2356,17 @@ if($debugc){
                 $p.WaitForExit()
             }
             catch{
-                Write-Output "No Process"
+                Write-Output $(Get-Translate("No Process"))
             }
             finally{
                 $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
                 Remove-Item "$npl\gmhtechsupport.ps1" -Force
                 $erchk = Get-content "$tsp" -Raw
-                Write-Log "After Game Exit:$tsp"
+                Write-Log $(Get-Translate("After Game Exit:$tsp"))
                 if($erchk.LastIndexOf("error") -gt 0){
-                    Write-Log "Done."
+                    Write-Log $(Get-Translate("Done."))
                 }else{
-                    Write-Log "No Error founds."
+                    Write-Log $(Get-Translate("No Error founds."))
                 }
                 $checkpro = $false
             }
