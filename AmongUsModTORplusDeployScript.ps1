@@ -538,7 +538,7 @@ $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
 [void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
-[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
+#[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
