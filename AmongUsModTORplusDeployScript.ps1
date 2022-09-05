@@ -1518,7 +1518,7 @@ if($tio){
         }
     }
     if($prevchk){
-        if($platform = "steam"){
+        if($platform -eq "steam"){
             $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
             if (Test-Path $steampth){
                 Write-Log "Steam Application is found on $steampth"
