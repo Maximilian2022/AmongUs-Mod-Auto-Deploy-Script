@@ -1441,11 +1441,20 @@ if($tio){
             # フォルダを中身を含めてコピーする
             if($prebool){
                 Expand-Archive -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
-                robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\depot_945361" -recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force    
+                $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
+                if(Test-Path "$aupathm\depot_945361"){
+                    robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                    Remove-Item "$aupathm\depot_945361" -recurse
+                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                    Write-Log "`r`n $content"
+                    Remove-Item "C:\Temp\temp.log" -Force        
+                }elseif(Test-Path "$aupathm\$filename"){
+                    robocopy "$aupathm\$filename" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                    Remove-Item "$aupathm\$filename" -recurse
+                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                    Write-Log "`r`n $content"
+                    Remove-Item "C:\Temp\temp.log" -Force        
+                }
             }else{
                 Copy-Item $aupatho -destination $aupathm -recurse
                 Write-Log $(Get-Translate("$aupatho を $aupathm にコピーしました"))
@@ -1467,11 +1476,20 @@ if($tio){
         # フォルダを中身を含めてコピーする
         if($prebool){
             Expand-Archive -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
-            robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "$aupathm\depot_945361" -recurse
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
+            $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
+            if(Test-Path "$aupathm\depot_945361"){
+                robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "$aupathm\depot_945361" -recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force        
+            }elseif(Test-Path "$aupathm\$filename"){
+                robocopy "$aupathm\$filename" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "$aupathm\$filename" -recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force        
+            }
         }else{
             Copy-Item $aupatho -destination $aupathm -recurse
             Write-Log $(Get-Translate("$aupatho を $aupathm にコピーしました"))
