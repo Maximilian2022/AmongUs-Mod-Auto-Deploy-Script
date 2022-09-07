@@ -1,4 +1,4 @@
-﻿#################################################################################################
+﻿################################################################################################
 #
 # Among Us Mod Auto Deploy Script
 #
@@ -24,6 +24,10 @@ $prever = "2022.7.12"
 #0713target id 6859044017310390774 
 #0824target id 	6036212755012520093
 $prevtargetid = "6859044017310390774"
+
+$gmhbool = $true
+#Testdll: v2022.9.7.0
+$torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1017001241349468170/TheOtherRolesGM.dll"
 
 #################################################################################################
 # Translate Function
@@ -516,7 +520,9 @@ $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
 [void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
-#[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
+if($gmhbool){
+    [void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
+}
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
@@ -1831,7 +1837,6 @@ if($tio){
         #Mod Original DLL削除
         Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
         Write-Log $(Get-Translate('Delete Original Mod DLL'))
-        $torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1014937849184911380/TheOtherRolesGM.dll"
         Write-Log $torgmdll
         #TOR+ DLLをDLして配置
         Write-Log $(Get-Translate("Download $scid DLL 開始"))
