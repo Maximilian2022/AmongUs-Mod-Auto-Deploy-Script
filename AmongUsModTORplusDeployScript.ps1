@@ -25,7 +25,7 @@ $prever = "2022.7.12"
 #0824target id 	6036212755012520093
 $prevtargetid = "6859044017310390774"
 
-$gmhbool = $true
+$gmhbool = $false
 #Testdll: v2022.9.7.0
 $torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1017001241349468170/TheOtherRolesGM.dll"
 
