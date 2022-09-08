@@ -214,6 +214,129 @@ function MakeEntry
         }
     }
 }
+#func backup
+function BackUpAU{
+    #Backup System
+    if(Test-Path $aupathb){
+    }else{
+        New-Item $aupathb -ItemType Directory
+    }
+    Write-Log $(Get-Translate("Backup Feature Start"))
+
+    #Current Ver check
+    $datest = Get-Date -Format "yyyyMMdd-hhmmss"
+    $backhashtxt = "$aupathb\backuphash.txt"
+    $backuptxt = "$aupathb\backupfn.txt"
+    if(test-path "$backuptxt"){
+        $f = (Get-Content $backuptxt) -as [string[]]
+        $filen = $f[0]
+        Write-Log $filen
+        $t = ""
+        $r = ""
+        $e = ""
+        
+        $t = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+        foreach($l in $t){
+            $r += " $l"
+        }
+        $e = (Get-Content $backhashtxt) -as [string[]]
+
+        Write-Log $(Get-Content $backuptxt)
+        Write-Log $(Get-Content $backuptxt).IndexOf($amver)
+        
+        if($(Get-Content $backuptxt).IndexOf($amver) -lt 0){
+            $e = "retake"
+        }
+
+        if($r -eq $e){
+            Write-Log $(Get-Translate("古い同一Backupが見つかったのでSkipします"))
+        }else{
+            Write-Log $(Get-Translate("新しいBackupが見つかったので生成します"))
+            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
+            write-log $e
+            Write-log $r
+            Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
+            Remove-Item -Path $backhashtxt -Force
+            Remove-Item -Path $backuptxt -Force
+            $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+            Write-Output " $thash"> $backhashtxt
+            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
+        }
+    }else{
+        Write-Log $(Get-Translate("Backupが見つかりません。生成します。"))
+        $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
+        Write-Output " $thash"> $backhashtxt
+        Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
+        Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
+    }
+
+    #Previous ver check
+    $items = Get-ChildItem $aupathb -File
+    $prevchk = $true
+    foreach ($item in $items) {        
+        if(($item.Name).IndexOf("$prever") -gt 0 ){
+            $prevchk = $false
+        }
+    }
+    if($prevchk){
+        if($platform -eq "steam"){
+            $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
+            if (Test-Path $steampth){
+                Write-Log $(Get-Translate("Steam Application is found on $steampth"))
+            }else{
+                Write-Log $(Get-Translate("Steam Application is not on default location"))
+                Param(
+                    [Parameter()]
+                    [String] $FilePath
+                )     
+                # $FilePath が設定されていない、又はファイルが存在しない
+                if([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
+                    [void][System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")    
+                    $dialog = New-Object System.Windows.Forms.OpenFileDialog
+                    $dialog.Filter = $(Get-Translate("EXE ファイル(*.EXE)|*.EXE"))
+                    $dialog.InitialDirectory = "C:\"
+                    $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
+                
+                    # キャンセルを押された時は処理を止める
+                    if($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG){
+                        exit 1
+                    }
+                
+                    # 選択したファイルパスを $FilePath に設定
+                    $steampth = $dialog.FileName
+                }
+            }
+
+            #Among Us app id 945360
+            #main depot id 945361
+            Start-Process $steampth -argument "+download_depot 945360 945361 $prevtargetid" 
+            Start-Sleep -Seconds 2
+
+            $stfolder = Split-Path $steampth -Parent
+            $bupfolder = Join-Path $stfolder "steamapps\content\app_945360\depot_945361"
+            $delfoldser = Join-Path $stfolder "steamapps\content\app_945360"
+            $counter = 0;
+            while(!(Test-Path $bupfolder)){
+                Start-Sleep -Seconds 2
+            }
+            Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
+            while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
+                Start-sleep -Seconds 15
+                if($counter -lt 300){
+                    $counter++
+                    Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
+                }else{
+                    break
+                }
+            }
+            Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
+            Start-Sleep -Seconds 2
+            Remove-Item -Path $delfoldser -Recurse -Force
+        }
+    }
+
+    Write-Log $(Get-Translate("Backup Feature Ends"))
+}
 
 # パイプラインからのファイルのハッシュ情報を取得する.
 #https://gist.github.com/seraphy/4674696
@@ -921,6 +1044,7 @@ if($RadioButton115.Checked){
     }
     #chk pth
     if($nbool){
+        BackUpAU
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
             Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
@@ -1515,126 +1639,8 @@ if($tio){
         }
     }    
 
-    #Backup System
-    if(Test-Path $aupathb){
-    }else{
-        New-Item $aupathb -ItemType Directory
-    }
-    Write-Log $(Get-Translate("Backup Feature Start"))
-
-    #Current Ver check
-    $datest = Get-Date -Format "yyyyMMdd-hhmmss"
-    $backhashtxt = "$aupathb\backuphash.txt"
-    $backuptxt = "$aupathb\backupfn.txt"
-    if(test-path "$backuptxt"){
-        $f = (Get-Content $backuptxt) -as [string[]]
-        $filen = $f[0]
-        Write-Log $filen
-        $t = ""
-        $r = ""
-        $e = ""
-        
-        $t = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-        foreach($l in $t){
-            $r += " $l"
-        }
-        $e = (Get-Content $backhashtxt) -as [string[]]
-
-        Write-Log $(Get-Content $backuptxt)
-        Write-Log $(Get-Content $backuptxt).IndexOf($amver)
-        
-        if($(Get-Content $backuptxt).IndexOf($amver) -lt 0){
-            $e = "retake"
-        }
-
-        if($r -eq $e){
-            Write-Log $(Get-Translate("古い同一Backupが見つかったのでSkipします"))
-        }else{
-            Write-Log $(Get-Translate("新しいBackupが見つかったので生成します"))
-            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
-            write-log $e
-            Write-log $r
-            Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
-            Remove-Item -Path $backhashtxt -Force
-            Remove-Item -Path $backuptxt -Force
-            $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-            Write-Output " $thash"> $backhashtxt
-            Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
-        }
-    }else{
-        Write-Log $(Get-Translate("Backupが見つかりません。生成します。"))
-        $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-        Write-Output " $thash"> $backhashtxt
-        Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
-        Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
-    }
-
-    #Previous ver check
-    $items = Get-ChildItem $aupathb -File
-    $prevchk = $true
-    foreach ($item in $items) {        
-        if(($item.Name).IndexOf("$prever") -gt 0 ){
-            $prevchk = $false
-        }
-    }
-    if($prevchk){
-        if($platform -eq "steam"){
-            $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
-            if (Test-Path $steampth){
-                Write-Log $(Get-Translate("Steam Application is found on $steampth"))
-            }else{
-                Write-Log $(Get-Translate("Steam Application is not on default location"))
-                Param(
-                    [Parameter()]
-                    [String] $FilePath
-                )     
-                # $FilePath が設定されていない、又はファイルが存在しない
-                if([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
-                    [void][System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")    
-                    $dialog = New-Object System.Windows.Forms.OpenFileDialog
-                    $dialog.Filter = $(Get-Translate("EXE ファイル(*.EXE)|*.EXE"))
-                    $dialog.InitialDirectory = "C:\"
-                    $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
-                
-                    # キャンセルを押された時は処理を止める
-                    if($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG){
-                        exit 1
-                    }
-                
-                    # 選択したファイルパスを $FilePath に設定
-                    $steampth = $dialog.FileName
-                }
-            }
-
-            #Among Us app id 945360
-            #main depot id 945361
-            Start-Process $steampth -argument "+download_depot 945360 945361 $prevtargetid" 
-            Start-Sleep -Seconds 2
-
-            $stfolder = Split-Path $steampth -Parent
-            $bupfolder = Join-Path $stfolder "steamapps\content\app_945360\depot_945361"
-            $delfoldser = Join-Path $stfolder "steamapps\content\app_945360"
-            $counter = 0;
-            while(!(Test-Path $bupfolder)){
-                Start-Sleep -Seconds 2
-            }
-            Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
-            while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
-                Start-sleep -Seconds 15
-                if($counter -lt 300){
-                    $counter++
-                    Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
-                }else{
-                    break
-                }
-            }
-            Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
-            Start-Sleep -Seconds 2
-            Remove-Item -Path $delfoldser -Recurse -Force
-        }
-    }
-
-    Write-Log $(Get-Translate("Backup Feature Ends"))
+    #Backup!
+    BackUpAU
 
     $Bar.Value = "53"
 
