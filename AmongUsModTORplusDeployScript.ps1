@@ -1055,11 +1055,11 @@ if($RadioButton114.Checked){
             Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
         }else{
             $prebool = $false    
-            Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
+            Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
         }    
     }else{
         $prebool = $false    
-        Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
+        Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
     }
 }else{
     Write-Log $(Get-Translate("Critical:AU ver chk"))
