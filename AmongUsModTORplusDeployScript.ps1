@@ -1031,8 +1031,12 @@ if ($result -eq "OK"){
 }
 
 $prefpth = ""
-if($RadioButton115.Checked){
+if($RadioButton114.Checked){
+    $prebool = $false
+    Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
+}elseif($RadioButton115.Checked){
     #ファイル一覧
+    BackUpAU
     $items = Get-ChildItem $aupathb -File
     $nbool = $false
     foreach ($item in $items) {
@@ -1046,7 +1050,6 @@ if($RadioButton115.Checked){
     }
     #chk pth
     if($nbool){
-        BackUpAU
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
             Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
@@ -1058,9 +1061,6 @@ if($RadioButton115.Checked){
         $prebool = $false    
         Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
     }
-}elseif($RadioButton114.Checked){
-    $prebool = $false
-    Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
 }else{
     Write-Log $(Get-Translate("Critical:AU ver chk"))
     exit
