@@ -1641,9 +1641,6 @@ if($tio){
         }
     }    
 
-    #Backup!
-    BackUpAU
-
     $Bar.Value = "53"
 
     ####
@@ -2356,6 +2353,12 @@ if($platform -eq "Epic"){
 $Bar.Value = "97"
 $fntime = Get-Date
 $difftime = ($fntime - $sttime).TotalSeconds
+
+$Bar.Value = "98"
+
+#Backup!
+BackUpAU
+
 $Bar.Value = "100"
 
 $Form2.Close()
