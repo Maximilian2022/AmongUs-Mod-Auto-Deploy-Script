@@ -332,6 +332,8 @@ function BackUpAU{
             Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
             Start-Sleep -Seconds 2
             Remove-Item -Path $delfoldser -Recurse -Force
+        }elseif($platform -eq "epic"){
+            Write-Log $(Get-Translate("EGLでは過去VersionをDLできません"))            
         }
     }
 
