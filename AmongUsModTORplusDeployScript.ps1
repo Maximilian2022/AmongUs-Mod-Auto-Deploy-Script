@@ -319,21 +319,27 @@ function BackUpAU{
             while(!(Test-Path $bupfolder)){
                 Start-Sleep -Seconds 2
             }
-            Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。#0"))
+            Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。(Max10分でタイムアウトします)#0"))
+            $presu = $false
             while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
                 Start-sleep -Seconds 15
                 #timeout 10min.
                 if($counter -lt 40){
                     $counter++
                     Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。#$counter"))
+                    $presu = $true
                 }else{
                     break
                     Write-Log $(Get-Translate("Steam.exe の前バージョンをダウンロードがタイムアウトしました。再度お試しください。"))
                 }
             }
-            Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
-            Start-Sleep -Seconds 2
-            Remove-Item -Path $delfoldser -Recurse -Force
+            if($presu){
+                Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
+                Start-Sleep -Seconds 2
+                Remove-Item -Path $delfoldser -Recurse -Force    
+            }else{
+                Write-Log $(Get-Translate("前バージョンのロードに失敗しました。再度お試しください。"))
+            }
         }elseif($platform -eq "epic"){
             Write-Log $(Get-Translate("EGLでは過去VersionをDLできません"))            
         }
