@@ -1595,6 +1595,12 @@ if($tio){
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force        
+                }elseif(Test-Path "$aupathm\AmongUs"){
+                    robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                    Remove-Item "$aupathm\AmongUs" -recurse
+                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                    Write-Log "`r`n $content"
+                    Remove-Item "C:\Temp\temp.log" -Force        
                 }
             }else{
                 Copy-Item $aupatho -destination $aupathm -recurse
@@ -1633,6 +1639,12 @@ if($tio){
             }elseif(Test-Path "$aupathm\Among Us"){
                 robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "$aupathm\Among Us" -recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force        
+            }elseif(Test-Path "$aupathm\AmongUs"){
+                robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "$aupathm\AmongUs" -recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force        
