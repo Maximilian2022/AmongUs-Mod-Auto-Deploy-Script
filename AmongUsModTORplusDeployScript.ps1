@@ -319,14 +319,16 @@ function BackUpAU{
             while(!(Test-Path $bupfolder)){
                 Start-Sleep -Seconds 2
             }
-            Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
+            Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。#0"))
             while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
                 Start-sleep -Seconds 15
-                if($counter -lt 300){
+                #timeout 10min.
+                if($counter -lt 40){
                     $counter++
-                    Write-Log $(Get-Translate("Steam.exe now downloading previous release....please wait."))
+                    Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。#$counter"))
                 }else{
                     break
+                    Write-Log $(Get-Translate("Steam.exe の前バージョンをダウンロードがタイムアウトしました。再度お試しください。"))
                 }
             }
             Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
