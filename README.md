@@ -37,7 +37,7 @@
 
 
 <!-- wp:paragraph -->
-<p>■Download<br><a href="https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" target="_blank" rel="noreferrer noopener">https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat</a></p>
+<p>■Download 右クリックで名前を付けて保存してください<br><a href="https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" target="_blank" rel="noreferrer noopener">https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat</a></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
