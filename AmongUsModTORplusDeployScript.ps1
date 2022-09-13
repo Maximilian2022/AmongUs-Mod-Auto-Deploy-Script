@@ -2289,7 +2289,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             $Bar.Value = "86"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
-            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
+#            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
             try{
                 choco -v
             }catch{
