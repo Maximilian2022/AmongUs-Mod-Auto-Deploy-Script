@@ -19,11 +19,8 @@ $tohmin = "v2.2.2"
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 #Frequent changing parameter
-#$prever = "2022.8.24"
-$prever = "2022.7.12"
-#0713target id 6859044017310390774 
-#0824target id 	6036212755012520093
-$prevtargetid = "6859044017310390774"
+$prever = "2022.8.24"
+$prevtargetid = "6036212755012520093"
 
 $gmhbool = $false
 #Testdll: v2022.9.7.0
