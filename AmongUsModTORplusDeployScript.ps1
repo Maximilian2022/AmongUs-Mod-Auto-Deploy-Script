@@ -324,11 +324,11 @@ function BackUpAU{
                 #timeout 10min.
                 if($counter -lt 40){
                     $counter++
-                    Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。#$counter"))
+                    Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。#$counter $((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
                     $presu = $true
                 }else{
                     break
-                    Write-Log $(Get-Translate("Steam.exe の前バージョンをダウンロードがタイムアウトしました。再度お試しください。"))
+                    Write-Log $(Get-Translate("Steam.exe の前バージョンをダウンロードがタイムアウトしました。再度お試しください。$((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
                 }
             }
             if($presu){
