@@ -2228,7 +2228,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
                 }
     
-                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime -y" -Verb RunAs -Wait   
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
                 $qureq = $true
             }
             if($qureq){
@@ -2297,14 +2297,14 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
             Write-Log ".Net Framework Install start"
             Start-Transcript -Append -Path "$LogFileName"
-#            Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
+#            Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"choco install 
             try{
                 choco -v
             }catch{
                 Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
 
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime -y" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet -y" -Verb RunAs -Wait
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
