@@ -310,16 +310,23 @@ function BackUpAU{
             $MAIN_WINDOW_TITLE="Steam"
             #Get-Processで取得できた1つ目のハンドルを対象とする。
             $steamruncheck = $true
+            $steamrunner = $true
 
             while($steamruncheck){
-                $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
-
+                try{
+                    $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
+                }catch{
+                    Write-Log "Steam.exe が起動していないか、ログインできていません。起動してログインしてください。"                    
+                }
                 if($null -eq $hwnd){
-                    Write-Log "Steam.exe が起動していないか、ログインできていません。起動してログインしてからEnterを押してください。"
+                    if($steamrunner){
+                        Start-Process $steampth 
+                        $steamrunner = $false
+                    }
                 }else{
                     $steamruncheck = $false
                 }
-                Pause
+                Start-Sleep -Seconds 5
             }
             Start-Sleep -Seconds 2
 
