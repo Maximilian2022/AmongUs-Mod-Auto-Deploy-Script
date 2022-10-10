@@ -5,7 +5,7 @@
 $version = "1.5.4"
 #
 #################################################################################################
-### minimum version for v2022.08.24
+### minimum version for v2022.9.7.0
 $ermin = "v3.2.2.0"
 $esmin = "v3.2.2.0"
 $snrmin = "1.4.2.0"
@@ -2221,9 +2221,10 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
                 $qureq = $true
             }else{
-                #Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
-                #.\dotnet-install.ps1
-                #Remove-Item .\dotnet-install.ps1
+                Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
+#                Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
+#                .\dotnet-install.ps1
+#                Remove-Item .\dotnet-install.ps1
                 try{
                     choco -v
                 }catch{
@@ -2299,7 +2300,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
             Write-Log ".Net Framework Install start"
             Start-Transcript -Append -Path "$LogFileName"
-            #Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
+            Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
             try{
                 choco -v
             }catch{
