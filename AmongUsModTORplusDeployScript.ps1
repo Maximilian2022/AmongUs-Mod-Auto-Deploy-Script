@@ -314,7 +314,20 @@ function BackUpAU{
             #操作したいウィンドウのタイトル
             $MAIN_WINDOW_TITLE="Steam"
             #Get-Processで取得できた1つ目のハンドルを対象とする。
-            $hwnd=(Get-Process |?{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
+            $steamruncheck = $true
+
+            while($steamruncheck){
+                $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
+
+                if($null -eq $hwnd){
+                    Write-Log "Steam.exe が起動していないか、ログインできていません。起動してログインしてからEnterを押してください。"
+                }else{
+                    $steamruncheck = $false
+                }
+                Pause
+            }
+
+            Start-Sleep -Seconds 2
             #ハンドルからウィンドウを取得する
             $window=[System.Windows.Automation.AutomationElement]::FromHandle($hwnd)
             $windowPattern=$window.GetCurrentPattern([System.Windows.Automation.WindowPattern]::Pattern)
