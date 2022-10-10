@@ -213,6 +213,7 @@ function MakeEntry
     }
 }
 #func backup
+Add-Type -AssemblyName UIAutomationClient
 function BackUpAU{
     #Backup System
     if(Test-Path $aupathb){
@@ -308,6 +309,19 @@ function BackUpAU{
             #Among Us app id 945360
             #main depot id 945361
             Start-Process $steampth -argument "+download_depot 945360 945361 $prevtargetid" 
+
+            #操作したいウィンドウのタイトル
+            $MAIN_WINDOW_TITLE="Steam"
+            #Get-Processで取得できた1つ目のハンドルを対象とする。
+            $hwnd=(Get-Process |?{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
+            #ハンドルからウィンドウを取得する
+            $window=[System.Windows.Automation.AutomationElement]::FromHandle($hwnd)
+            $windowPattern=$window.GetCurrentPattern([System.Windows.Automation.WindowPattern]::Pattern)
+            #ウィンドウサイズが最大なら最小化し、最小なら最大化する
+            if ($windowPattern.Current.WindowVisualState -eq [System.Windows.Automation.WindowVisualState]::Maximized){
+                $windowPattern.SetWindowVisualState([System.Windows.Automation.WindowVisualState]::Minimized)    
+            }
+
             Start-Sleep -Seconds 2
 
             $stfolder = Split-Path $steampth -Parent
