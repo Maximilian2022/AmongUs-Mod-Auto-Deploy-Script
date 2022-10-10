@@ -309,6 +309,7 @@ function BackUpAU{
             #Among Us app id 945360
             #main depot id 945361
             Start-Process $steampth -argument "+download_depot 945360 945361 $prevtargetid" 
+            Start-Sleep -Seconds 2
 
             #操作したいウィンドウのタイトル
             $MAIN_WINDOW_TITLE="Steam"
@@ -317,10 +318,8 @@ function BackUpAU{
             #ハンドルからウィンドウを取得する
             $window=[System.Windows.Automation.AutomationElement]::FromHandle($hwnd)
             $windowPattern=$window.GetCurrentPattern([System.Windows.Automation.WindowPattern]::Pattern)
-            #ウィンドウサイズが最大なら最小化し、最小なら最大化する
-            if ($windowPattern.Current.WindowVisualState -eq [System.Windows.Automation.WindowVisualState]::Maximized){
-                $windowPattern.SetWindowVisualState([System.Windows.Automation.WindowVisualState]::Minimized)    
-            }
+            #ウィンドウサイズを最小化する
+            $windowPattern.SetWindowVisualState([System.Windows.Automation.WindowVisualState]::Minimized)    
 
             Start-Sleep -Seconds 2
 
