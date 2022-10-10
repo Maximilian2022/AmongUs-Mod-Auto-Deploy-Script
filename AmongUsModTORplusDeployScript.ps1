@@ -306,11 +306,6 @@ function BackUpAU{
                 }
             }
 
-            #Among Us app id 945360
-            #main depot id 945361
-            Start-Process $steampth -argument "+download_depot 945360 945361 $prevtargetid" 
-            Start-Sleep -Seconds 2
-
             #操作したいウィンドウのタイトル
             $MAIN_WINDOW_TITLE="Steam"
             #Get-Processで取得できた1つ目のハンドルを対象とする。
@@ -326,6 +321,11 @@ function BackUpAU{
                 }
                 Pause
             }
+            Start-Sleep -Seconds 2
+
+            #Among Us app id 945360
+            #main depot id 945361
+            Start-Process $steampth -argument "+download_depot 945360 945361 $prevtargetid" 
 
             Start-Sleep -Seconds 2
             #ハンドルからウィンドウを取得する
