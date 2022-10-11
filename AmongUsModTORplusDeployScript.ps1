@@ -1153,7 +1153,6 @@ if($CheckedBox.GetSelected(5)){
             Write-Log $textBox11111.Text
             if($($textBox11111.Text).StartsWith("https")){
                 $gmhwebhooktxt = $textBox11111.Text
-                Write-Log "here"
             }else{
                 Write-Log "Webhook URLが無効、または入力されていません。Skipされます。"
                 $gmhwebhooktxt = "None"
@@ -2400,11 +2399,11 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
                     $gmhnewconfig = ""           
                     foreach ($gmhline in $gmhfile) {
-                        if ($gmhline -contains "Webhook" ){
+                        if ($gmhline.StartsWith("Webhook")){
                             if($gmhwebhooktxt -eq "None"){
                                 $gmhnewconfig += "$gmhline `r`n"
                             }else{
-                                $gmhnewconfig += "$gmhwebhooktxt `r`n"                    
+                                $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
                             }
                         }else{
                             $gmhnewconfig += "$gmhline `r`n"
