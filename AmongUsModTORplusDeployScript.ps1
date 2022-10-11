@@ -1117,49 +1117,50 @@ if($RadioButton28.Checked){
 #################################################################################################>
 #Webhook
 #################################################################################################>
-if($scid -eq "TOR GMH"){
-    $form1113 = New-Object System.Windows.Forms.Form
-    $form1113.Text = "GMH Webhook URL"
-    $form1113.Size = New-Object System.Drawing.Size(500,140)
-    $form1113.StartPosition = 'CenterScreen'
-    
-    $okButton11111 = New-Object System.Windows.Forms.Button
-    $okButton11111.Location = New-Object System.Drawing.Point(380,70)
-    $okButton11111.Size = New-Object System.Drawing.Size(75,23)
-    $okButton11111.Text = 'OK'
-    $okButton11111.DialogResult = [System.Windows.Forms.DialogResult]::OK
-    $form1113.AcceptButton = $okButton11111
-    $form1113.Controls.Add($okButton11111)
-    
-    $label11111 = New-Object System.Windows.Forms.Label
-    $label11111.Location = New-Object System.Drawing.Point(10,10)
-    $label11111.Size = New-Object System.Drawing.Size(280,20)
-    $label11111.Text = "Discord のWebhook URLを入力してください。"
-    $form1113.Controls.Add($label11111)
-    
-    $textBox11111 = New-Object System.Windows.Forms.TextBox
-    $textBox11111.Location = New-Object System.Drawing.Point(10,30)
-    $textBox11111.Size = New-Object System.Drawing.Size(460,20)
-    $form1113.Controls.Add($textBox11111)
-    
-    $form1113.Topmost = $true
-    
-    $form1113.Add_Shown({$textBox11111.Select()})
-    $result11111 = $form1113.ShowDialog()
-    $gmhwebhooktxt = ""
-    if ($result11111 -eq [System.Windows.Forms.DialogResult]::OK)
-    {
-        Write-Log $textBox11111.Text
-        if($($textBox11111.Text).StartsWith("https")){
-            $gmhwebhooktxt = $textBox11111.Text
-            Write-Log "here"
-        }else{
-            Write-Log "Webhook URLが無効、または入力されていません。Skipされます。"
-            $gmhwebhooktxt = "None"
-        }
+if($CheckedBox.GetSelected(5)){
+    if($scid -eq "TOR GMH"){
+        $form1113 = New-Object System.Windows.Forms.Form
+        $form1113.Text = "GMH Webhook URL"
+        $form1113.Size = New-Object System.Drawing.Size(500,140)
+        $form1113.StartPosition = 'CenterScreen'
+        
+        $okButton11111 = New-Object System.Windows.Forms.Button
+        $okButton11111.Location = New-Object System.Drawing.Point(380,70)
+        $okButton11111.Size = New-Object System.Drawing.Size(75,23)
+        $okButton11111.Text = 'OK'
+        $okButton11111.DialogResult = [System.Windows.Forms.DialogResult]::OK
+        $form1113.AcceptButton = $okButton11111
+        $form1113.Controls.Add($okButton11111)
+        
+        $label11111 = New-Object System.Windows.Forms.Label
+        $label11111.Location = New-Object System.Drawing.Point(10,10)
+        $label11111.Size = New-Object System.Drawing.Size(280,20)
+        $label11111.Text = "Discord のWebhook URLを入力してください。"
+        $form1113.Controls.Add($label11111)
+        
+        $textBox11111 = New-Object System.Windows.Forms.TextBox
+        $textBox11111.Location = New-Object System.Drawing.Point(10,30)
+        $textBox11111.Size = New-Object System.Drawing.Size(460,20)
+        $form1113.Controls.Add($textBox11111)
+        
+        $form1113.Topmost = $true
+        
+        $form1113.Add_Shown({$textBox11111.Select()})
+        $result11111 = $form1113.ShowDialog()
+        $gmhwebhooktxt = ""
+        if ($result11111 -eq [System.Windows.Forms.DialogResult]::OK)
+        {
+            Write-Log $textBox11111.Text
+            if($($textBox11111.Text).StartsWith("https")){
+                $gmhwebhooktxt = $textBox11111.Text
+                Write-Log "here"
+            }else{
+                Write-Log "Webhook URLが無効、または入力されていません。Skipされます。"
+                $gmhwebhooktxt = "None"
+            }
+        }    
     }    
 }
-
 #################################################################################################>
 
 # プログレスバー
