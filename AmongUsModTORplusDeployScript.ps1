@@ -659,7 +659,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""AmongUsReplayInWindow",
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","GMH Webhook")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -1114,6 +1114,50 @@ if($RadioButton28.Checked){
 }else{
     $submerged = $false
 }
+#################################################################################################>
+#Webhook
+#################################################################################################>
+if($scid -eq "TOR GMH"){
+    $form1113 = New-Object System.Windows.Forms.Form
+    $form1113.Text = "GMH Webhook URL"
+    $form1113.Size = New-Object System.Drawing.Size(300,200)
+    $form1113.StartPosition = 'CenterScreen'
+    
+    $okButton11111 = New-Object System.Windows.Forms.Button
+    $okButton11111.Location = New-Object System.Drawing.Point(75,120)
+    $okButton11111.Size = New-Object System.Drawing.Size(75,23)
+    $okButton11111.Text = 'OK'
+    $okButton11111.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $form1113.AcceptButton = $okButton11111
+    $form1113.Controls.Add($okButton11111)
+    
+    $label11111 = New-Object System.Windows.Forms.Label
+    $label11111.Location = New-Object System.Drawing.Point(10,20)
+    $label11111.Size = New-Object System.Drawing.Size(280,20)
+    $label11111.Text = "Discord のWebhook URLを入力してください。"
+    $form1113.Controls.Add($label11111)
+    
+    $textBox11111 = New-Object System.Windows.Forms.TextBox
+    $textBox11111.Location = New-Object System.Drawing.Point(10,40)
+    $textBox11111.Size = New-Object System.Drawing.Size(260,20)
+    $form1113.Controls.Add($textBox11111)
+    
+    $form1113.Topmost = $true
+    
+    $form1113.Add_Shown({$textBox11111.Select()})
+    $result11111 = $form1113.ShowDialog()
+    $gmhwebhooktxt = ""
+    if ($result11111 -eq [System.Windows.Forms.DialogResult]::OK)
+    {
+        if($textBox11111.Text -contains "https"){
+            $gmhwebhooktxt = $textBox11111.Text
+        }else{
+            Write-Log "Webhook URLが無効、または入力されていません。Skipされます。"
+            $gmhwebhooktxt = "None"
+        }
+    }    
+}
+
 #################################################################################################>
 
 # プログレスバー
@@ -2341,6 +2385,32 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
+        }elseif($CheckedBox.CheckedItems[$aa] -eq "GMH Webhook"){
+            Write-Log "GMH Webhook start"
+            if($scid -eq "TOR GMH"){
+                if($gmhwebhooktxt -eq "None"){
+                    Write-Log "GMH Webhook skipped."
+                }else{
+                    $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
+                    $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.old"
+                    Copy-Item $gmhconfig $gmhconfigtmp
+                    $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
+                    $gmhnewconfig = ""           
+                    foreach ($gmhline in $gmhfile) {
+                        if ($gmhline -contains "Webhook" ){
+                            $gmhnewconfig += "$gmhwebhooktxt"                    
+                        }else{
+                            $gmhnewconfig += "$gmhline"
+                        }
+                    }
+                    Remove-Item $gmhconfig -Force
+                    $gmhnewconfig |Out-File $gmhconfig
+                }   
+            }else{
+                Write-Log "GMH Webhook skipped."
+            }
+            Write-Log "GMH Webhook ends"
+            $Bar.Value = "89"
         }else{
         }
     }
