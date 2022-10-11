@@ -1120,11 +1120,11 @@ if($RadioButton28.Checked){
 if($scid -eq "TOR GMH"){
     $form1113 = New-Object System.Windows.Forms.Form
     $form1113.Text = "GMH Webhook URL"
-    $form1113.Size = New-Object System.Drawing.Size(300,200)
+    $form1113.Size = New-Object System.Drawing.Size(500,140)
     $form1113.StartPosition = 'CenterScreen'
     
     $okButton11111 = New-Object System.Windows.Forms.Button
-    $okButton11111.Location = New-Object System.Drawing.Point(75,120)
+    $okButton11111.Location = New-Object System.Drawing.Point(380,70)
     $okButton11111.Size = New-Object System.Drawing.Size(75,23)
     $okButton11111.Text = 'OK'
     $okButton11111.DialogResult = [System.Windows.Forms.DialogResult]::OK
@@ -1132,14 +1132,14 @@ if($scid -eq "TOR GMH"){
     $form1113.Controls.Add($okButton11111)
     
     $label11111 = New-Object System.Windows.Forms.Label
-    $label11111.Location = New-Object System.Drawing.Point(10,20)
+    $label11111.Location = New-Object System.Drawing.Point(10,10)
     $label11111.Size = New-Object System.Drawing.Size(280,20)
     $label11111.Text = "Discord のWebhook URLを入力してください。"
     $form1113.Controls.Add($label11111)
     
     $textBox11111 = New-Object System.Windows.Forms.TextBox
-    $textBox11111.Location = New-Object System.Drawing.Point(10,40)
-    $textBox11111.Size = New-Object System.Drawing.Size(260,20)
+    $textBox11111.Location = New-Object System.Drawing.Point(10,30)
+    $textBox11111.Size = New-Object System.Drawing.Size(460,20)
     $form1113.Controls.Add($textBox11111)
     
     $form1113.Topmost = $true
@@ -1149,8 +1149,10 @@ if($scid -eq "TOR GMH"){
     $gmhwebhooktxt = ""
     if ($result11111 -eq [System.Windows.Forms.DialogResult]::OK)
     {
-        if($textBox11111.Text -contains "https"){
+        Write-Log $textBox11111.Text
+        if($($textBox11111.Text).StartsWith("https")){
             $gmhwebhooktxt = $textBox11111.Text
+            Write-Log "here"
         }else{
             Write-Log "Webhook URLが無効、または入力されていません。Skipされます。"
             $gmhwebhooktxt = "None"
@@ -2398,7 +2400,11 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhnewconfig = ""           
                     foreach ($gmhline in $gmhfile) {
                         if ($gmhline -contains "Webhook" ){
-                            $gmhnewconfig += "$gmhwebhooktxt"                    
+                            if($gmhwebhooktxt -eq "None"){
+                                $gmhnewconfig += "$gmhline"
+                            }else{
+                                $gmhnewconfig += "$gmhwebhooktxt"                    
+                            }
                         }else{
                             $gmhnewconfig += "$gmhline"
                         }
