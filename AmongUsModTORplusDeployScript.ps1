@@ -2401,12 +2401,12 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     foreach ($gmhline in $gmhfile) {
                         if ($gmhline -contains "Webhook" ){
                             if($gmhwebhooktxt -eq "None"){
-                                $gmhnewconfig += "$gmhline"
+                                $gmhnewconfig += "$gmhline `r`n"
                             }else{
-                                $gmhnewconfig += "$gmhwebhooktxt"                    
+                                $gmhnewconfig += "$gmhwebhooktxt `r`n"                    
                             }
                         }else{
-                            $gmhnewconfig += "$gmhline"
+                            $gmhnewconfig += "$gmhline `r`n"
                         }
                     }
                     Remove-Item $gmhconfig -Force
