@@ -2404,6 +2404,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                                 $gmhnewconfig += "$gmhline `r`n"
                             }else{
                                 $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
+                                Write-Log "GMH Webhook : $gmhwebhooktxt"
                             }
                         }else{
                             $gmhnewconfig += "$gmhline `r`n"
