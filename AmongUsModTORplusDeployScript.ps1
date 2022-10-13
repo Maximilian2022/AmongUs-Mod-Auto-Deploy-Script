@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.7.3"
+$version = "1.5.7.4"
 #
 #################################################################################################
 ### minimum version for v2022.9.7.0
@@ -2234,7 +2234,7 @@ $Bar.Value = "82"
 
 if($CheckedBox.CheckedItems.Count -gt 0){
 
-    for($aa=$CheckedBox.CheckedItems.Count;$aa -lt 0;$aa--){
+    for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
         if($CheckedBox.CheckedItems[$aa] -eq "BetterCrewLink"){
             Write-Log "BCL Install Start"
             $bcl= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/OhMyGuus/BetterCrewLink/releases/latest" -UseBasicParsing)).assets.browser_download_url
@@ -2390,56 +2390,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
-            if($scid -eq "TOR GMH"){
-                Write-Host "健康ランド化 start"
-                #regioninfo.json
-                $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-                if(Test-Path $aurifile){               
-                    $auritext = Get-Content $aurifile -Raw
-                
-                    if($auritext.IndexOf("健康ランド") -gt 0){
-                        Write-Host "健康ランド済:Server"
-                    }else{
-                        if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
-                            Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
-                        }
-                        $aurijson = ConvertFrom-Json $auritext
-                        $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
-                        $aurijson.Regions += $kenkojson              
-                        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
-                        Write-Host "健康ランド化完了:Server"
-                    }
-                }
-
-                $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
-                
-
-                $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
-                $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
-                $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
-                $ghfiletmp = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions.old"
-                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/KenkoLandOptions"
-                $indeedgo = $true
-                if((Test-Path $gmhconfig) -OR (Test-Path $ghfile)){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("この操作を行うと、既存の設定は全て上書きされます。続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -ne "Yes"){
-                        $indeedgo = $false
-                    }
-                }
-                if($indeedgo){
-                    Copy-Item $gmhconfig $gmhconfigtmp
-                    Copy-Item $ghfile $ghfiletmp
-                    Remove-Item $gmhconfig -Force
-                    Remove-Item $ghfile -Force
-                    $kenkoconf |Out-File $gmhconfig
-                    curl.exe $ghurl -o "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
-                    Write-Host "健康ランド化完了:Config"
-                }
-                Write-Host "健康ランド化 ends"
-                $Bar.Value = "88"
-            }else{
-                Write-Host "健康ランド化を実行するにはTOR GMHを選択してください。"
-            }
         }elseif($CheckedBox.CheckedItems[$aa] -eq "GMH Webhook"){
             Write-Log "GMH Webhook start"
             if($scid -eq "TOR GMH"){
@@ -2471,6 +2421,78 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             }
             Write-Log "GMH Webhook ends"
             $Bar.Value = "89"
+        }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
+            if($scid -eq "TOR GMH"){
+                Write-Host "健康ランド化 start"
+                #regioninfo.json
+                $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+                if(Test-Path $aurifile){               
+                    $auritext = Get-Content $aurifile -Raw
+                
+                    if($auritext.IndexOf("健康ランド") -gt 0){
+                        Write-Host "健康ランド済:Server"
+                    }else{
+                        if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+                            Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+                        }
+                        $aurijson = ConvertFrom-Json $auritext
+                        $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
+                        $aurijson.Regions += $kenkojson              
+                        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
+                        Write-Host "健康ランド化完了:Server"
+                    }
+                }
+
+                $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
+                
+
+                $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
+                $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
+
+                #configからWebhookを救出
+                $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
+                $gmhwh = ""           
+                foreach ($gmhline in $gmhfile) {
+                    if ($gmhline.StartsWith("Webhook")){
+                        $gmhwh += "$gmhline `r`n"
+                        }
+                    }
+                }
+                #optionconf
+                $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
+                $ghfiletmp = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions.old"
+                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/KenkoLandOptions"
+                $indeedgo = $true
+                if((Test-Path $gmhconfig) -OR (Test-Path $ghfile)){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("この操作を行うと、既存の設定は全て上書きされます。続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -ne "Yes"){
+                        $indeedgo = $false
+                    }
+                }
+                #
+                if($indeedgo){
+                    Copy-Item $gmhconfig $gmhconfigtmp
+                    Copy-Item $ghfile $ghfiletmp
+                    Remove-Item $gmhconfig -Force
+                    Remove-Item $ghfile -Force
+                    curl.exe $ghurl -o "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
+
+                    $gmhnewconfig = ""           
+                    foreach ($gmhline in $kenkoconf) {
+                        if ($gmhline.StartsWith("Webhook")){
+                                $gmhnewconfig += "$gmhwh `r`n"
+                            }
+                        }else{
+                            $gmhnewconfig += "$gmhline `r`n"
+                        }
+                    }
+                    $gmhnewconfig |Out-File $gmhconfig
+                    Write-Host "健康ランド化完了:Config"
+                }
+                Write-Host "健康ランド化 ends"
+                $Bar.Value = "88"
+            }else{
+                Write-Host "健康ランド化を実行するにはTOR GMHを選択してください。"
+            }
         }else{
         }
     }
