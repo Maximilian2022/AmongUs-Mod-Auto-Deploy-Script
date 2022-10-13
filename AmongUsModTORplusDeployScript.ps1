@@ -2414,16 +2414,22 @@ if($CheckedBox.CheckedItems.Count -gt 0){
 
                 $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
                 $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
+                $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
+                $ghfiletmp = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions.old"
+                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/KenkoLandOptions"
                 $indeedgo = $true
-                if(Test-Path $gmhconfig){
+                if((Test-Path $gmhconfig) -OR (Test-Path $ghfile)){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("この操作を行うと、既存の設定は全て上書きされます。続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -ne "Yes"){
                         $indeedgo = $false
                     }
                 }
                 if($indeedgo){
                     Copy-Item $gmhconfig $gmhconfigtmp
+                    Copy-Item $ghfile $ghfiletmp
                     Remove-Item $gmhconfig -Force
+                    Remove-Item $ghfile -Force
                     $kenkoconf |Out-File $gmhconfig
+                    aria2c -x5 -V --dir "$env:APPDATA\..\LocalLow\Innersloth\Among Us\" -o "gameHostOptions" $ghurl
                     Write-Host "健康ランド化完了:Config"
                 }
                 Write-Host "健康ランド化 ends"
