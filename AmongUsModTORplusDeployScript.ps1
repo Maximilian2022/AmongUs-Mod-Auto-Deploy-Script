@@ -2465,7 +2465,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 #optionconf
                 $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
 #                $ghfiletmp = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions.old"
-                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/KenkoLandOptions"
+                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gameHostOptions"
                 $indeedgo = $true
                 if((Test-Path $gmhconfig) -OR (Test-Path $ghfile)){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("健康ランド化を行うと、既存の部屋設定は全て上書きされます。続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -ne "Yes"){
