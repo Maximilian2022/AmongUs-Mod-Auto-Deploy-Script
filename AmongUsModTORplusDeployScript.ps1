@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.7.2"
+$version = "1.5.7.3"
 #
 #################################################################################################
 ### minimum version for v2022.9.7.0
@@ -1118,8 +1118,8 @@ if($RadioButton28.Checked){
 #Webhook
 #################################################################################################>
 Write-Log "Webhook"
-Write-Log $CheckedBox.GetSelected(5)
-if($CheckedBox.GetSelected(5)){
+Write-Log $CheckedBox.CheckedItems
+if($CheckedBox.CheckedItems -contains "GMH Webhook"){
     if($scid -eq "TOR GMH"){
         $form1113 = New-Object System.Windows.Forms.Form
         $form1113.Text = "GMH Webhook URL"
