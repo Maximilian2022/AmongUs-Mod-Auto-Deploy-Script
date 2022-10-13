@@ -2397,28 +2397,32 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Write-Log "GMH Webhook skipped."
                 }else{
                     $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
-                    if(Test-Path $gmhconfig){
-                        $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforewebhook.old"
-                        Copy-Item $gmhconfig $gmhconfigtmp
-                        $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
-                        $gmhnewconfig = ""           
-                        foreach ($gmhline in $gmhfile) {
-                            if ($gmhline.StartsWith("Webhook")){
-                                if($gmhwebhooktxt -eq "None"){
-                                    $gmhnewconfig += "$gmhline `r`n"
-                                }else{
-                                    $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
-                                    Write-Log "GMH Webhook : $gmhwebhooktxt"
-                                }
-                            }else{
-                                $gmhnewconfig += "$gmhline `r`n"
-                            }
+                    if(!(Test-Path $gmhconfig)){
+                        Write-Log "Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"
+                        $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
+                        if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
+                            New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
                         }
-                        Remove-Item $gmhconfig -Force
-                        $gmhnewconfig |Out-File $gmhconfig
-                    }else{
-                        Write-Log "一度Among US GMHを起動して再度動作させてください。"
+                        $kenkoconf |Out-File $gmhconfig
                     }
+                    $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforewebhook.old"
+                    Copy-Item $gmhconfig $gmhconfigtmp
+                    $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
+                    $gmhnewconfig = ""           
+                    foreach ($gmhline in $gmhfile) {
+                        if ($gmhline.StartsWith("Webhook")){
+                            if($gmhwebhooktxt -eq "None"){
+                                $gmhnewconfig += "$gmhline `r`n"
+                            }else{
+                                $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
+                                Write-Log "GMH Webhook : $gmhwebhooktxt"
+                            }
+                        }else{
+                            $gmhnewconfig += "$gmhline `r`n"
+                        }
+                    }
+                    Remove-Item $gmhconfig -Force
+                    $gmhnewconfig |Out-File $gmhconfig
                 }   
             }else{
                 Write-Log "GMH Webhook skipped."
