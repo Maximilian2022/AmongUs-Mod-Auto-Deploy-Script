@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.7.4"
+$version = "1.5.8"
 #
 #################################################################################################
 ### minimum version for v2022.9.7.0
@@ -2397,24 +2397,28 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Write-Log "GMH Webhook skipped."
                 }else{
                     $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
-                    $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforewebhook.old"
-                    Copy-Item $gmhconfig $gmhconfigtmp
-                    $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
-                    $gmhnewconfig = ""           
-                    foreach ($gmhline in $gmhfile) {
-                        if ($gmhline.StartsWith("Webhook")){
-                            if($gmhwebhooktxt -eq "None"){
-                                $gmhnewconfig += "$gmhline `r`n"
+                    if(Test-Path $gmhconfig){
+                        $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforewebhook.old"
+                        Copy-Item $gmhconfig $gmhconfigtmp
+                        $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
+                        $gmhnewconfig = ""           
+                        foreach ($gmhline in $gmhfile) {
+                            if ($gmhline.StartsWith("Webhook")){
+                                if($gmhwebhooktxt -eq "None"){
+                                    $gmhnewconfig += "$gmhline `r`n"
+                                }else{
+                                    $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
+                                    Write-Log "GMH Webhook : $gmhwebhooktxt"
+                                }
                             }else{
-                                $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
-                                Write-Log "GMH Webhook : $gmhwebhooktxt"
+                                $gmhnewconfig += "$gmhline `r`n"
                             }
-                        }else{
-                            $gmhnewconfig += "$gmhline `r`n"
                         }
+                        Remove-Item $gmhconfig -Force
+                        $gmhnewconfig |Out-File $gmhconfig
+                    }else{
+                        Write-Log "一度Among US GMHを起動して再度動作させてください。"
                     }
-                    Remove-Item $gmhconfig -Force
-                    $gmhnewconfig |Out-File $gmhconfig
                 }   
             }else{
                 Write-Log "GMH Webhook skipped."
@@ -2449,12 +2453,13 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
                 $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
 
-                #configからWebhookを救出
-                $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
-                $gmhwh = ""           
-                foreach ($gmhline in $gmhfile) {
-                    if ($gmhline.StartsWith("Webhook")){
-                        $gmhwh += "$gmhline `r`n"
+                if(Test-Path $gmhconfig){
+                    #configからWebhookを救出
+                    $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
+                    foreach ($gmhline in $gmhfile) {
+                        if ($gmhline.StartsWith("Webhook")){
+                            $gmhwh += "$gmhline `r`n"
+                        }
                     }
                 }
                 #optionconf
@@ -2478,9 +2483,13 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhnewconfig = ""           
                     foreach ($gmhline in $kenkoconf) {
                         if ($gmhline.StartsWith("Webhook")){
+                            if($null -ne $gmhwh){
                                 $gmhnewconfig += "$gmhwh `r`n"
+                            }else{
+                                $gmhnewconfig += "$gmhline `r`n"
+                            }
                         }else{
-                            $gmhnewconfig += "$gmhline `r`n"
+                                $gmhnewconfig += "$gmhline `r`n"
                         }
                     }
                     $gmhnewconfig |Out-File $gmhconfig
