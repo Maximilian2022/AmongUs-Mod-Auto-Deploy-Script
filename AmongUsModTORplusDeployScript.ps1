@@ -2479,7 +2479,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     foreach ($gmhline in $kenkoconf) {
                         if ($gmhline.StartsWith("Webhook")){
                                 $gmhnewconfig += "$gmhwh `r`n"
-                            }
                         }else{
                             $gmhnewconfig += "$gmhline `r`n"
                         }
