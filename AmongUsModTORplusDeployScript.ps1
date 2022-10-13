@@ -2477,7 +2477,9 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         Copy-Item $gmhconfig $gmhconfigtmp
                         Remove-Item $gmhconfig -Force
                     }
-                    Remove-Item $ghfile -Force
+                    if(Test-Path $ghfile){
+                        Remove-Item $ghfile -Force
+                    }
                     curl.exe $ghurl -o "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
 
                     $gmhnewconfig = ""           
@@ -2491,6 +2493,9 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         }else{
                                 $gmhnewconfig += "$gmhline `r`n"
                         }
+                    }
+                    if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
+                        New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
                     }
                     $gmhnewconfig |Out-File $gmhconfig
                     Write-Host "健康ランド化完了:Config"
