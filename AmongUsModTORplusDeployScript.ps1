@@ -1117,6 +1117,8 @@ if($RadioButton28.Checked){
 #################################################################################################>
 #Webhook
 #################################################################################################>
+Write-Log "Webhook"
+Write-Log $CheckedBox.GetSelected(5)
 if($CheckedBox.GetSelected(5)){
     if($scid -eq "TOR GMH"){
         $form1113 = New-Object System.Windows.Forms.Form
