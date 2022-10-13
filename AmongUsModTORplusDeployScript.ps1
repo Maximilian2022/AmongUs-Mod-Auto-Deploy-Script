@@ -2455,7 +2455,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 foreach ($gmhline in $gmhfile) {
                     if ($gmhline.StartsWith("Webhook")){
                         $gmhwh += "$gmhline `r`n"
-                        }
                     }
                 }
                 #optionconf
