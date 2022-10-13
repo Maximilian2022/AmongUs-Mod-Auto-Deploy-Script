@@ -2464,7 +2464,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
                 #optionconf
                 $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
-#                $ghfiletmp = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions.old"
                 $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gameHostOptions"
                 $indeedgo = $true
                 if((Test-Path $gmhconfig) -OR (Test-Path $ghfile)){
@@ -2475,7 +2474,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 #
                 if($indeedgo){
                     Copy-Item $gmhconfig $gmhconfigtmp
-#                    Copy-Item $ghfile $ghfiletmp
                     Remove-Item $gmhconfig -Force
                     Remove-Item $ghfile -Force
                     curl.exe $ghurl -o "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
