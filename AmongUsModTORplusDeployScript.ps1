@@ -2387,6 +2387,46 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
+        }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
+            Write-Host "健康ランド化 start"
+            #regioninfo.json
+            $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+            if(Test-Path $aurifile){               
+                $auritext = Get-Content $aurifile -Raw
+            
+                if($auritext.IndexOf("健康ランド") -gt 0){
+                    Write-Host "健康ランド済:Server"
+                }else{
+                    if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+                        Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+                    }
+                    $aurijson = ConvertFrom-Json $auritext
+                    $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
+                    $aurijson.Regions += $kenkojson              
+                    ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
+                    Write-Host "健康ランド化完了:Server"
+                }
+            }
+
+            $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
+            
+
+            $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
+            $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
+            $indeedgo = $true
+            if(Test-Path $gmhconfig){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("この操作を行うと、既存の設定は全て上書きされます。続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -ne "Yes"){
+                    $indeedgo = $false
+                }
+            }
+            if($indeedgo){
+                Copy-Item $gmhconfig $gmhconfigtmp
+                Remove-Item $gmhconfig -Force
+                $kenkoconf |Out-File $gmhconfig
+                Write-Host "健康ランド化完了:Config"
+            }
+            Write-Host "健康ランド化 ends"
+            $Bar.Value = "88"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "GMH Webhook"){
             Write-Log "GMH Webhook start"
             if($scid -eq "TOR GMH"){
@@ -2418,42 +2458,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             }
             Write-Log "GMH Webhook ends"
             $Bar.Value = "89"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
-            Write-Host "健康ランド化 start"
-            #regioninfo.json
-            $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-            if(Test-Path $aurifile){               
-                $auritext = Get-Content $aurifile -Raw
-            
-                if($auritext.IndexOf("健康ランド") -gt 0){
-                    Write-Host "健康ランド済:Server"
-                }else{
-                    if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
-                        Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
-                    }
-                    $aurijson = ConvertFrom-Json $auritext
-                    $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
-                    $aurijson.Regions += $kenkojson              
-                    ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
-                    Write-Host "健康ランド化完了:Server"
-                }
-            }
-
-            $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
-            $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
-            if(Test-Path $gmhconfig){
-
-            }
-            Copy-Item $gmhconfig $gmhconfigtmp
-
-
-            Remove-Item $gmhconfig -Force
-            $gmhnewconfig |Out-File $gmhconfig
-            Write-Host "健康ランド化完了:Config"
-
-
-            Write-Host "健康ランド化 ends"
-            $Bar.Value = "88"
         }else{
         }
     }
