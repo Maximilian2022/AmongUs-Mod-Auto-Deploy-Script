@@ -2429,7 +2429,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     Remove-Item $gmhconfig -Force
                     Remove-Item $ghfile -Force
                     $kenkoconf |Out-File $gmhconfig
-                    aria2c -x5 -V --dir "$env:APPDATA\..\LocalLow\Innersloth\Among Us\" -o "gameHostOptions" $ghurl
+                    curl.exe $ghurl -o "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
                     Write-Host "健康ランド化完了:Config"
                 }
                 Write-Host "健康ランド化 ends"
