@@ -2231,7 +2231,8 @@ if($tio -eq $false){
 $Bar.Value = "82"
 
 if($CheckedBox.CheckedItems.Count -gt 0){
-    for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
+
+    for($aa=$CheckedBox.CheckedItems.Count;$aa -le 0;$aa--){
         if($CheckedBox.CheckedItems[$aa] -eq "BetterCrewLink"){
             Write-Log "BCL Install Start"
             $bcl= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/OhMyGuus/BetterCrewLink/releases/latest" -UseBasicParsing)).assets.browser_download_url
