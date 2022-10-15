@@ -2521,9 +2521,14 @@ $Bar.Value = "90"
 ####################
 if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
-    $ps1script += 'chcp 65001`r`n@echo off`r`ncurl.exe -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1`r`npwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
-    $ps1script += "`"$scid`" `"$aupathm`" `"$platform`"`r`n" 
-    $ps1script += '`r`ndel .\gmhtechsupport.ps1`r`n'
+    $ps1script += 'chcp 65001
+@echo off
+curl.exe -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1
+pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
+    $ps1script += "`"$scid`" `"$aupathm`" `"$platform`"" 
+    $ps1script += '
+
+del .\gmhtechsupport.ps1'
     $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$npl\StartAmongUsGetLogScript_$scid.bat" 
 }
 ####################
