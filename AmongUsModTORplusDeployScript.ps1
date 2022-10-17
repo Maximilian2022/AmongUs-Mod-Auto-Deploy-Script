@@ -62,10 +62,6 @@ try{
 }
 catch{
     Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
-    #$com = 'Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"'
-    #$com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
-    #Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
-    #Remove-Item "$npl\ps.ps1" -Force
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install pwsh powershell-core aria2 microsoft-windows-terminal -y" -Verb RunAs -Wait   
@@ -132,7 +128,7 @@ function Write-Log($logstring){
     # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
-        # ログ出力
+    # ログ出力
     Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding utf8 -Append
     # echo させるために出力したログを戻す
     Return $(Get-Translate($Log))
@@ -281,9 +277,9 @@ function BackUpAU{
         if($platform -eq "steam"){
             $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
             if (Test-Path $steampth){
-                Write-Log $(Get-Translate("Steam Application is found on $steampth"))
+                Write-Log $(Get-Translate("Steam アプリは以下で見つかりました。 $steampth"))
             }else{
-                Write-Log $(Get-Translate("Steam Application is not on default location"))
+                Write-Log $(Get-Translate("Steam アプリがデフォルトの場所に見つかりませんでした。"))
                 Param(
                     [Parameter()]
                     [String] $FilePath
@@ -316,7 +312,7 @@ function BackUpAU{
                 try{
                     $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
                 }catch{
-                    Write-Log "Steam.exe が起動していないか、ログインできていません。起動してログインしてください。"                    
+                    Write-Log $(Get-Translate("Steam.exe が起動していないか、ログインできていません。起動してログインしてください。"))           
                 }
                 if($null -eq $hwnd){
                     if($steamrunner){
@@ -428,25 +424,6 @@ catch{
 }
 
 #################################################################################################
-# Clock Sync
-<#################################################################################################
-
-$l = w32tm /query /status 
-if ($l.contains("0x80070426")){
-    net start "windows time"
-    start-sleep -Seconds 5
-}
-Write-Log $l
-$l = w32tm /monitor /computers:time.google.com
-Write-Log $l
-$l = w32tm /config /syncfromflags:manual /manualpeerlist:time.google.com /reliable:yes /update
-Write-Log $l
-$l = w32tm /resync
-Write-Log $l
-$l = w32tm /query /status 
-Write-Log $l
-#>
-#################################################################################################
 ### GM Mod or TOR+ 選択メニュー表示
 #################################################################################################
 #Special Thanks
@@ -459,8 +436,6 @@ Write-Log $l
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 $platform = ""
-
-
 
 # フォントの指定
 $Font = New-Object System.Drawing.Font("メイリオ",12)
@@ -743,7 +718,7 @@ $label6.Size = New-Object System.Drawing.Size(770,50)
 $label6.Text = ""
 $form.Controls.Add($label6)
 
-$scid = "TOR Plus"
+$scid = "TOR GMH"
 $tio = $true
 $aumin =""
 $aupatho=""
@@ -1040,9 +1015,9 @@ $Combo_SelectedIndexChanged= {
     $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
     $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
     $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
-    Write-Log $tt3
+    #Write-Log $tt3
     $script:amver = $tt3[1].Value
-    write-log $script:amver
+    write-log $(Get-Translate("$script:amver が検出されました"))
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever"))        
 }
@@ -1117,8 +1092,6 @@ if($RadioButton28.Checked){
 #################################################################################################>
 #Webhook
 #################################################################################################>
-Write-Log "Webhook"
-Write-Log $CheckedBox.CheckedItems
 if($CheckedBox.CheckedItems -contains "GMH Webhook"){
     if($scid -eq "TOR GMH"){
         $form1113 = New-Object System.Windows.Forms.Form
@@ -1155,8 +1128,9 @@ if($CheckedBox.CheckedItems -contains "GMH Webhook"){
             Write-Log $textBox11111.Text
             if($($textBox11111.Text).StartsWith("https")){
                 $gmhwebhooktxt = $textBox11111.Text
+                Write-Log $(Get-Translate("Webhook URL: $gmhwebhooktxt"))
             }else{
-                Write-Log "Webhook URLが無効、または入力されていません。Skipされます。"
+                Write-Log $(Get-Translate("Webhook URLが無効、または入力されていません。Skipされます。"))
                 $gmhwebhooktxt = "None"
             }
         }    
@@ -1188,9 +1162,7 @@ if($tio){
 
     $Form2.Show()
     $Bar.Value = "10"
-
     #################################################################################################
-
     $web = Invoke-WebRequest $releasepage -UseBasicParsing
     $web2 = ConvertFrom-Json $web.Content
     $Bar.Value = "14"
@@ -1884,7 +1856,7 @@ if($tio){
     $Bar.Value = "68"
 
     if($submerged){
-        Write-Log $(Get-Translate("Submerged配置開始"))
+        Write-Log $(Get-Translate("最新のSubmerged配置開始"))
         #GithubのRelease一覧からぶっこぬいてLatestを置く
         $rel2 = "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest"
         $webs = Invoke-WebRequest $rel2 -UseBasicParsing
@@ -1898,9 +1870,10 @@ if($tio){
             if($($aus[$aaai]).IndexOf(".dll") -gt 0){
                 aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $($aus[$aaai])
                 Write-Log "$($aus[$aaai])"
+                Write-Log $(Get-Translate("Submerged Latest DLL download done"))
             }
         }
-        Write-Log $(Get-Translate("Submerged Latest DLL download done"))
+        Write-Log $(Get-Translate("最新のSubmerged配置完了"))
     }
     $Bar.Value = "69"
 
@@ -2023,8 +1996,6 @@ if($tio){
         }
         Write-Log $(Get-Translate("日本語 データ Download 開始"))
         Write-Log $(Get-Translate("日本語 データ $langdata"))
-        #Invoke-WebRequest $langdata -Outfile "$aupathm\Language\Japanese.dat" -UseBasicParsing
-        #curl.exe -L $langdata -o "$aupathm\Language\Japanese.dat"
         aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
         Write-Log $(Get-Translate("日本語 データ Download 完了"))
     }else{
@@ -2258,9 +2229,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
             }else{
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("必要な.Net 5 Frameworkがインストールされていません。インストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    #Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -UseBasicParsing
-                    #.\dotnet-install.ps1
-                    #Remove-Item .\dotnet-install.ps1
                     try{
                         choco -v
                     }catch{
@@ -2303,7 +2271,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
                 $qureq = $true
             }else{
-#                Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"
                 try{
                     choco -v
                 }catch{
@@ -2340,8 +2307,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
             Start-Transcript -Append -Path "$LogFileName"
-#            $fpth = Join-Path $npl "\install.ps1"
-#            Invoke-WebRequest https://vcredist.com/install.ps1 -OutFile "$fpth" -UseBasicParsing
             try{
                 pwsh -Command '$PSVersionTable.PSVersion.major'
             }
@@ -2360,14 +2325,11 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             }
 
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 vcredist-all -y" -Verb RunAs -Wait
-#            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth""" -Verb RunAs -Wait
-#            Remove-Item "$fpth"
             Stop-Transcript
             Write-Log "VC Redist Install ends"
             $Bar.Value = "86"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
-#            Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
             try{
                 choco -v
             }catch{
@@ -2379,7 +2341,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
         }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
             Write-Log ".Net Framework Install start"
             Start-Transcript -Append -Path "$LogFileName"
-#            Invoke-Expression "& { $(Invoke-RestMethod https://dot.net/v1/dotnet-install.ps1) }"choco install 
             try{
                 choco -v
             }catch{
@@ -2394,11 +2355,11 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Write-Log "GMH Webhook start"
             if($scid -eq "TOR GMH"){
                 if($gmhwebhooktxt -eq "None"){
-                    Write-Log "GMH Webhook skipped."
+                    Write-Log $(Get-Translate("GMH Webhook skipped."))
                 }else{
                     $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
                     if(!(Test-Path $gmhconfig)){
-                        Write-Log "Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"
+                        Write-Log $(Get-Translate("Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"))
                         $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
                         if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
                             New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
@@ -2415,7 +2376,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                                 $gmhnewconfig += "$gmhline `r`n"
                             }else{
                                 $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
-                                Write-Log "GMH Webhook : $gmhwebhooktxt"
+                                Write-Log $(Get-Translate("GMH Webhook : $gmhwebhooktxt"))
                             }
                         }else{
                             $gmhnewconfig += "$gmhline `r`n"
@@ -2425,20 +2386,20 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhnewconfig |Out-File $gmhconfig
                 }   
             }else{
-                Write-Log "GMH Webhook skipped."
+                Write-Log $(Get-Translate("GMH Webhook skipped."))
             }
-            Write-Log "GMH Webhook ends"
+            Write-Log $(Get-Translate("GMH Webhook ends"))
             $Bar.Value = "89"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
             if($scid -eq "TOR GMH"){
-                Write-Host "健康ランド化 start"
+                Write-Host $(Get-Translate("健康ランド化 start"))
                 #regioninfo.json
                 $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
                 if(Test-Path $aurifile){               
                     $auritext = Get-Content $aurifile -Raw
                 
                     if($auritext.IndexOf("健康ランド") -gt 0){
-                        Write-Host "健康ランド済:Server"
+                        Write-Host $(Get-Translate("健康ランド済:Server"))
                     }else{
                         if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
                             Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
@@ -2447,7 +2408,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
                         $aurijson.Regions += $kenkojson              
                         ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
-                        Write-Host "健康ランド化完了:Server"
+                        Write-Host $(Get-Translate("健康ランド化完了:Server"))
                     }
                 }
 
@@ -2502,12 +2463,12 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
                     }
                     $gmhnewconfig |Out-File $gmhconfig
-                    Write-Host "健康ランド化完了:Config"
+                    Write-Host $(Get-Translate("健康ランド化完了:Config"))
                 }
-                Write-Host "健康ランド化 ends"
+                Write-Host $(Get-Translate("健康ランド化 ends"))
                 $Bar.Value = "88"
             }else{
-                Write-Host "健康ランド化を実行するにはTOR GMHを選択してください。"
+                Write-Host $(Get-Translate("健康ランド化を実行するにはTOR GMHを選択してください。"))
             }
         }else{
         }
