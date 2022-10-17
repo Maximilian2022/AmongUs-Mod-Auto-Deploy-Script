@@ -1811,7 +1811,7 @@ if($tio){
                 New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
             }
             Copy-Item "C:\Temp\com.emptybottle.townofhost.cfg" "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" -Force
-            Remove-Item "C:\com.emptybottle.townofhost.cfg" -Force    
+            Remove-Item "C:\Temp\com.emptybottle.townofhost.cfg" -Force    
         }
     }elseif($scid -eq "SNR"){
         if(test-path "C:\Temp\jp.ykundesu.supernewroles.cfg"){
