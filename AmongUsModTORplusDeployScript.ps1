@@ -2426,8 +2426,6 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
 
                 $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
-                
-
                 $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
                 $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
 
@@ -2478,6 +2476,14 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhnewconfig |Out-File $gmhconfig
                     Write-Host $(Get-Translate("健康ランド化完了:Config"))
                 }
+
+                #regu
+                if(!(Test-Path "$aupathm\Regulations")){
+                    New-Item $(Join-Path $aupathm "Regulations") -Type Directory
+                }
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/KenkoLand.json" -OutFile "$aupathm\Regulations\KenkoLand.json" -UseBasicParsing
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/Nakarita.json" -OutFile "$aupathm\Regulations\Nakarita.json" -UseBasicParsing
+
                 Write-Host $(Get-Translate("健康ランド化 ends"))
                 $Bar.Value = "88"
             }else{
