@@ -2462,7 +2462,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
 
                     $gmhnewconfig = ""           
                     foreach ($gmhline in $kenkoconf) {
-                        if ($gmhline.StartsWith("Webhook")){
+                        if ($gmhline.StartsWith("Webhook = https://")){
                             if($null -ne $gmhwh){
                                 $gmhnewconfig += "$gmhwh `r`n"
                             }else{
