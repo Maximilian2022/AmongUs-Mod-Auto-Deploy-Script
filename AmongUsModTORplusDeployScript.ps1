@@ -1569,6 +1569,10 @@ if($tio){
                 New-Item -Path "C:\Temp\TheOtherHats" -ItemType Directory
                 Copy-Item "$aupathm\TheOtherHats\*" -Recurse "C:\Temp\TheOtherHats"
             }
+            if(Test-Path "$aupathm\Regulations"){
+                New-Item -Path "C:\Temp\Regulations" -ItemType Directory
+                Copy-Item "$aupathm\Regulations\*" -Recurse "C:\Temp\Regulations"
+            }
         }
         $Bar.Value = "42"
         if($clean -eq $true){
@@ -1850,6 +1854,15 @@ if($tio){
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force
             }
+        }
+        if(Test-Path "C:\Temp\Regulations"){
+            robocopy "C:\Temp\Regulations" "$aupathm\Regulations" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\Regulations" -Recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+
         }
     }
     $Bar.Value = "64"
