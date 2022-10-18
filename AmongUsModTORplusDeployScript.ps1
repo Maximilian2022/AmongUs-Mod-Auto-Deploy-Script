@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.8.1"
+$version = "1.5.8.3"
 #
 #################################################################################################
 ### minimum version for v2022.9.7.0
@@ -2384,11 +2384,11 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
                     $gmhnewconfig = ""           
                     foreach ($gmhline in $gmhfile) {
-                        if ($gmhline.StartsWith("Webhook")){
+                        if ($gmhline.StartsWith("WebhookUrl")){
                             if($gmhwebhooktxt -eq "None"){
                                 $gmhnewconfig += "$gmhline `r`n"
                             }else{
-                                $gmhnewconfig += "Webhook = $gmhwebhooktxt `r`n"                    
+                                $gmhnewconfig += "WebhookUrl = $gmhwebhooktxt `r`n"                    
                                 Write-Log $(Get-Translate("GMH Webhook : $gmhwebhooktxt"))
                             }
                         }else{
@@ -2412,7 +2412,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $auritext = Get-Content $aurifile -Raw
                 
                     if($auritext.IndexOf("健康ランド") -gt 0){
-                        Write-Host $(Get-Translate("健康ランド済:Server"))
+                        Write-Log $(Get-Translate("健康ランド済:Server"))
                     }else{
                         if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
                             Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
@@ -2421,21 +2421,21 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
                         $aurijson.Regions += $kenkojson 
                         ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-                        Write-Host $(Get-Translate("健康ランド化完了:Server"))
+                        Write-Log $(Get-Translate("健康ランド化完了:Server"))
                     }
                 }
-
-                $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
+                $kenkofile = "$aupathm\BepInEx\config\kenkoland.txt"
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt" -OutFile "$kenkofile" -UseBasicParsing
                 $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
                 $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
 
                 if(Test-Path $gmhconfig){
                     #configからWebhookを救出
                     $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
-                    foreach ($gmhline in $gmhfile) {
-                        if ($gmhline.StartsWith("Webhook = https://")){
-                            Write-Log $gmhline
-                            $gmhwh += "$gmhline"
+                    foreach ($gmhline2 in $gmhfile) {
+                        if ($gmhline2.StartsWith("WebhookUrl = https://")){
+                            Write-Log "WebhookUrl is already set: $gmhline2"
+                            $gmhwh = "$gmhline2"
                         }
                     }
                 }
@@ -2460,24 +2460,31 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     curl.exe $ghurl -o "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
 
                     $gmhnewconfig = ""           
-                    foreach ($gmhline in $kenkoconf) {
-                        if ($gmhline.StartsWith("Webhook")){
+                    $kenkoconf = (Get-Content -Encoding utf8 $kenkofile) -as [string[]]
+                    foreach ($gmhline3 in $kenkoconf) {
+                        if ($gmhline3.StartsWith("WebhookUrl")){
                             if($null -ne $gmhwebhooktxt){
-                                $gmhnewconfig += "Webhook = $gmhwebhooktxt"
+                                $gmhnewconfig += "WebhookUrl = $gmhwebhooktxt `r`n"
                             }elseif($null -ne $gmhwh){
                                 $gmhnewconfig += "$gmhwh `r`n"
+                            }elseif($gmhwebhooktxt -ne ""){
+                                $gmhnewconfig += "WebhookUrl = $gmhwebhooktxt `r`n"
+                            }elseif($gmhwh -ne ""){
+                                $gmhnewconfig += "$gmhwh `r`n"
                             }else{
-                                $gmhnewconfig += "$gmhline `r`n"
+                                $gmhnewconfig += "$gmhline3 `r`n"
                             }
                         }else{
-                                $gmhnewconfig += "$gmhline `r`n"
+                                $gmhnewconfig += "$gmhline3 `r`n"
                         }
                     }
                     if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
                         New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
                     }
+                    Start-Sleep -Seconds 2
                     $gmhnewconfig |Out-File $gmhconfig
-                    Write-Host $(Get-Translate("健康ランド化完了:Config"))
+                    Remove-Item $kenkofile -Force
+                    Write-Log $(Get-Translate("健康ランド化完了:Config"))
                 }
 
                 #regu
@@ -2486,11 +2493,12 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/KenkoLand.json" -OutFile "$aupathm\Regulations\KenkoLand.json" -UseBasicParsing
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/Nakarita.json" -OutFile "$aupathm\Regulations\Nakarita.json" -UseBasicParsing
+                Write-Log $(Get-Translate("健康ランド化完了:Regulation"))
 
-                Write-Host $(Get-Translate("健康ランド化 ends"))
+                Write-Log $(Get-Translate("健康ランド化 ends"))
                 $Bar.Value = "88"
             }else{
-                Write-Host $(Get-Translate("健康ランド化を実行するにはTOR GMHを選択してください。"))
+                Write-Log $(Get-Translate("健康ランド化を実行するにはTOR GMHを選択してください。"))
             }
         }else{
         }

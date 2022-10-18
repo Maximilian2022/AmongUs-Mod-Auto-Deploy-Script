@@ -87,8 +87,6 @@ Custom Server IP = imposter.kenko.land
 # Default value: 22023
 Custom Server Port = 22023
 
-Webhook = 
-
 [Preset0]
 
 # Setting type: Int32
