@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.5.8"
+$version = "1.5.8.1"
 #
 #################################################################################################
 ### minimum version for v2022.9.7.0
@@ -2434,7 +2434,8 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
                     foreach ($gmhline in $gmhfile) {
                         if ($gmhline.StartsWith("Webhook = https://")){
-                            $gmhwh += "$gmhline `r`n"
+                            Write-Log $gmhline
+                            $gmhwh += "$gmhline"
                         }
                     }
                 }
@@ -2460,8 +2461,10 @@ if($CheckedBox.CheckedItems.Count -gt 0){
 
                     $gmhnewconfig = ""           
                     foreach ($gmhline in $kenkoconf) {
-                        if ($gmhline.StartsWith("Webhook = https://")){
-                            if($null -ne $gmhwh){
+                        if ($gmhline.StartsWith("Webhook")){
+                            if($null -ne $gmhwebhooktxt){
+                                $gmhnewconfig += "Webhook = $gmhwebhooktxt"
+                            }elseif($null -ne $gmhwh){
                                 $gmhnewconfig += "$gmhwh `r`n"
                             }else{
                                 $gmhnewconfig += "$gmhline `r`n"
