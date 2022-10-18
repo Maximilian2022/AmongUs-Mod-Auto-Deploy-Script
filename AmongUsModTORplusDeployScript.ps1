@@ -2419,8 +2419,8 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         }
                         $aurijson = ConvertFrom-Json $auritext
                         $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
-                        $aurijson.Regions += $kenkojson              
-                        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
+                        $aurijson.Regions += $kenkojson 
+                        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
                         Write-Host $(Get-Translate("健康ランド化完了:Server"))
                     }
                 }
@@ -2435,7 +2435,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     #configからWebhookを救出
                     $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
                     foreach ($gmhline in $gmhfile) {
-                        if ($gmhline.StartsWith("Webhook")){
+                        if ($gmhline.StartsWith("Webhook = https://")){
                             $gmhwh += "$gmhline `r`n"
                         }
                     }
