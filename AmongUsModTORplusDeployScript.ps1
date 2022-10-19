@@ -18,9 +18,9 @@ $tohmin = "v2.2.2"
 
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
-#Frequent changing parameter
-$prever = "2022.8.24"
-$prevtargetid = "6036212755012520093"
+#Frequent changing parameter https://steamdb.info/depot/945361/manifests/
+$prever = "2022.9.20"
+$prevtargetid = "2481435393334839152"
 
 $gmhbool = $false
 #Testdll: v2022.9.7.0
