@@ -22,9 +22,9 @@ $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $prever = "2022.9.20"
 $prevtargetid = "2481435393334839152"
 
-$gmhbool = $false
-#Testdll: v2022.9.7.0
-$torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1017075108696834098/TheOtherRolesGM.dll"
+$gmhbool = $true
+#Testdll: v2022.10.19
+$torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1032246367009120287/TheOtherRolesGM.dll"
 
 #################################################################################################
 # Translate Function
@@ -312,7 +312,7 @@ function BackUpAU{
                 try{
                     $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
                 }catch{
-                    Write-Log $(Get-Translate("Steam.exe が起動していないか、ログインできていません。起動してログインしてください。"))           
+                    Write-Log $(Get-Translate("Steam.exe 起動チェック。ログインできていない場合はログインしてください。"))           
                 }
                 if($null -eq $hwnd){
                     if($steamrunner){
@@ -368,7 +368,7 @@ function BackUpAU{
                 Write-Log $(Get-Translate("前バージョンのロードに失敗しました。再度お試しください。"))
             }
         }elseif($platform -eq "epic"){
-            Write-Log $(Get-Translate("EGLでは過去VersionをDLできません"))            
+            Write-Log $(Get-Translate("Epic Game では過去VersionをDLできません"))            
         }
     }
 
