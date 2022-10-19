@@ -5,12 +5,14 @@
 $version = "1.5.9"
 #
 #################################################################################################
-### minimum version for v2022.9.7.0
+### minimum version for v2022.10.18
+$snrmin = "1.4.2.3"
+$torhmin = "v2.3.120"
+
+### minimum version for v2022.9.70
 $ermin = "v3.2.2.0"
 $esmin = "v3.2.2.0"
-$snrmin = "1.4.2.0"
 $nosmin = "1.12.11,2022.8.24"
-$torhmin = "v2.2.102"
 $tormin = "v4.1.7"
 $tourmin = "v3.3.0"
 $tormmin = "MR_v2.3.0"
@@ -22,7 +24,7 @@ $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $prever = "2022.9.20"
 $prevtargetid = "2481435393334839152"
 
-$gmhbool = $true
+$gmhbool = $false
 #Testdll: v2022.10.19
 $torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1032246367009120287/TheOtherRolesGM.dll"
 
