@@ -1219,7 +1219,8 @@ if($tio){
     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
         if($web2.tag_name[$ai] -eq "$torpv"){
             if($scid -eq "TOR GMH"){
-                if($torpv -lt $torhmin){
+                if($torpv -eq "tmp_v2022.10.23"){
+                }elseif($torpv -lt $torhmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     }else{
                         Write-Log $(Get-Translate("処理を中止します"))
@@ -1398,28 +1399,33 @@ if($tio){
         }
         $wvar = $true
         while($wvar){
-            $vermet = @()
-            $vermet = $torv.split(".")
-            if($($vermet[2]) -ne 0){
-                $v3 = $vermet[2] -1
-            }else{
-                $v3 = 0
-            }
-            $torv = "$($vermet[0]).$($vermet[1]).$v3"
-            if($checkzip){
-                if($checkdll){
-                    Write-Output $(Get-Translate("ERROR:something wrong."))
-                    exit
-                }else{
-                    for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
-                        if($($langh[$aiv]).IndexOf("$torv") -gt 0){
-                            $tordlp = $($langh[$aiv])
-                            $checkzip = $false
-                        }
-                    }                
-                }
-            }else{
+            if($torv -eq "tmp_v2022.10.23"){
+                $tordlp = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.3.122/TheOtherRoles-GM-Haoming.v2.3.122.zip"
                 $wvar = $false
+            }else{
+                $vermet = @()
+                $vermet = $torv.split(".")
+                if($($vermet[2]) -ne 0){
+                    $v3 = $vermet[2] -1
+                }else{
+                    $v3 = 0
+                }
+                $torv = "$($vermet[0]).$($vermet[1]).$v3"
+                if($checkzip){
+                    if($checkdll){
+                        Write-Output $(Get-Translate("ERROR:something wrong."))
+                        exit
+                    }else{
+                        for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
+                            if($($langh[$aiv]).IndexOf("$torv") -gt 0){
+                                $tordlp = $($langh[$aiv])
+                                $checkzip = $false
+                            }
+                        }                
+                    }
+                }else{
+                    $wvar = $false
+                }
             }
         }
     }elseif($scid -eq "TOR GMT"){
@@ -1452,34 +1458,29 @@ if($tio){
         }
         $wvar = $true
         while($wvar){
-            if($torv -eq "tmp_v2022.10.23"){
-                $tordlp = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.3.122/TheOtherRoles-GM-Haoming.v2.3.122.zip"
-                $wvar = $false
+            $vermet = @()
+            $vermet = $torv.split(".")
+            if($($vermet[2]) -ne 0){
+                $v3 = $vermet[2] -1
             }else{
-                $vermet = @()
-                $vermet = $torv.split(".")
-                if($($vermet[2]) -ne 0){
-                    $v3 = $vermet[2] -1
-                }else{
-                    $v3 = 0
-                }
-                $torv = "$($vermet[0]).$($vermet[1]).$v3"
-                if($checkzip){
-                    if($checkdll){
-                        Write-Output $(Get-Translate("ERROR:something wrong."))
-                        exit
-                    }else{
-                        for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
-                            if($($langh[$aiv]).IndexOf("$torv") -gt 0){
-                                $tordlp = $($langh[$aiv])
-                                $checkzip = $false
-                            }
-                        }                
-                    }
-                }else{
-                    $wvar = $false
-                }                    
+                $v3 = 0
             }
+            $torv = "$($vermet[0]).$($vermet[1]).$v3"
+            if($checkzip){
+                if($checkdll){
+                    Write-Output $(Get-Translate("ERROR:something wrong."))
+                    exit
+                }else{
+                    for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
+                        if($($langh[$aiv]).IndexOf("$torv") -gt 0){
+                            $tordlp = $($langh[$aiv])
+                            $checkzip = $false
+                        }
+                    }                
+                }
+            }else{
+                $wvar = $false
+            }                    
         }
     }elseif($scid -eq "TOR MR"){
         $tordlp = "https://github.com/miru-y/TheOtherRoles-MR/releases/download/${torv}/TheOtherRolesMR.zip"
