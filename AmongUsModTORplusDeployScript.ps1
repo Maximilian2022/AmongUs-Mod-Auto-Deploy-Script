@@ -2587,6 +2587,7 @@ if($platform -eq "Epic"){
         Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
     }
     
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco update legendary -y" -Verb RunAs -Wait   
     Start-Transcript -Append -Path "$LogFileName"
     Set-Location "$aupathb"
     legendary auth --import
