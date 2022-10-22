@@ -22,8 +22,10 @@ $tohmin = "v2.2.2"
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-$prever = "2022.9.20"
-$prevtargetid = "2481435393334839152"
+$prever = "2022.10.18"
+$prevtargetid0 = "7491486149462341667"
+$prever1 = "2022.9.20"
+$prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
 #Testdll: v2022.10.19
@@ -526,18 +528,24 @@ $MyGroupBox4.text = $(Get-Translate("本体Versionを選択してください"))
 
 # グループの中のラジオボタンを作る
 $RadioButton114 = New-Object System.Windows.Forms.RadioButton
-$RadioButton114.Location = New-Object System.Drawing.Point(20,30)
-$RadioButton114.size = New-Object System.Drawing.Size(150,30)
+$RadioButton114.Location = New-Object System.Drawing.Point(10,30)
+$RadioButton114.size = New-Object System.Drawing.Size(120,30)
 $RadioButton114.Text = $(Get-Translate("A"))
 $RadioButton114.Checked = $True
 
 $RadioButton115 = New-Object System.Windows.Forms.RadioButton
-$RadioButton115.Location = New-Object System.Drawing.Point(180,30)
-$RadioButton115.size = New-Object System.Drawing.Size(150,30)
+$RadioButton115.Location = New-Object System.Drawing.Point(130,30)
+$RadioButton115.size = New-Object System.Drawing.Size(120,30)
 $RadioButton115.Text = $(Get-Translate("B"))
 
+$RadioButton116 = New-Object System.Windows.Forms.RadioButton
+$RadioButton116.Location = New-Object System.Drawing.Point(250,30)
+$RadioButton116.size = New-Object System.Drawing.Size(120,30)
+$RadioButton116.Text = $(Get-Translate("C"))
+
+
 # グループにラジオボタンを入れる
-$MyGroupBox4.Controls.AddRange(@($Radiobutton114,$RadioButton115))
+$MyGroupBox4.Controls.AddRange(@($Radiobutton114,$RadioButton115,$RadioButton116))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox4)
 
@@ -1023,6 +1031,7 @@ $Combo_SelectedIndexChanged= {
     write-log $(Get-Translate("$script:amver が検出されました"))
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever"))        
+    $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
 }
 
 $sttime = Get-Date
@@ -1052,6 +1061,7 @@ if($RadioButton114.Checked){
     $prebool = $false
     Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
 }elseif($RadioButton115.Checked){
+    $prevtargetid = $prevtargetid0
     #ファイル一覧
     BackUpAU
     $items = Get-ChildItem $aupathb -File
@@ -1070,6 +1080,34 @@ if($RadioButton114.Checked){
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
             Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
+        }else{
+            $prebool = $false    
+            Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
+        }    
+    }else{
+        $prebool = $false    
+        Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
+    }
+}elseif($RadioButton116.Checked){
+    $prevtargetid = $prevtargetid1
+    #ファイル一覧
+    BackUpAU
+    $items = Get-ChildItem $aupathb -File
+    $nbool = $false
+    foreach ($item in $items) {
+        if(($item.Name).IndexOf("$prever1") -gt 0){
+            if(($item.Name).IndexOf(".zip") -gt 0){
+                $prefpth = $item.Name 
+                Write-Log $prefpth
+                $nbool = $true
+            }
+        }
+    }
+    #chk pth
+    if($nbool){
+        if(Test-Path "$aupathb\$prefpth"){
+            $prebool = $true
+            Write-Log $(Get-Translate("本体バージョン v$prever1 が選択されています"))
         }else{
             $prebool = $false    
             Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
