@@ -35,8 +35,8 @@ $prever1 = "2022.9.20"
 $prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
-#Testdll: v2022.10.19
-$torgmdll = "https://cdn.discordapp.com/attachments/956562783942606948/1033001757514682419/TheOtherRolesGM.dll"
+#Testdll: tmp_v2022.10.23
+$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23/TheOtherRolesGM.dll"
 
 #################################################################################################
 # Translate Function
@@ -1402,6 +1402,7 @@ if($tio){
             if($torv -eq "tmp_v2022.10.23"){
                 $tordlp = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.3.122/TheOtherRoles-GM-Haoming.v2.3.122.zip"
                 $wvar = $false
+                $checkgm = $true
             }else{
                 $vermet = @()
                 $vermet = $torv.split(".")
