@@ -857,6 +857,8 @@ $Combo_SelectedIndexChanged= {
             for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                 if($web2.tag_name[$ai] -ge $aumin){
                     $list2 += $($web2.tag_name[$ai])
+                }elseif($web2.tag_name[$ai] -eq "tmp_v2022.10.23"){
+                    $list2 += $($web2.tag_name[$ai])
                 }
             }
         }
