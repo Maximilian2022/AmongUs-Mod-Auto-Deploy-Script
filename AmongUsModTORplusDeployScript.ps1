@@ -5,10 +5,15 @@
 $version = "1.6.0"
 #
 #################################################################################################
+### minimum version for v2022.10.25
+$snrmin = "1.4.2.4"
+
+
 ### minimum version for v2022.10.18
 $snrmin = "1.4.2.3"
-#$torhmin = "v2.3.120"
-$torhmin = "v2.3.117"
+$torhmin = "v2.3.120"
+$ermin = "v3.3.0.3"
+$esmin = "v3.3.0.3"
 
 ### minimum version for v2022.9.20
 $ermin = "v3.2.2.0"
@@ -18,6 +23,8 @@ $tormin = "v4.1.7"
 $tourmin = "v3.3.0"
 $tormmin = "MR_v2.3.0"
 $tohmin = "v2.2.2"
+$snrmin = "1.4.2.3"
+$torhmin = "v2.2.102"
 
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
