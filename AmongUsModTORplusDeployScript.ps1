@@ -2610,8 +2610,8 @@ if($platform -eq "Epic"){
     #ウィンドウサイズを最小化する
     $windowPattern.SetWindowVisualState([System.Windows.Automation.WindowVisualState]::Minimized)    
     Write-Output $(Get-Translate("`r`nEGL再起動完了`r`n"))
-    #>
     Start-Sleep -Seconds 20
+    #>
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
         Write-Output "945360"> "$aupathm\steam_appid.txt"
