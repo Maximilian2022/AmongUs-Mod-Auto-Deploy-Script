@@ -2407,7 +2407,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Write-Log $(Get-Translate("GMH Webhook ends"))
             $Bar.Value = "89"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
-            if(($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT"))
+            if(($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT")){
                 Write-Host $(Get-Translate("健康ランド化 start"))
                 #regioninfo.json
                 $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
