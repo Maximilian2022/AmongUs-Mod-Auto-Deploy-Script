@@ -2598,9 +2598,8 @@ if($platform -eq "Epic"){
     Start-Sleep -Seconds 5
     Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
     Get-Process EpicGamesLauncher | ForEach-Object { Stop-Process $_; Start-Process $_.Path }
-    $MAIN_WINDOW_TITLE = "EpicGamesLauncher"
     try{
-        $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
+        $hwnd=(Get-Process EpicGamesLauncher).MainWindowHandle
     }catch{
         Write-Log $(Get-Translate("EGL 起動チェック。ログインできていない場合はログインしてください。"))           
     }
