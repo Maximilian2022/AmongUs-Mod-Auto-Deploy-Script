@@ -23,7 +23,7 @@ $tormin = "v4.1.7"
 $tourmin = "v3.3.0"
 $tormmin = "MR_v2.3.0"
 $tohmin = "v2.2.2"
-$snrmin = "1.4.2.3"
+$snrmin = "1.4.2.0"
 $torhmin = "v2.2.102"
 
 #TOR plus, TOR GM, AUM is depricated.
@@ -2598,6 +2598,11 @@ if($platform -eq "Epic"){
     Start-Sleep -Seconds 5
     Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
     Get-Process EpicGamesLauncher | ForEach-Object { Stop-Process $_; Start-Process $_.Path }
+    try{
+        (Get-Process EpicGamesLauncher).MainWindowHandle
+    }catch{
+        Write-Log $(Get-Translate("EGL 起動チェック。ログインできていない場合はログインしてください。"))           
+    }
     Write-Output $(Get-Translate("`r`nEGL再起動完了`r`n"))
     Start-Sleep -Seconds 20
 }elseif($platform -eq "Steam"){
