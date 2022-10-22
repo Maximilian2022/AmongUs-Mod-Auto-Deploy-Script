@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.0.5"
+$version = "1.6.0.6"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -2596,9 +2596,9 @@ if($platform -eq "Epic"){
     legendary -y egl-sync
     Stop-Transcript
     Start-Sleep -Seconds 5
-    Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
-    Get-Process EpicGamesLauncher | ForEach-Object { Stop-Process $_; Start-Process $_.Path }
-    Start-Sleep -Seconds 5
+    <#Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
+    #Get-Process EpicGamesLauncher | ForEach-Object { Stop-Process $_; Start-Process $_.Path }
+    #Start-Sleep -Seconds 5
     Add-Type -AssemblyName UIAutomationClient
     try{
         $hwnd=(Get-Process EpicGamesLauncher).MainWindowHandle
@@ -2610,6 +2610,7 @@ if($platform -eq "Epic"){
     #ウィンドウサイズを最小化する
     $windowPattern.SetWindowVisualState([System.Windows.Automation.WindowVisualState]::Minimized)    
     Write-Output $(Get-Translate("`r`nEGL再起動完了`r`n"))
+    #>
     Start-Sleep -Seconds 20
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
