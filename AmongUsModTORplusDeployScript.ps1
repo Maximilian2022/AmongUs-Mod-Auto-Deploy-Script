@@ -2596,7 +2596,8 @@ if($platform -eq "Epic"){
     legendary -y egl-sync
     Stop-Transcript
     Start-Sleep -Seconds 5
-    <#Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
+    <# ショートカットを変えたのでもはや不要
+    Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
     #Get-Process EpicGamesLauncher | ForEach-Object { Stop-Process $_; Start-Process $_.Path }
     #Start-Sleep -Seconds 5
     Add-Type -AssemblyName UIAutomationClient
