@@ -2227,7 +2227,7 @@ if($tio){
                 $sShortcut.TargetPath = "$aupathm\Among Us.exe"
             }elseif($platform -eq "Epic"){
                 $sShortcut.TargetPath = "pwsh.exe"
-                $sShortcut.Arguments = "-Command legendary auth --import && legendary -y egl-sync && legendary launch Among Us"
+                $sShortcut.Arguments = "-Command legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import `"Among Us`" $aupathm && legendary -y egl-sync && legendary launch Among Us"
                 $sShortcut.WorkingDirectory = $aupathb
             }else{
                 Write-Log $(Get-Translate("ERROR: Critical Shortcut"))
