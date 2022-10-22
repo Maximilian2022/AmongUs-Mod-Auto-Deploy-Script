@@ -1452,28 +1452,33 @@ if($tio){
         }
         $wvar = $true
         while($wvar){
-            $vermet = @()
-            $vermet = $torv.split(".")
-            if($($vermet[2]) -ne 0){
-                $v3 = $vermet[2] -1
-            }else{
-                $v3 = 0
-            }
-            $torv = "$($vermet[0]).$($vermet[1]).$v3"
-            if($checkzip){
-                if($checkdll){
-                    Write-Output $(Get-Translate("ERROR:something wrong."))
-                    exit
-                }else{
-                    for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
-                        if($($langh[$aiv]).IndexOf("$torv") -gt 0){
-                            $tordlp = $($langh[$aiv])
-                            $checkzip = $false
-                        }
-                    }                
-                }
-            }else{
+            if($torv -eq "tmp_v2022.10.23"){
+                $tordlp = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.3.122/TheOtherRoles-GM-Haoming.v2.3.122.zip"
                 $wvar = $false
+            }else{
+                $vermet = @()
+                $vermet = $torv.split(".")
+                if($($vermet[2]) -ne 0){
+                    $v3 = $vermet[2] -1
+                }else{
+                    $v3 = 0
+                }
+                $torv = "$($vermet[0]).$($vermet[1]).$v3"
+                if($checkzip){
+                    if($checkdll){
+                        Write-Output $(Get-Translate("ERROR:something wrong."))
+                        exit
+                    }else{
+                        for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
+                            if($($langh[$aiv]).IndexOf("$torv") -gt 0){
+                                $tordlp = $($langh[$aiv])
+                                $checkzip = $false
+                            }
+                        }                
+                    }
+                }else{
+                    $wvar = $false
+                }                    
             }
         }
     }elseif($scid -eq "TOR MR"){
