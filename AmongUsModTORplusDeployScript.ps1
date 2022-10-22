@@ -2592,17 +2592,21 @@ if($platform -eq "Epic"){
     Set-Location "$aupathb"
     legendary auth --import
     legendary -y uninstall Among Us --keep-files 
-    legendary -y import "Among Us" $aupathm
+    legendary -y import "Among Us" "$aupathm"
     legendary -y egl-sync
     Stop-Transcript
     Start-Sleep -Seconds 5
     Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
     Get-Process EpicGamesLauncher | ForEach-Object { Stop-Process $_; Start-Process $_.Path }
     try{
-        (Get-Process EpicGamesLauncher).MainWindowHandle
+        $hwnd = (Get-Process EpicGamesLauncher).MainWindowHandle
     }catch{
         Write-Log $(Get-Translate("EGL 起動チェック。ログインできていない場合はログインしてください。"))           
     }
+    $window=[System.Windows.Automation.AutomationElement]::FromHandle($hwnd)
+    $windowPattern=$window.GetCurrentPattern([System.Windows.Automation.WindowPattern]::Pattern)
+    #ウィンドウサイズを最小化する
+    $windowPattern.SetWindowVisualState([System.Windows.Automation.WindowVisualState]::Minimized)    
     Write-Output $(Get-Translate("`r`nEGL再起動完了`r`n"))
     Start-Sleep -Seconds 20
 }elseif($platform -eq "Steam"){
