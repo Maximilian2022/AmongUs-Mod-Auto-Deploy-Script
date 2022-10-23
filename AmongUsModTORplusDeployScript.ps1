@@ -35,8 +35,8 @@ $prever1 = "2022.9.20"
 $prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
-#Testdll: tmp_v2022.10.23
-$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23/TheOtherRolesGM.dll"
+#Testdll: tmp_v2022.10.23.2
+$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23.2/TheOtherRolesGM.dll"
 
 #################################################################################################
 # Translate Function
