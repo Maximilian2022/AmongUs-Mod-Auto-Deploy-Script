@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.1.1"
+$version = "1.6.1.2"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -29,10 +29,10 @@ $torhmin = "v2.2.102"
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-$prever0 = "2022.10.18"
-$prevtargetid0 = "7491486149462341667"
-$prever1 = "2022.9.20"
-$prevtargetid1 = "2481435393334839152"
+$prever1 = "2022.10.18"
+$prevtargetid1 = "7491486149462341667"
+$prever = "2022.9.20"
+$prevtargetid0 = "2481435393334839152"
 
 $gmhbool = $true
 #Testdll: tmp_v2022.10.23.2
@@ -1069,7 +1069,6 @@ if($RadioButton114.Checked){
     Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
 }elseif($RadioButton115.Checked){
     $prevtargetid = $prevtargetid0
-    $prever = $prever0
     #ファイル一覧
     BackUpAU
     $items = Get-ChildItem $aupathb -File
@@ -1098,13 +1097,12 @@ if($RadioButton114.Checked){
     }
 }elseif($RadioButton116.Checked){
     $prevtargetid = $prevtargetid1
-    $prever = $prever1
     #ファイル一覧
     BackUpAU
     $items = Get-ChildItem $aupathb -File
     $nbool = $false
     foreach ($item in $items) {
-        if(($item.Name).IndexOf("$prever") -gt 0){
+        if(($item.Name).IndexOf("$prever1") -gt 0){
             if(($item.Name).IndexOf(".zip") -gt 0){
                 $prefpth = $item.Name 
                 Write-Log $prefpth
@@ -1116,7 +1114,7 @@ if($RadioButton114.Checked){
     if($nbool){
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
-            Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
+            Write-Log $(Get-Translate("本体バージョン v$prever1 が選択されています"))
         }else{
             $prebool = $false    
             Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
