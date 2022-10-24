@@ -29,10 +29,10 @@ $torhmin = "v2.2.102"
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-$prever1 = "2022.10.18"
-$prevtargetid1 = "7491486149462341667"
-$prever = "2022.9.20"
-$prevtargetid0 = "2481435393334839152"
+$prever0 = "2022.10.18"
+$prevtargetid0 = "7491486149462341667"
+$prever1 = "2022.9.20"
+$prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
 #Testdll: tmp_v2022.10.23.2
@@ -358,18 +358,18 @@ function BackUpAU{
             while(!(Test-Path $bupfolder)){
                 Start-Sleep -Seconds 2
             }
-            Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。(Max10分でタイムアウトします)#0"))
+            Write-Log $(Get-Translate("Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。(Max10分でタイムアウトします)#0"))
             $presu = $false
             while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
                 Start-sleep -Seconds 15
                 #timeout 10min.
                 if($counter -lt 40){
                     $counter++
-                    Write-Log $(Get-Translate("Steam.exe は前バージョンをダウンロード中です。しばらくお待ちください。#$counter $((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
+                    Write-Log $(Get-Translate("Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。#$counter $((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
                     $presu = $true
                 }else{
                     break
-                    Write-Log $(Get-Translate("Steam.exe の前バージョンをダウンロードがタイムアウトしました。再度お試しください。$((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
+                    Write-Log $(Get-Translate("Steam.exe の前バージョン($prever)をダウンロードがタイムアウトしました。再度お試しください。$((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
                 }
             }
             if($presu){
@@ -377,10 +377,10 @@ function BackUpAU{
                 Start-Sleep -Seconds 2
                 Remove-Item -Path $delfoldser -Recurse -Force    
             }else{
-                Write-Log $(Get-Translate("前バージョンのロードに失敗しました。再度お試しください。"))
+                Write-Log $(Get-Translate("前バージョン($prever)のロードに失敗しました。再度お試しください。"))
             }
         }elseif($platform -eq "epic"){
-            Write-Log $(Get-Translate("Epic Game では過去VersionをDLできません"))            
+            Write-Log $(Get-Translate("Epic Game では現在このScriptで過去VersionをDLできません"))            
         }
     }
 
@@ -1037,7 +1037,7 @@ $Combo_SelectedIndexChanged= {
     $script:amver = $tt3[1].Value
     write-log $(Get-Translate("$script:amver が検出されました"))
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
-    $RadioButton115.Text = $(Get-Translate("$script:prever"))        
+    $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
     $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
 }
 
@@ -1069,6 +1069,7 @@ if($RadioButton114.Checked){
     Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
 }elseif($RadioButton115.Checked){
     $prevtargetid = $prevtargetid0
+    $prever = $prever0
     #ファイル一覧
     BackUpAU
     $items = Get-ChildItem $aupathb -File
@@ -1097,6 +1098,7 @@ if($RadioButton114.Checked){
     }
 }elseif($RadioButton116.Checked){
     $prevtargetid = $prevtargetid1
+    $prever = $prever1
     #ファイル一覧
     BackUpAU
     $items = Get-ChildItem $aupathb -File
@@ -1114,7 +1116,7 @@ if($RadioButton114.Checked){
     if($nbool){
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
-            Write-Log $(Get-Translate("本体バージョン v$prever1 が選択されています"))
+            Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
         }else{
             $prebool = $false    
             Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
