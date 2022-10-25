@@ -284,8 +284,9 @@ function BackUpAU{
             New-Item "$aupathb\epic_manifest" -Type Directory
         }
         if(Test-Path "$aupatho\.egstore"){
-            if(!(Test-Path "$aupatho\.egstore\$amver.manifest")){
-                Copy-Item -Filter *.manifest -Path "$aupatho\.egstore" -Destination "$aupathb\epic_manifest\$amver.manifest"
+            if(!(Test-Path "$aupathb\$amver.manifest")){
+                $egmani = Get-ChildItem -path "$aupatho\.egstore\*.manifest"
+                Copy-Item -Filter $egmani[0].Name -Path "$aupatho\.egstore" -Destination "$aupathb\epic_manifest\$amver.manifest"
             }
         }
     }
