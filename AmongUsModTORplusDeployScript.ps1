@@ -9,6 +9,7 @@ $version = "1.6.4"
 $snrmin = "1.4.2.4"
 $ermin = "v4.0.0.0"
 $esmin = "v4.0.0.0"
+$tohmin = "v3.0.2"
 
 
 ### minimum version for v2022.10.18
@@ -423,14 +424,14 @@ function BackUpAU{
                     }
                 }
 
-                Write-Log "$epicmanifestfile"
+                Write-Log "選択: $epicmanifestfile"
                 if(!(Test-Path "$aupathb\epic_manifest")){
                     New-Item "$aupathb\epic_manifest" -Type Directory
                 }
                 $mfileName = Split-Path $epicmanifestfile -Leaf
                 Copy-Item $epicmanifestfile "$aupathb\epic_manifest\$mfilename"
                 $epicmanifestfile = "$aupathb\epic_manifest\$mfilename"
-                Write-Log "$epicmanifestfile"
+                Write-Log "コピー: $epicmanifestfile"
 
                 #legendary でAmongusを落とす
                 legendary.exe uninstall "Among Us" --keep-files -y
@@ -1219,7 +1220,7 @@ if($RadioButton114.Checked){
     exit
 }
 
-$legver = legendary -V            
+$legver = legendary.exe -V            
 if($legver -eq 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'){
 }else{
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
@@ -2299,7 +2300,7 @@ if($tio){
                     Start-Process "$aupathm\Among Us.exe"
                 }elseif($platform -eq "Epic"){
                     Set-Location "$aupathb"
-                    legendary launch Among Us
+                    legendary.exe launch Among Us
                 }else{
                     Write-Output "ERROR:Critical run apps"
                 }
@@ -2689,7 +2690,7 @@ $Bar.Value = "93"
 if($platform -eq "Epic"){
 
     try{
-        legendary -V
+        legendary.exe -V
     }
     catch{
         try{
@@ -2703,10 +2704,10 @@ if($platform -eq "Epic"){
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command cup legendary -y" -Verb RunAs -Wait   
     Start-Transcript -Append -Path "$LogFileName"
     Set-Location "$aupathb"
-    legendary auth --import
-    legendary -y uninstall Among Us --keep-files 
-    legendary -y import "Among Us" "$aupathm"
-    legendary -y egl-sync
+    legendary.exe auth --import
+    legendary.exe -y uninstall Among Us --keep-files 
+    legendary.exe -y import "Among Us" "$aupathm"
+    legendary.exe -y egl-sync
     Stop-Transcript
     Start-Sleep -Seconds 5
     <# ショートカットを変えたのでもはや不要
@@ -2752,7 +2753,7 @@ if($tio){
             Start-Process "$aupathm\Among Us.exe"   
         }elseif($platform -eq "Epic"){
             Set-Location "$aupathb"
-            legendary launch Among Us
+            legendary.exe launch Among Us
         }else{
             Write-Log $(Get-Translate("ERROR:Critical run apps"))
         }
