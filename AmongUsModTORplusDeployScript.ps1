@@ -222,6 +222,7 @@ function MakeEntry
 }
 #func backup
 Add-Type -AssemblyName UIAutomationClient
+$oldtype = $true
 function BackUpAU{
     #Backup System
     if(Test-Path $aupathb){
@@ -392,76 +393,78 @@ function BackUpAU{
                 Write-Log $(Get-Translate("前バージョン($prever)のロードに失敗しました。再度お試しください。"))
             }
         }elseif($platform -eq "epic"){
-            $epicmanifestchk = $true
-            if(Test-Path "$aupathb\epic_manifest"){
-                $eitems = Get-ChildItem "$aupathb\epic_manifest" -File
-                foreach ($item in $eitems) {        
-                    if(($item.Name).IndexOf("$prever") -gt 0 ){
-                        $epicmanifestchk = $false
-                        $epicmanifestfile = "$aupathb\epic_manifest\$prever.manifest"
+            if($oldtype){
+                $epicmanifestchk = $true
+                if(Test-Path "$aupathb\epic_manifest"){
+                    $eitems = Get-ChildItem "$aupathb\epic_manifest" -File
+                    foreach ($item in $eitems) {        
+                        if(($item.Name).IndexOf("$prever") -gt 0 ){
+                            $epicmanifestchk = $false
+                            $epicmanifestfile = "$aupathb\epic_manifest\$prever.manifest"
+                        }
                     }
                 }
-            }
-            if($epicmanifestchk){
-                #manifestがないから指定してもらう
-                Write-Log $(Get-Translate("Epic Game の過去のManifestファイルが見つかりません。Manifestファイルを指定してください。"))            
-               
-                Add-Type -assemblyName System.Windows.Forms
-                $dialog = New-Object System.Windows.Forms.OpenFileDialog
-                $dialog.Filter = $(Get-Translate("manifest ファイル(*.manifest)|*.manifest"))
-                $dialog.InitialDirectory = [Environment]::GetFolderPath('Desktop')
-                $dialog.Title = $(Get-Translate("Manifestファイルを選択してください"))
-                if ($dialog.ShowDialog() -eq "OK") {
-                    $epicmanifestfile = $dialog.FileName
-                } else {
-                    Write-Log $(Get-Translate("ファイルを選択しませんでした"))
+                if($epicmanifestchk){
+                    #manifestがないから指定してもらう
+                    Write-Log $(Get-Translate("Epic Game の過去のManifestファイルが見つかりません。Manifestファイルを指定してください。"))            
+                
+                    Add-Type -assemblyName System.Windows.Forms
+                    $dialog = New-Object System.Windows.Forms.OpenFileDialog
+                    $dialog.Filter = $(Get-Translate("manifest ファイル(*.manifest)|*.manifest"))
+                    $dialog.InitialDirectory = [Environment]::GetFolderPath('Desktop')
+                    $dialog.Title = $(Get-Translate("Manifestファイルを選択してください"))
+                    if ($dialog.ShowDialog() -eq "OK") {
+                        $epicmanifestfile = $dialog.FileName
+                    } else {
+                        Write-Log $(Get-Translate("ファイルを選択しませんでした"))
+                    }
                 }
-            }
 
-            Write-Log "$epicmanifestfile"
-            if(!(Test-Path "$aupathb\epic_manifest")){
-                New-Item "$aupathb\epic_manifest" -Type Directory
-            }
-            $mfileName = Split-Path $epicmanifestfile -Leaf
-            Copy-Item $epicmanifestfile "$aupathb\epic_manifest\$mfilename"
-            $epicmanifestfile = "$aupathb\epic_manifest\$mfilename"
-            Write-Log "$epicmanifestfile"
-
-            #legendary でAmongusを落とす
-            legendary.exe uninstall "Among Us" --keep-files -y
-            Copy-Item $aupatho "$aupathb\AmongUs" -Recurse
-            legendary.exe -y import 'Among Us' "$aupathb\AmongUs"
-            Start-Sleep -Seconds 1
-            if(Test-Path "$aupathb\AmongUs"){
-                Remove-item "$aupathb\AmongUs" -Recurse -Force
-                legendary.exe install "Among Us" --old-manifest "$epicmanifestfile" --disable-patching --enable-reordering --repair -y
-            }else{
-                Write-Log $(Get-Translate("何かがおかしい・・・"))
-            }
-
-            $ptt = (Format-Hex -Path "$aupathb\AmongUs\Among Us_Data\globalgamemanagers").Bytes
-            $ptt2 = [System.Text.Encoding]::UTF8.GetString($ptt)
-            $ptt3 = [regex]::Matches($ptt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
-            $pmver = $ptt3[1].Value
-            
-            if($pmver -eq $prever){
-                #success
-                Write-Log $(Get-Translate("Download 成功"))
-                Compress-Archive -Path "$aupathb\AmongUs" $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
-
+                Write-Log "$epicmanifestfile"
                 if(!(Test-Path "$aupathb\epic_manifest")){
                     New-Item "$aupathb\epic_manifest" -Type Directory
                 }
-                Copy-Item $epicmanifestfile "$aupathb\epic_manifest\v$prever.manifest"
-    
-            }else{
-                Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありません"))
-                Write-Log $(Get-Translate("最新バージョンでの作成が続行されます"))
-            }
+                $mfileName = Split-Path $epicmanifestfile -Leaf
+                Copy-Item $epicmanifestfile "$aupathb\epic_manifest\$mfilename"
+                $epicmanifestfile = "$aupathb\epic_manifest\$mfilename"
+                Write-Log "$epicmanifestfile"
 
-            if(Test-Path "$aupathb\AmongUs"){
-                Remove-item "$aupathb\AmongUs" -Recurse -Force
-            } 
+                #legendary でAmongusを落とす
+                legendary.exe uninstall "Among Us" --keep-files -y
+                Copy-Item $aupatho "$aupathb\AmongUs" -Recurse
+                legendary.exe -y import 'Among Us' "$aupathb\AmongUs"
+                Start-Sleep -Seconds 1
+                if(Test-Path "$aupathb\AmongUs"){
+                    Remove-item "$aupathb\AmongUs" -Recurse -Force
+                    legendary.exe install "Among Us" --old-manifest "$epicmanifestfile" --disable-patching --enable-reordering --repair -y
+                }else{
+                    Write-Log $(Get-Translate("何かがおかしい・・・"))
+                }
+
+                $ptt = (Format-Hex -Path "$aupathb\AmongUs\Among Us_Data\globalgamemanagers").Bytes
+                $ptt2 = [System.Text.Encoding]::UTF8.GetString($ptt)
+                $ptt3 = [regex]::Matches($ptt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
+                $pmver = $ptt3[1].Value
+                
+                if($pmver -eq $prever){
+                    #success
+                    Write-Log $(Get-Translate("Download 成功"))
+                    Compress-Archive -Path "$aupathb\AmongUs" $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
+
+                    if(!(Test-Path "$aupathb\epic_manifest")){
+                        New-Item "$aupathb\epic_manifest" -Type Directory
+                    }
+                    Copy-Item $epicmanifestfile "$aupathb\epic_manifest\v$prever.manifest"
+        
+                }else{
+                    Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありません"))
+                    Write-Log $(Get-Translate("最新バージョンでの作成が続行されます"))
+                }
+
+                if(Test-Path "$aupathb\AmongUs"){
+                    Remove-item "$aupathb\AmongUs" -Recurse -Force
+                } 
+            }
         }
     }
     Write-Log $(Get-Translate("Backup Feature Ends"))
@@ -1147,6 +1150,7 @@ $prefpth = ""
 if($RadioButton114.Checked){
     $prebool = $false
     Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
+    $oldtype = $false
 }elseif($RadioButton115.Checked){
     $prevtargetid = $prevtargetid0
     $prever = $prever0
