@@ -7,6 +7,8 @@ $version = "1.6.4"
 #################################################################################################
 ### minimum version for v2022.10.25
 $snrmin = "1.4.2.4"
+$ermin = "v4.0.0.0"
+$esmin = "v4.0.0.0"
 
 
 ### minimum version for v2022.10.18
@@ -36,7 +38,7 @@ $prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
 #Testdll: tmp_v2022.10.23.2
-$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23.2/TheOtherRolesGM.dll"
+$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23/TheOtherRolesGM.dll"
 
 #################################################################################################
 # Translate Function
