@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.3.4"
+$version = "1.6.4"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -1587,6 +1587,7 @@ if($tio){
         $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
     }elseif($scid -eq "SNR"){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
+        $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
     }elseif($scid -eq "NOS"){
         $langhead=@()
         $langtail=@()
@@ -2141,6 +2142,15 @@ if($tio){
 
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
+
+            if(Test-Path "$aupathm\BepInEx\plugins\Agartha.dll"){
+                Remove-item -Path "$aupathm\BepInEx\plugins\Agartha.dll"
+                Write-Log $(Get-Translate('Delete Original Agartha Mod DLL'))    
+            }
+            #Agartha DLLをDLして配置
+            Write-Log $(Get-Translate("Download $scid Agartha DLL 開始"))
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
+            Write-Log $(Get-Translate("Download $scid Agartha DLL 完了"))              
         }
     }elseif($scid -eq "NOS"){
         if(test-path "$aupathm\Nebula"){
