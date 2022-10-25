@@ -286,7 +286,7 @@ function BackUpAU{
         if(Test-Path "$aupatho\.egstore"){
             if(!(Test-Path "$aupathb\$amver.manifest")){
                 $egmani = Get-ChildItem -path "$aupatho\.egstore\*.manifest"
-                Copy-Item "$aupatho\.egstore\$($egmani[0].Name)" "$aupathb\epic_manifest\$amver.manifest"
+                Copy-Item "$aupatho\.egstore\$($egmani[0].Name)" "$aupathb\epic_manifest\v$amver.manifest"
             }
         }
     }
