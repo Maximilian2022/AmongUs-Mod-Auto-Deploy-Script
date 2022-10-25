@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.2"
+$version = "1.6.3"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -277,6 +277,18 @@ function BackUpAU{
         Compress-Archive -Path $aupatho $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
     }
 
+    #Manifest Backup
+    if($platform -eq "epic"){
+        if(!(Test-Path "$aupathb\epic_manifest")){
+            New-Item "$aupathb\epic_manifest" -Type Directory
+        }
+        if(Test-Path "$aupatho\.egstore"){
+            if(Test-Path "$aupatho\.egstore\$amver.manifest"){
+                Copy-Item -Filter *.manifest -Path "$aupatho\.egstore" -Destination "$aupathb\epic_manifest\$amver.manifest"
+            }
+        }
+    }
+
     #Previous ver check
     $items = Get-ChildItem $aupathb -File
     $prevchk = $true
@@ -380,10 +392,78 @@ function BackUpAU{
                 Write-Log $(Get-Translate("前バージョン($prever)のロードに失敗しました。再度お試しください。"))
             }
         }elseif($platform -eq "epic"){
-            Write-Log $(Get-Translate("Epic Game では現在このScriptで過去VersionをDLできません"))            
+            $epicmanifestchk = $true
+            if(Test-Path "$aupathb\epic_manifest"){
+                $eitems = Get-ChildItem "$aupathb\epic_manifest" -File
+                foreach ($item in $eitems) {        
+                    if(($item.Name).IndexOf("$prever") -gt 0 ){
+                        $epicmanifestchk = $false
+                        $epicmanifestfile = "$aupathb\epic_manifest\$prever.manifest"
+                    }
+                }
+            }
+            if($epicmanifestchk){
+                #manifestがないから指定してもらう
+                Write-Log $(Get-Translate("Epic Game の過去のManifestファイルが見つかりません。Manifestファイルを指定してください。"))            
+               
+                Add-Type -assemblyName System.Windows.Forms
+                $dialog = New-Object System.Windows.Forms.OpenFileDialog
+                $dialog.Filter = $(Get-Translate("manifest ファイル(*.manifest)|*.manifest"))
+                $dialog.InitialDirectory = [Environment]::GetFolderPath('Desktop')
+                $dialog.Title = $(Get-Translate("Manifestファイルを選択してください"))
+                if ($dialog.ShowDialog() -eq "OK") {
+                    $epicmanifestfile = $dialog.FileName
+                } else {
+                    Write-Log $(Get-Translate("ファイルを選択しませんでした"))
+                }
+            }
+
+            Write-Log "$epicmanifestfile"
+            if(!(Test-Path "$aupathb\epic_manifest")){
+                New-Item "$aupathb\epic_manifest" -Type Directory
+            }
+            $mfileName = Split-Path $epicmanifestfile -Leaf
+            Copy-Item $epicmanifestfile "$aupathb\epic_manifest\$mfilename"
+            $epicmanifestfile = "$aupathb\epic_manifest\$mfilename"
+            Write-Log "$epicmanifestfile"
+
+            #legendary でAmongusを落とす
+            legendary.exe uninstall "Among Us" --keep-files -y
+            Copy-Item $aupatho "$aupathb\AmongUs" -Recurse
+            legendary.exe -y import 'Among Us' "$aupathb\AmongUs"
+            Start-Sleep -Seconds 1
+            if(Test-Path "$aupathb\AmongUs"){
+                Remove-item "$aupathb\AmongUs" -Recurse -Force
+                legendary.exe install "Among Us" --old-manifest "$epicmanifestfile" --disable-patching --enable-reordering --repair -y
+            }else{
+                Write-Log "Something Wrong. Stop processing."
+            }
+
+            $ptt = (Format-Hex -Path "$aupathb\AmongUs\Among Us_Data\globalgamemanagers").Bytes
+            $ptt2 = [System.Text.Encoding]::UTF8.GetString($ptt)
+            $ptt3 = [regex]::Matches($ptt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
+            $pmver = $ptt3[1].Value
+            
+            if($pmver -eq $prever){
+                #success
+                Write-Log "Download 成功"
+                Compress-Archive -Path "$aupathb\AmongUs" $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
+
+                if(!(Test-Path "$aupathb\epic_manifest")){
+                    New-Item "$aupathb\epic_manifest" -Type Directory
+                }
+                Copy-Item $epicmanifestfile "$aupathb\epic_manifest\v$prever.manifest"
+    
+            }else{
+                Write-Log "Download 失敗か、指定されたManifestが選択されたバージョンではありません"
+                Write-Log "最新バージョンでの作成が続行されます"
+            }
+
+            if(Test-Path "$aupathb\AmongUs"){
+                Remove-item "$aupathb\AmongUs" -Recurse -Force
+            } 
         }
     }
-
     Write-Log $(Get-Translate("Backup Feature Ends"))
 }
 
@@ -1128,6 +1208,18 @@ if($RadioButton114.Checked){
 }else{
     Write-Log $(Get-Translate("Critical:AU ver chk"))
     exit
+}
+
+$legver = legendary -V            
+if($legver -eq 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'){
+}else{
+    #legendaryが最新じゃないので手動でDL
+    $legpth = "https://github.com/derrod/legendary/releases/download/0.20.29/legendary.exe"
+    aria2c -x5 -V --allow-overwrite=true --dir "$Env:ALLUSERSPROFILE\chocolatey\bin" -o "legendary.exe" $legpth
+    Write-Log "重要ファイルを更新が必要だったため更新しました。再度Batを実行してください。
+    %$"
+    Pause
+    Exit
 }
 
 Write-Log $(Get-Translate("$mod が選択されました"))
