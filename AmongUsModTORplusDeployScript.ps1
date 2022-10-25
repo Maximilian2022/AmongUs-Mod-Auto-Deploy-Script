@@ -1152,6 +1152,8 @@ if($RadioButton114.Checked){
     $prebool = $false
     Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
     $oldtype = $false
+    $prevtargetid = $prevtargetid0
+    $prever = $prever0
 }elseif($RadioButton115.Checked){
     $prevtargetid = $prevtargetid0
     $prever = $prever0
