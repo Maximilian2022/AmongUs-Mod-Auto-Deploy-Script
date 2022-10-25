@@ -76,7 +76,7 @@ catch{
     Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install pwsh powershell-core aria2 microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install pwsh powershell-core aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
@@ -283,7 +283,7 @@ function BackUpAU{
             New-Item "$aupathb\epic_manifest" -Type Directory
         }
         if(Test-Path "$aupatho\.egstore"){
-            if(Test-Path "$aupatho\.egstore\$amver.manifest"){
+            if(!(Test-Path "$aupatho\.egstore\$amver.manifest")){
                 Copy-Item -Filter *.manifest -Path "$aupatho\.egstore" -Destination "$aupathb\epic_manifest\$amver.manifest"
             }
         }
@@ -436,7 +436,7 @@ function BackUpAU{
                 Remove-item "$aupathb\AmongUs" -Recurse -Force
                 legendary.exe install "Among Us" --old-manifest "$epicmanifestfile" --disable-patching --enable-reordering --repair -y
             }else{
-                Write-Log "Something Wrong. Stop processing."
+                Write-Log $(Get-Translate("何かがおかしい・・・"))
             }
 
             $ptt = (Format-Hex -Path "$aupathb\AmongUs\Among Us_Data\globalgamemanagers").Bytes
@@ -446,7 +446,7 @@ function BackUpAU{
             
             if($pmver -eq $prever){
                 #success
-                Write-Log "Download 成功"
+                Write-Log $(Get-Translate("Download 成功"))
                 Compress-Archive -Path "$aupathb\AmongUs" $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
 
                 if(!(Test-Path "$aupathb\epic_manifest")){
@@ -455,8 +455,8 @@ function BackUpAU{
                 Copy-Item $epicmanifestfile "$aupathb\epic_manifest\v$prever.manifest"
     
             }else{
-                Write-Log "Download 失敗か、指定されたManifestが選択されたバージョンではありません"
-                Write-Log "最新バージョンでの作成が続行されます"
+                Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありません"))
+                Write-Log $(Get-Translate("最新バージョンでの作成が続行されます"))
             }
 
             if(Test-Path "$aupathb\AmongUs"){
@@ -512,7 +512,7 @@ catch{
     }catch{
         Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     }
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install aria2 microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
 }
 
 #################################################################################################
@@ -1213,10 +1213,11 @@ if($RadioButton114.Checked){
 $legver = legendary -V            
 if($legver -eq 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'){
 }else{
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
     #legendaryが最新じゃないので手動でDL
     $legpth = "https://github.com/derrod/legendary/releases/download/0.20.29/legendary.exe"
     aria2c -x5 -V --allow-overwrite=true --dir "$Env:ALLUSERSPROFILE\chocolatey\bin" -o "legendary.exe" $legpth
-    Write-Log "重要ファイルを更新が必要だったため更新しました。再度Batを実行してください。
+    Write-Log $(Get-Translate("重要ファイルの更新が必要だったため更新しました。再度Batを実行してください。))
     %$"
     Pause
     Exit
