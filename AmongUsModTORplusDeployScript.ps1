@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.4.1"
+$version = "1.6.4.2"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -459,7 +459,7 @@ function BackUpAU{
                     if(!(Test-Path "$aupathb\epic_manifest")){
                         New-Item "$aupathb\epic_manifest" -Type Directory
                     }
-                    if($epicmanifestfile -eq "$aupathb\epic_manifest\v$prever.manifest"){
+                    if(($epicmanifestchk) -and ($epicmanifestfile -eq "$aupathb\epic_manifest\v$prever.manifest")){
                     }else{
                         Copy-Item $epicmanifestfile "$aupathb\epic_manifest\v$prever.manifest"        
                         Remove-Item $epicmanifestfile -Force
