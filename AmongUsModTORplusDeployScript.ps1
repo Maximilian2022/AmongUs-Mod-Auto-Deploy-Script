@@ -1228,11 +1228,11 @@ if($RadioButton114.Checked){
 }
 
 $legver = legendary.exe -V            
-if($legver -eq 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'){
+if($legver -ge 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'){
 }else{
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
     #legendaryが最新じゃないので手動でDL
-    $legpth = "https://github.com/derrod/legendary/releases/download/0.20.29/legendary.exe"
+    $legpth = "https://github.com/derrod/legendary/releases/download/0.20.30/legendary.exe"
     aria2c -x5 -V --allow-overwrite=true --dir "$Env:ALLUSERSPROFILE\chocolatey\bin" -o "legendary.exe" $legpth
     Write-Log $(Get-Translate("重要ファイルの更新が必要だったため更新しました。再度Batを実行してください。"))
     Pause
