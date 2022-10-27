@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.4.2"
+$version = "1.6.4.3"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -465,9 +465,10 @@ function BackUpAU{
                         Remove-Item $epicmanifestfile -Force
                     }
                 }else{
-                    Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありません"))
-                    Write-Log $(Get-Translate("最新バージョンでの作成が続行されます"))
+                    Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありませんでした"))
+                    Write-Log $(Get-Translate("指定したManifestを確認するか、再度やり直してください"))
                     Remove-Item $epicmanifestfile -Force
+                    Exit
                 }
 
                 if(Test-Path "$aupathb\AmongUs"){
