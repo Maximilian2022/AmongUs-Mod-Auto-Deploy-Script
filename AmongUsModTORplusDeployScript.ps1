@@ -468,6 +468,7 @@ function BackUpAU{
                     Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありませんでした"))
                     Write-Log $(Get-Translate("指定したManifestを確認するか、再度やり直してください"))
                     Remove-Item $epicmanifestfile -Force
+                    Pause
                     Exit
                 }
 
