@@ -249,7 +249,8 @@ if($legver -ge 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'
             Write-Log $(Get-Translate("Legendaryのバージョンが古いため、最新に更新しました。"))
         }
     }
-    Write-Log $(Get-Translate("再度Batを実行してください。"))
+    Write-Log $(Get-Translate("重要ファイルの更新がありました。"))
+    Write-Log $(Get-Translate("再度Batファイルを実行してください。"))
     Pause
     Exit
 }
