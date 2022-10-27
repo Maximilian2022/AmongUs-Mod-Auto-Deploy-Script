@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.4.7"
+$version = "1.6.4.8"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -97,18 +97,18 @@ if($legver -ge 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'
     $webs = Invoke-WebRequest $rel2 -UseBasicParsing
     $webs2 = ConvertFrom-Json $webs.Content
     $aus = $webs2.assets.browser_download_url
-    Write-Log "Legendary Latest DLL download start"
+    Write-Host "Legendary Latest DLL download start"
     if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
         New-Item "$aupathm\BepInEx\plugins\" -Type Directory
     }
     for($aaai = 0;$aaai -lt $aus.Length;$aaai++){
         if($($aus[$aaai]).IndexOf(".exe") -gt 0){
             aria2c -x5 -V --allow-overwrite=true --dir "$Env:ALLUSERSPROFILE\chocolatey\bin" -o "legendary.exe" $($aus[$aaai])
-            Write-Log "$($aus[$aaai])"
-            Write-Log $(Get-Translate("Legendaryのバージョンが古いため、最新に更新しました。"))
+            Write-Host "$($aus[$aaai])"
+            Write-Host "Legendaryのバージョンが古いため、最新に更新しました。"
         }
     }
-    Write-Log $(Get-Translate("再度Batを実行してください。"))
+    Write-Host "再度Batを実行してください。"
     Pause
     Exit
 }
