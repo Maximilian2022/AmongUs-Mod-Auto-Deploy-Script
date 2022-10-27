@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.4.3"
+$version = "1.6.4.4"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -435,6 +435,7 @@ function BackUpAU{
                 Write-Log "コピー: $epicmanifestfile"
 
                 #legendary でAmongusを落とす
+                legendary.exe auth --import
                 legendary.exe uninstall "Among Us" --keep-files -y
                 Copy-Item $aupatho "$aupathb\AmongUs" -Recurse
                 legendary.exe -y import 'Among Us' "$aupathb\AmongUs"
