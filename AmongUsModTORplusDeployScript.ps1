@@ -6,17 +6,18 @@ $version = "1.6.4"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
-$snrmin = "1.4.2.4"
 $ermin = "v4.0.0.0"
 $esmin = "v4.0.0.0"
+$tormin = "v4.2.0"
 $tohmin = "v3.0.2"
+$snrmin = "1.4.2.4"
 
 
 ### minimum version for v2022.10.18
-$snrmin = "1.4.2.3"
-$torhmin = "v2.3.120"
 $ermin = "v3.3.0.3"
 $esmin = "v3.3.0.3"
+$snrmin = "1.4.2.3"
+$torhmin = "v2.3.120"
 
 ### minimum version for v2022.9.20
 $ermin = "v3.2.2.0"
@@ -458,11 +459,15 @@ function BackUpAU{
                     if(!(Test-Path "$aupathb\epic_manifest")){
                         New-Item "$aupathb\epic_manifest" -Type Directory
                     }
-                    Copy-Item $epicmanifestfile "$aupathb\epic_manifest\v$prever.manifest"
-        
+                    if($epicmanifestfile -eq "$aupathb\epic_manifest\v$prever.manifest"){
+                    }else{
+                        Copy-Item $epicmanifestfile "$aupathb\epic_manifest\v$prever.manifest"        
+                        Remove-Item $epicmanifestfile -Force
+                    }
                 }else{
                     Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありません"))
                     Write-Log $(Get-Translate("最新バージョンでの作成が続行されます"))
+                    Remove-Item $epicmanifestfile -Force
                 }
 
                 if(Test-Path "$aupathb\AmongUs"){
