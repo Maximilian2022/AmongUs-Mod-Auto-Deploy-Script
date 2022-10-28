@@ -2,7 +2,7 @@
 
 <p>■TOR系 Mod入れるのが面倒なので作った自動化Script</p>
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
-<p>MODとバージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
+<p>MODとMODバージョン、本体バージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
 
 <p>このScriptは 以下の環境用のものです<br>
  ・The Other Roles: GM Haoming Edition (<a href="https://github.com/haoming37/TheOtherRoles-GM-Haoming">haoming37/TheOtherRoles-GM-Haoming</a>)<br>
@@ -55,8 +55,13 @@
 4. 本体のバージョンを選ぶ<br></p>
 <!-- /wp:paragraph -->
 
+<p>■[Rollback機能について]<br>
+古い本体バージョンでの自動作成機能があります。（Steam/Epic両対応）<br>
+ただし、Epicについては戻りたいバージョンのManifestファイルが必要です。(Manifestファイルの配布は行いません。)<br>
+</p>
+
 <!-- wp:paragraph -->
-<p><br>■Q&amp;A <br>Q. セキュリティソフトが止めてきます<br>A. でしょうね<br>　 カスペルスキーとか入ってると動かない時があります<br>　 真面目に話すと長いけど、Windows Defenderでも止められることがあるよ<br>　 詳細情報を押して実行ボタンを押せば、動くよ<br>　 自己責任でどうぞ<br><br>Q. batでcurl.exeでエラーが出てます<br>A. Windows 10が古い可能性があります<br>　Win10 1803以降、Win11でないと稼働しません<br><br>Q. Modを入れて起動すると画面が真っ黒になります <br>A. Mod Fileが壊れているか、失敗しています<br>　Scriptを再実行してみてください<br>　やり直しても変わらないときは、まず<strong>クリーンインストール</strong>しましょう<br><br>Q. 手順通りやってもModの起動に失敗したり、固まったりします <br>A. 以下のような場合、BepinExの初動が正しく動いていない可能性があります<br>　Scriptを再実行してみましょう<br>　・BepinExのフォルダにCacheフォルダができていない場合、<br>　・TheOtherHatsが初期状態のままの場合<br>　（多分NW系のエラーの可能性もあるので、時間置くのも大事です）<br><br>Q. EPIC版でも使えますか？<br>A. 使えるようになりました。同時に複数のModも維持できますが、ショートカットから起動してください。<br><br>Q. 「このユーザーアカウントでは本Scriptは動作しません」と言われました。どうすればいいですか？<br>A. ご使用のユーザーアカウントに管理者権限を付与してください。</p>
+<p><br>■Q&amp;A <br>Q. セキュリティソフトが止めてきます<br>A. でしょうね<br>　 カスペルスキーとか入ってると動かない時があります<br>　 真面目に話すと長いけど、Windows Defenderでも止められることがあるよ<br>　 詳細情報を押して実行ボタンを押せば、動くよ<br>　 自己責任でどうぞ<br><br>Q. batでcurl.exeでエラーが出てます<br>A. Windows 10が古い可能性があります<br>　Win10 1803以降、Win11でないと稼働しません<br><br>Q. Modを入れて起動すると画面が真っ黒になります <br>A. Mod Fileが壊れているか、失敗しています<br>　Scriptを再実行してみてください<br>　やり直しても変わらないときは、まず<strong>クリーンインストール</strong>しましょう<br><br>Q. 手順通りやってもModの起動に失敗したり、固まったりします <br>A. 以下のような場合、BepinExの初動が正しく動いていない可能性があります<br>　Scriptを再実行してみましょう<br>　・BepinExのフォルダにCacheフォルダができていない場合、<br>　・TheOtherHatsが初期状態のままの場合<br>　（多分NW系のエラーの可能性もあるので、時間置くのも大事です）<br><br>Q. EPIC版でも使えますか？<br>A. 使えるようになりました。同時に複数のModも維持できますが、ショートカットから起動してください。<br>　自動アップデートがONになっている場合、古い本体バージョンで作ってもそのうち上がっちゃうので、その時は作り直してください。<br><br>Q. 「このユーザーアカウントでは本Scriptは動作しません」と言われました。どうすればいいですか？<br>A. ご使用のユーザーアカウントに管理者権限を付与してください。</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
