@@ -2,16 +2,17 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.5"
+$version = "1.6.5.1"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
 $ermin = "v4.0.0.0"
 $esmin = "v4.0.0.0"
+$nosmin = "1.16.1,2022.10.25"
 $tormin = "v4.2.0"
+$tourmin = "v3.4.0"
 $tohmin = "v3.0.2"
 $snrmin = "1.4.2.4"
-$tourmin = "v3.4.0"
 $torhmin = "v2.3.127"
 
 ### minimum version for v2022.10.18
@@ -26,10 +27,10 @@ $esmin = "v3.2.2.0"
 $nosmin = "1.12.11,2022.8.24"
 $tormin = "v4.1.7"
 $tourmin = "v3.3.0"
-$tormmin = "MR_v2.3.0"
 $tohmin = "v2.2.2"
 $snrmin = "1.4.2.0"
 $torhmin = "v2.2.102"
+$tormmin = "MR_v2.3.0"
 
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -783,12 +784,6 @@ $RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFra
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
-$pwshv = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases/latest" -UseBasicParsing)).tag_name
-
-if("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv"){
-    $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)
-}
-
 # すべての既存の選択をクリア
 $CheckedBox.ClearSelected()
 $form.Controls.Add($CheckedBox)
@@ -1144,7 +1139,13 @@ $Combo_SelectedIndexChanged= {
         if(!(Test-Path "$aupathb\chk$ym.txt")){
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"),$true)
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"),$true)                       
-            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)                       
+
+            $pwshv = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases/latest" -UseBasicParsing)).tag_name
+
+            if("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv"){
+                $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)
+            }
+
             if(!(Test-Path "$aupathb")){
                 New-Item $aupathb -Type Directory 
             }
