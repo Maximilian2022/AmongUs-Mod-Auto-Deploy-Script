@@ -869,8 +869,7 @@ $releasepage =""
 $ovwrite = $false
 $amver = ""
 $prebool = $false
-
-$Combo_SelectedIndexChanged= {
+function Reload(){
     function Write-Log($LogString){
         $Now = Get-Date
         # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
@@ -1167,6 +1166,10 @@ $Combo_SelectedIndexChanged= {
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
     $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
+}
+
+$Combo_SelectedIndexChanged= {
+    Reload
 }
 
 $sttime = Get-Date
