@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.5.1"
+$version = "1.6.6"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -16,21 +16,26 @@ $snrmin = "1.4.2.4"
 $torhmin = "v2.3.127"
 
 ### minimum version for v2022.10.18
-$ermin = "v3.3.0.3"
-$esmin = "v3.3.0.3"
-$snrmin = "1.4.2.3"
-$torhmin = "v2.3.120"
+$ermin1 = "v3.3.0.3"
+$esmin1 = "v3.3.0.3"
+$nosmin1 = "NONE"
+$tormin1 = "NONE"
+$tourmin1 = "NONE"
+$tohmin1 = "NONE"
+$snrmin1 = "1.4.2.3"
+$torhmin1 = "v2.3.120"
+$tormmin1 = "NONE"
 
 ### minimum version for v2022.9.20
-$ermin = "v3.2.2.0"
-$esmin = "v3.2.2.0"
-$nosmin = "1.12.11,2022.8.24"
-$tormin = "v4.1.7"
-$tourmin = "v3.3.0"
-$tohmin = "v2.2.2"
-$snrmin = "1.4.2.0"
-$torhmin = "v2.2.102"
-$tormmin = "MR_v2.3.0"
+$ermin2 = "v3.2.2.0"
+$esmin2 = "v3.2.2.0"
+$nosmin2 = "1.12.11,2022.8.24"
+$tormin2 = "v4.1.7"
+$tourmin2 = "v3.3.0"
+$tohmin2 = "v2.2.2"
+$snrmin2 = "1.4.2.0"
+$torhmin2 = "v2.2.102"
+$tormmin2 = "MR_v2.3.0"
 
 #TOR plus, TOR GM, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -82,7 +87,7 @@ catch{
     Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install pwsh powershell-core aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco update pwsh powershell-core aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
@@ -650,7 +655,7 @@ $RadioButton17.size = New-Object System.Drawing.Size(190,30)
 $RadioButton17.Text = $(Get-Translate("クリーンインストール"))
 
 # グループにラジオボタンを入れる
-$MyGroupBox3.Controls.AddRange(@($Radiobutton5,$RadioButton6,$RadioButton7,$RadioButton17))
+$MyGroupBox3.Controls.AddRange(@($Radiobutton5, $RadioButton6, $RadioButton7, $RadioButton17))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox3)
 
@@ -680,7 +685,7 @@ $RadioButton116.Text = $(Get-Translate("C"))
 
 
 # グループにラジオボタンを入れる
-$MyGroupBox4.Controls.AddRange(@($Radiobutton114,$RadioButton115,$RadioButton116))
+$MyGroupBox4.Controls.AddRange(@($Radiobutton114, $RadioButton115, $RadioButton116))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox4)
 
@@ -709,7 +714,7 @@ $RadioButton42.size = New-Object System.Drawing.Size(100,30)
 $RadioButton42.Text = $(Get-Translate("デバッグ"))
 
 # グループにラジオボタンを入れる
-$MyGroupBox.Controls.AddRange(@($Radiobutton1,$RadioButton2,$RadioButton42))
+$MyGroupBox.Controls.AddRange(@($Radiobutton1, $RadioButton2, $RadioButton42))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox)
 
@@ -734,7 +739,7 @@ $RadioButton4.Text = $(Get-Translate("起動しない"))
 $RadioButton4.Checked = $True
 
 # グループにラジオボタンを入れる
-$MyGroupBox2.Controls.AddRange(@($Radiobutton3,$RadioButton4))
+$MyGroupBox2.Controls.AddRange(@($Radiobutton3, $RadioButton4))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox2)
 
@@ -762,7 +767,7 @@ $RadioButton27.size = New-Object System.Drawing.Size(100,30)
 $RadioButton27.Text = $(Get-Translate("除去する"))
 
 # グループにラジオボタンを入れる
-$MyGroupBox24.Controls.AddRange(@($Radiobutton28,$RadioButton29,$RadioButton27))
+$MyGroupBox24.Controls.AddRange(@($Radiobutton28, $RadioButton29, $RadioButton27))
 # フォームに各アイテムを入れる
 $form.Controls.Add($MyGroupBox24)
 
@@ -860,15 +865,63 @@ $form.Controls.Add($label6)
 
 $scid = "TOR GMH"
 $tio = $true
-$aumin =""
-$aupatho=""
-$aupathm=""
-$aupathb=""
+$aumin = ""
+$aumax = "NONE"
+$aupatho = ""
+$aupathm = ""
+$aupathb = ""
 $checkt = $true
 $releasepage =""
 $ovwrite = $false
 $amver = ""
 $prebool = $false
+
+function VerMinMax($ver0, $ver1, $ver2){
+    Write-Log $ver0
+    Write-Log $ver1
+    Write-Log $ver2
+    if($RadioButton114.Checked){
+        if($ver0 -eq "NONE"){
+            $script:aumin = "NONE"
+            $script:aumax = "NONE"
+        }else{
+            $script:aumax = "NONE"
+            $script:aumin = $ver0
+        }
+    }elseif($RadioButton115.Checked){
+        if($ver1 -eq "NONE"){
+            $script:aumax = "NONE"
+            $script:aumin = "NONE"
+        }else{
+            if($ver0 -eq "NONE"){
+                $script:aumax = "NONE"
+                $script:aumin = $ver1
+            }else{
+                $script:aumax = $ver0
+                $script:aumin = $ver1    
+            }
+        }
+    }elseif($RadioButton116.Checked){
+        if($ver2 -eq "NONE"){
+            $script:aumax = "NONE"
+            $script:aumin = "NONE"
+        }else{
+            if($ver1 -eq "NONE"){
+                if($ver0 -eq "NONE"){
+                    $script:aumax = "NONE"
+                    $script:aumin = $ver2
+                }else{
+                    $script:aumax = $ver0
+                    $script:aumin = $ver2    
+                }
+            }else{
+                $script:aumax = $ver1
+                $script:aumin = $ver2
+            }
+        }
+    }
+}
+
 function Reload(){
     function Write-Log($LogString){
         $Now = Get-Date
@@ -885,71 +938,73 @@ function Reload(){
     $combo2.DataSource=@()
     $combo2.Enabled = $true
     $tio = $true
+
     Switch ($combo.text){
         default{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
-            $aumin = $torhmin
+            VerMinMax $torhmin $torhmin1 $torhmin2
             Write-Log "TOR GMH Selected"
             $RadioButton29.Checked = $True
         }"TOR MR :miru-y/TheOtherRoles-MR"{
             $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
             $scid = "TOR MR"
-            $aumin = $tormmin
+            VerMinMax $tormmin $tormmin1 $tormmin2
             Write-Log "TOR MR Selected"
             $RadioButton29.Checked = $True
         }"TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMT"
-            $aumin = $torhmin
+            VerMinMax $torhmin $torhmin1 $torhmin2
             Write-Log "TOR GMH Test Selected"
             $RadioButton29.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
-            $aumin = $torhmin
+            VerMinMax $torhmin $torhmin1 $torhmin2
             Write-Log "TOR GMH Selected"
             $RadioButton29.Checked = $True
         }"TOR :TheOtherRolesAU/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/TheOtherRolesAU/TheOtherRoles/releases"
             $scid = "TOR"
-            $aumin = $tormin
+            VerMinMax $tormin $tormin1 $tormin2
             Write-Log "TOR Selected"
             $RadioButton28.Checked = $True
         }"TOU-R :eDonnes124/Town-Of-Us-R"{
             $releasepage2 = "https://api.github.com/repos/eDonnes124/Town-Of-Us-R/releases"
             $scid = "TOU-R"
-            $aumin = $tourmin
+            VerMinMax $tourmin $tourmin1 $tourmin2
             Write-Log "TOU-R Selected"
             $RadioButton29.Checked = $True
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
-            $aumin = $ermin
+            VerMinMax $ermin $ermin1 $ermin2
             Write-Log "ER Selected"
             $RadioButton29.Checked = $True
         }"ER+ES :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER+ES"
+            VerMinMax $esmin $esmin1 $esmin2
             $aumin = $esmin
             Write-Log "ER+ES Selected"
             $RadioButton29.Checked = $True
         }"NOS :Dolly1016/Nebula"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOS"
-            $aumin = $nosmin
+            VerMinMax $nosmin $nosmin1 $nosmin2
             Write-Log "NOS Selected"
             $RadioButton29.Checked = $True
         }"SNR :ykundesu/SuperNewRoles"{
             $releasepage2 = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
             $scid = "SNR"
-            $aumin = $snrmin
+            VerMinMax $snrmin $snrmin1 $snrmin2
             Write-Log "SNR Selected"
             $RadioButton29.Checked = $True
         }"TOH :tukasa0001/TownOfHost"{
             $releasepage2 = "https://api.github.com/repos/tukasa0001/TownOfHost/releases"
             $scid = "TOH"
-            $aumin = $tohmin
+            VerMinMax $tohmin $tohmin1 $tohmin2
             Write-Log "TOH Selected"
             $RadioButton29.Checked = $True
         }"Tool Install Only"{
@@ -965,22 +1020,49 @@ function Reload(){
         $web2 = ConvertFrom-Json $web.Content
     
         $list2 =@()
+        Write-Log "$script:aumin"
+        Write-Log "$script:aumax"
         # コンボボックスに項目を追加
-        if($scid -eq "NOS"){
-            for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-                if($web2.tag_name[$ai] -ge $nosmin){
-                    if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
-                        $list2 += $($web2.tag_name[$ai])
-                    }        
-                }
-            }            
-        }else{            
-            for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-                if($web2.tag_name[$ai] -ge $aumin){
-                    $list2 += $($web2.tag_name[$ai])
-                }
+        $OKButton.Enabled=$True
+        if($script:aumin -ne "NONE"){
+            if($script:aumax -ne "NONE"){
+                if($scid -eq "NOS"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        if(($web2.tag_name[$ai] -ge $script:aumin) -and ($web2.tag_name[$ai] -lt $script:aumax)){
+                            if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
+                                $list2 += $($web2.tag_name[$ai])
+                            }        
+                        }
+                    }            
+                }else{            
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        if(($web2.tag_name[$ai] -ge $script:aumin) -and ($web2.tag_name[$ai] -lt $script:aumax)){
+                            $list2 += $($web2.tag_name[$ai])
+                        }
+                    }
+                }    
+            }else{
+                if($scid -eq "NOS"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        if(($web2.tag_name[$ai] -ge $script:aumin)){
+                            if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
+                                $list2 += $($web2.tag_name[$ai])
+                            }        
+                        }
+                    }            
+                }else{            
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        if(($web2.tag_name[$ai] -ge $script:aumin)){
+                            $list2 += $($web2.tag_name[$ai])
+                        }
+                    }
+                }    
+
             }
+        }else{
+            $OKButton.Enabled=$false
         }
+
         $combo2.DataSource = $list2
         $Combo2.SelectedIndex = 0
 
@@ -1136,13 +1218,13 @@ function Reload(){
         $script:aumin = $aumin
         $ym = Get-Date -Format yyyyMM
         if(!(Test-Path "$aupathb\chk$ym.txt")){
-            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"),$true)
-            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"),$true)                       
+            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"), $true)
+            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"), $true)                       
 
             $pwshv = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases/latest" -UseBasicParsing)).tag_name
 
             if("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv"){
-                $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"),$true)
+                $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"), $true)
             }
 
             if(!(Test-Path "$aupathb")){
@@ -1171,6 +1253,16 @@ function Reload(){
 $Combo_SelectedIndexChanged= {
     Reload
 }
+
+$RadioButton114.Add_CheckedChanged({
+    Reload
+})
+$RadioButton115.Add_CheckedChanged({
+    Reload
+})
+$RadioButton116.Add_CheckedChanged({
+    Reload
+})
 
 $sttime = Get-Date
 
