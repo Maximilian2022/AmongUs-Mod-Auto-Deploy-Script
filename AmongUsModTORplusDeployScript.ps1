@@ -1078,8 +1078,6 @@ function Reload(){
         $web2 = ConvertFrom-Json $web.Content
     
         $list2 =@()
-        Write-Log "$script:aumin"
-        Write-Log "$script:aumax"
         # コンボボックスに項目を追加
         $OKButton.Enabled=$True
         if($script:aumin -ne "NONE"){
@@ -1122,7 +1120,9 @@ function Reload(){
         }
 
         $combo2.DataSource = $list2
-        $Combo2.SelectedIndex = 0
+        if($list2.Length -gt 0){
+            $Combo2.SelectedIndex = 0            
+        }
 
         #################################################################################################
         #AutoDetect用Static
