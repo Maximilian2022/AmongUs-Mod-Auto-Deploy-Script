@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.6"
+$version = "1.6.6.1"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -1015,7 +1015,66 @@ function Reload(){
 
     if($tio){
         #GithubのRelease一覧からぶっこぬく
-        $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+        if(($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT")){
+            if($null -eq $script:gmhweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:gmhweb = $web
+            }else{
+                $web = $script:gmhweb
+            }
+        }elseif($scid -eq "TOR MR"){
+            if($null -eq $script:mrweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:mrweb = $web
+            }else{
+                $web = $script:mrweb
+            }
+        }elseif($scid -eq "TOR"){
+            if($null -eq $script:torweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:torweb = $web
+            }else{
+                $web = $script:torweb
+            }
+        }elseif($scid -eq "TOU-R"){
+            if($null -eq $script:tourweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:tourweb = $web
+            }else{
+                $web = $script:tourweb
+            }
+        }elseif(($scid -eq "ER") -or ($scid -eq "ER+ES")){
+            if($null -eq $script:erweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:erweb = $web
+            }else{
+                $web = $script:erweb
+            }
+        }elseif($scid -eq "NOS"){
+            if($null -eq $script:nosweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:nosweb = $web
+            }else{
+                $web = $script:nosweb
+            }
+        }elseif($scid -eq "SNR"){
+            if($null -eq $script:snrweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:snrweb = $web
+            }else{
+                $web = $script:snrweb
+            }
+        }elseif($scid -eq "TOH"){
+            if($null -eq $script:tohweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:tohweb = $web
+            }else{
+                $web = $script:tohweb
+            }
+        }else{
+            $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+        }
+
         $web2 = ConvertFrom-Json $web.Content
     
         $list2 =@()
