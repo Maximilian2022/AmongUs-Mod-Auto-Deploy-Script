@@ -14,6 +14,7 @@ $tourmin = "v3.4.0"
 $tohmin = "v3.0.2"
 $snrmin = "1.4.2.4"
 $torhmin = "v2.3.127"
+$tormmin = "NONE"
 
 ### minimum version for v2022.10.18
 $ermin1 = "v3.3.0.3"
