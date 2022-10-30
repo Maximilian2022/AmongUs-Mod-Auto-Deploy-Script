@@ -878,9 +878,6 @@ $amver = ""
 $prebool = $false
 
 function VerMinMax($ver0, $ver1, $ver2){
-    Write-Log $ver0
-    Write-Log $ver1
-    Write-Log $ver2
     if($RadioButton114.Checked){
         if($ver0 -eq "NONE"){
             $script:aumin = "NONE"
