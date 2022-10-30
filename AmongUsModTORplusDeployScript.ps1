@@ -37,17 +37,18 @@ $snrmin2 = "1.4.2.0"
 $torhmin2 = "v2.2.102"
 $tormmin2 = "MR_v2.3.0"
 
-#TOR plus, TOR GM, AUM is depricated.
-$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 $prever0 = "2022.10.18"
 $prevtargetid0 = "7491486149462341667"
 $prever1 = "2022.9.20"
 $prevtargetid1 = "2481435393334839152"
 
-$gmhbool = $true
+$gmhbool = $false
 #Testdll: tmp_v2022.10.23.2
 $torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23/TheOtherRolesGM.dll"
+
+#TOR plus, TOR GM, AUM is depricated.
+$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
 #################################################################################################
 # Translate Function
