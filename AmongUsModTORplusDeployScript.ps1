@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.6.2"
+$version = "1.6.6.3"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -27,7 +27,7 @@ $snrmin1 = "1.4.2.3"
 $torhmin1 = "v2.3.120"
 $tormmin1 = "NONE"
 
-### minimum version for v2022.9.20
+### minimum version for v2022.9.20(8.24)
 $ermin2 = "v3.2.2.0"
 $esmin2 = "v3.2.2.0"
 $nosmin2 = "1.12.11,2022.8.24"
@@ -2204,24 +2204,38 @@ if($tio){
     $Bar.Value = "68"
 
     if($submerged){
-        Write-Log $(Get-Translate("最新のSubmerged配置開始"))
-        #GithubのRelease一覧からぶっこぬいてLatestを置く
-        $rel2 = "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest"
-        $webs = Invoke-WebRequest $rel2 -UseBasicParsing
-        $webs2 = ConvertFrom-Json $webs.Content
-        $aus = $webs2.assets.browser_download_url
-        Write-Log "Submerged Latest DLL download start"
+        Write-Log $(Get-Translate("対応する最新のSubmerged配置開始"))
+        Write-Log "Submerged DLL download start"
         if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
             New-Item "$aupathm\BepInEx\plugins\" -Type Directory
         }
-        for($aaai = 0;$aaai -lt $aus.Length;$aaai++){
-            if($($aus[$aaai]).IndexOf(".dll") -gt 0){
-                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $($aus[$aaai])
-                Write-Log "$($aus[$aaai])"
-                Write-Log $(Get-Translate("Submerged Latest DLL download done"))
-            }
+
+        if($RadioButton114.Checked){
+            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.10.26/Submerged.zip"
+        }elseif($RadioButton115.Checked){
+            Write-Log "Submerged is not compatible this version yet."
+            $submdll = "NONE"
+        }elseif($RadioButton116.Checked){
+            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.8.26/Submerged.zip"
         }
-        Write-Log $(Get-Translate("最新のSubmerged配置完了"))
+
+        if($submdll -ne "NONE"){
+            aria2c -x5 -V --dir "$aupathm" -o "Submerged.zip" $submdll
+            Write-Log "$submdll"
+            Expand-Archive -path "$aupathm\Submerged.zip" -DestinationPath $aupathm -Force
+            if(Test-Path "$aupathm\Submerged"){
+                robocopy "$aupathm\Submerged" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "$aupathm\Submerged" -recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
+            }
+            Remove-Item "$aupathm\Submerged.zip" -Force
+            Write-Log $(Get-Translate("Submerged DLL download done"))
+            Write-Log $(Get-Translate("対応する最新のSubmerged配置完了"))    
+        }else{
+            Write-Log $(Get-Translate("対応するSubmergedがありません"))    
+        }
     }
     $Bar.Value = "69"
 
