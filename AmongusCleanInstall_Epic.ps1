@@ -191,16 +191,7 @@ catch{
     }
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
 }
-<#
-if(Test-Path "$sback\legendary.exe"){
-    Set-Location $sback
-    $legflag = $true
-}else{
-    Set-Location $npl
-    Invoke-WebRequest "https://github.com/derrod/legendary/releases/download/0.20.25/legendary.exe" -OutFile "$npl\legendary.exe" 
-    ./legendary.exe auth --import    
-}
-#>
+
 
 Set-Location $spath
 Set-Location ../

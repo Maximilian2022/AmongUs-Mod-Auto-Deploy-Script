@@ -590,11 +590,11 @@ $Font = New-Object System.Drawing.Font("メイリオ",12)
 # フォーム全体の設定
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Among Us Mod Auto Deploy Tool"
-$form.Size = New-Object System.Drawing.Size(800,680)
+$form.Size = New-Object System.Drawing.Size(815,680)
 $form.StartPosition = "CenterScreen"
 $form.font = $Font
 $form.FormBorderStyle = "Fixed3D"
-$form.MaximumSize = "800,850"
+$form.MaximumSize = "815,850"
 
 # ラベルを表示
 $label8 = New-Object System.Windows.Forms.Label
@@ -631,7 +631,7 @@ $form.Controls.Add($CancelButton)
 # グループを作る
 $MyGroupBox3 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox3.Location = New-Object System.Drawing.Point(400,10)
-$MyGroupBox3.size = New-Object System.Drawing.Size(350,100)
+$MyGroupBox3.size = New-Object System.Drawing.Size(375,100)
 $MyGroupBox3.text = $(Get-Translate("既存のフォルダを上書き/再作成しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -665,7 +665,7 @@ $form.Controls.Add($MyGroupBox3)
 # グループを作る
 $MyGroupBox4 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox4.Location = New-Object System.Drawing.Point(400,120)
-$MyGroupBox4.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox4.size = New-Object System.Drawing.Size(375,70)
 $MyGroupBox4.text = $(Get-Translate("本体Versionを選択してください"))
 
 # グループの中のラジオボタンを作る
@@ -695,7 +695,7 @@ $form.Controls.Add($MyGroupBox4)
 # グループを作る
 $MyGroupBox = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox.Location = New-Object System.Drawing.Point(400,200)
-$MyGroupBox.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox.size = New-Object System.Drawing.Size(375,70)
 $MyGroupBox.text = $(Get-Translate("ショートカットを作成しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -725,7 +725,7 @@ $form.Controls.Add($MyGroupBox)
 # グループを作る
 $MyGroupBox2 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox2.Location = New-Object System.Drawing.Point(400,280)
-$MyGroupBox2.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox2.size = New-Object System.Drawing.Size(375,70)
 $MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -748,7 +748,7 @@ $form.Controls.Add($MyGroupBox2)
 # フォームに各アイテムを入れる
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox24.Location = New-Object System.Drawing.Point(400,360)
-$MyGroupBox24.size = New-Object System.Drawing.Size(350,70)
+$MyGroupBox24.size = New-Object System.Drawing.Size(375,70)
 $MyGroupBox24.text = $(Get-Translate("Submerged を同梱しますか？"))
 
 # グループの中のラジオボタンを作る
@@ -1306,6 +1306,15 @@ function Reload(){
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
     $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
+    if($RadioButton114.Checked){
+        Write-Log $(Get-Translate("本体バージョン v$script:amver が選択されています"))
+    }elseif($RadioButton115.Checked){
+        Write-Log $(Get-Translate("本体バージョン v$script:prever0 が選択されています"))
+    }elseif($RadioButton116.Checked){
+        Write-Log $(Get-Translate("本体バージョン v$script:prever1 が選択されています"))
+    }else{
+        Write-Log $(Get-Translate("Unknown ERROR:本体バージョン"))
+    }
 }
 
 $Combo_SelectedIndexChanged= {
