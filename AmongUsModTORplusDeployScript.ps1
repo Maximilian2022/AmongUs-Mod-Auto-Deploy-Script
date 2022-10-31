@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.6.3"
+$version = "1.6.6.4"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -2211,26 +2211,17 @@ if($tio){
         }
 
         if($RadioButton114.Checked){
-            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.10.26/Submerged.zip"
+            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.10.26/Submerged.dll"
         }elseif($RadioButton115.Checked){
             Write-Log "Submerged is not compatible this version yet."
             $submdll = "NONE"
         }elseif($RadioButton116.Checked){
-            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.8.26/Submerged.zip"
+            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.8.26/Submerged.dll"
         }
 
         if($submdll -ne "NONE"){
-            aria2c -x5 -V --dir "$aupathm" -o "Submerged.zip" $submdll
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins\" -o "Submerged.dll" $submdll
             Write-Log "$submdll"
-            Expand-Archive -path "$aupathm\Submerged.zip" -DestinationPath $aupathm -Force
-            if(Test-Path "$aupathm\Submerged"){
-                robocopy "$aupathm\Submerged" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\Submerged" -recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force
-            }
-            Remove-Item "$aupathm\Submerged.zip" -Force
             Write-Log $(Get-Translate("Submerged DLL download done"))
             Write-Log $(Get-Translate("対応する最新のSubmerged配置完了"))    
         }else{
