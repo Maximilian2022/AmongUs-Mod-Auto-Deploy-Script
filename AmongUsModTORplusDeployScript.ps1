@@ -2733,7 +2733,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
                     if(!(Test-Path $gmhconfig)){
                         Write-Log $(Get-Translate("Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"))
-                        $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt).Content
+                        $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt).Content
                         if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
                             New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
                         }
@@ -2785,7 +2785,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     }
                 }
                 $kenkofile = "$aupathm\BepInEx\config\kenkoland.txt"
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/kenkoland.txt" -OutFile "$kenkofile" -UseBasicParsing
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt" -OutFile "$kenkofile" -UseBasicParsing
                 $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
                 $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
 
@@ -2801,7 +2801,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
                 #optionconf
                 $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
-                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gameHostOptions"
+                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/gameHostOptions"
                 $indeedgo = $true
                 if(Test-Path $ghfile){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("健康ランド化を行うと、既存の部屋設定は全て上書きされます。続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -ne "Yes"){
@@ -2851,8 +2851,8 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 if(!(Test-Path "$aupathm\Regulations")){
                     New-Item $(Join-Path $aupathm "Regulations") -Type Directory
                 }
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/KenkoLand.json" -OutFile "$aupathm\Regulations\KenkoLand.json" -UseBasicParsing
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/Nakarita.json" -OutFile "$aupathm\Regulations\Nakarita.json" -UseBasicParsing
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/KenkoLand.json" -OutFile "$aupathm\Regulations\KenkoLand.json" -UseBasicParsing
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/Nakarita.json" -OutFile "$aupathm\Regulations\Nakarita.json" -UseBasicParsing
                 Write-Log $(Get-Translate("健康ランド化完了:Regulation"))
 
                 Write-Log $(Get-Translate("健康ランド化 ends"))

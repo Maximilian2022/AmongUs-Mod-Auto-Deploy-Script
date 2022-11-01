@@ -296,7 +296,7 @@ Write-Log "`r`n $content"
 if($Cult -eq "ja-JP"){
     #post API(Discord or Git issue)
     $chkenabled = ""
-    $chkenabled = invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/enabledebug.txt
+    $chkenabled = invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/enabledebug.txt
     if($($chkenabled.Content).LastIndexOf("true") -gt 0){
         $dispost = $true
         If(Test-Path "C:\Temp\agreement.txt"){
