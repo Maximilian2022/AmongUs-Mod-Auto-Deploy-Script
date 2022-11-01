@@ -67,6 +67,8 @@ function Get-Translate($transtext){
     }
 }
 
+
+
 #################################################################################################
 # 権限チェック
 #################################################################################################
@@ -636,23 +638,23 @@ $MyGroupBox3.text = $(Get-Translate("既存のフォルダを上書き/再作成
 
 # グループの中のラジオボタンを作る
 $RadioButton5 = New-Object System.Windows.Forms.RadioButton
-$RadioButton5.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton5.Location = New-Object System.Drawing.Point(10,30)
 $RadioButton5.size = New-Object System.Drawing.Size(120,30)
 $RadioButton5.Checked = $True
 $RadioButton5.Text = $(Get-Translate("再作成する"))
 
 $RadioButton6 = New-Object System.Windows.Forms.RadioButton
-$RadioButton6.Location = New-Object System.Drawing.Point(20,60)
+$RadioButton6.Location = New-Object System.Drawing.Point(10,60)
 $RadioButton6.size = New-Object System.Drawing.Size(130,30)
 $RadioButton6.Text = $(Get-Translate("再作成しない"))
 
 $RadioButton7 = New-Object System.Windows.Forms.RadioButton
-$RadioButton7.Location = New-Object System.Drawing.Point(150,30)
+$RadioButton7.Location = New-Object System.Drawing.Point(160,30)
 $RadioButton7.size = New-Object System.Drawing.Size(120,30)
 $RadioButton7.Text = $(Get-Translate("上書きする"))
 
 $RadioButton17 = New-Object System.Windows.Forms.RadioButton
-$RadioButton17.Location = New-Object System.Drawing.Point(150,60)
+$RadioButton17.Location = New-Object System.Drawing.Point(160,60)
 $RadioButton17.size = New-Object System.Drawing.Size(190,30)
 $RadioButton17.Text = $(Get-Translate("クリーンインストール"))
 
@@ -700,18 +702,18 @@ $MyGroupBox.text = $(Get-Translate("ショートカットを作成しますか�
 
 # グループの中のラジオボタンを作る
 $RadioButton1 = New-Object System.Windows.Forms.RadioButton
-$RadioButton1.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton1.Location = New-Object System.Drawing.Point(10,30)
 $RadioButton1.size = New-Object System.Drawing.Size(100,30)
 $RadioButton1.Checked = $True
 $RadioButton1.Text = $(Get-Translate("作成する"))
 
 $RadioButton2 = New-Object System.Windows.Forms.RadioButton
-$RadioButton2.Location = New-Object System.Drawing.Point(120,30)
+$RadioButton2.Location = New-Object System.Drawing.Point(130,30)
 $RadioButton2.size = New-Object System.Drawing.Size(110,30)
 $RadioButton2.Text = $(Get-Translate("作成しない"))
 
 $RadioButton42 = New-Object System.Windows.Forms.RadioButton
-$RadioButton42.Location = New-Object System.Drawing.Point(230,30)
+$RadioButton42.Location = New-Object System.Drawing.Point(250,30)
 $RadioButton42.size = New-Object System.Drawing.Size(100,30)
 $RadioButton42.Text = $(Get-Translate("デバッグ"))
 
@@ -726,16 +728,16 @@ $form.Controls.Add($MyGroupBox)
 $MyGroupBox2 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox2.Location = New-Object System.Drawing.Point(400,280)
 $MyGroupBox2.size = New-Object System.Drawing.Size(375,70)
-$MyGroupBox2.text = $(Get-Translate("作成したModをすぐに起動しますか？"))
+$MyGroupBox2.text = $(Get-Translate("すぐに起動しますか？"))
 
 # グループの中のラジオボタンを作る
 $RadioButton3 = New-Object System.Windows.Forms.RadioButton
-$RadioButton3.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton3.Location = New-Object System.Drawing.Point(10,30)
 $RadioButton3.size = New-Object System.Drawing.Size(150,30)
 $RadioButton3.Text = $(Get-Translate("起動する"))
 
 $RadioButton4 = New-Object System.Windows.Forms.RadioButton
-$RadioButton4.Location = New-Object System.Drawing.Point(180,30)
+$RadioButton4.Location = New-Object System.Drawing.Point(160,30)
 $RadioButton4.size = New-Object System.Drawing.Size(150,30)
 $RadioButton4.Text = $(Get-Translate("起動しない"))
 $RadioButton4.Checked = $True
@@ -753,18 +755,18 @@ $MyGroupBox24.text = $(Get-Translate("Submerged を同梱しますか？"))
 
 # グループの中のラジオボタンを作る
 $RadioButton28 = New-Object System.Windows.Forms.RadioButton
-$RadioButton28.Location = New-Object System.Drawing.Point(20,30)
+$RadioButton28.Location = New-Object System.Drawing.Point(10,30)
 $RadioButton28.size = New-Object System.Drawing.Size(100,30)
 $RadioButton28.Text = $(Get-Translate("同梱する"))
 
 $RadioButton29 = New-Object System.Windows.Forms.RadioButton
-$RadioButton29.Location = New-Object System.Drawing.Point(120,30)
+$RadioButton29.Location = New-Object System.Drawing.Point(130,30)
 $RadioButton29.size = New-Object System.Drawing.Size(110,30)
 $RadioButton29.Text = $(Get-Translate("同梱しない"))
 $RadioButton29.Checked = $True
 
 $RadioButton27 = New-Object System.Windows.Forms.RadioButton
-$RadioButton27.Location = New-Object System.Drawing.Point(230,30)
+$RadioButton27.Location = New-Object System.Drawing.Point(250,30)
 $RadioButton27.size = New-Object System.Drawing.Size(100,30)
 $RadioButton27.Text = $(Get-Translate("除去する"))
 

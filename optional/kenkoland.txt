@@ -1,0 +1,5229 @@
+## Settings file was created by plugin The Other Roles GM v2.3.118
+## Plugin GUID: me.eisbison.theotherroles
+
+[Custom]
+
+# Setting type: Boolean
+# Default value: false
+Enable Debug Mode = false
+
+# Setting type: Boolean
+# Default value: false
+Enable Streamer Mode = false
+
+# Setting type: Boolean
+# Default value: true
+Ghosts See Remaining Tasks = true
+
+# Setting type: Boolean
+# Default value: true
+Ghosts See Roles = true
+
+# Setting type: Boolean
+# Default value: true
+Ghosts See Votes = true
+
+# Setting type: Boolean
+# Default value: true
+Show Role Summary = true
+
+# Setting type: Boolean
+# Default value: false
+Hide Nameplates = false
+
+# Setting type: Boolean
+# Default value: false
+Show Lighter / Darker = false
+
+# Setting type: Boolean
+# Default value: false
+Hide Task Arrows = false
+
+# Setting type: Boolean
+# Default value: false
+Offline Hats = false
+
+# Setting type: Boolean
+# Default value: false
+Hide Fake Tasks = true
+
+# Setting type: Boolean
+# Default value: false
+BetterSabotageMap = true
+
+# Setting type: Boolean
+# Default value: false
+ForceNormalSabotageMap = false
+
+# Setting type: String
+# Default value: 0
+Show PopUp = 2.3.118
+
+# Setting type: String
+# Default value: \n\nThe Other Roles GM
+Streamer Mode Replacement Text = \n\nThe Other Roles GM
+
+# Setting type: String
+# Default value: #87AAF5FF
+Streamer Mode Replacement Text Hex Color = #87AAF5FF
+
+# Setting type: String
+# Default value: 
+Debug Hat Repo = 
+
+# Setting type: String
+# Default value: 
+WebhookUrl = 
+
+# Setting type: Boolean
+# Default value: false
+TransparentMap = false
+
+# Setting type: String
+# Default value: 127.0.0.1
+Custom Server IP = imposter.kenko.land
+
+# Setting type: UInt16
+# Default value: 22023
+Custom Server Port = 22023
+
+[Preset0]
+
+# Setting type: Int32
+# Default value: 1
+7 = 1
+
+# Setting type: Int32
+# Default value: 0
+300 = 3
+
+# Setting type: Int32
+# Default value: 0
+301 = 3
+
+# Setting type: Int32
+# Default value: 0
+302 = 0
+
+# Setting type: Int32
+# Default value: 0
+303 = 0
+
+# Setting type: Int32
+# Default value: 0
+304 = 2
+
+# Setting type: Int32
+# Default value: 0
+305 = 2
+
+# Setting type: Int32
+# Default value: 0
+400 = 0
+
+# Setting type: Int32
+# Default value: 1
+401 = 1
+
+# Setting type: Int32
+# Default value: 1
+405 = 1
+
+# Setting type: Int32
+# Default value: 0
+406 = 0
+
+# Setting type: Int32
+# Default value: 1
+404 = 1
+
+# Setting type: Int32
+# Default value: 0
+10 = 0
+
+# Setting type: Int32
+# Default value: 0
+12 = 0
+
+# Setting type: Int32
+# Default value: 0
+13 = 0
+
+# Setting type: Int32
+# Default value: 0
+14 = 0
+
+# Setting type: Int32
+# Default value: 11
+11 = 11
+
+# Setting type: Int32
+# Default value: 0
+15 = 0
+
+# Setting type: Int32
+# Default value: 0
+16 = 0
+
+# Setting type: Int32
+# Default value: 0
+17 = 0
+
+# Setting type: Int32
+# Default value: 0
+20 = 0
+
+# Setting type: Int32
+# Default value: 11
+21 = 11
+
+# Setting type: Int32
+# Default value: 18
+22 = 18
+
+# Setting type: Int32
+# Default value: 0
+30 = 0
+
+# Setting type: Int32
+# Default value: 11
+31 = 11
+
+# Setting type: Int32
+# Default value: 18
+32 = 18
+
+# Setting type: Int32
+# Default value: 0
+33 = 0
+
+# Setting type: Int32
+# Default value: 0
+1900 = 10
+
+# Setting type: Int32
+# Default value: 0
+1912 = 1
+
+# Setting type: Int32
+# Default value: 0
+1901 = 0
+
+# Setting type: Int32
+# Default value: 1
+1913 = 1
+
+# Setting type: Int32
+# Default value: 0
+1914 = 1
+
+# Setting type: Int32
+# Default value: 1
+1915 = 1
+
+# Setting type: Int32
+# Default value: 0
+1902 = 0
+
+# Setting type: Int32
+# Default value: 0
+1903 = 0
+
+# Setting type: Int32
+# Default value: 0
+1904 = 0
+
+# Setting type: Int32
+# Default value: 0
+1905 = 0
+
+# Setting type: Int32
+# Default value: 0
+1906 = 0
+
+# Setting type: Int32
+# Default value: 0
+1907 = 0
+
+# Setting type: Int32
+# Default value: 1
+1908 = 1
+
+# Setting type: Int32
+# Default value: 0
+1909 = 0
+
+# Setting type: Int32
+# Default value: 3
+1910 = 3
+
+# Setting type: Int32
+# Default value: 0
+1911 = 0
+
+# Setting type: Int32
+# Default value: 0
+40 = 0
+
+# Setting type: Int32
+# Default value: 9
+41 = 9
+
+# Setting type: Int32
+# Default value: 11
+42 = 11
+
+# Setting type: Int32
+# Default value: 1
+43 = 1
+
+# Setting type: Int32
+# Default value: 0
+230 = 0
+
+# Setting type: Int32
+# Default value: 5
+231 = 5
+
+# Setting type: Int32
+# Default value: 4
+233 = 4
+
+# Setting type: Int32
+# Default value: 0
+232 = 0
+
+# Setting type: Int32
+# Default value: 0
+250 = 0
+
+# Setting type: Int32
+# Default value: 3
+251 = 3
+
+# Setting type: Int32
+# Default value: 5
+252 = 5
+
+# Setting type: Int32
+# Default value: 4
+253 = 4
+
+# Setting type: Int32
+# Default value: 0
+260 = 0
+
+# Setting type: Int32
+# Default value: 11
+261 = 11
+
+# Setting type: Int32
+# Default value: 0
+270 = 0
+
+# Setting type: Int32
+# Default value: 11
+271 = 11
+
+# Setting type: Int32
+# Default value: 5
+272 = 5
+
+# Setting type: Int32
+# Default value: 0
+320 = 0
+
+# Setting type: Int32
+# Default value: 5
+321 = 5
+
+# Setting type: Int32
+# Default value: 0
+322 = 0
+
+# Setting type: Int32
+# Default value: 8
+323 = 8
+
+# Setting type: Int32
+# Default value: 1
+324 = 1
+
+# Setting type: Int32
+# Default value: 5
+325 = 5
+
+# Setting type: Int32
+# Default value: 0
+390 = 0
+
+# Setting type: Int32
+# Default value: 11
+391 = 11
+
+# Setting type: Int32
+# Default value: 2
+392 = 2
+
+# Setting type: Int32
+# Default value: 0
+393 = 0
+
+# Setting type: Int32
+# Default value: 1
+394 = 1
+
+# Setting type: Int32
+# Default value: 1
+395 = 1
+
+# Setting type: Int32
+# Default value: 1
+396 = 1
+
+# Setting type: Int32
+# Default value: 0
+410 = 0
+
+# Setting type: Int32
+# Default value: 4
+411 = 4
+
+# Setting type: Int32
+# Default value: 1
+412 = 1
+
+# Setting type: Int32
+# Default value: 8
+413 = 8
+
+# Setting type: Int32
+# Default value: 4
+414 = 4
+
+# Setting type: Int32
+# Default value: 0
+1000 = 0
+
+# Setting type: Int32
+# Default value: 0
+11000 = 0
+
+# Setting type: Int32
+# Default value: 11
+1002 = 11
+
+# Setting type: Int32
+# Default value: 5
+1003 = 5
+
+# Setting type: Int32
+# Default value: 1
+1004 = 1
+
+# Setting type: Int32
+# Default value: 4
+1005 = 4
+
+# Setting type: Int32
+# Default value: 15
+1006 = 15
+
+# Setting type: Int32
+# Default value: 1
+1007 = 1
+
+# Setting type: Int32
+# Default value: 0
+1008 = 0
+
+# Setting type: Int32
+# Default value: 0
+1010 = 0
+
+# Setting type: Int32
+# Default value: 0
+11010 = 0
+
+# Setting type: Int32
+# Default value: 5
+1012 = 5
+
+# Setting type: Int32
+# Default value: 15
+1013 = 15
+
+# Setting type: Int32
+# Default value: 1
+1014 = 1
+
+# Setting type: Int32
+# Default value: 0
+1070 = 0
+
+# Setting type: Int32
+# Default value: 1
+1079 = 1
+
+# Setting type: Int32
+# Default value: 6
+1071 = 6
+
+# Setting type: Int32
+# Default value: 3
+1072 = 3
+
+# Setting type: Int32
+# Default value: 4
+1073 = 4
+
+# Setting type: Int32
+# Default value: 0
+1074 = 0
+
+# Setting type: Int32
+# Default value: 9
+1076 = 9
+
+# Setting type: Int32
+# Default value: 10
+1077 = 10
+
+# Setting type: Int32
+# Default value: 10
+1078 = 10
+
+# Setting type: Int32
+# Default value: 0
+1030 = 0
+
+# Setting type: Int32
+# Default value: 18
+1031 = 18
+
+# Setting type: Int32
+# Default value: 4
+1032 = 4
+
+# Setting type: Int32
+# Default value: 1
+1033 = 1
+
+# Setting type: Int32
+# Default value: 1
+1034 = 1
+
+# Setting type: Int32
+# Default value: 1
+1035 = 1
+
+# Setting type: Int32
+# Default value: 1
+1036 = 1
+
+# Setting type: Int32
+# Default value: 1
+1037 = 1
+
+# Setting type: Int32
+# Default value: 0
+1050 = 10
+
+# Setting type: Int32
+# Default value: 0
+11050 = 0
+
+# Setting type: Int32
+# Default value: 10
+1052 = 0
+
+# Setting type: Int32
+# Default value: 1
+1053 = 1
+
+# Setting type: Int32
+# Default value: 1
+1054 = 1
+
+# Setting type: Int32
+# Default value: 1
+1055 = 1
+
+# Setting type: Int32
+# Default value: 1
+1056 = 1
+
+# Setting type: Int32
+# Default value: 0
+1080 = 0
+
+# Setting type: Int32
+# Default value: 1
+1081 = 1
+
+# Setting type: Int32
+# Default value: 1
+1082 = 1
+
+# Setting type: Int32
+# Default value: 1
+1083 = 1
+
+# Setting type: Int32
+# Default value: 0
+1020 = 0
+
+# Setting type: Int32
+# Default value: 0
+11020 = 0
+
+# Setting type: Int32
+# Default value: 1
+1021 = 1
+
+# Setting type: Int32
+# Default value: 1
+1022 = 1
+
+# Setting type: Int32
+# Default value: 1
+1023 = 1
+
+# Setting type: Int32
+# Default value: 0
+1024 = 0
+
+# Setting type: Int32
+# Default value: 0
+360 = 10
+
+# Setting type: Int32
+# Default value: 0
+10360 = 0
+
+# Setting type: Int32
+# Default value: 0
+366 = 1
+
+# Setting type: Int32
+# Default value: 0
+369 = 5
+
+# Setting type: Int32
+# Default value: 0
+367 = 1
+
+# Setting type: Int32
+# Default value: 1
+20368 = 0
+
+# Setting type: Int32
+# Default value: 1
+20369 = 0
+
+# Setting type: Int32
+# Default value: 3
+20370 = 1
+
+# Setting type: Int32
+# Default value: 0
+361 = 1
+
+# Setting type: Int32
+# Default value: 0
+362 = 1
+
+# Setting type: Int32
+# Default value: 0
+363 = 1
+
+# Setting type: Int32
+# Default value: 0
+364 = 0
+
+# Setting type: Int32
+# Default value: 1
+365 = 0
+
+# Setting type: Int32
+# Default value: 0
+10370 = 0
+
+# Setting type: Int32
+# Default value: 0
+180 = 0
+
+# Setting type: Int32
+# Default value: 0
+10180 = 0
+
+# Setting type: Int32
+# Default value: 3
+181 = 3
+
+# Setting type: Int32
+# Default value: 0
+50 = 0
+
+# Setting type: Int32
+# Default value: 0
+51 = 0
+
+# Setting type: Int32
+# Default value: 0
+57 = 0
+
+# Setting type: Int32
+# Default value: 1
+52 = 1
+
+# Setting type: Int32
+# Default value: 1
+53 = 1
+
+# Setting type: Int32
+# Default value: 1
+56 = 1
+
+# Setting type: Int32
+# Default value: 0
+55 = 0
+
+# Setting type: Int32
+# Default value: 1
+54 = 1
+
+# Setting type: Int32
+# Default value: 0
+1090 = 0
+
+# Setting type: Int32
+# Default value: 0
+11090 = 0
+
+# Setting type: Int32
+# Default value: 0
+310 = 0
+
+# Setting type: Int32
+# Default value: 0
+311 = 0
+
+# Setting type: Int32
+# Default value: 0
+317 = 0
+
+# Setting type: Int32
+# Default value: 1
+312 = 1
+
+# Setting type: Int32
+# Default value: 1
+313 = 1
+
+# Setting type: Int32
+# Default value: 0
+314 = 0
+
+# Setting type: Int32
+# Default value: 1
+315 = 1
+
+# Setting type: Int32
+# Default value: 1
+316 = 1
+
+# Setting type: Int32
+# Default value: 1
+318 = 1
+
+# Setting type: Int32
+# Default value: 1
+319 = 1
+
+# Setting type: Int32
+# Default value: 0
+150 = 0
+
+# Setting type: Int32
+# Default value: 0
+153 = 0
+
+# Setting type: Int32
+# Default value: 1
+154 = 1
+
+# Setting type: Int32
+# Default value: 0
+151 = 0
+
+# Setting type: Int32
+# Default value: 0
+152 = 0
+
+# Setting type: Int32
+# Default value: 0
+60 = 0
+
+# Setting type: Int32
+# Default value: 1
+61 = 1
+
+# Setting type: Int32
+# Default value: 1
+62 = 1
+
+# Setting type: Int32
+# Default value: 0
+63 = 0
+
+# Setting type: Int32
+# Default value: 0
+290 = 0
+
+# Setting type: Int32
+# Default value: 4
+291 = 4
+
+# Setting type: Int32
+# Default value: 3
+292 = 3
+
+# Setting type: Int32
+# Default value: 0
+293 = 0
+
+# Setting type: Int32
+# Default value: 0
+380 = 0
+
+# Setting type: Int32
+# Default value: 0
+10380 = 0
+
+# Setting type: Int32
+# Default value: 0
+220 = 0
+
+# Setting type: Int32
+# Default value: 11
+221 = 11
+
+# Setting type: Int32
+# Default value: 1
+223 = 1
+
+# Setting type: Int32
+# Default value: 0
+430 = 0
+
+# Setting type: Int32
+# Default value: 0
+224 = 0
+
+# Setting type: Int32
+# Default value: 11
+222 = 11
+
+# Setting type: Int32
+# Default value: 0
+225 = 0
+
+# Setting type: Int32
+# Default value: 0
+226 = 0
+
+# Setting type: Int32
+# Default value: 1
+227 = 1
+
+# Setting type: Int32
+# Default value: 1
+228 = 1
+
+# Setting type: Int32
+# Default value: 1
+229 = 1
+
+# Setting type: Int32
+# Default value: 1
+431 = 1
+
+# Setting type: Int32
+# Default value: 0
+340 = 0
+
+# Setting type: Int32
+# Default value: 5
+341 = 5
+
+# Setting type: Int32
+# Default value: 3
+342 = 3
+
+# Setting type: Int32
+# Default value: 1
+343 = 1
+
+# Setting type: Int32
+# Default value: 1
+344 = 1
+
+# Setting type: Int32
+# Default value: 0
+350 = 0
+
+# Setting type: Int32
+# Default value: 1
+351 = 1
+
+# Setting type: Int32
+# Default value: 0
+352 = 0
+
+# Setting type: Int32
+# Default value: 4
+353 = 4
+
+# Setting type: Int32
+# Default value: 3
+354 = 3
+
+# Setting type: Int32
+# Default value: 0
+355 = 0
+
+# Setting type: Int32
+# Default value: 11
+356 = 11
+
+# Setting type: Int32
+# Default value: 5
+357 = 5
+
+# Setting type: Int32
+# Default value: 0
+70 = 0
+
+# Setting type: Int32
+# Default value: 0
+72 = 0
+
+# Setting type: Int32
+# Default value: 0
+71 = 0
+
+# Setting type: Int32
+# Default value: 0
+73 = 0
+
+# Setting type: Int32
+# Default value: 0
+900 = 0
+
+# Setting type: Int32
+# Default value: 3
+901 = 3
+
+# Setting type: Int32
+# Default value: 0
+902 = 0
+
+# Setting type: Int32
+# Default value: 3
+903 = 3
+
+# Setting type: Int32
+# Default value: 4
+904 = 4
+
+# Setting type: Int32
+# Default value: 9
+905 = 9
+
+# Setting type: Int32
+# Default value: 1
+906 = 1
+
+# Setting type: Int32
+# Default value: 1
+908 = 1
+
+# Setting type: Int32
+# Default value: 0
+1040 = 0
+
+# Setting type: Int32
+# Default value: 0
+11040 = 0
+
+# Setting type: Int32
+# Default value: 1
+101041 = 1
+
+# Setting type: Int32
+# Default value: 0
+101040 = 0
+
+# Setting type: Int32
+# Default value: 0
+1120 = 0
+
+# Setting type: Int32
+# Default value: 0
+11120 = 0
+
+# Setting type: Int32
+# Default value: 9
+1121 = 9
+
+# Setting type: Int32
+# Default value: 0
+1122 = 0
+
+# Setting type: Int32
+# Default value: 0
+1113 = 0
+
+# Setting type: Int32
+# Default value: 1
+1114 = 1
+
+# Setting type: Int32
+# Default value: 0
+910 = 0
+
+# Setting type: Int32
+# Default value: 3
+911 = 0
+
+# Setting type: Int32
+# Default value: 4
+913 = 4
+
+# Setting type: Int32
+# Default value: 0
+914 = 0
+
+# Setting type: Int32
+# Default value: 1
+912 = 1
+
+# Setting type: Int32
+# Default value: 1
+919 = 1
+
+# Setting type: Int32
+# Default value: 14
+916 = 14
+
+# Setting type: Int32
+# Default value: 14
+917 = 14
+
+# Setting type: Int32
+# Default value: 1
+918 = 1
+
+# Setting type: Int32
+# Default value: 0
+940 = 0
+
+# Setting type: Int32
+# Default value: 0
+10940 = 0
+
+# Setting type: Int32
+# Default value: 4
+941 = 4
+
+# Setting type: Int32
+# Default value: 0
+942 = 0
+
+# Setting type: Int32
+# Default value: 38
+943 = 38
+
+# Setting type: Int32
+# Default value: 3
+944 = 3
+
+# Setting type: Int32
+# Default value: 0
+970 = 0
+
+# Setting type: Int32
+# Default value: 38
+971 = 38
+
+# Setting type: Int32
+# Default value: 1
+972 = 1
+
+# Setting type: Int32
+# Default value: 0
+973 = 0
+
+# Setting type: Int32
+# Default value: 0
+974 = 0
+
+# Setting type: Int32
+# Default value: 0
+975 = 0
+
+# Setting type: Int32
+# Default value: 0
+976 = 0
+
+# Setting type: Int32
+# Default value: 0
+1060 = 0
+
+# Setting type: Int32
+# Default value: 2
+1061 = 2
+
+# Setting type: Int32
+# Default value: 4
+1062 = 4
+
+# Setting type: Int32
+# Default value: 1
+1063 = 1
+
+# Setting type: Int32
+# Default value: 1
+1064 = 1
+
+# Setting type: Int32
+# Default value: 1
+1065 = 1
+
+# Setting type: Int32
+# Default value: 0
+1100 = 0
+
+# Setting type: Int32
+# Default value: 2
+1101 = 2
+
+# Setting type: Int32
+# Default value: 7
+1103 = 7
+
+# Setting type: Int32
+# Default value: 12
+1104 = 12
+
+# Setting type: Int32
+# Default value: 1
+1105 = 1
+
+# Setting type: Int32
+# Default value: 1
+21106 = 1
+
+# Setting type: Int32
+# Default value: 2
+21107 = 2
+
+# Setting type: Int32
+# Default value: 3
+21108 = 3
+
+# Setting type: Int32
+# Default value: 2
+1107 = 2
+
+# Setting type: Int32
+# Default value: 0
+1130 = 0
+
+# Setting type: Int32
+# Default value: 0
+1131 = 0
+
+# Setting type: Int32
+# Default value: 29
+1132 = 29
+
+# Setting type: Int32
+# Default value: 2
+1134 = 2
+
+# Setting type: Int32
+# Default value: 0
+1135 = 0
+
+# Setting type: Int32
+# Default value: 0
+1136 = 0
+
+# Setting type: Int32
+# Default value: 0
+1140 = 0
+
+# Setting type: Int32
+# Default value: 0
+11140 = 0
+
+# Setting type: Int32
+# Default value: 3
+1141 = 3
+
+# Setting type: Int32
+# Default value: 4
+1142 = 4
+
+# Setting type: Int32
+# Default value: 4
+1143 = 4
+
+# Setting type: Int32
+# Default value: 0
+960 = 0
+
+# Setting type: Int32
+# Default value: 0
+10960 = 0
+
+# Setting type: Int32
+# Default value: 0
+963 = 0
+
+# Setting type: Int32
+# Default value: 6
+961 = 6
+
+# Setting type: Int32
+# Default value: 2
+962 = 2
+
+# Setting type: Int32
+# Default value: 0
+80 = 0
+
+# Setting type: Int32
+# Default value: 0
+81 = 0
+
+# Setting type: Int32
+# Default value: 0
+90 = 0
+
+# Setting type: Int32
+# Default value: 1
+91 = 1
+
+# Setting type: Int32
+# Default value: 1
+92 = 1
+
+# Setting type: Int32
+# Default value: 1
+93 = 1
+
+# Setting type: Int32
+# Default value: 0
+100 = 10
+
+# Setting type: Int32
+# Default value: 0
+10100 = 0
+
+# Setting type: Int32
+# Default value: 11
+101 = 11
+
+# Setting type: Int32
+# Default value: 1
+103 = 0
+
+# Setting type: Int32
+# Default value: 0
+104 = 0
+
+# Setting type: Int32
+# Default value: 1
+105 = 1
+
+# Setting type: Int32
+# Default value: 0
+102 = 1
+
+# Setting type: Int32
+# Default value: 0
+110 = 10
+
+# Setting type: Int32
+# Default value: 0
+10110 = 0
+
+# Setting type: Int32
+# Default value: 7
+111 = 5
+
+# Setting type: Int32
+# Default value: 2
+112 = 5
+
+# Setting type: Int32
+# Default value: 5
+113 = 5
+
+# Setting type: Int32
+# Default value: 1
+114 = 11
+
+# Setting type: Int32
+# Default value: 1
+115 = 1
+
+# Setting type: Int32
+# Default value: 0
+120 = 0
+
+# Setting type: Int32
+# Default value: 0
+121 = 0
+
+# Setting type: Int32
+# Default value: 1
+122 = 1
+
+# Setting type: Int32
+# Default value: 19
+123 = 19
+
+# Setting type: Int32
+# Default value: 0
+124 = 0
+
+# Setting type: Int32
+# Default value: 8
+125 = 8
+
+# Setting type: Int32
+# Default value: 0
+130 = 0
+
+# Setting type: Int32
+# Default value: 11
+131 = 11
+
+# Setting type: Int32
+# Default value: 2
+132 = 2
+
+# Setting type: Int32
+# Default value: 2
+133 = 2
+
+# Setting type: Int32
+# Default value: 0
+140 = 0
+
+# Setting type: Int32
+# Default value: 0
+143 = 0
+
+# Setting type: Int32
+# Default value: 0
+144 = 0
+
+# Setting type: Int32
+# Default value: 0
+145 = 0
+
+# Setting type: Int32
+# Default value: 0
+146 = 0
+
+# Setting type: Int32
+# Default value: 0
+160 = 0
+
+# Setting type: Int32
+# Default value: 0
+161 = 0
+
+# Setting type: Int32
+# Default value: 0
+163 = 0
+
+# Setting type: Int32
+# Default value: 3
+162 = 3
+
+# Setting type: Int32
+# Default value: 0
+170 = 0
+
+# Setting type: Int32
+# Default value: 5
+171 = 5
+
+# Setting type: Int32
+# Default value: 3
+172 = 3
+
+# Setting type: Int32
+# Default value: 0
+173 = 0
+
+# Setting type: Int32
+# Default value: 4
+174 = 4
+
+# Setting type: Int32
+# Default value: 1
+175 = 1
+
+# Setting type: Int32
+# Default value: 1
+176 = 1
+
+# Setting type: Int32
+# Default value: 0
+200 = 0
+
+# Setting type: Int32
+# Default value: 4
+201 = 4
+
+# Setting type: Int32
+# Default value: 0
+202 = 0
+
+# Setting type: Int32
+# Default value: 1
+203 = 1
+
+# Setting type: Int32
+# Default value: 6
+204 = 6
+
+# Setting type: Int32
+# Default value: 1
+205 = 1
+
+# Setting type: Int32
+# Default value: 0
+210 = 0
+
+# Setting type: Int32
+# Default value: 1
+211 = 1
+
+# Setting type: Int32
+# Default value: 0
+212 = 0
+
+# Setting type: Int32
+# Default value: 1
+213 = 1
+
+# Setting type: Int32
+# Default value: 0
+240 = 0
+
+# Setting type: Int32
+# Default value: 0
+241 = 0
+
+# Setting type: Int32
+# Default value: 1
+242 = 1
+
+# Setting type: Int32
+# Default value: 0
+243 = 0
+
+# Setting type: Int32
+# Default value: 0
+244 = 0
+
+# Setting type: Int32
+# Default value: 0
+280 = 0
+
+# Setting type: Int32
+# Default value: 11
+281 = 11
+
+# Setting type: Int32
+# Default value: 6
+282 = 6
+
+# Setting type: Int32
+# Default value: 1
+283 = 1
+
+# Setting type: Int32
+# Default value: 0
+284 = 0
+
+# Setting type: Int32
+# Default value: 3
+285 = 3
+
+# Setting type: Int32
+# Default value: 4
+286 = 4
+
+# Setting type: Int32
+# Default value: 2
+287 = 2
+
+# Setting type: Int32
+# Default value: 1
+288 = 1
+
+# Setting type: Int32
+# Default value: 0
+330 = 0
+
+# Setting type: Int32
+# Default value: 0
+331 = 0
+
+# Setting type: Int32
+# Default value: 0
+332 = 0
+
+# Setting type: Int32
+# Default value: 1
+333 = 1
+
+# Setting type: Int32
+# Default value: 0
+370 = 0
+
+# Setting type: Int32
+# Default value: 5
+371 = 5
+
+# Setting type: Int32
+# Default value: 3
+372 = 3
+
+# Setting type: Int32
+# Default value: 0
+373 = 0
+
+# Setting type: Int32
+# Default value: 0
+9909 = 1
+
+# Setting type: Int32
+# Default value: 0
+9914 = 0
+
+# Setting type: Int32
+# Default value: 2
+9913 = 2
+
+# Setting type: Int32
+# Default value: 1
+9920 = 1
+
+# Setting type: Int32
+# Default value: 1
+9932 = 1
+
+# Setting type: Int32
+# Default value: 1
+9933 = 1
+
+# Setting type: Int32
+# Default value: 0
+9936 = 1
+
+# Setting type: Int32
+# Default value: 0
+9910 = 1
+
+# Setting type: Int32
+# Default value: 0
+9911 = 1
+
+# Setting type: Int32
+# Default value: 0
+9912 = 1
+
+# Setting type: Int32
+# Default value: 0
+9931 = 1
+
+# Setting type: Int32
+# Default value: 0
+9934 = 1
+
+# Setting type: Int32
+# Default value: 10
+9935 = 10
+
+# Setting type: Int32
+# Default value: 0
+9921 = 1
+
+# Setting type: Int32
+# Default value: 0
+9905 = 0
+
+# Setting type: Int32
+# Default value: 0
+9906 = 0
+
+# Setting type: Int32
+# Default value: 0
+9907 = 0
+
+# Setting type: Int32
+# Default value: 1
+9922 = 1
+
+# Setting type: Int32
+# Default value: 1
+9908 = 1
+
+# Setting type: Int32
+# Default value: 60
+9999 = 45
+
+# Setting type: Int32
+# Default value: 0
+9916 = 0
+
+# Setting type: Int32
+# Default value: 0
+9917 = 0
+
+# Setting type: Int32
+# Default value: 0
+97918 = 1
+
+# Setting type: Int32
+# Default value: 0
+9919 = 0
+
+# Setting type: Int32
+# Default value: 0
+9923 = 0
+
+# Setting type: Int32
+# Default value: 15
+9924 = 10
+
+# Setting type: Int32
+# Default value: 0
+9925 = 0
+
+# Setting type: Int32
+# Default value: 0
+9926 = 1
+
+# Setting type: Int32
+# Default value: 0
+9927 = 0
+
+# Setting type: Int32
+# Default value: 0
+9928 = 0
+
+# Setting type: Int32
+# Default value: 0
+9929 = 0
+
+# Setting type: Int32
+# Default value: 0
+9930 = 0
+
+# Setting type: Int32
+# Default value: 0
+9937 = 0
+
+# Setting type: Int32
+# Default value: 0
+552 = 0
+
+# Setting type: Int32
+# Default value: 1
+9900 = 0
+
+# Setting type: Int32
+# Default value: 0
+9901 = 0
+
+# Setting type: Int32
+# Default value: 3
+9902 = 3
+
+# Setting type: Int32
+# Default value: 0
+9903 = 0
+
+# Setting type: Int32
+# Default value: 0
+9904 = 0
+
+# Setting type: Int32
+# Default value: 10
+3 = 8
+
+# Setting type: Int32
+# Default value: 0
+4 = 0
+
+# Setting type: Int32
+# Default value: 0
+5 = 0
+
+# Setting type: Int32
+# Default value: 0
+550 = 1
+
+# Setting type: Int32
+# Default value: 1
+551 = 1
+
+# Setting type: Int32
+# Default value: 0
+540 = 0
+
+# Setting type: Int32
+# Default value: 0
+520 = 0
+
+# Setting type: Int32
+# Default value: 0
+510 = 2
+
+# Setting type: Int32
+# Default value: 1
+501 = 1
+
+# Setting type: Int32
+# Default value: 30
+502 = 3
+
+# Setting type: Int32
+# Default value: 1
+503 = 1
+
+# Setting type: Int32
+# Default value: 1
+505 = 0
+
+# Setting type: Int32
+# Default value: 30
+506 = 30
+
+# Setting type: Int32
+# Default value: 1
+509 = 0
+
+# Setting type: Int32
+# Default value: 1
+507 = 1
+
+# Setting type: Int32
+# Default value: 30
+508 = 3
+
+# Setting type: Int32
+# Default value: 1
+511 = 1
+
+# Setting type: Int32
+# Default value: 0
+530 = 0
+
+# Setting type: Int32
+# Default value: 0
+8 = 0
+
+# Setting type: Int32
+# Default value: 1
+531 = 1
+
+# Setting type: Int32
+# Default value: 1
+532 = 1
+
+# Setting type: Int32
+# Default value: 1
+533 = 1
+
+# Setting type: Int32
+# Default value: 1
+534 = 1
+
+# Setting type: Int32
+# Default value: 1
+535 = 1
+
+# Setting type: Int32
+# Default value: 0
+504 = 0
+
+# Setting type: Int32
+# Default value: 0
+6 = 0
+
+# Setting type: Int32
+# Default value: 0
+522 = 0
+
+# Setting type: Int32
+# Default value: 0
+521 = 0
+
+1150 = 0
+
+1151 = 9
+
+20913 = 1
+
+20914 = 1
+
+20915 = 3
+
+920 = 0
+
+921 = 1
+
+9918 = 0
+
+11041 = 1
+
+[Preset1]
+
+7 = 1
+
+300 = 0
+
+301 = 0
+
+302 = 0
+
+303 = 0
+
+304 = 0
+
+305 = 0
+
+400 = 0
+
+401 = 1
+
+405 = 1
+
+406 = 0
+
+404 = 1
+
+10 = 0
+
+12 = 0
+
+13 = 0
+
+14 = 0
+
+11 = 11
+
+15 = 0
+
+16 = 0
+
+17 = 0
+
+20 = 0
+
+21 = 11
+
+22 = 18
+
+30 = 0
+
+31 = 11
+
+32 = 18
+
+33 = 0
+
+1900 = 0
+
+1912 = 0
+
+1901 = 0
+
+1913 = 1
+
+1914 = 0
+
+1915 = 1
+
+1902 = 0
+
+1903 = 0
+
+1904 = 0
+
+1905 = 0
+
+1906 = 0
+
+1907 = 0
+
+1908 = 1
+
+1909 = 0
+
+1910 = 3
+
+1911 = 0
+
+40 = 0
+
+41 = 9
+
+42 = 11
+
+43 = 1
+
+230 = 0
+
+231 = 5
+
+233 = 4
+
+232 = 0
+
+250 = 0
+
+251 = 3
+
+252 = 5
+
+253 = 4
+
+260 = 0
+
+261 = 11
+
+270 = 0
+
+271 = 11
+
+272 = 5
+
+320 = 0
+
+321 = 5
+
+322 = 0
+
+323 = 8
+
+324 = 1
+
+325 = 5
+
+390 = 0
+
+391 = 11
+
+392 = 2
+
+393 = 0
+
+394 = 1
+
+395 = 1
+
+396 = 1
+
+410 = 0
+
+411 = 4
+
+412 = 1
+
+413 = 8
+
+414 = 4
+
+1000 = 0
+
+11000 = 0
+
+1002 = 11
+
+1003 = 5
+
+1004 = 1
+
+1005 = 4
+
+1006 = 15
+
+1007 = 1
+
+1008 = 0
+
+1010 = 0
+
+11010 = 0
+
+1012 = 5
+
+1013 = 15
+
+1014 = 1
+
+1070 = 0
+
+1079 = 1
+
+1071 = 6
+
+1072 = 3
+
+1073 = 4
+
+1074 = 0
+
+1076 = 9
+
+1077 = 10
+
+1078 = 10
+
+1030 = 0
+
+1031 = 18
+
+1032 = 4
+
+1033 = 1
+
+1034 = 1
+
+1035 = 1
+
+1036 = 1
+
+1037 = 1
+
+1050 = 0
+
+11050 = 0
+
+1052 = 10
+
+1053 = 1
+
+1054 = 1
+
+1055 = 1
+
+1056 = 1
+
+1080 = 0
+
+1081 = 1
+
+1082 = 1
+
+1083 = 1
+
+1020 = 0
+
+11020 = 0
+
+1021 = 1
+
+1022 = 1
+
+1023 = 1
+
+1024 = 0
+
+360 = 0
+
+10360 = 0
+
+366 = 0
+
+369 = 0
+
+367 = 0
+
+20368 = 1
+
+20369 = 1
+
+20370 = 3
+
+361 = 0
+
+362 = 0
+
+363 = 0
+
+364 = 0
+
+365 = 1
+
+10370 = 0
+
+180 = 0
+
+10180 = 0
+
+181 = 3
+
+50 = 0
+
+51 = 0
+
+57 = 0
+
+52 = 1
+
+53 = 1
+
+56 = 1
+
+55 = 0
+
+54 = 1
+
+1090 = 0
+
+11090 = 0
+
+310 = 0
+
+311 = 0
+
+317 = 0
+
+312 = 1
+
+313 = 1
+
+314 = 0
+
+315 = 1
+
+316 = 1
+
+318 = 1
+
+319 = 1
+
+150 = 0
+
+153 = 0
+
+154 = 1
+
+151 = 0
+
+152 = 0
+
+60 = 0
+
+61 = 1
+
+62 = 1
+
+63 = 0
+
+290 = 0
+
+291 = 4
+
+292 = 3
+
+293 = 0
+
+380 = 0
+
+10380 = 0
+
+220 = 0
+
+221 = 11
+
+223 = 1
+
+430 = 0
+
+224 = 0
+
+222 = 11
+
+225 = 0
+
+226 = 0
+
+227 = 1
+
+228 = 1
+
+229 = 1
+
+431 = 1
+
+340 = 0
+
+341 = 5
+
+342 = 3
+
+343 = 1
+
+344 = 1
+
+350 = 0
+
+351 = 1
+
+352 = 0
+
+353 = 4
+
+354 = 3
+
+355 = 0
+
+356 = 11
+
+357 = 5
+
+70 = 0
+
+72 = 0
+
+71 = 0
+
+73 = 0
+
+900 = 0
+
+901 = 3
+
+902 = 0
+
+903 = 3
+
+904 = 4
+
+905 = 9
+
+906 = 1
+
+908 = 1
+
+1040 = 0
+
+11040 = 0
+
+101041 = 1
+
+101040 = 0
+
+1120 = 0
+
+11120 = 0
+
+1121 = 9
+
+1122 = 0
+
+1113 = 0
+
+1114 = 1
+
+910 = 0
+
+911 = 3
+
+913 = 4
+
+914 = 0
+
+912 = 1
+
+919 = 1
+
+916 = 14
+
+917 = 14
+
+918 = 1
+
+940 = 0
+
+10940 = 0
+
+941 = 4
+
+942 = 0
+
+943 = 38
+
+944 = 3
+
+970 = 0
+
+971 = 38
+
+972 = 1
+
+973 = 0
+
+974 = 0
+
+975 = 0
+
+976 = 0
+
+1060 = 0
+
+1061 = 2
+
+1062 = 4
+
+1063 = 1
+
+1064 = 1
+
+1065 = 1
+
+1100 = 0
+
+1101 = 2
+
+1103 = 7
+
+1104 = 12
+
+1105 = 1
+
+21106 = 1
+
+21107 = 2
+
+21108 = 3
+
+1107 = 2
+
+1130 = 0
+
+1131 = 0
+
+1132 = 29
+
+1134 = 2
+
+1135 = 0
+
+1136 = 0
+
+1140 = 0
+
+11140 = 0
+
+1141 = 3
+
+1142 = 4
+
+1143 = 4
+
+1150 = 0
+
+1151 = 9
+
+960 = 0
+
+10960 = 0
+
+963 = 0
+
+961 = 6
+
+962 = 2
+
+80 = 0
+
+81 = 0
+
+90 = 0
+
+91 = 1
+
+92 = 1
+
+93 = 1
+
+100 = 0
+
+10100 = 0
+
+101 = 11
+
+103 = 1
+
+104 = 0
+
+105 = 1
+
+102 = 0
+
+110 = 0
+
+10110 = 0
+
+111 = 7
+
+112 = 2
+
+113 = 5
+
+114 = 1
+
+115 = 1
+
+120 = 0
+
+121 = 0
+
+122 = 1
+
+123 = 19
+
+124 = 0
+
+125 = 8
+
+130 = 0
+
+131 = 11
+
+132 = 2
+
+133 = 2
+
+140 = 0
+
+143 = 0
+
+144 = 0
+
+145 = 0
+
+146 = 0
+
+160 = 0
+
+161 = 0
+
+163 = 0
+
+162 = 3
+
+170 = 0
+
+171 = 5
+
+172 = 3
+
+173 = 0
+
+174 = 4
+
+175 = 1
+
+176 = 1
+
+200 = 0
+
+201 = 4
+
+202 = 0
+
+203 = 1
+
+204 = 6
+
+205 = 1
+
+210 = 0
+
+211 = 1
+
+212 = 0
+
+213 = 1
+
+240 = 0
+
+241 = 0
+
+242 = 1
+
+243 = 0
+
+244 = 0
+
+280 = 0
+
+281 = 11
+
+282 = 6
+
+283 = 1
+
+284 = 0
+
+285 = 3
+
+286 = 4
+
+287 = 2
+
+288 = 1
+
+330 = 0
+
+331 = 0
+
+332 = 0
+
+333 = 1
+
+370 = 0
+
+371 = 5
+
+372 = 3
+
+373 = 0
+
+9909 = 0
+
+9914 = 0
+
+9913 = 2
+
+9920 = 1
+
+9932 = 1
+
+9933 = 1
+
+9936 = 0
+
+9910 = 0
+
+9911 = 0
+
+9912 = 0
+
+9931 = 0
+
+9934 = 0
+
+9935 = 10
+
+9921 = 0
+
+9905 = 0
+
+9906 = 0
+
+9907 = 0
+
+9922 = 1
+
+9908 = 1
+
+9999 = 60
+
+9916 = 0
+
+9917 = 0
+
+97918 = 0
+
+9919 = 0
+
+9923 = 0
+
+9924 = 15
+
+9925 = 0
+
+9926 = 0
+
+9927 = 0
+
+9928 = 0
+
+9929 = 0
+
+9930 = 0
+
+9937 = 0
+
+552 = 0
+
+9900 = 1
+
+9901 = 0
+
+9902 = 3
+
+9903 = 0
+
+9904 = 0
+
+3 = 10
+
+4 = 0
+
+5 = 0
+
+550 = 0
+
+551 = 1
+
+540 = 0
+
+520 = 0
+
+510 = 0
+
+501 = 1
+
+502 = 30
+
+503 = 1
+
+505 = 1
+
+506 = 30
+
+509 = 1
+
+507 = 1
+
+508 = 30
+
+511 = 1
+
+530 = 0
+
+8 = 0
+
+531 = 1
+
+532 = 1
+
+533 = 1
+
+534 = 1
+
+535 = 1
+
+504 = 0
+
+6 = 0
+
+522 = 0
+
+521 = 0
+
+[Preset2]
+
+7 = 1
+
+300 = 0
+
+301 = 0
+
+302 = 0
+
+303 = 0
+
+304 = 0
+
+305 = 0
+
+400 = 0
+
+401 = 1
+
+405 = 1
+
+406 = 0
+
+404 = 1
+
+10 = 0
+
+12 = 0
+
+13 = 0
+
+14 = 0
+
+11 = 11
+
+15 = 0
+
+16 = 0
+
+17 = 0
+
+20 = 0
+
+21 = 11
+
+22 = 18
+
+30 = 0
+
+31 = 11
+
+32 = 18
+
+33 = 0
+
+1900 = 0
+
+1912 = 0
+
+1901 = 0
+
+1913 = 1
+
+1914 = 0
+
+1915 = 1
+
+1902 = 0
+
+1903 = 0
+
+1904 = 0
+
+1905 = 0
+
+1906 = 0
+
+1907 = 0
+
+1908 = 1
+
+1909 = 0
+
+1910 = 3
+
+1911 = 0
+
+40 = 0
+
+41 = 9
+
+42 = 11
+
+43 = 1
+
+230 = 0
+
+231 = 5
+
+233 = 4
+
+232 = 0
+
+250 = 0
+
+251 = 3
+
+252 = 5
+
+253 = 4
+
+260 = 0
+
+261 = 11
+
+270 = 0
+
+271 = 11
+
+272 = 5
+
+320 = 0
+
+321 = 5
+
+322 = 0
+
+323 = 8
+
+324 = 1
+
+325 = 5
+
+390 = 0
+
+391 = 11
+
+392 = 2
+
+393 = 0
+
+394 = 1
+
+395 = 1
+
+396 = 1
+
+410 = 0
+
+411 = 4
+
+412 = 1
+
+413 = 8
+
+414 = 4
+
+1000 = 0
+
+11000 = 0
+
+1002 = 11
+
+1003 = 5
+
+1004 = 1
+
+1005 = 4
+
+1006 = 15
+
+1007 = 1
+
+1008 = 0
+
+1010 = 0
+
+11010 = 0
+
+1012 = 5
+
+1013 = 15
+
+1014 = 1
+
+1070 = 0
+
+1079 = 1
+
+1071 = 6
+
+1072 = 3
+
+1073 = 4
+
+1074 = 0
+
+1076 = 9
+
+1077 = 10
+
+1078 = 10
+
+1030 = 0
+
+1031 = 18
+
+1032 = 4
+
+1033 = 1
+
+1034 = 1
+
+1035 = 1
+
+1036 = 1
+
+1037 = 1
+
+1050 = 0
+
+11050 = 0
+
+1052 = 10
+
+1053 = 1
+
+1054 = 1
+
+1055 = 1
+
+1056 = 1
+
+1080 = 0
+
+1081 = 1
+
+1082 = 1
+
+1083 = 1
+
+1020 = 0
+
+11020 = 0
+
+1021 = 1
+
+1022 = 1
+
+1023 = 1
+
+1024 = 0
+
+360 = 0
+
+10360 = 0
+
+366 = 0
+
+369 = 0
+
+367 = 0
+
+20368 = 1
+
+20369 = 1
+
+20370 = 3
+
+361 = 0
+
+362 = 0
+
+363 = 0
+
+364 = 0
+
+365 = 1
+
+10370 = 0
+
+180 = 0
+
+10180 = 0
+
+181 = 3
+
+50 = 0
+
+51 = 0
+
+57 = 0
+
+52 = 1
+
+53 = 1
+
+56 = 1
+
+55 = 0
+
+54 = 1
+
+1090 = 0
+
+11090 = 0
+
+310 = 0
+
+311 = 0
+
+317 = 0
+
+312 = 1
+
+313 = 1
+
+314 = 0
+
+315 = 1
+
+316 = 1
+
+318 = 1
+
+319 = 1
+
+150 = 0
+
+153 = 0
+
+154 = 1
+
+151 = 0
+
+152 = 0
+
+60 = 0
+
+61 = 1
+
+62 = 1
+
+63 = 0
+
+290 = 0
+
+291 = 4
+
+292 = 3
+
+293 = 0
+
+380 = 0
+
+10380 = 0
+
+220 = 0
+
+221 = 11
+
+223 = 1
+
+430 = 0
+
+224 = 0
+
+222 = 11
+
+225 = 0
+
+226 = 0
+
+227 = 1
+
+228 = 1
+
+229 = 1
+
+431 = 1
+
+340 = 0
+
+341 = 5
+
+342 = 3
+
+343 = 1
+
+344 = 1
+
+350 = 0
+
+351 = 1
+
+352 = 0
+
+353 = 4
+
+354 = 3
+
+355 = 0
+
+356 = 11
+
+357 = 5
+
+70 = 0
+
+72 = 0
+
+71 = 0
+
+73 = 0
+
+900 = 0
+
+901 = 3
+
+902 = 0
+
+903 = 3
+
+904 = 4
+
+905 = 9
+
+906 = 1
+
+908 = 1
+
+1040 = 0
+
+11040 = 0
+
+101041 = 1
+
+101040 = 0
+
+1120 = 0
+
+11120 = 0
+
+1121 = 9
+
+1122 = 0
+
+1113 = 0
+
+1114 = 1
+
+910 = 0
+
+911 = 3
+
+913 = 4
+
+914 = 0
+
+912 = 1
+
+919 = 1
+
+916 = 14
+
+917 = 14
+
+918 = 1
+
+940 = 0
+
+10940 = 0
+
+941 = 4
+
+942 = 0
+
+943 = 38
+
+944 = 3
+
+970 = 0
+
+971 = 38
+
+972 = 1
+
+973 = 0
+
+974 = 0
+
+975 = 0
+
+976 = 0
+
+1060 = 0
+
+1061 = 2
+
+1062 = 4
+
+1063 = 1
+
+1064 = 1
+
+1065 = 1
+
+1100 = 0
+
+1101 = 2
+
+1103 = 7
+
+1104 = 12
+
+1105 = 1
+
+21106 = 1
+
+21107 = 2
+
+21108 = 3
+
+1107 = 2
+
+1130 = 0
+
+1131 = 0
+
+1132 = 29
+
+1134 = 2
+
+1135 = 0
+
+1136 = 0
+
+1140 = 0
+
+11140 = 0
+
+1141 = 3
+
+1142 = 4
+
+1143 = 4
+
+1150 = 0
+
+1151 = 9
+
+960 = 0
+
+10960 = 0
+
+963 = 0
+
+961 = 6
+
+962 = 2
+
+80 = 0
+
+81 = 0
+
+90 = 0
+
+91 = 1
+
+92 = 1
+
+93 = 1
+
+100 = 0
+
+10100 = 0
+
+101 = 11
+
+103 = 1
+
+104 = 0
+
+105 = 1
+
+102 = 0
+
+110 = 0
+
+10110 = 0
+
+111 = 7
+
+112 = 2
+
+113 = 5
+
+114 = 1
+
+115 = 1
+
+120 = 0
+
+121 = 0
+
+122 = 1
+
+123 = 19
+
+124 = 0
+
+125 = 8
+
+130 = 0
+
+131 = 11
+
+132 = 2
+
+133 = 2
+
+140 = 0
+
+143 = 0
+
+144 = 0
+
+145 = 0
+
+146 = 0
+
+160 = 0
+
+161 = 0
+
+163 = 0
+
+162 = 3
+
+170 = 0
+
+171 = 5
+
+172 = 3
+
+173 = 0
+
+174 = 4
+
+175 = 1
+
+176 = 1
+
+200 = 0
+
+201 = 4
+
+202 = 0
+
+203 = 1
+
+204 = 6
+
+205 = 1
+
+210 = 0
+
+211 = 1
+
+212 = 0
+
+213 = 1
+
+240 = 0
+
+241 = 0
+
+242 = 1
+
+243 = 0
+
+244 = 0
+
+280 = 0
+
+281 = 11
+
+282 = 6
+
+283 = 1
+
+284 = 0
+
+285 = 3
+
+286 = 4
+
+287 = 2
+
+288 = 1
+
+330 = 0
+
+331 = 0
+
+332 = 0
+
+333 = 1
+
+370 = 0
+
+371 = 5
+
+372 = 3
+
+373 = 0
+
+9909 = 0
+
+9914 = 0
+
+9913 = 2
+
+9920 = 1
+
+9932 = 1
+
+9933 = 1
+
+9936 = 0
+
+9910 = 0
+
+9911 = 0
+
+9912 = 0
+
+9931 = 0
+
+9934 = 0
+
+9935 = 10
+
+9921 = 0
+
+9905 = 0
+
+9906 = 0
+
+9907 = 0
+
+9922 = 1
+
+9908 = 1
+
+9999 = 60
+
+9916 = 0
+
+9917 = 0
+
+97918 = 0
+
+9919 = 0
+
+9923 = 0
+
+9924 = 15
+
+9925 = 0
+
+9926 = 0
+
+9927 = 0
+
+9928 = 0
+
+9929 = 0
+
+9930 = 0
+
+9937 = 0
+
+552 = 0
+
+9900 = 1
+
+9901 = 0
+
+9902 = 3
+
+9903 = 0
+
+9904 = 0
+
+3 = 10
+
+4 = 0
+
+5 = 0
+
+550 = 0
+
+551 = 1
+
+540 = 0
+
+520 = 0
+
+510 = 0
+
+501 = 1
+
+502 = 30
+
+503 = 1
+
+505 = 1
+
+506 = 30
+
+509 = 1
+
+507 = 1
+
+508 = 30
+
+511 = 1
+
+530 = 0
+
+8 = 0
+
+531 = 1
+
+532 = 1
+
+533 = 1
+
+534 = 1
+
+535 = 1
+
+504 = 0
+
+6 = 0
+
+522 = 0
+
+521 = 0
+
+[Preset3]
+
+7 = 1
+
+300 = 3
+
+301 = 3
+
+302 = 0
+
+303 = 0
+
+304 = 2
+
+305 = 2
+
+400 = 0
+
+401 = 1
+
+405 = 1
+
+406 = 0
+
+404 = 1
+
+10 = 0
+
+12 = 0
+
+13 = 0
+
+14 = 0
+
+11 = 11
+
+15 = 0
+
+16 = 0
+
+17 = 0
+
+20 = 0
+
+21 = 11
+
+22 = 18
+
+30 = 0
+
+31 = 11
+
+32 = 18
+
+33 = 0
+
+1900 = 10
+
+1912 = 1
+
+1901 = 0
+
+1913 = 1
+
+1914 = 1
+
+1915 = 1
+
+1902 = 0
+
+1903 = 0
+
+1904 = 0
+
+1905 = 0
+
+1906 = 0
+
+1907 = 0
+
+1908 = 1
+
+1909 = 0
+
+1910 = 3
+
+1911 = 0
+
+40 = 0
+
+41 = 9
+
+42 = 11
+
+43 = 1
+
+230 = 0
+
+231 = 5
+
+233 = 4
+
+232 = 0
+
+250 = 0
+
+251 = 3
+
+252 = 5
+
+253 = 4
+
+260 = 0
+
+261 = 11
+
+270 = 0
+
+271 = 11
+
+272 = 5
+
+320 = 0
+
+321 = 5
+
+322 = 0
+
+323 = 8
+
+324 = 1
+
+325 = 5
+
+390 = 0
+
+391 = 11
+
+392 = 2
+
+393 = 0
+
+394 = 1
+
+395 = 1
+
+396 = 1
+
+410 = 0
+
+411 = 4
+
+412 = 1
+
+413 = 8
+
+414 = 4
+
+1000 = 0
+
+11000 = 0
+
+1002 = 11
+
+1003 = 5
+
+1004 = 1
+
+1005 = 4
+
+1006 = 15
+
+1007 = 1
+
+1008 = 0
+
+1010 = 0
+
+11010 = 0
+
+1012 = 5
+
+1013 = 15
+
+1014 = 1
+
+1070 = 0
+
+1079 = 1
+
+1071 = 6
+
+1072 = 3
+
+1073 = 4
+
+1074 = 0
+
+1076 = 9
+
+1077 = 10
+
+1078 = 10
+
+1030 = 0
+
+1031 = 18
+
+1032 = 4
+
+1033 = 1
+
+1034 = 1
+
+1035 = 1
+
+1036 = 1
+
+1037 = 1
+
+1050 = 10
+
+11050 = 0
+
+1052 = 0
+
+1053 = 1
+
+1054 = 1
+
+1055 = 1
+
+1056 = 1
+
+1080 = 0
+
+1081 = 1
+
+1082 = 1
+
+1083 = 1
+
+1020 = 0
+
+11020 = 0
+
+1021 = 1
+
+1022 = 1
+
+1023 = 1
+
+1024 = 0
+
+360 = 10
+
+10360 = 0
+
+366 = 1
+
+369 = 5
+
+367 = 1
+
+20368 = 0
+
+20369 = 0
+
+20370 = 1
+
+361 = 1
+
+362 = 1
+
+363 = 1
+
+364 = 0
+
+365 = 0
+
+10370 = 1
+
+180 = 0
+
+10180 = 0
+
+181 = 3
+
+50 = 0
+
+51 = 0
+
+57 = 0
+
+52 = 1
+
+53 = 1
+
+56 = 1
+
+55 = 0
+
+54 = 1
+
+1090 = 0
+
+11090 = 0
+
+310 = 10
+
+311 = 0
+
+317 = 0
+
+312 = 0
+
+313 = 1
+
+314 = 0
+
+315 = 1
+
+316 = 1
+
+318 = 1
+
+319 = 1
+
+150 = 0
+
+153 = 0
+
+154 = 1
+
+151 = 0
+
+152 = 0
+
+60 = 0
+
+61 = 1
+
+62 = 1
+
+63 = 0
+
+290 = 0
+
+291 = 4
+
+292 = 3
+
+293 = 0
+
+380 = 0
+
+10380 = 0
+
+220 = 0
+
+221 = 11
+
+223 = 1
+
+430 = 0
+
+224 = 0
+
+222 = 11
+
+225 = 0
+
+226 = 0
+
+227 = 1
+
+228 = 1
+
+229 = 1
+
+431 = 1
+
+340 = 0
+
+341 = 5
+
+342 = 3
+
+343 = 1
+
+344 = 1
+
+350 = 0
+
+351 = 1
+
+352 = 0
+
+353 = 4
+
+354 = 3
+
+355 = 0
+
+356 = 11
+
+357 = 5
+
+70 = 0
+
+72 = 0
+
+71 = 0
+
+73 = 0
+
+900 = 0
+
+901 = 3
+
+902 = 0
+
+903 = 3
+
+904 = 4
+
+905 = 9
+
+906 = 1
+
+908 = 1
+
+1040 = 0
+
+11040 = 0
+
+101041 = 1
+
+101040 = 0
+
+1120 = 0
+
+11120 = 0
+
+1121 = 9
+
+1122 = 0
+
+1113 = 0
+
+1114 = 1
+
+910 = 0
+
+911 = 0
+
+913 = 4
+
+914 = 0
+
+912 = 1
+
+919 = 1
+
+916 = 14
+
+917 = 14
+
+918 = 1
+
+940 = 0
+
+10940 = 0
+
+941 = 4
+
+942 = 0
+
+943 = 38
+
+944 = 3
+
+970 = 0
+
+971 = 38
+
+972 = 1
+
+973 = 0
+
+974 = 0
+
+975 = 0
+
+976 = 0
+
+1060 = 0
+
+1061 = 2
+
+1062 = 4
+
+1063 = 1
+
+1064 = 1
+
+1065 = 1
+
+1100 = 0
+
+1101 = 2
+
+1103 = 7
+
+1104 = 12
+
+1105 = 1
+
+21106 = 1
+
+21107 = 2
+
+21108 = 3
+
+1107 = 2
+
+1130 = 0
+
+1131 = 0
+
+1132 = 29
+
+1134 = 2
+
+1135 = 0
+
+1136 = 0
+
+1140 = 0
+
+11140 = 0
+
+1141 = 3
+
+1142 = 4
+
+1143 = 4
+
+1150 = 0
+
+1151 = 9
+
+960 = 0
+
+10960 = 0
+
+963 = 0
+
+961 = 6
+
+962 = 2
+
+80 = 0
+
+81 = 0
+
+90 = 0
+
+91 = 1
+
+92 = 1
+
+93 = 1
+
+100 = 0
+
+10100 = 0
+
+101 = 11
+
+103 = 1
+
+104 = 0
+
+105 = 1
+
+102 = 0
+
+110 = 0
+
+10110 = 0
+
+111 = 7
+
+112 = 2
+
+113 = 5
+
+114 = 1
+
+115 = 1
+
+120 = 0
+
+121 = 0
+
+122 = 1
+
+123 = 19
+
+124 = 0
+
+125 = 8
+
+130 = 0
+
+131 = 11
+
+132 = 2
+
+133 = 2
+
+140 = 0
+
+143 = 0
+
+144 = 0
+
+145 = 0
+
+146 = 0
+
+160 = 0
+
+161 = 0
+
+163 = 0
+
+162 = 3
+
+170 = 0
+
+171 = 5
+
+172 = 3
+
+173 = 0
+
+174 = 4
+
+175 = 1
+
+176 = 1
+
+200 = 0
+
+201 = 4
+
+202 = 0
+
+203 = 1
+
+204 = 6
+
+205 = 1
+
+210 = 0
+
+211 = 1
+
+212 = 0
+
+213 = 1
+
+240 = 0
+
+241 = 0
+
+242 = 1
+
+243 = 0
+
+244 = 0
+
+280 = 0
+
+281 = 11
+
+282 = 6
+
+283 = 1
+
+284 = 0
+
+285 = 3
+
+286 = 4
+
+287 = 2
+
+288 = 1
+
+330 = 0
+
+331 = 0
+
+332 = 0
+
+333 = 1
+
+370 = 0
+
+371 = 5
+
+372 = 3
+
+373 = 0
+
+9909 = 1
+
+9914 = 0
+
+9913 = 2
+
+9920 = 1
+
+9932 = 1
+
+9933 = 1
+
+9936 = 1
+
+9910 = 1
+
+9911 = 1
+
+9912 = 1
+
+9931 = 1
+
+9934 = 1
+
+9935 = 10
+
+9921 = 1
+
+9905 = 0
+
+9906 = 0
+
+9907 = 0
+
+9922 = 1
+
+9908 = 1
+
+9999 = 45
+
+9916 = 0
+
+9917 = 0
+
+97918 = 1
+
+9919 = 0
+
+9923 = 0
+
+9924 = 10
+
+9925 = 0
+
+9926 = 1
+
+9927 = 0
+
+9928 = 0
+
+9929 = 0
+
+9930 = 0
+
+9937 = 0
+
+552 = 0
+
+9900 = 0
+
+9901 = 0
+
+9902 = 3
+
+9903 = 0
+
+9904 = 0
+
+3 = 8
+
+4 = 0
+
+5 = 0
+
+550 = 1
+
+551 = 1
+
+540 = 0
+
+520 = 0
+
+510 = 2
+
+501 = 1
+
+502 = 3
+
+503 = 1
+
+505 = 0
+
+506 = 30
+
+509 = 0
+
+507 = 1
+
+508 = 3
+
+511 = 1
+
+530 = 0
+
+8 = 0
+
+531 = 1
+
+532 = 1
+
+533 = 1
+
+534 = 1
+
+535 = 1
+
+504 = 0
+
+6 = 0
+
+522 = 0
+
+521 = 0
+
+20913 = 1
+
+20914 = 1
+
+20915 = 3
+
+920 = 0
+
+921 = 1
+
+[Preset4]
+
+7 = 1
+
+300 = 3
+
+301 = 3
+
+302 = 0
+
+303 = 0
+
+304 = 2
+
+305 = 2
+
+400 = 0
+
+401 = 1
+
+405 = 1
+
+406 = 0
+
+404 = 1
+
+10 = 0
+
+12 = 0
+
+13 = 0
+
+14 = 0
+
+11 = 11
+
+15 = 0
+
+16 = 0
+
+17 = 0
+
+20 = 0
+
+21 = 11
+
+22 = 18
+
+30 = 0
+
+31 = 11
+
+32 = 18
+
+33 = 0
+
+1900 = 10
+
+1912 = 1
+
+1901 = 0
+
+1913 = 1
+
+1914 = 1
+
+1915 = 1
+
+1902 = 0
+
+1903 = 0
+
+1904 = 0
+
+1905 = 0
+
+1906 = 0
+
+1907 = 0
+
+1908 = 1
+
+1909 = 0
+
+1910 = 3
+
+1911 = 0
+
+40 = 0
+
+41 = 9
+
+42 = 11
+
+43 = 1
+
+230 = 0
+
+231 = 5
+
+233 = 4
+
+232 = 0
+
+250 = 0
+
+251 = 3
+
+252 = 5
+
+253 = 4
+
+260 = 0
+
+261 = 11
+
+270 = 0
+
+271 = 11
+
+272 = 5
+
+320 = 0
+
+321 = 5
+
+322 = 0
+
+323 = 8
+
+324 = 1
+
+325 = 5
+
+390 = 0
+
+391 = 11
+
+392 = 2
+
+393 = 0
+
+394 = 1
+
+395 = 1
+
+396 = 1
+
+410 = 0
+
+411 = 4
+
+412 = 1
+
+413 = 8
+
+414 = 4
+
+1000 = 0
+
+11000 = 0
+
+1002 = 11
+
+1003 = 5
+
+1004 = 1
+
+1005 = 4
+
+1006 = 15
+
+1007 = 1
+
+1008 = 0
+
+1010 = 0
+
+11010 = 0
+
+1012 = 5
+
+1013 = 15
+
+1014 = 1
+
+1070 = 0
+
+1079 = 1
+
+1071 = 6
+
+1072 = 3
+
+1073 = 4
+
+1074 = 0
+
+1076 = 9
+
+1077 = 10
+
+1078 = 10
+
+1030 = 0
+
+1031 = 18
+
+1032 = 4
+
+1033 = 1
+
+1034 = 1
+
+1035 = 1
+
+1036 = 1
+
+1037 = 1
+
+1050 = 10
+
+11050 = 0
+
+1052 = 0
+
+1053 = 1
+
+1054 = 1
+
+1055 = 1
+
+1056 = 1
+
+1080 = 0
+
+1081 = 1
+
+1082 = 1
+
+1083 = 1
+
+1020 = 0
+
+11020 = 0
+
+1021 = 1
+
+1022 = 1
+
+1023 = 1
+
+1024 = 0
+
+360 = 10
+
+10360 = 0
+
+366 = 1
+
+369 = 5
+
+367 = 1
+
+20368 = 0
+
+20369 = 0
+
+20370 = 1
+
+361 = 1
+
+362 = 1
+
+363 = 1
+
+364 = 0
+
+365 = 0
+
+10370 = 0
+
+180 = 0
+
+10180 = 0
+
+181 = 3
+
+50 = 0
+
+51 = 0
+
+57 = 0
+
+52 = 1
+
+53 = 1
+
+56 = 1
+
+55 = 0
+
+54 = 1
+
+1090 = 0
+
+11090 = 0
+
+310 = 0
+
+311 = 0
+
+317 = 0
+
+312 = 1
+
+313 = 1
+
+314 = 0
+
+315 = 1
+
+316 = 1
+
+318 = 1
+
+319 = 1
+
+150 = 0
+
+153 = 0
+
+154 = 1
+
+151 = 0
+
+152 = 0
+
+60 = 0
+
+61 = 1
+
+62 = 1
+
+63 = 0
+
+290 = 0
+
+291 = 4
+
+292 = 3
+
+293 = 0
+
+380 = 0
+
+10380 = 0
+
+220 = 0
+
+221 = 11
+
+223 = 1
+
+430 = 0
+
+224 = 0
+
+222 = 11
+
+225 = 0
+
+226 = 0
+
+227 = 1
+
+228 = 1
+
+229 = 1
+
+431 = 1
+
+340 = 0
+
+341 = 5
+
+342 = 3
+
+343 = 1
+
+344 = 1
+
+350 = 0
+
+351 = 1
+
+352 = 0
+
+353 = 4
+
+354 = 3
+
+355 = 0
+
+356 = 11
+
+357 = 5
+
+70 = 0
+
+72 = 0
+
+71 = 0
+
+73 = 0
+
+900 = 0
+
+901 = 3
+
+902 = 0
+
+903 = 3
+
+904 = 4
+
+905 = 9
+
+906 = 1
+
+908 = 1
+
+1040 = 0
+
+11040 = 0
+
+101041 = 1
+
+101040 = 0
+
+1120 = 0
+
+11120 = 0
+
+1121 = 9
+
+1122 = 0
+
+1113 = 0
+
+1114 = 1
+
+910 = 0
+
+911 = 0
+
+913 = 4
+
+914 = 0
+
+912 = 1
+
+919 = 1
+
+916 = 14
+
+917 = 14
+
+918 = 1
+
+940 = 0
+
+10940 = 0
+
+941 = 4
+
+942 = 0
+
+943 = 38
+
+944 = 3
+
+970 = 0
+
+971 = 38
+
+972 = 1
+
+973 = 0
+
+974 = 0
+
+975 = 0
+
+976 = 0
+
+1060 = 0
+
+1061 = 2
+
+1062 = 4
+
+1063 = 1
+
+1064 = 1
+
+1065 = 1
+
+1100 = 0
+
+1101 = 2
+
+1103 = 7
+
+1104 = 12
+
+1105 = 1
+
+21106 = 1
+
+21107 = 2
+
+21108 = 3
+
+1107 = 2
+
+1130 = 0
+
+1131 = 0
+
+1132 = 29
+
+1134 = 2
+
+1135 = 0
+
+1136 = 0
+
+1140 = 0
+
+11140 = 0
+
+1141 = 3
+
+1142 = 4
+
+1143 = 4
+
+1150 = 0
+
+1151 = 9
+
+960 = 0
+
+10960 = 0
+
+963 = 0
+
+961 = 6
+
+962 = 2
+
+80 = 0
+
+81 = 0
+
+90 = 0
+
+91 = 1
+
+92 = 1
+
+93 = 1
+
+100 = 10
+
+10100 = 0
+
+101 = 11
+
+103 = 0
+
+104 = 0
+
+105 = 1
+
+102 = 1
+
+110 = 10
+
+10110 = 0
+
+111 = 5
+
+112 = 5
+
+113 = 5
+
+114 = 11
+
+115 = 1
+
+120 = 0
+
+121 = 0
+
+122 = 1
+
+123 = 19
+
+124 = 0
+
+125 = 8
+
+130 = 0
+
+131 = 11
+
+132 = 2
+
+133 = 2
+
+140 = 0
+
+143 = 0
+
+144 = 0
+
+145 = 0
+
+146 = 0
+
+160 = 0
+
+161 = 0
+
+163 = 0
+
+162 = 3
+
+170 = 0
+
+171 = 5
+
+172 = 3
+
+173 = 0
+
+174 = 4
+
+175 = 1
+
+176 = 1
+
+200 = 0
+
+201 = 4
+
+202 = 0
+
+203 = 1
+
+204 = 6
+
+205 = 1
+
+210 = 0
+
+211 = 1
+
+212 = 0
+
+213 = 1
+
+240 = 0
+
+241 = 0
+
+242 = 1
+
+243 = 0
+
+244 = 0
+
+280 = 0
+
+281 = 11
+
+282 = 6
+
+283 = 1
+
+284 = 0
+
+285 = 3
+
+286 = 4
+
+287 = 2
+
+288 = 1
+
+330 = 0
+
+331 = 0
+
+332 = 0
+
+333 = 1
+
+370 = 0
+
+371 = 5
+
+372 = 3
+
+373 = 0
+
+9909 = 1
+
+9914 = 0
+
+9913 = 2
+
+9920 = 1
+
+9932 = 1
+
+9933 = 1
+
+9936 = 1
+
+9910 = 1
+
+9911 = 1
+
+9912 = 1
+
+9931 = 1
+
+9934 = 1
+
+9935 = 10
+
+9921 = 1
+
+9905 = 0
+
+9906 = 0
+
+9907 = 0
+
+9922 = 1
+
+9908 = 1
+
+9999 = 45
+
+9916 = 0
+
+9917 = 0
+
+97918 = 1
+
+9919 = 0
+
+9923 = 0
+
+9924 = 10
+
+9925 = 0
+
+9926 = 1
+
+9927 = 0
+
+9928 = 0
+
+9929 = 0
+
+9930 = 0
+
+9937 = 0
+
+552 = 0
+
+9900 = 0
+
+9901 = 0
+
+9902 = 3
+
+9903 = 0
+
+9904 = 0
+
+3 = 8
+
+4 = 0
+
+5 = 0
+
+550 = 1
+
+551 = 1
+
+540 = 0
+
+520 = 0
+
+510 = 2
+
+501 = 1
+
+502 = 3
+
+503 = 1
+
+505 = 0
+
+506 = 30
+
+509 = 0
+
+507 = 1
+
+508 = 3
+
+511 = 1
+
+530 = 0
+
+8 = 0
+
+531 = 1
+
+532 = 1
+
+533 = 1
+
+534 = 1
+
+535 = 1
+
+504 = 0
+
+6 = 0
+
+522 = 0
+
+521 = 0
+
+20913 = 1
+
+20914 = 1
+
+20915 = 3
+
+920 = 0
+
+921 = 1
+
