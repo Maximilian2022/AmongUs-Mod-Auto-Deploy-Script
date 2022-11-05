@@ -2771,7 +2771,15 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 if(Test-Path $aurifile){               
                     $auritext = Get-Content $aurifile -Raw
                     if($auritext.IndexOf("Modded EU (MEU)") -gt 0){
-                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded NA (MNA)","PingServer":"https://aumods.one","Servers":[{"Name":"Http-1","Ip":"https://aumods.one","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded Asia (MAS)","PingServer":"https://au-as.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-as.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
+                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
+                        $auritext = $auritext.Replace($torjson, '')    
+                    }
+                    if($auritext.IndexOf("Modded NA (MNA)") -gt 0){
+                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded NA (MNA)","PingServer":"https://aumods.one","Servers":[{"Name":"Http-1","Ip":"https://aumods.one","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
+                        $auritext = $auritext.Replace($torjson, '')    
+                    }
+                    if($auritext.IndexOf("Modded Asia (MAS)") -gt 0){
+                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded Asia (MAS)","PingServer":"https://au-as.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-as.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
                         $auritext = $auritext.Replace($torjson, '')    
                     }
 
