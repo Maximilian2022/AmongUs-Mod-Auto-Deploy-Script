@@ -2770,7 +2770,17 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
                 if(Test-Path $aurifile){               
                     $auritext = Get-Content $aurifile -Raw
-                
+                    if($auritext.IndexOf("Modded EU (MEU)") -gt 0){
+                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded NA (MNA)","PingServer":"https://aumods.one","Servers":[{"Name":"Http-1","Ip":"https://aumods.one","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded Asia (MAS)","PingServer":"https://au-as.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-as.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
+                        $auritext = $auritext.Replace($torjson, '')    
+                    }
+
+                    $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}'
+                    $kenkonewjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランドMain","PingServer":"amongus.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://amongus.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
+                    if($auritext.IndexOf($kenkojson) -gt 0){
+                        $auritext = $auritext.Replace($kenkojson, $kenkonewjson)    
+                    }
+                    
                     if($auritext.IndexOf("健康ランド") -gt 0){
                         Write-Log $(Get-Translate("健康ランド済:Server"))
                     }else{
@@ -2778,8 +2788,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                             Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
                         }
                         $aurijson = ConvertFrom-Json $auritext
-                        $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}' | ConvertFrom-Json
-                        $aurijson.Regions += $kenkojson 
+                        $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
                         ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
                         Write-Log $(Get-Translate("健康ランド化完了:Server"))
                     }
