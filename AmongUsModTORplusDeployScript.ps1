@@ -91,7 +91,7 @@ catch{
     Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco update pwsh powershell-core aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
@@ -2891,7 +2891,7 @@ if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
     $ps1script += 'chcp 65001
 @echo off
-curl.exe -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1
+curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1
 pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
     $ps1script += "`"$scid`" `"$aupathm`" `"$platform`"" 
     $ps1script += '
