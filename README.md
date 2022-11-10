@@ -1,4 +1,5 @@
-# AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
+# AU MAD Script
+## AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
 
 <p>■TOR系 Mod入れるのが面倒なので作った自動化Script</p>
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
