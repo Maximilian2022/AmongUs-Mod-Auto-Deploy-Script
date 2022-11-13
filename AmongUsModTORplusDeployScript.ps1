@@ -13,7 +13,7 @@ $tormin = "v4.2.0"
 $tourmin = "v3.4.0"
 $tohmin = "v3.0.2"
 $snrmin = "1.4.2.4"
-$torhmin = "v2.3.127"
+#$torhmin = "v2.3.127"
 $tormmin = "NONE"
 
 ### minimum version for v2022.10.18
@@ -24,7 +24,7 @@ $tormin1 = "NONE"
 $tourmin1 = "NONE"
 $tohmin1 = "NONE"
 $snrmin1 = "1.4.2.3"
-$torhmin1 = "v2.3.120"
+#$torhmin1 = "v2.3.120"
 $tormmin1 = "NONE"
 
 ### minimum version for v2022.9.20(8.24)
@@ -35,7 +35,7 @@ $tormin2 = "v4.1.7"
 $tourmin2 = "v3.3.0"
 $tohmin2 = "v2.2.2"
 $snrmin2 = "1.4.2.0"
-$torhmin2 = "v2.2.102"
+#$torhmin2 = "v2.2.102"
 $tormmin2 = "MR_v2.3.0"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
@@ -807,7 +807,7 @@ $Combo.font = $Font
 $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
-[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
+#[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 if($gmhbool){
     [void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
 }
