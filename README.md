@@ -4,7 +4,7 @@
 <p>■TOR系 Mod入れるのが面倒なので作った自動化Script</p>
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
 <p>MODとMODバージョン、本体バージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
-<p>GMH公開終了に伴い、Script対応は終了しました</p>
+<p>GMH公開終了に伴い、ScriptでのGMH対応は終了しました。</p>
 
 <p>このScriptは 以下の環境用のものです<br>
  <s>・The Other Roles: GM Haoming Edition (<a href="https://github.com/haoming37/TheOtherRoles-GM-Haoming">haoming37/TheOtherRoles-GM-Haoming</a>)</s><br>
