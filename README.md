@@ -14,6 +14,7 @@
  ・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
  ・Extreme Roles with Extreme Skins (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
  ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
+ ・Las Monjas (<a rel="noreferrer noopener" href="https://github.com/KiraYamato94/LasMonjas" target="_blank">KiraYamato94/LasMonjas</a>)<br>
  ・SuperNewRoles (<a rel="noreferrer noopener" href="https://github.com/ykundesu/SuperNewRoles" target="_blank">ykundesu/SuperNewRoles</a>)<br>
  ・TownOfHost (<a rel="noreferrer noopener" href="https://github.com/tukasa0001/TownOfHost" target="_blank">tukasa0001/TownOfHost</a>)<br>
 </p>
