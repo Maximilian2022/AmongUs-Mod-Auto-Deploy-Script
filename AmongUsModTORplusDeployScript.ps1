@@ -271,6 +271,29 @@ if(Test-Path "C:\Program Files\Epic Games\AmongUs"){
     }
 }
 
+function BackupMod{
+    #Backup Mod
+    if(Test-Path $aupathb){
+    }else{
+        New-Item $aupathb -ItemType Directory
+    }
+    if(Test-Path $aupathb\$scid){
+    }else{
+        New-Item $aupathb\$scid -ItemType Directory
+    }
+    Write-Log $(Get-Translate("Mod Backup Feature Start"))
+    if(Test-Path "$aupathb\$scid\$scid-$torv.zip"){
+        $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.zip").Length
+        $dlfsize = (Get-Item "$aupathm\TheOtherRoles.zip").Length
+
+        if($orgsize -lt $dlfsize){
+            Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip" -Force
+        }
+    }else{
+        Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip"
+    }
+}
+
 function BackUpAU{
     #Backup System
     if(Test-Path $aupathb){
@@ -2121,6 +2144,7 @@ if($tio){
         exit
     }
 
+    BackupMod
     $Bar.Value = "59"
 
     if(test-path "$aupathm\BepInEx"){
