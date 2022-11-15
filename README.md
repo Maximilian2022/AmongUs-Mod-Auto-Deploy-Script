@@ -1,7 +1,7 @@
 # AU MAD Script
 ## AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
 
-<p>■Amongus Mod入れるのが面倒なので作った自動化Script</p>
+<p>■AmongUs Mod入れるのが面倒なので作った自動化Script</p>
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
 <p>MODとMODバージョン、本体バージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
 <br>
