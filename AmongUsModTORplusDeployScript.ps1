@@ -292,6 +292,7 @@ function BackupMod{
     }else{
         Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip"
     }
+    Write-Log $(Get-Translate("Mod Backup Feature End"))
 }
 
 function BackUpAU{
