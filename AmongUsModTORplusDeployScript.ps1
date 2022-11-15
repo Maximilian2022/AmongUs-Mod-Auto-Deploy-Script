@@ -493,14 +493,14 @@ function BackUpAU{
                     }
                 }
 
-                Write-Log "選択: $epicmanifestfile"
+                Write-Log $(Get-Translate("選択: $epicmanifestfile"))
                 if(!(Test-Path "$aupathb\epic_manifest")){
                     New-Item "$aupathb\epic_manifest" -Type Directory
                 }
                 $mfileName = Split-Path $epicmanifestfile -Leaf
                 Copy-Item $epicmanifestfile "$aupathb\epic_manifest\$mfilename"
                 $epicmanifestfile = "$aupathb\epic_manifest\$mfilename"
-                Write-Log "コピー: $epicmanifestfile"
+                Write-Log $(Get-Translate("コピー: $epicmanifestfile"))
 
                 #legendary でAmongusを落とす
                 legendary.exe auth --import
