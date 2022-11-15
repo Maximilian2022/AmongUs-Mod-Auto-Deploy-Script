@@ -44,11 +44,11 @@ $prevtargetid0 = "7491486149462341667"
 $prever1 = "2022.9.20"
 $prevtargetid1 = "2481435393334839152"
 
-$gmhbool = $false
+#$gmhbool = $false
 #Testdll: tmp_v2022.10.23.2
-$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23/TheOtherRolesGM.dll"
+#$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23/TheOtherRolesGM.dll"
 
-#TOR plus, TOR GM, AUM is depricated.
+#TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
 #################################################################################################
@@ -808,9 +808,7 @@ $form.ShowIcon = $False
 
 # コンボボックスに項目を追加
 #[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
-if($gmhbool){
-    [void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
-}
+#[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
@@ -1217,7 +1215,7 @@ function Reload(){
                 [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Mod Auto Deploy Tool")
                 $spath = Get-FolderPathG
             }
-            if($spath -eq $null){
+            if($null -eq $spath){
                 Write-Log "Failed $spath"
                 pause
                 Exit
