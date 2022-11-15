@@ -1,13 +1,13 @@
 # AU MAD Script
 ## AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
 
-<p>■TOR系 Mod入れるのが面倒なので作った自動化Script</p>
+<p>■Amongus Mod入れるのが面倒なので作った自動化Script</p>
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
 <p>MODとMODバージョン、本体バージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
+<br>
 <p>GMH公開終了に伴い、ScriptでのGMH対応は終了しました。</p>
-
+<br>
 <p>このScriptは 以下の環境用のものです<br>
- <s>・The Other Roles: GM Haoming Edition (<a href="https://github.com/haoming37/TheOtherRoles-GM-Haoming">haoming37/TheOtherRoles-GM-Haoming</a>)</s><br>
  ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
  ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
  ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
@@ -158,10 +158,11 @@ Manifestファイルの配布は行いません。持ってる人から譲って
 
 
 <p>対応終了<br>
+ ・The Other Roles: GM Haoming Edition (<a href="https://github.com/haoming37/TheOtherRoles-GM-Haoming">haoming37/TheOtherRoles-GM-Haoming</a>)<br>
  ・The Other Roles+ (<a rel="noreferrer noopener" href="https://github.com/tomarai/TheOtherRoles" target="_blank">tomarai/TheOtherRoles</a>)<br>
  ・The Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM">yukinogatari/TheOtherRoles-GM</a>)<br>
  ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>) <br>
-・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
+ ・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
 <br>
 </p>
 
