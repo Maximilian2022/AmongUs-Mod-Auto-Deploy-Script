@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.7"
+$version = "1.6.8"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -15,6 +15,7 @@ $tohmin = "v3.0.2"
 $snrmin = "1.4.2.4"
 #$torhmin = "v2.3.127"
 $tormmin = "NONE"
+$lmmin = "3.0.0"
 
 ### minimum version for v2022.10.18
 $ermin1 = "v3.3.0.3"
@@ -26,6 +27,7 @@ $tohmin1 = "NONE"
 $snrmin1 = "1.4.2.3"
 #$torhmin1 = "v2.3.120"
 $tormmin1 = "NONE"
+$lmmin1 = "NONE"
 
 ### minimum version for v2022.9.20(8.24)
 $ermin2 = "v3.2.2.0"
@@ -37,6 +39,7 @@ $tohmin2 = "v2.2.2"
 $snrmin2 = "1.4.2.0"
 #$torhmin2 = "v2.2.102"
 $tormmin2 = "MR_v2.3.0"
+$lmmin2 = "2.1.3"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 $prever0 = "2022.10.18"
@@ -815,6 +818,7 @@ $form.ShowIcon = $False
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
+[void] $Combo.Items.Add("LM :KiraYamato94/LasMonjas")
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
 [void] $Combo.Items.Add("Tool Install Only")
@@ -994,6 +998,12 @@ function Reload(){
             VerMinMax $nosmin $nosmin1 $nosmin2
             Write-Log "NOS Selected"
             $RadioButton29.Checked = $True
+        }"LM :KiraYamato94/LasMonjas"{
+            $releasepage2 = "https://api.github.com/repos/KiraYamato94/LasMonjas/releases"
+            $scid = "LM"
+            VerMinMax $lmmin $lmmin1 $lmmin2
+            Write-Log "LM Selected"
+            $RadioButton29.Checked = $True
         }"SNR :ykundesu/SuperNewRoles"{
             $releasepage2 = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
             $scid = "SNR"
@@ -1056,6 +1066,13 @@ function Reload(){
                 $script:nosweb = $web
             }else{
                 $web = $script:nosweb
+            }
+        }elseif($scid -eq "LM"){
+            if($null -eq $script:lmweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:lmweb = $web
+            }else{
+                $web = $script:lmweb
             }
         }elseif($scid -eq "SNR"){
             if($null -eq $script:snrweb){
@@ -1602,6 +1619,19 @@ if($tio){
                 $torv = $torpv
                 Write-Log $(Get-Translate("Nebula on the Ship Version $torv が選択されました"))
                 $checkt = $false
+            }elseif($scid -eq "LM"){
+                if($torpv -lt $lmmin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log $(Get-Translate("処理を中止します"))
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log $(Get-Translate("Nebula on the Ship Version $torv が選択されました"))
+                $checkt = $false
             }elseif($scid -eq "TOH"){
                 if($torpv -lt $tohmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -1781,6 +1811,8 @@ if($tio){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
     }elseif($scid -eq "TOH"){
         $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
+    }elseif($scid -eq "LM"){
+        $tordlp = "https://github.com/KiraYamato94/LasMonjas/releases/download/${torv}/Las.Monjas.${torv}.zip"
     }elseif($scid -eq "SNR"){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
         $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
@@ -1896,6 +1928,10 @@ if($tio){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
                 New-Item -Path "C:\Temp\MoreCosmic" -ItemType Directory
                 Copy-Item "$aupathm\MoreCosmic\*" -Recurse "C:\Temp\MoreCosmic"
+            }
+        }elseif($scid -eq "LM"){
+            if(test-path "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg" "C:\Temp\me.allul.lasmonjas.cfg" -Force
             }
         }elseif($scid -eq "SNR"){
             if(test-path "$aupathm\BepInEx\config\jp.ykundesu.supernewroles.cfg"){
@@ -2153,6 +2189,14 @@ if($tio){
                 Remove-Item "C:\Temp\temp.log" -Force
             }
         }
+    }elseif($scid -eq "LM"){
+        if(test-path "C:\Temp\me.allul.lasmonjas.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\me.allul.lasmonjas.cfg" "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg" -Force
+            Remove-Item "C:\Temp\me.allul.lasmonjas.cfg" -Force    
+        }
     }elseif($scid -eq "TOH"){
         if(test-path "C:\Temp\com.emptybottle.townofhost.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -2321,6 +2365,15 @@ if($tio){
         if(test-path "$aupathm\ExtremeRoles-$torv"){
             robocopy "$aupathm\ExtremeRoles-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\ExtremeRoles-$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }elseif($scid -eq "LM"){
+        if(test-path "$aupathm\Las Monjas $torv"){
+            robocopy "$aupathm\Las Monjas $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\Las Monjas $torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
