@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.8"
+$version = "1.6.9"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -47,9 +47,9 @@ $prevtargetid0 = "7491486149462341667"
 $prever1 = "2022.9.20"
 $prevtargetid1 = "2481435393334839152"
 
-#$gmhbool = $false
-#Testdll: tmp_v2022.10.23.2
-#$torgmdll = "https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/tmp_v2022.10.23/TheOtherRolesGM.dll"
+$gmhbool = $true
+#Testdll: Snapshot 22.11.16b
+$torgmdll = "https://cdn.discordapp.com/attachments/937731474818486372/1042415644899016704/Nebula.dll"
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -836,7 +836,10 @@ $form.ShowIcon = $False
 # コンボボックスに項目を追加
 #[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 #[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
-[void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
+[void] $Combo.Items.Add("NOS :Dolly1016/Nebula on the Ship")
+if($gmhbool){
+    [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
+}
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
@@ -979,11 +982,11 @@ function Reload(){
             VerMinMax $tormmin $tormmin1 $tormmin2
             Write-Log "TOR MR Selected"
             $RadioButton29.Checked = $True
-        }"TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test"{
-            $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
-            $scid = "TOR GMT"
-            VerMinMax $torhmin $torhmin1 $torhmin2
-            Write-Log "TOR GMH Test Selected"
+        }"NOT :Dolly1016/Nebula on the Test"{
+            $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
+            $scid = "NOT"
+            VerMinMax $nosmin $nosmin1 $nosmin2
+            Write-Log "NOT Selected"
             $RadioButton29.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
@@ -2447,6 +2450,30 @@ if($tio){
         Write-Log $(Get-Translate("日本語 データ $langdata"))
         aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
         Write-Log $(Get-Translate("日本語 データ Download 完了"))
+    }elseif($scid -eq "NOT"){
+        if(test-path "$aupathm\Nebula"){
+            robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\Nebula" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+        if (!(Test-Path "$aupathm\Language\")) {
+            New-Item "$aupathm\Language\" -Type Directory
+        }
+        Write-Log $(Get-Translate("日本語 データ Download 開始"))
+        Write-Log $(Get-Translate("日本語 データ $langdata"))
+        aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
+        Write-Log $(Get-Translate("日本語 データ Download 完了"))
+        #Mod Original DLL削除
+        Remove-item -Path "$aupathm\BepInEx\plugins\Nebula.dll"
+        Write-Log $(Get-Translate('Delete Original Mod DLL'))
+        Write-Log $torgmdll
+        #TOR+ DLLをDLして配置
+        Write-Log $(Get-Translate("Download $scid DLL 開始"))
+        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Nebula.dll" $torgmdll
+        Write-Log $(Get-Translate("Download $scid DLL 完了"))
     }else{
     }
     $Bar.Value = "71"
