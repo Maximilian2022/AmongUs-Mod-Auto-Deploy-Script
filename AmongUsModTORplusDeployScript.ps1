@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.9.3"
+$version = "1.6.9.4"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -1529,11 +1529,11 @@ if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
     if(($scid -eq "NOS") -or ($scid -eq "NOT")){
         $form11113 = New-Object System.Windows.Forms.Form
         $form11113.Text = "NOS CPU Affinity"
-        $form11113.Size = New-Object System.Drawing.Size(500,140)
+        $form11113.Size = New-Object System.Drawing.Size(400,150)
         $form11113.StartPosition = 'CenterScreen'
         
         $okButton111111 = New-Object System.Windows.Forms.Button
-        $okButton111111.Location = New-Object System.Drawing.Point(380,70)
+        $okButton111111.Location = New-Object System.Drawing.Point(300,80)
         $okButton111111.Size = New-Object System.Drawing.Size(75,23)
         $okButton111111.Text = 'OK'
         $okButton111111.DialogResult = [System.Windows.Forms.DialogResult]::OK
@@ -1543,27 +1543,27 @@ if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
         # フォームに各アイテムを入れる
         $MyGroupBox124 = New-Object System.Windows.Forms.GroupBox
         $MyGroupBox124.Location = New-Object System.Drawing.Point(10,10)
-        $MyGroupBox124.size = New-Object System.Drawing.Size(375,70)
+        $MyGroupBox124.size = New-Object System.Drawing.Size(380,60)
         $MyGroupBox124.text = $(Get-Translate("CPU Affinityの値を選択してください。"))
 
         # グループの中のラジオボタンを作る
         $RadioButton128 = New-Object System.Windows.Forms.RadioButton
-        $RadioButton128.Location = New-Object System.Drawing.Point(10,70)
+        $RadioButton128.Location = New-Object System.Drawing.Point(10,20)
         $RadioButton128.size = New-Object System.Drawing.Size(70,30)
-        $RadioButton128.Text = $(Get-Translate("無制限"))　#0
+        $RadioButton128.Text = $(Get-Translate("無制限")) #0
 
         $RadioButton129 = New-Object System.Windows.Forms.RadioButton
-        $RadioButton129.Location = New-Object System.Drawing.Point(90,70)
+        $RadioButton129.Location = New-Object System.Drawing.Point(90,20)
         $RadioButton129.size = New-Object System.Drawing.Size(70,30)
         $RadioButton129.Text = $(Get-Translate("2コアHT")) #1
 
         $RadioButton127 = New-Object System.Windows.Forms.RadioButton
-        $RadioButton127.Location = New-Object System.Drawing.Point(170,70)
+        $RadioButton127.Location = New-Object System.Drawing.Point(170,20)
         $RadioButton127.size = New-Object System.Drawing.Size(70,30)
         $RadioButton127.Text = $(Get-Translate("2コア")) #2
 
         $RadioButton126 = New-Object System.Windows.Forms.RadioButton
-        $RadioButton126.Location = New-Object System.Drawing.Point(250,70)
+        $RadioButton126.Location = New-Object System.Drawing.Point(250,20)
         $RadioButton126.size = New-Object System.Drawing.Size(70,30)
         $RadioButton126.Text = $(Get-Translate("1コア")) #3
         $RadioButton126.Checked = $True
@@ -1572,23 +1572,20 @@ if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
         $MyGroupBox124.Controls.AddRange(@($Radiobutton128, $RadioButton129, $RadioButton127, $RadioButton126))
         # フォームに各アイテムを入れる
         $form11113.Controls.Add($MyGroupBox124)
-        $form11113.Topmost = $true
-        
-        $form11113.Add_Shown({$textBox111111.Select()})
+        $form11113.Topmost = $true        
         $result111111 = $form11113.ShowDialog()
 
         $gmhwebhooktxt = ""
-        if($RadioButton126.Checked){#1コア
-            $gmhwebhooktxt = "3"
-        }elseif($RadioButton127.Checked){ #2コア
-            $gmhwebhooktxt = "2"
-        }elseif($RadioButton128.Checked){ #無制限
-            $gmhwebhooktxt = "0"
-        }elseif($RadioButton129.Checked){ #2CHT
-            $gmhwebhooktxt = "1"
-        }
-
         if ($result111111 -eq [System.Windows.Forms.DialogResult]::OK){
+            if($RadioButton126.Checked){#1コア
+                $gmhwebhooktxt = "3"
+            }elseif($RadioButton127.Checked){ #2コア
+                $gmhwebhooktxt = "2"
+            }elseif($RadioButton128.Checked){ #無制限
+                $gmhwebhooktxt = "0"
+            }elseif($RadioButton129.Checked){ #2CHT
+                $gmhwebhooktxt = "1"
+            }
             Write-Log $(Get-Translate("CPU Affinity: $gmhwebhooktxt"))
         }    
     }    
