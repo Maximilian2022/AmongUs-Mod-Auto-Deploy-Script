@@ -269,6 +269,7 @@ if(Test-Path "C:\Program Files\Epic Games\AmongUs"){
 }
 
 function BackupMod{
+    if($scid -ne "NOT"){
     #Backup Mod
     if(Test-Path $aupathb){
     }else{
@@ -290,6 +291,7 @@ function BackupMod{
         Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip"
     }
     Write-Log $(Get-Translate("Mod Backup Feature End"))
+    }
 }
 
 function BackUpAU{
