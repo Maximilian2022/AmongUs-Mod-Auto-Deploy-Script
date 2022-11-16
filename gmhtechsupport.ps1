@@ -190,6 +190,22 @@ if($null -ne $Arg2){
 }
 Write-Log "Platform:$platform"
 
+if(($scid -eq "NOS")-or($scid -eq "NOT")){
+    Write-Log "`r`n`r`n "
+    Write-Log "-----------------------------------------------------------------"
+    Write-Log "Nebula Log"
+    Write-Log "-----------------------------------------------------------------"
+    
+    #BepinEx稼働/BepinExLogチェック
+    if(!(Test-Path "$aupathm\NebulaLog.txt")){
+        Write-Log "There is no Logoutput.log"
+    }else{
+        $content = Get-content "$aupathm\NebulaLog.txt" -Raw
+        Write-Log "`r`n $content"
+    }
+}
+
+
 Write-Log "`r`n`r`n "
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Bepin Log"
