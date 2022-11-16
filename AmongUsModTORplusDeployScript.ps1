@@ -815,8 +815,8 @@ $CheckedBox = New-Object System.Windows.Forms.CheckedListBox
 $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,185"
 
-# 配列を作成 ,"OBS","Streamlabs OBS""AmongUsReplayInWindow",
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","GMH Webhook","健康ランド")
+# 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","AmongUsReplayInWindow","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -836,12 +836,12 @@ $form.ShowIcon = $False
 # コンボボックスに項目を追加
 #[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 #[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
+[void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
-[void] $Combo.Items.Add("NOS :Dolly1016/Nebula")
 [void] $Combo.Items.Add("LM :KiraYamato94/LasMonjas")
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
