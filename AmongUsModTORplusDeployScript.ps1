@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.9.4"
+$version = "1.6.9.5"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -2058,8 +2058,12 @@ if($tio){
         }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
+            }
+            if(test-path "$aupathm\MoreCosmic"){
                 New-Item -Path "C:\Temp\MoreCosmic" -ItemType Directory
                 Copy-Item "$aupathm\MoreCosmic\*" -Recurse "C:\Temp\MoreCosmic"
+            }
+            if(test-path "$aupathm\Presets"){
                 New-Item -Path "C:\Temp\Presets" -ItemType Directory
                 Copy-Item "$aupathm\Presets\*" -Recurse "C:\Temp\Presets"
             }
@@ -3033,6 +3037,25 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                             $gmhwh = "$gmhline2"
                         }
                     } 
+                    #configからProcessorAffinityを救出
+                    foreach ($gmhline4 in $gmhfile) {
+                        if ($gmhline4.StartsWith("ProcessorAffinity = 0")){
+                            Write-Log "ProcessorAffinity is already set: $gmhline4"
+                            $gmhpa = "$gmhline4"
+                        }
+                        if ($gmhline4.StartsWith("ProcessorAffinity = 1")){
+                            Write-Log "ProcessorAffinity is already set: $gmhline4"
+                            $gmhpa = "$gmhline4"
+                        }
+                        if ($gmhline4.StartsWith("ProcessorAffinity = 2")){
+                            Write-Log "ProcessorAffinity is already set: $gmhline4"
+                            $gmhpa = "$gmhline4"
+                        }
+                        if ($gmhline4.StartsWith("ProcessorAffinity = 3")){
+                            Write-Log "ProcessorAffinity is already set: $gmhline4"
+                            $gmhpa = "$gmhline4"
+                        }
+                    } 
                 }
                 #optionconf
                 $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
@@ -3066,6 +3089,18 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                                 $gmhnewconfig += "WebhookUrl = $gmhwebhooktxt `r`n"
                             }elseif($gmhwh -ne ""){
                                 $gmhnewconfig += "$gmhwh `r`n"
+                            }else{
+                                $gmhnewconfig += "$gmhline3 `r`n"
+                            }
+                        }elseif ($gmhline3.StartsWith("ProcessorAffinity")){
+                            if($null -ne $gmhwebhooktxt){
+                                $gmhnewconfig += "ProcessorAffinity = $gmhwebhooktxt `r`n"
+                            }elseif($null -ne $gmhpa){
+                                $gmhnewconfig += "$gmhpa `r`n"
+                            }elseif($gmhwebhooktxt -ne ""){
+                                $gmhnewconfig += "ProcessorAffinity = $gmhwebhooktxt `r`n"
+                            }elseif($gmhpa -ne ""){
+                                $gmhnewconfig += "$gmhpa `r`n"
                             }else{
                                 $gmhnewconfig += "$gmhline3 `r`n"
                             }
