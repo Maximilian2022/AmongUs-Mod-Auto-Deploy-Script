@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.9.5"
+$version = "1.6.9.7"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -3007,6 +3007,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
 
                     $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}'
                     $kenkonewjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランド","PingServer":"amongus.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://amongus.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
+                    $kenkonewtjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランドテスト","PingServer":"imposter.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://imposter.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
                     if($auritext.IndexOf($kenkojson) -gt 0){
                         $auritext = $auritext.Replace($kenkojson, $kenkonewjson)    
                     }
@@ -3019,6 +3020,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         }
                         $aurijson = ConvertFrom-Json $auritext
                         $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
+                        $aurijson.Regions += $($kenkonewtjson | ConvertFrom-Json)
                         ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
                         Write-Log $(Get-Translate("健康ランド化完了:Server"))
                     }
