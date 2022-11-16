@@ -815,7 +815,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","AmongUsReplayInWindow","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -1086,7 +1086,7 @@ function Reload(){
             }else{
                 $web = $script:erweb
             }
-        }elseif($scid -eq "NOS"){
+        }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
             if($null -eq $script:nosweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
                 $script:nosweb = $web
@@ -1125,7 +1125,7 @@ function Reload(){
         $OKButton.Enabled=$True
         if($script:aumin -ne "NONE"){
             if($script:aumax -ne "NONE"){
-                if($scid -eq "NOS"){
+                if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin) -and ($web2.tag_name[$ai] -lt $script:aumax)){
                             if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
@@ -1141,7 +1141,7 @@ function Reload(){
                     }
                 }    
             }else{
-                if($scid -eq "NOS"){
+                if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin)){
                             if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
@@ -1519,6 +1519,77 @@ if($CheckedBox.CheckedItems -contains "GMH Webhook"){
                 Write-Log $(Get-Translate("Webhook URLが無効、または入力されていません。Skipされます。"))
                 $gmhwebhooktxt = "None"
             }
+        }    
+    }    
+}
+#################################################################################################>
+#ProcessorAffinity
+#################################################################################################>
+if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
+    if(($scid -eq "NOS") -or ($scid -eq "NOT")){
+        $form11113 = New-Object System.Windows.Forms.Form
+        $form11113.Text = "NOS CPU Affinity"
+        $form11113.Size = New-Object System.Drawing.Size(500,140)
+        $form11113.StartPosition = 'CenterScreen'
+        
+        $okButton111111 = New-Object System.Windows.Forms.Button
+        $okButton111111.Location = New-Object System.Drawing.Point(380,70)
+        $okButton111111.Size = New-Object System.Drawing.Size(75,23)
+        $okButton111111.Text = 'OK'
+        $okButton111111.DialogResult = [System.Windows.Forms.DialogResult]::OK
+        $form11113.AcceptButton = $okButton111111
+        $form11113.Controls.Add($okButton111111)
+           
+        # フォームに各アイテムを入れる
+        $MyGroupBox124 = New-Object System.Windows.Forms.GroupBox
+        $MyGroupBox124.Location = New-Object System.Drawing.Point(10,10)
+        $MyGroupBox124.size = New-Object System.Drawing.Size(375,70)
+        $MyGroupBox124.text = $(Get-Translate("CPU Affinityの値を選択してください。"))
+
+        # グループの中のラジオボタンを作る
+        $RadioButton128 = New-Object System.Windows.Forms.RadioButton
+        $RadioButton128.Location = New-Object System.Drawing.Point(10,70)
+        $RadioButton128.size = New-Object System.Drawing.Size(70,30)
+        $RadioButton128.Text = $(Get-Translate("無制限"))　#0
+
+        $RadioButton129 = New-Object System.Windows.Forms.RadioButton
+        $RadioButton129.Location = New-Object System.Drawing.Point(90,70)
+        $RadioButton129.size = New-Object System.Drawing.Size(70,30)
+        $RadioButton129.Text = $(Get-Translate("2コアHT")) #1
+
+        $RadioButton127 = New-Object System.Windows.Forms.RadioButton
+        $RadioButton127.Location = New-Object System.Drawing.Point(170,70)
+        $RadioButton127.size = New-Object System.Drawing.Size(70,30)
+        $RadioButton127.Text = $(Get-Translate("2コア")) #2
+
+        $RadioButton126 = New-Object System.Windows.Forms.RadioButton
+        $RadioButton126.Location = New-Object System.Drawing.Point(250,70)
+        $RadioButton126.size = New-Object System.Drawing.Size(70,30)
+        $RadioButton126.Text = $(Get-Translate("1コア")) #3
+        $RadioButton126.Checked = $True
+
+        # グループにラジオボタンを入れる
+        $MyGroupBox124.Controls.AddRange(@($Radiobutton128, $RadioButton129, $RadioButton127, $RadioButton126))
+        # フォームに各アイテムを入れる
+        $form11113.Controls.Add($MyGroupBox124)
+        $form11113.Topmost = $true
+        
+        $form11113.Add_Shown({$textBox111111.Select()})
+        $result111111 = $form11113.ShowDialog()
+
+        $gmhwebhooktxt = ""
+        if($RadioButton126.Checked){#1コア
+            $gmhwebhooktxt = "3"
+        }elseif($RadioButton127.Checked){ #2コア
+            $gmhwebhooktxt = "2"
+        }elseif($RadioButton128.Checked){ #無制限
+            $gmhwebhooktxt = "0"
+        }elseif($RadioButton129.Checked){ #2CHT
+            $gmhwebhooktxt = "1"
+        }
+
+        if ($result111111 -eq [System.Windows.Forms.DialogResult]::OK){
+            Write-Log $(Get-Translate("CPU Affinity: $gmhwebhooktxt"))
         }    
     }    
 }
@@ -1987,11 +2058,13 @@ if($tio){
                 New-Item -Path "C:\Temp\ExtremeHat" -ItemType Directory
                 Copy-Item "$aupathm\ExtremeHat\*" -Recurse "C:\Temp\ExtremeHat"
             }
-        }elseif($scid -eq "NOS"){
+        }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
                 New-Item -Path "C:\Temp\MoreCosmic" -ItemType Directory
                 Copy-Item "$aupathm\MoreCosmic\*" -Recurse "C:\Temp\MoreCosmic"
+                New-Item -Path "C:\Temp\Presets" -ItemType Directory
+                Copy-Item "$aupathm\Presets\*" -Recurse "C:\Temp\Presets"
             }
         }elseif($scid -eq "LM"){
             if(test-path "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg"){
@@ -2235,7 +2308,7 @@ if($tio){
                 Remove-Item "C:\Temp\temp.log" -Force
             }
         }
-    }elseif($scid -eq "NOS"){
+    }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
                 New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
@@ -2248,6 +2321,14 @@ if($tio){
             if(test-path "C:\Temp\MoreCosmic"){
                 robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\MoreCosmic" -Recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
+            }
+            if(test-path "C:\Temp\Presets"){
+                robocopy "C:\Temp\Presets" "$aupathm\Presets" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "C:\Temp\Presets" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
                 Write-Log "`r`n $content"
@@ -2864,13 +2945,13 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "GMH Webhook"){
-            Write-Log "GMH Webhook start"
-            if(($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT")){
+        }elseif($CheckedBox.CheckedItems[$aa] -eq "NOS Webhook"){
+            Write-Log "NOS/NOT Webhook start"
+            if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 if($gmhwebhooktxt -eq "None"){
-                    Write-Log $(Get-Translate("GMH Webhook skipped."))
+                    Write-Log $(Get-Translate("NOS/NOT Webhook skipped."))
                 }else{
-                    $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
+                    $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
                     if(!(Test-Path $gmhconfig)){
                         Write-Log $(Get-Translate("Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"))
                         $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt).Content
@@ -2879,10 +2960,10 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         }
                         $kenkoconf |Out-File $gmhconfig
                     }
-                    $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforewebhook.old"
+                    $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg.beforewebhook.old"
                     Copy-Item $gmhconfig $gmhconfigtmp
                     $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
-                    $gmhnewconfig = ""           
+                    $gmhnewconfig = ""
                     foreach ($gmhline in $gmhfile) {
                         if ($gmhline.StartsWith("WebhookUrl")){
                             if($gmhwebhooktxt -eq "None"){
@@ -2899,16 +2980,16 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                     $gmhnewconfig |Out-File $gmhconfig
                 }   
             }else{
-                Write-Log $(Get-Translate("GMH Webhook skipped."))
+                Write-Log $(Get-Translate("NOS/NOT Webhook skipped."))
             }
-            Write-Log $(Get-Translate("GMH Webhook ends"))
+            Write-Log $(Get-Translate("NOS/NOT Webhook ends"))
             $Bar.Value = "89"
         }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
-            if(($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT")){
+            if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 Write-Host $(Get-Translate("健康ランド化 start"))
                 #regioninfo.json
                 $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-                if(Test-Path $aurifile){               
+                if(Test-Path $aurifile){
                     $auritext = Get-Content $aurifile -Raw
                     if($auritext.IndexOf("Modded EU (MEU)") -gt 0){
                         $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
@@ -2943,8 +3024,8 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
                 $kenkofile = "$aupathm\BepInEx\config\kenkoland.txt"
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt" -OutFile "$kenkofile" -UseBasicParsing
-                $gmhconfig = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg"
-                $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\me.eisbison.theotherroles.cfg.beforekenkoland.old"
+                $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
+                $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg.beforekenkoland.old"
 
                 if(Test-Path $gmhconfig){
                     #configからWebhookを救出
@@ -2954,7 +3035,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                             Write-Log "WebhookUrl is already set: $gmhline2"
                             $gmhwh = "$gmhline2"
                         }
-                    }
+                    } 
                 }
                 #optionconf
                 $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
@@ -3005,17 +3086,56 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
 
                 #regu
-                if(!(Test-Path "$aupathm\Regulations")){
-                    New-Item $(Join-Path $aupathm "Regulations") -Type Directory
+                if(!(Test-Path "$aupathm\Presets")){
+                    New-Item $(Join-Path $aupathm "Presets") -Type Directory
                 }
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/KenkoLand.json" -OutFile "$aupathm\Regulations\KenkoLand.json" -UseBasicParsing
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/Nakarita.json" -OutFile "$aupathm\Regulations\Nakarita.json" -UseBasicParsing
-                Write-Log $(Get-Translate("健康ランド化完了:Regulation"))
+#                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/KenkoLand.json" -OutFile "$aupathm\Presets\KenkoLand.json" -UseBasicParsing
+#                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/Nakarita.json" -OutFile "$aupathm\Presets\Nakarita.json" -UseBasicParsing
+#                Write-Log $(Get-Translate("健康ランド化完了:Regulation"))
 
                 Write-Log $(Get-Translate("健康ランド化 ends"))
                 $Bar.Value = "88"
+            }elseif($CheckedBox.CheckedItems[$aa] -eq "NOS CPU Affinity"){
+                Write-Log "NOS CPU Affinity start"
+                if(($scid -eq "NOS") -or ($scid -eq "NOT")){
+                    if($gmhwebhooktxt -eq "None"){
+                        Write-Log $(Get-Translate("NOS CPU Affinity skipped."))
+                    }else{
+                        $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
+                        if(!(Test-Path $gmhconfig)){
+                            Write-Log $(Get-Translate("Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"))
+                            $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt).Content
+                            if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
+                                New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
+                            }
+                            $kenkoconf |Out-File $gmhconfig
+                        }
+                        $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg.beforewebhook.old"
+                        Copy-Item $gmhconfig $gmhconfigtmp
+                        $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
+                        $gmhnewconfig = ""
+                        foreach ($gmhline in $gmhfile) {
+                            if ($gmhline.StartsWith("ProcessorAffinity")){
+                                if($gmhwebhooktxt -eq "None"){
+                                    $gmhnewconfig += "$gmhline `r`n"
+                                }else{
+                                    $gmhnewconfig += "ProcessorAffinity = $gmhwebhooktxt `r`n"                    
+                                    Write-Log $(Get-Translate("CPU Affinity : $gmhwebhooktxt"))
+                                }
+                            }else{
+                                $gmhnewconfig += "$gmhline `r`n"
+                            }
+                        }
+                        Remove-Item $gmhconfig -Force
+                        $gmhnewconfig |Out-File $gmhconfig
+                    }   
+                }else{
+                    Write-Log $(Get-Translate("NOS CPU Affinity skipped."))
+                }
+                Write-Log $(Get-Translate("NOS CPU Affinity ends"))
+                $Bar.Value = "89"
             }else{
-                Write-Log $(Get-Translate("健康ランド化を実行するにはTOR GMHを選択してください。"))
+                Write-Log $(Get-Translate("健康ランド化を実行するにはNOS/NOTを選択してください。"))
             }
         }else{
         }
