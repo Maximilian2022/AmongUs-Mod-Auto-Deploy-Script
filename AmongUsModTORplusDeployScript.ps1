@@ -8,7 +8,7 @@ $version = "1.6.8"
 ### minimum version for v2022.10.25
 $ermin = "v4.0.0.0"
 $esmin = "v4.0.0.0"
-$nosmin = "1.16.1,2022.10.25"
+$nosmin = "1.16,2022.10.25"
 $tormin = "v4.2.0"
 $tourmin = "v3.4.0"
 $tohmin = "v3.0.2"
