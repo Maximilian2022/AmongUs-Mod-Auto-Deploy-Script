@@ -3012,14 +3012,16 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                         $auritext = $auritext.Replace($kenkojson, $kenkonewjson)    
                     }
                     
-                    if($auritext.IndexOf("健康ランド") -gt 0){
+                    if($auritext.IndexOf("健康ランドテスト") -gt 0){
                         Write-Log $(Get-Translate("健康ランド済:Server"))
                     }else{
                         if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
                             Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
                         }
                         $aurijson = ConvertFrom-Json $auritext
-                        $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
+                        if($auritext.IndexOf("健康ランド") -le 0){
+                            $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
+                        }
                         $aurijson.Regions += $($kenkonewtjson | ConvertFrom-Json)
                         ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
                         Write-Log $(Get-Translate("健康ランド化完了:Server"))
