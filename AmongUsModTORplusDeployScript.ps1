@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.9"
+$version = "1.6.9.1"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -971,10 +971,10 @@ function Reload(){
 
     Switch ($combo.text){
         default{
-            $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
-            $scid = "TOR GMH"
-            VerMinMax $torhmin $torhmin1 $torhmin2
-            Write-Log "TOR GMH Selected"
+            $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
+            $scid = "NOS"
+            VerMinMax $nosmin $nosmin1 $nosmin2
+            Write-Log "NOS Selected"
             $RadioButton29.Checked = $True
         }"TOR MR :miru-y/TheOtherRoles-MR"{
             $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
@@ -1645,6 +1645,19 @@ if($tio){
                 }
                 $torv = $torpv
                 Write-Log $(Get-Translate("Nebula on the Ship Version $torv が選択されました"))
+                $checkt = $false
+            }elseif($scid -eq "NOT"){
+                if($torpv -lt $nosmin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log $(Get-Translate("処理を中止します"))
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log $(Get-Translate("Nebula on the Test Version $torv が選択されました"))
                 $checkt = $false
             }elseif($scid -eq "LM"){
                 if($torpv -lt $lmmin){
