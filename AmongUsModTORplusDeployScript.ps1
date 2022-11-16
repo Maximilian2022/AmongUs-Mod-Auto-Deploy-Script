@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.9.1"
+$version = "1.6.9.2"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -49,7 +49,7 @@ $prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
 #Testdll: Snapshot 22.11.16b
-$torgmdll = "https://cdn.discordapp.com/attachments/937731474818486372/1042415644899016704/Nebula.dll"
+$torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -69,8 +69,6 @@ function Get-Translate($transtext){
         return $transtext
     }
 }
-
-
 
 #################################################################################################
 # 権限チェック
@@ -203,8 +201,7 @@ function Get-FolderPathG{
 
     if($ret -eq [System.Windows.Forms.DialogResult]::OK){
         return $fd.SelectedPath
-    }
-    else{
+    }else{
         return $null
     }
 }
@@ -1881,8 +1878,33 @@ if($tio){
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum            
         }
+    }elseif($scid -eq "NOT"){
+        $langhead=@()
+        $langtail=@()
+        $torvtmp = $torv.Replace(",","%2C")
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
+                if($($web2.assets.browser_download_url[$aii]).IndexOf("$torvtmp") -gt 0){
+                    $tordlp = $web2.assets.browser_download_url[$aii]
+                }
+            }  
+            if($($web2.assets.browser_download_url[$aii]).IndexOf("Japanese.dat") -gt 0){
+                if($($web2.assets.browser_download_url[$aii]).IndexOf("download/LANG") -gt 0){
+                    $langhead += $web2.assets.browser_download_url[$aii]
+                }else{
+                    $langtail += $web2.assets.browser_download_url[$aii]
+                }
+            }
+        }
+        $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
+        $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
+        if($lheadnum -gt $ltailnum){
+            $langdata = $($langhead|Measure-Object -Maximum).Maximum
+        }else{
+            $langdata = $($langtail|Measure-Object -Maximum).Maximum
+        }
     }else{
-        Write-Log $(Get-Translate("Critical Error 2"))
+        Write-Log $(Get-Translate("Critical Error 3"))
         $Form2.Close()
         pause
         exit
