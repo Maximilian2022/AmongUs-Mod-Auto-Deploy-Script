@@ -2808,14 +2808,14 @@ for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
         $tempoitems += $CheckedBox.CheckedItems[$aa]
     }
 }
-$CheckedBox.Checkeditems = $kenkoitems + $tempoitems
+$ckbci = $kenkoitems + $tempoitems
 
-Write-Log $CheckedBox.CheckedItems
+Write-Log $ckbci
 
-if($CheckedBox.CheckedItems.Count -gt 0){
+if($ckbci.Count -gt 0){
 
-    for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
-        if($CheckedBox.CheckedItems[$aa] -eq "BetterCrewLink"){
+    for($aa=0;$aa -le $ckbci.Count;$aa++){
+        if($ckbci[$aa] -eq "BetterCrewLink"){
             Write-Log "BCL Install Start"
             $bcl= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/OhMyGuus/BetterCrewLink/releases/latest" -UseBasicParsing)).assets.browser_download_url
             for($ab=0;$ab -le $bcl.Length;$ab++){
@@ -2833,7 +2833,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Write-Log "BCL Install Done"
             Remove-Item $md\$bclfile
             $Bar.Value = "83"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsReplayInWindow"){
+        }elseif($ckbci[$aa] -eq "AmongUsReplayInWindow"){
             $qureq = $true
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
             }else{
@@ -2875,7 +2875,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
             }
             $Bar.Value = "84"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "AmongUsCapture"){
+        }elseif($ckbci[$aa] -eq "AmongUsCapture"){
             $qureq = $false
             if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
                 $qureq = $true
@@ -2913,7 +2913,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
                 }
             }
             $Bar.Value = "85"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "VC Redist"){
+        }elseif($ckbci[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
             Start-Transcript -Append -Path "$LogFileName"
             try{
@@ -2937,7 +2937,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Stop-Transcript
             Write-Log "VC Redist Install ends"
             $Bar.Value = "86"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "PowerShell 7"){
+        }elseif($ckbci[$aa] -eq "PowerShell 7"){
             Write-Log "PS7 Install start"
             try{
                 choco -v
@@ -2947,7 +2947,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 pwsh powershell-core -y" -Verb RunAs -Wait
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "dotNetFramework"){
+        }elseif($ckbci[$aa] -eq "dotNetFramework"){
             Write-Log ".Net Framework Install start"
             Start-Transcript -Append -Path "$LogFileName"
             try{
@@ -2960,7 +2960,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "NOS Webhook"){
+        }elseif($ckbci[$aa] -eq "NOS Webhook"){
             Write-Log "NOS/NOT Webhook start"
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 if($gmhwebhooktxt -eq "None"){
@@ -2999,7 +2999,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
             }
             Write-Log $(Get-Translate("NOS/NOT Webhook ends"))
             $Bar.Value = "89"
-        }elseif($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
+        }elseif($ckbci[$aa] -eq "健康ランド"){
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 Write-Host $(Get-Translate("健康ランド化 start"))
                 #regioninfo.json
@@ -3145,7 +3145,7 @@ if($CheckedBox.CheckedItems.Count -gt 0){
 
                 Write-Log $(Get-Translate("健康ランド化 ends"))
                 $Bar.Value = "88"
-            }elseif($CheckedBox.CheckedItems[$aa] -eq "NOS CPU Affinity"){
+            }elseif($ckbci[$aa] -eq "NOS CPU Affinity"){
                 Write-Log "NOS CPU Affinity start"
                 if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                     if($gmhwebhooktxt -eq "None"){
