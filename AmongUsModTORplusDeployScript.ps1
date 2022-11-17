@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.6.9.7"
+$version = "1.7.0"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -1145,7 +1145,9 @@ function Reload(){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin)){
                             if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
-                                $list2 += $($web2.tag_name[$ai])
+                                if($($web2.tag_name[$ai]) -ne "snapshot"){
+                                    $list2 += $($web2.tag_name[$ai])
+                                }
                             }        
                         }
                     }            
