@@ -3,7 +3,7 @@
 #
 # Among Us Mod Tech Support Script
 #
-$version = "1.0.2"
+$version = "1.0.3"
 #
 #################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -198,7 +198,7 @@ if(($scid -eq "NOS")-or($scid -eq "NOT")){
     
     #BepinEx稼働/BepinExLogチェック
     if(!(Test-Path "$aupathm\NebulaLog.txt")){
-        Write-Log "There is no Logoutput.log"
+        Write-Log "There is no NebulaLog.txt"
     }else{
         $content = Get-content "$aupathm\NebulaLog.txt" -Raw
         Write-Log "`r`n $content"
