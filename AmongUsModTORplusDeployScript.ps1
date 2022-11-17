@@ -2798,6 +2798,20 @@ if($tio -eq $false){
 }
 $Bar.Value = "82"
 
+#reorder checkeditems
+$tempoitems = @()
+$kenkoitems = @()
+for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
+    if($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
+        $kenkoitems += $CheckedBox.CheckedItems[$aa]
+    }else{
+        $tempoitems += $CheckedBox.CheckedItems[$aa]
+    }
+}
+$CheckedBox.Checkeditems = $kenkoitems + $tempoitems
+
+Write-Log $CheckedBox.CheckedItems
+
 if($CheckedBox.CheckedItems.Count -gt 0){
 
     for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
