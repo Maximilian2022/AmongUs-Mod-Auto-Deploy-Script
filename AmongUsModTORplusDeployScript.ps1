@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.1"
+$version = "1.7.2"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -280,8 +280,8 @@ function BackupMod{
         if(!(Test-Path $aupathb\$scid)){
             New-Item $aupathb\$scid -ItemType Directory
         }
+        Write-Log $(Get-Translate("Mod Backup Feature Start"))
         if($scid -ne "AMS"){
-            Write-Log $(Get-Translate("Mod Backup Feature Start"))
             if(Test-Path "$aupathb\$scid\$scid-$torv.zip"){
                 $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.zip").Length
                 $dlfsize = (Get-Item "$aupathm\TheOtherRoles.zip").Length
@@ -298,7 +298,7 @@ function BackupMod{
                 $dlfsize = (Get-Item "$aupathm\BepInEx\plugins\AUModS.dll").Length
         
                 if($orgsize -lt $dlfsize){
-                    Copy-Item "$aupathm\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
+                    Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
                 }
             }else{
                 Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll"
