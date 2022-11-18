@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.0"
+$version = "1.7.1"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -16,6 +16,7 @@ $snrmin = "1.4.2.4"
 #$torhmin = "v2.3.127"
 $tormmin = "NONE"
 $lmmin = "3.0.0"
+$amsmin = "v0.0.1"
 
 ### minimum version for v2022.10.18
 $ermin1 = "v3.3.0.3"
@@ -28,6 +29,7 @@ $snrmin1 = "1.4.2.3"
 #$torhmin1 = "v2.3.120"
 $tormmin1 = "NONE"
 $lmmin1 = "NONE"
+$amsmin1 = "NONE"
 
 ### minimum version for v2022.9.20(8.24)
 $ermin2 = "v3.2.2.0"
@@ -40,6 +42,7 @@ $snrmin2 = "1.4.2.0"
 #$torhmin2 = "v2.2.102"
 $tormmin2 = "MR_v2.3.0"
 $lmmin2 = "2.1.3"
+$amsmin2 = "NONE"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 $prever0 = "2022.10.18"
@@ -270,27 +273,38 @@ if(Test-Path "C:\Program Files\Epic Games\AmongUs"){
 
 function BackupMod{
     if($scid -ne "NOT"){
-    #Backup Mod
-    if(Test-Path $aupathb){
-    }else{
-        New-Item $aupathb -ItemType Directory
-    }
-    if(Test-Path $aupathb\$scid){
-    }else{
-        New-Item $aupathb\$scid -ItemType Directory
-    }
-    Write-Log $(Get-Translate("Mod Backup Feature Start"))
-    if(Test-Path "$aupathb\$scid\$scid-$torv.zip"){
-        $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.zip").Length
-        $dlfsize = (Get-Item "$aupathm\TheOtherRoles.zip").Length
-
-        if($orgsize -lt $dlfsize){
-            Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip" -Force
+        #Backup Mod
+        if(!(Test-Path $aupathb)){
+            New-Item $aupathb -ItemType Directory
         }
-    }else{
-        Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip"
-    }
-    Write-Log $(Get-Translate("Mod Backup Feature End"))
+        if(!(Test-Path $aupathb\$scid)){
+            New-Item $aupathb\$scid -ItemType Directory
+        }
+        if($scid -ne "AMS"){
+            Write-Log $(Get-Translate("Mod Backup Feature Start"))
+            if(Test-Path "$aupathb\$scid\$scid-$torv.zip"){
+                $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.zip").Length
+                $dlfsize = (Get-Item "$aupathm\TheOtherRoles.zip").Length
+        
+                if($orgsize -lt $dlfsize){
+                    Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip" -Force
+                }
+            }else{
+                Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip"
+            }    
+        }else{
+            if(Test-Path "$aupathb\$scid\$scid-$torv.dll"){
+                $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.dll").Length
+                $dlfsize = (Get-Item "$aupathm\BepInEx\plugins\AUModS.dll").Length
+        
+                if($orgsize -lt $dlfsize){
+                    Copy-Item "$aupathm\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
+                }
+            }else{
+                Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll"
+            }    
+        }
+        Write-Log $(Get-Translate("Mod Backup Feature End"))
     }
 }
 
@@ -839,6 +853,7 @@ $form.ShowIcon = $False
 if($gmhbool){
     [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
 }
+[void] $Combo.Items.Add("AMS :AUModS/AUModS")
 [void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
@@ -974,6 +989,12 @@ function Reload(){
             $scid = "NOS"
             VerMinMax $nosmin $nosmin1 $nosmin2
             Write-Log "NOS Selected"
+            $RadioButton29.Checked = $True
+        }"AMS :AUModS/AUModS"{
+            $releasepage2 = "https://api.github.com/repos/AUModS/AUModS/releases"
+            $scid = "AMS"
+            VerMinMax $amsmin $amsmin1 $amsmin2
+            Write-Log "AMS Selected"
             $RadioButton29.Checked = $True
         }"TOR MR :miru-y/TheOtherRoles-MR"{
             $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
@@ -1113,6 +1134,13 @@ function Reload(){
                 $script:tohweb = $web
             }else{
                 $web = $script:tohweb
+            }
+        }elseif($scid -eq "ams"){
+            if($null -eq $script:amsweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:amsweb = $web
+            }else{
+                $web = $script:amsweb
             }
         }else{
             $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
@@ -1754,6 +1782,19 @@ if($tio){
                 $torv = $torpv
                 Write-Log $(Get-Translate("Town of Host Version $torv が選択されました"))
                 $checkt = $false
+            }elseif($scid -eq "AMS"){
+                if($torpv -lt $amsmin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log $(Get-Translate("処理を中止します"))
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log $(Get-Translate("Town of Host Version $torv が選択されました"))
+                $checkt = $false
             }elseif($scid -eq "SNR"){
                 if($torpv -lt $snrmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -1925,6 +1966,24 @@ if($tio){
     }elseif($scid -eq "SNR"){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
         $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
+    }elseif($scid -eq "AMS"){
+        $tordlp = "https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityIL2CPP_x86_6.0.0-pre.1.zip"
+        $langd = @()
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf(".dll") -gt 0){
+                $langd += $web2.assets.browser_download_url[$aii]
+            }
+        }
+        for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
+            if($($web2.tag_name[$aiiii]) -eq "$torv"){
+                $amsdll = $($langd[$aiiii])
+            }
+        }
+        if($amsdll.indexof(".dll") -le 0){
+            Write-Log "Error: Critical 4 missing dll"
+            Pause
+            exit
+        }
     }elseif($scid -eq "NOS"){
         $langhead=@()
         $langtail=@()
@@ -2082,6 +2141,10 @@ if($tio){
         }elseif($scid -eq "TOH"){
             if(test-path "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" "C:\Temp\com.emptybottle.townofhost.cfg" -Force               
+            }
+        }elseif($scid -eq "AMS"){
+            if(test-path "$aupathm\BepInEx\config\me.tomarai.aumod.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\me.tomarai.aumod.cfg" "C:\Temp\me.tomarai.aumod.cfg" -Force               
             }
         }else{
             if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
@@ -2354,6 +2417,14 @@ if($tio){
             Copy-Item "C:\Temp\com.emptybottle.townofhost.cfg" "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" -Force
             Remove-Item "C:\Temp\com.emptybottle.townofhost.cfg" -Force    
         }
+    }elseif($scid -eq "AMS"){
+        if(test-path "C:\Temp\me.tomarai.aumod.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\me.tomarai.aumod.cfg" "$aupathm\BepInEx\config\me.tomarai.aumod.cfg" -Force
+            Remove-Item "C:\Temp\me.tomarai.aumod.cfg" -Force    
+        }
     }elseif($scid -eq "SNR"){
         if(test-path "C:\Temp\jp.ykundesu.supernewroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -2555,6 +2626,27 @@ if($tio){
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
             Write-Log $(Get-Translate("Download $scid Agartha DLL 完了"))              
         }
+    }elseif($scid -eq "AMS"){
+        if(test-path "$aupathm\BepInEx"){
+#            robocopy "$aupathm\BepInEx_UnityIL2CPP_x86_6.0.0-pre.1" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+#            Remove-Item "$aupathm\BepInEx_UnityIL2CPP_x86_6.0.0-pre.1" -recurse
+#            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+#            Write-Log "`r`n $content"
+#            Remove-Item "C:\Temp\temp.log" -Force
+
+            if(Test-Path "$aupathm\BepInEx\plugins\AUModS.dll"){
+                Remove-item -Path "$aupathm\BepInEx\plugins\AUModS.dll"
+                Write-Log $(Get-Translate('Delete Original AUModS Mod DLL'))    
+            }
+            #AUModS DLLをDLして配置
+            if(!(Test-Path "$aupathm\BepInEx\plugins")){
+                New-Item "$aupathm\BepInEx\plugins" -ItemType Directory 
+            }
+            Write-Log $amsdll
+            Write-Log $(Get-Translate("Download $scid AUModS DLL 開始"))
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUModS.dll" $amsdll
+            Write-Log $(Get-Translate("Download $scid AUModS DLL 完了"))              
+        }
     }elseif($scid -eq "NOS"){
         if(test-path "$aupathm\Nebula"){
             robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -2721,7 +2813,6 @@ if($tio){
                 if($platform -eq "Steam"){
                     Start-Process "$aupathm\Among Us.exe"
                 }elseif($platform -eq "Epic"){
-                    Set-Location "$aupathb"
                     legendary.exe launch Among Us
                 }else{
                     Write-Output "ERROR:Critical run apps"
