@@ -3427,7 +3427,7 @@ if($error.length -eq 0){
     Write-Log $(Get-Translate("Script実行時のエラーはなさそうです"))
 }else{
     for($abc=0;$abc -le $error.Length;$abc++){
-        Write-Log $($error[$abc])
+        Write-Log $($error[$abc]).Exception.Message
     }    
 }
 
