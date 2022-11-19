@@ -301,7 +301,7 @@ function BackupMod{
                     Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
                 }
             }else{
-                Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll"
+                Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
             }    
         }
         Write-Log $(Get-Translate("Mod Backup Feature End"))
@@ -2324,7 +2324,6 @@ if($tio){
         exit
     }
 
-    BackupMod
     $Bar.Value = "59"
 
     if(test-path "$aupathm\BepInEx"){
@@ -2694,6 +2693,7 @@ if($tio){
     #解凍チェック
     if (test-path "$aupathm\BepInEx\plugins"){
         Write-Log $(Get-Translate("ZIP 解凍OK"))
+        BackupMod
         Remove-item -Path "$aupathm\TheOtherRoles.zip"
         Write-Log $(Get-Translate("DLしたZIPを削除"))
     }else{
