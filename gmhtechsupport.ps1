@@ -302,7 +302,7 @@ try{
 }
 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade speedtest -y" -Verb RunAs -Wait   
 
-Write-Output "yes" | speedtest | Tee-Object ping.log
+(Write-Output "yes" | speedtest )| Tee-Object ping.log
 $content = get-content "ping.log" -raw
 Remove-Item "ping.log"
 Write-Log "`r`n $content"
