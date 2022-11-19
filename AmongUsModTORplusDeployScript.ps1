@@ -95,7 +95,7 @@ catch{
     Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary speedtest microsoft-windows-terminal -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
@@ -3379,9 +3379,6 @@ if($tio){
     }
 }
 
-Write-Log "-----------------------------------------------------------------"
-Write-Log "MOD Installation Ends"
-Write-Log "-----------------------------------------------------------------"
 
 if($debugc){
     if($startexewhendone -eq $true){
@@ -3421,6 +3418,23 @@ if($debugc){
         }
     }
 }
+
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Install Error check"
+Write-Log "-----------------------------------------------------------------"
+
+if($error.length -eq 0){
+    Write-Log $(Get-Translate("Script実行時のエラーはなさそうです")
+}else{
+    for($abc=0;$abc -le $error.Length;$abc++){
+        Write-Log $($error[$abc])
+    }    
+}
+
+Write-Log "-----------------------------------------------------------------"
+Write-Log "MOD Installation Ends"
+Write-Log "-----------------------------------------------------------------"
+
 
 Start-Sleep -Seconds 2
 exit
