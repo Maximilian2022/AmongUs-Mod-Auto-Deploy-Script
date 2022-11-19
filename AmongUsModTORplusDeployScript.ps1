@@ -3422,6 +3422,7 @@ if($debugc){
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Install Error check"
 Write-Log "-----------------------------------------------------------------"
+Write-Log $error.length
 
 if($error.length -eq 0){
     Write-Log $(Get-Translate("Script実行時のエラーはなさそうです"))

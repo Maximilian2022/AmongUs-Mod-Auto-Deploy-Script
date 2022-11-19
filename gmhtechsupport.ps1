@@ -381,6 +381,7 @@ if($Cult -eq "ja-JP"){
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Tech Support Error check"
 Write-Log "-----------------------------------------------------------------"
+Write-Log $error.length
 
 if($error.length -eq 0){
     Write-Log $(Get-Translate("Script 実行時のScriptエラーはなさそうです"))
