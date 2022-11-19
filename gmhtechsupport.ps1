@@ -273,19 +273,19 @@ Write-Log "`r`n`r`n "
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Ping/Tracert check"
 Write-Log "-----------------------------------------------------------------"
-ping.exe 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+ping.exe 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
 $content = get-content "ping.log" -raw
 Remove-Item "ping.log"
 Write-Log "`r`n $content"
-ping.exe 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+ping.exe 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
 $content = get-content "ping.log" -raw
 Remove-Item "ping.log"
 Write-Log "`r`n $content"
-tracert.exe -d 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+tracert.exe -d 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
 $content = get-content "ping.log" -raw
 Remove-Item "ping.log"
 Write-Log "`r`n $content"
-tracert.exe -d 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | tee ping.log
+tracert.exe -d 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
 $content = get-content "ping.log" -raw
 Remove-Item "ping.log"
 Write-Log "`r`n $content"
@@ -302,7 +302,7 @@ try{
 }
 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade speedtest -y" -Verb RunAs -Wait   
 
-echo "yes" | speedtest | tee ping.log
+Write-Output "yes" | speedtest | Tee-Object ping.log
 $content = get-content "ping.log" -raw
 Remove-Item "ping.log"
 Write-Log "`r`n $content"
