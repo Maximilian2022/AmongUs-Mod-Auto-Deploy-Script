@@ -3134,6 +3134,9 @@ if($ckbci.Count -gt 0){
                         Write-Log $(Get-Translate("健康ランド化完了:Server"))
                     }
                 }
+                if(!(Test-Path "$aupathm\BepInEx\config")){
+                    New-Item "$aupathm\BepInEx\config" -Type Directory
+                }
                 $kenkofile = "$aupathm\BepInEx\config\kenkoland.txt"
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt" -OutFile "$kenkofile" -UseBasicParsing
                 $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
