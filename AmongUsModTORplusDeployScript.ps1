@@ -2736,7 +2736,10 @@ if($tio){
                     Remove-Item "C:\temp\startamongusrun_$scid2.bat"
                 }
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1" -OutFile "C:\temp\gmhtechsupport.ps1" -UseBasicParsing
-                $batscript = "chcp 65001`r`n@echo off`r`npowershell -NoProfile -ExecutionPolicy Unrestricted `"C:\temp\amongusrun_$scid2.ps1`"`r`nexit"
+                $batscript = "chcp 65001 `r`n"
+                $batscript += "@echo off `r`n"
+                $batscript += "powershell -NoProfile -ExecutionPolicy Unrestricted `"C:\temp\amongusrun_$scid2.ps1`" `r`n"
+                $batscript += "exit"
                 $batscript | Out-File -Encoding default -FilePath "C:\temp\startamongusrun_$scid2.bat" 
                 $ps1script = '$platform="'
                 $ps1script += "$platform`"`r`n"
@@ -3297,14 +3300,12 @@ $Bar.Value = "90"
 ####################
 if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
-    $ps1script += 'chcp 65001
-@echo off
-curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1
-pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1 '
-    $ps1script += "`"$scid`" `"$aupathm`" `"$platform`"" 
-    $ps1script += '
-
-del .\gmhtechsupport.ps1'
+    $ps1script += "chcp 65001 `r`n"
+    $ps1script += "@echo off `r`n"
+    $ps1script += "curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1 `r`n"
+    $ps1script += "pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1"
+    $ps1script += "`"$scid`" `"$aupathm`" `"$platform`" `r`n" 
+    $ps1script += "del .\gmhtechsupport.ps1 `r`n"
     $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$npl\StartAmongUsGetLogScript_$scid.bat" 
 }
 ####################
