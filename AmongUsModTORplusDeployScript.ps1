@@ -611,9 +611,27 @@ catch{
     }
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
 }
+#################################################################################################
+# Clock Sync
+#################################################################################################
+
+$l = w32tm /query /status 
+if ($l.contains("0x80070426")){
+    net start "windows time"
+    start-sleep -Seconds 5
+}
+Write-Log $l
+$l = w32tm /monitor /computers:time.google.com
+Write-Log $l
+$l = w32tm /config /syncfromflags:manual /manualpeerlist:"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8" /reliable:yes /update
+Write-Log $l
+$l = w32tm /resync
+Write-Log $l
+$l = w32tm /query /status 
+Write-Log $l
 
 #################################################################################################
-### GM Mod or TOR+ 選択メニュー表示
+### Mod 選択メニュー表示
 #################################################################################################
 #Special Thanks
 #https://letspowershell.blogspot.com/2015/07/powershell_29.html
