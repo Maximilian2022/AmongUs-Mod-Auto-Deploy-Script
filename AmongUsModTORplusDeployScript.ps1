@@ -847,7 +847,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -3311,6 +3311,18 @@ if($ckbci.Count -gt 0){
             }else{
                 Write-Log $(Get-Translate("健康ランド化を実行するにはNOS/NOTを選択してください。"))
             }
+        }elseif($ckbci[$aa] -eq "配信ソフト"){
+            Write-Log "配信ソフトセットアップ"
+            Start-Transcript -Append -Path "$LogFileName"
+            try{
+                choco -v
+            }catch{
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+            }
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade streamlabs-obs obs-studio  -y" -Verb RunAs -Wait
+            Stop-Transcript
+            Write-Log "配信ソフトセットアップ完了"
+            $Bar.Value = "88"
         }else{
         }
     }
