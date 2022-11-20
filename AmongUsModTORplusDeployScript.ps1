@@ -3134,6 +3134,8 @@ if($ckbci.Count -gt 0){
                         Write-Log $(Get-Translate("健康ランド化完了:Server"))
                     }
                 }
+
+<#
                 if(!(Test-Path "$aupathm\BepInEx\config")){
                     New-Item "$aupathm\BepInEx\config" -Type Directory
                 }
@@ -3180,7 +3182,7 @@ if($ckbci.Count -gt 0){
                         $indeedgo = $false
                     }
                 }
-                #
+
                 if($indeedgo){
                     if(Test-Path $gmhconfig){
                         Copy-Item $gmhconfig $gmhconfigtmp
@@ -3230,7 +3232,7 @@ if($ckbci.Count -gt 0){
                     Remove-Item $kenkofile -Force
                     Write-Log $(Get-Translate("健康ランド化完了:Config"))
                 }
-
+#>
                 #regu
                 if(!(Test-Path "$aupathm\Presets")){
                     New-Item $(Join-Path $aupathm "Presets") -Type Directory
