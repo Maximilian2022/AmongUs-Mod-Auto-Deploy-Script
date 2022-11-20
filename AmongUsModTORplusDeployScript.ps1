@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.2.3"
+$version = "1.7.2.4"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -53,7 +53,7 @@ $prevtargetid1 = "2481435393334839152"
 $gmhbool = $true
 #Testdll: Snapshot 22.11.16b
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-$notlangdata = "https://cdn.discordapp.com/attachments/939804752580050985/1043558641258737694/Japanese.dat"
+$nebulangdata = "https://cdn.discordapp.com/attachments/939804752580050985/1043558641258737694/Japanese.dat"
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -2009,6 +2009,7 @@ if($tio){
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum            
         }
+        $langdata = $nebulangdata
     }elseif($scid -eq "NOT"){
         $langhead=@()
         $langtail=@()
@@ -2034,7 +2035,7 @@ if($tio){
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum
         }
-        $langdata = $notlangdata
+        $langdata = $nebulangdata
     }else{
         Write-Log $(Get-Translate("Critical Error 3"))
         $Form2.Close()
@@ -2661,6 +2662,9 @@ if($tio){
         }
         Write-Log $(Get-Translate("日本語 データ Download 開始"))
         Write-Log $(Get-Translate("日本語 データ $langdata"))
+        if(Test-Path "$aupathm\Language\Japanese.dat"){
+            Copy-Item "$aupathm\Language\Japanese.dat" "$aupathm\Language\Japanese.dat.old"
+        }
         aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
         Write-Log $(Get-Translate("日本語 データ Download 完了"))
     }elseif($scid -eq "NOT"){
