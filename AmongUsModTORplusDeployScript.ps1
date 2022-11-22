@@ -81,7 +81,11 @@ function Get-Translate($transtext){
 #################################################################################################
 if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
 }else{
-    write-host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
+    Write-Host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
+    Write-Host "あなたのユーザー名($env:username)は管理者権限グループに属していません"
+    Write-Host "管理者権限グループに属しているユーザーは以下の通りです"
+    $nn = net localgroup Administrators
+    Write-Host $nn
     pause
     exit
 }
