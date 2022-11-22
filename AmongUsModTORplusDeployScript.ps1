@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.3"
+$version = "1.7.4"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -2003,7 +2003,17 @@ if($tio){
             }                    
         }
     }elseif($scid -eq "TOR MR"){
-        $tordlp = "https://github.com/miru-y/TheOtherRoles-MR/releases/download/${torv}/TheOtherRolesMR.zip"
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf("MR.zip") -gt 0){
+                $langd += $web2.assets.browser_download_url[$aii]
+            }
+        }
+        for($aii = 0;$aii -lt $langd.Length;$aii++){
+            if($($langd[$aii]).IndexOf("${torv}") -gt 0){
+                $tordlp = $langd[$aii]
+            }
+        }
+        #$tordlp = "https://github.com/miru-y/TheOtherRoles-MR/releases/download/${torv}/TheOtherRolesMR.zip"
     }elseif($scid -eq "TOR"){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/${torv}/TheOtherRoles.zip"
     }elseif($scid -eq "TOU-R"){
