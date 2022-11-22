@@ -53,7 +53,7 @@ $prevtargetid1 = "2481435393334839152"
 $gmhbool = $true
 #Testdll: Snapshot 22.11.16b
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-$nebulangdata = "https://cdn.discordapp.com/attachments/939804752580050985/1043558641258737694/Japanese.dat"
+$nebulangdata = "https://cdn.discordapp.com/attachments/939804752580050985/1043936439471181934/Japanese.dat"
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -78,10 +78,11 @@ function Get-Translate($transtext){
 #################################################################################################
 if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
 }else{
-    write-host $(Get-Translate("このユーザアカウントでは本Scriptは動作しません。"))
+    write-host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。"))
     pause
     exit
 }
+
 
 #################################################################################################
 # Run w/ Powershell v7 if available.
