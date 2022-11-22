@@ -17,6 +17,7 @@ $snrmin = "1.4.2.4"
 $tormmin = "NONE"
 $lmmin = "3.0.0"
 $amsmin = "v0.0.1"
+$toymin = "v3.0.2.2"
 
 ### minimum version for v2022.10.18
 $ermin1 = "v3.3.0.3"
@@ -30,6 +31,7 @@ $snrmin1 = "1.4.2.3"
 $tormmin1 = "NONE"
 $lmmin1 = "NONE"
 $amsmin1 = "NONE"
+$toymin1 = "NONE"
 
 ### minimum version for v2022.9.20(8.24)
 $ermin2 = "v3.2.2.0"
@@ -43,6 +45,7 @@ $snrmin2 = "1.4.2.0"
 $tormmin2 = "MR_v2.3.0"
 $lmmin2 = "2.1.3"
 $amsmin2 = "NONE"
+$toymin2 = "NONE"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 $prever0 = "2022.10.18"
@@ -78,7 +81,7 @@ function Get-Translate($transtext){
 #################################################################################################
 if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
 }else{
-    write-host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。"))
+    write-host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
     pause
     exit
 }
@@ -881,6 +884,7 @@ if($gmhbool){
 [void] $Combo.Items.Add("LM :KiraYamato94/LasMonjas")
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
+[void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
 
@@ -1082,6 +1086,12 @@ function Reload(){
             VerMinMax $tohmin $tohmin1 $tohmin2
             Write-Log "TOH Selected"
             $RadioButton29.Checked = $True
+        }"TOY :Yumenopai/TownOfHost_Y"{
+            $releasepage2 = "https://api.github.com/repos/Yumenopai/TownOfHost_Y/releases"
+            $scid = "TOY"
+            VerMinMax $toymin $toymin1 $toymin2
+            Write-Log "TOY Selected"
+            $RadioButton29.Checked = $True
         }"Tool Install Only"{
             $tio = $false
             Write-Log "TOI Selected"
@@ -1153,6 +1163,13 @@ function Reload(){
                 $script:tohweb = $web
             }else{
                 $web = $script:tohweb
+            }
+        }elseif($scid -eq "TOY"){
+            if($null -eq $script:toyweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:toyweb = $web
+            }else{
+                $web = $script:toyweb
             }
         }elseif($scid -eq "ams"){
             if($null -eq $script:amsweb){
@@ -1801,6 +1818,19 @@ if($tio){
                 $torv = $torpv
                 Write-Log $(Get-Translate("Town of Host Version $torv が選択されました"))
                 $checkt = $false
+            }elseif($scid -eq "TOY"){
+                if($torpv -lt $toymin){
+                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    }else{
+                        Write-Log $(Get-Translate("処理を中止します"))
+                        $Form2.Close()
+                        pause
+                        exit
+                    }  
+                }
+                $torv = $torpv
+                Write-Log $(Get-Translate("Town of Host_Y Version $torv が選択されました"))
+                $checkt = $false
             }elseif($scid -eq "AMS"){
                 if($torpv -lt $amsmin){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
@@ -1980,6 +2010,8 @@ if($tio){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
     }elseif($scid -eq "TOH"){
         $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
+    }elseif($scid -eq "TOY"){
+        $tordlp = "https://github.com/Yumenopai/TownOfHost_Y/releases/download/${torv}/TownOfHost_Y.-.${torv}.zip"
     }elseif($scid -eq "LM"){
         $tordlp = "https://github.com/KiraYamato94/LasMonjas/releases/download/${torv}/Las.Monjas.${torv}.zip"
     }elseif($scid -eq "SNR"){
@@ -2160,6 +2192,10 @@ if($tio){
                 Copy-Item "$aupathm\SuperNewRoles\*" -Recurse "C:\Temp\SuperNewRoles"
             }
         }elseif($scid -eq "TOH"){
+            if(test-path "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" "C:\Temp\com.emptybottle.townofhost.cfg" -Force               
+            }
+        }elseif($scid -eq "TOY"){
             if(test-path "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" "C:\Temp\com.emptybottle.townofhost.cfg" -Force               
             }
@@ -2437,6 +2473,14 @@ if($tio){
             Copy-Item "C:\Temp\com.emptybottle.townofhost.cfg" "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" -Force
             Remove-Item "C:\Temp\com.emptybottle.townofhost.cfg" -Force    
         }
+    }elseif($scid -eq "TOY"){
+        if(test-path "C:\Temp\com.emptybottle.townofhost.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\com.emptybottle.townofhost.cfg" "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" -Force
+            Remove-Item "C:\Temp\com.emptybottle.townofhost.cfg" -Force    
+        }
     }elseif($scid -eq "AMS"){
         if(test-path "C:\Temp\me.tomarai.aumod.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -2614,6 +2658,15 @@ if($tio){
         if(test-path "$aupathm\Las Monjas $torv"){
             robocopy "$aupathm\Las Monjas $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\Las Monjas $torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }elseif($scid -eq "TOY"){
+        if(test-path "$aupathm\TownOfHost_Y.-.$torv"){
+            robocopy "$aupathm\TownOfHost_Y.-.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\TownOfHost_Y.-.$torv" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
