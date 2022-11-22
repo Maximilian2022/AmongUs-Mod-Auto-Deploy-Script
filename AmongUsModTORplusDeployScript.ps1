@@ -1894,6 +1894,8 @@ if($tio){
     }
     $Bar.Value = "20"
     $langdata
+    $langd=@()
+    $exfoldn
     if($scid -eq "TOR GMH"){
         $langh=@()
         $langd=@()
@@ -2014,6 +2016,8 @@ if($tio){
             }
         }
         Write-Log $tordlp
+        $exfoldn = [IO.Path]::GetFileNameWithoutExtension($(Split-Path $tordlp -Leaf));
+        $exfoldn = $exfoldn.Replace('.',' ')
         #$tordlp = "https://github.com/miru-y/TheOtherRoles-MR/releases/download/${torv}/TheOtherRolesMR.zip"
     }elseif($scid -eq "TOR"){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/${torv}/TheOtherRoles.zip"
@@ -2026,7 +2030,19 @@ if($tio){
     }elseif($scid -eq "TOH"){
         $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
     }elseif($scid -eq "TOY"){
-        $tordlp = "https://github.com/Yumenopai/TownOfHost_Y/releases/download/${torv}/TownOfHost_Y.-.${torv}.zip"
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf("${torv}.zip") -gt 0){
+                $langd += $web2.assets.browser_download_url[$aii]
+            }
+        }
+        for($aii = 0;$aii -lt $langd.Length;$aii++){
+            if($($langd[$aii]).IndexOf("${torv}") -gt 0){
+                $tordlp = $langd[$aii]
+            }
+        }
+        Write-Log $tordlp
+        $exfoldn = [IO.Path]::GetFileNameWithoutExtension($(Split-Path $tordlp -Leaf));
+        #$tordlp = "https://github.com/Yumenopai/TownOfHost_Y/releases/download/${torv}/TownOfHost_Y.-.${torv}.zip"
     }elseif($scid -eq "LM"){
         $tordlp = "https://github.com/KiraYamato94/LasMonjas/releases/download/${torv}/Las.Monjas.${torv}.zip"
     }elseif($scid -eq "SNR"){
@@ -2643,9 +2659,9 @@ if($tio){
             Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "TOR MR"){
-        if(test-path "$aupathm\TheOtherRolesMR"){
-            robocopy "$aupathm\TheOtherRolesMR" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "$aupathm\TheOtherRolesMR" -recurse
+        if(test-path "$aupathm\$exfoldn"){
+            robocopy "$aupathm\$exfoldn" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\$exfoldn" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
