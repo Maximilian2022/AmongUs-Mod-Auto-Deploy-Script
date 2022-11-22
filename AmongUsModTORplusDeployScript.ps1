@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.4"
+$version = "1.7.4.1"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -2013,6 +2013,7 @@ if($tio){
                 $tordlp = $langd[$aii]
             }
         }
+        Write-Log $tordlp
         #$tordlp = "https://github.com/miru-y/TheOtherRoles-MR/releases/download/${torv}/TheOtherRolesMR.zip"
     }elseif($scid -eq "TOR"){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/${torv}/TheOtherRoles.zip"
