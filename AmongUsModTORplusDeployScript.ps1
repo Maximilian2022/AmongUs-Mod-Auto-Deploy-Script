@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.4.1"
+$version = "1.7.4.2"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -2695,9 +2695,9 @@ if($tio){
             Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "TOY"){
-        if(test-path "$aupathm\TownOfHost_Y.-.$torv"){
-            robocopy "$aupathm\TownOfHost_Y.-.$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "$aupathm\TownOfHost_Y.-.$torv" -recurse
+        if(test-path "$aupathm\$exfoldn"){
+            robocopy "$aupathm\$exfoldn" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\$exfoldn" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
