@@ -13,7 +13,6 @@ $tormin = "v4.2.0"
 $tourmin = "v3.4.0"
 $tohmin = "v3.0.2"
 $snrmin = "1.4.2.4"
-#$torhmin = "v2.3.127"
 $tormmin = "MR_v2.5.0"
 $lmmin = "3.0.0"
 $amsmin = "v0.0.1"
@@ -27,7 +26,6 @@ $tormin1 = "NONE"
 $tourmin1 = "NONE"
 $tohmin1 = "NONE"
 $snrmin1 = "1.4.2.3"
-#$torhmin1 = "v2.3.120"
 $tormmin1 = "NONE"
 $lmmin1 = "NONE"
 $amsmin1 = "NONE"
@@ -41,7 +39,6 @@ $tormin2 = "v4.1.7"
 $tourmin2 = "v3.3.0"
 $tohmin2 = "v2.2.2"
 $snrmin2 = "1.4.2.0"
-#$torhmin2 = "v2.2.102"
 $tormmin2 = "MR_v2.3.0"
 $lmmin2 = "2.1.3"
 $amsmin2 = "NONE"
@@ -1689,198 +1686,51 @@ if($tio){
     #################################################################################################
     $web = Invoke-WebRequest $releasepage -UseBasicParsing
     $web2 = ConvertFrom-Json $web.Content
-    $Bar.Value = "14"
+    $Bar.Value = "11"
     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
         if($web2.tag_name[$ai] -eq "$torpv"){
-            if($scid -eq "TOR GMH"){
-                if($torpv -lt $torhmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("TheOtherRole-GM-Haoming Version $torv が選択されました"))
-                $checkt = $false
-            }elseif($scid -eq "TOR GMT"){
-                if($torpv -lt $torhmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("TheOtherRole-GM-Haoming Test Version $torv が選択されました"))
-                $checkt = $false
-            }elseif($scid -eq "TOR"){
-                if($torpv -lt $tormin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("TheOtherRole Version $torv が選択されました"))
-                $checkt = $false
+            if($scid -eq "TOR"){
+                $modmin = $tormin
             }elseif($scid -eq "TOU-R"){
-                if($torpv -lt $tourmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Town of Us Reactivated Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $tourmin
             }elseif($scid -eq "ER"){
-                if($torpv -lt $ermin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Extreme Roles Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $ermin
             }elseif($scid -eq "ER+ES"){
-                if($torpv -lt $esmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Extreme Roles Version $torv with Extreme Skins が選択されました"))
-                $checkt = $false
-            }elseif($scid -eq "NOS"){
-                if($torpv -lt $nosmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Nebula on the Ship Version $torv が選択されました"))
-                $checkt = $false
-            }elseif($scid -eq "NOT"){
-                if($torpv -lt $nosmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Nebula on the Test Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $esmin
+            }elseif(($scid -eq "NOT") -or ($scid -eq "NOS")){
+                $modmin = $nosmin
             }elseif($scid -eq "LM"){
-                if($torpv -lt $lmmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Nebula on the Ship Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $lmmin
             }elseif($scid -eq "TOH"){
-                if($torpv -lt $tohmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Town of Host Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $tohmin
             }elseif($scid -eq "TOY"){
-                if($torpv -lt $toymin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Town of Host_Y Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $toymin
             }elseif($scid -eq "AMS"){
-                if($torpv -lt $amsmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Town of Host Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $amsmin
             }elseif($scid -eq "SNR"){
-                if($torpv -lt $snrmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("Super New Roles Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $snrmin
             }elseif($scid -eq "TOR MR"){
-                if($torpv -lt $tormmin){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    }else{
-                        Write-Log $(Get-Translate("処理を中止します"))
-                        $Form2.Close()
-                        pause
-                        exit
-                    }  
-                }
-                $torv = $torpv
-                Write-Log $(Get-Translate("The Other Roles: MR Edition Version $torv が選択されました"))
-                $checkt = $false
+                $modmin = $tormmin
             }else{
-                Write-Log $(Get-Translate("Critical Error 2"))
+                Write-Log $(Get-Translate("Critical Error : SCID unknown"))
                 Write-Log $(Get-Translate("処理を中止します"))
                 $Form2.Close()
                 pause
                 exit
             }
+            #Check.
+            if($torpv -lt $modmin){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                }else{
+                    Write-Log $(Get-Translate("処理を中止します"))
+                    $Form2.Close()
+                    pause
+                    exit
+                }  
+            }
+            $torv = $torpv
+            Write-Log $(Get-Translate("$scid Version $torv が選択されました"))
+            $checkt = $false
         }
     }
     $Bar.Value = "17"
@@ -1896,115 +1746,7 @@ if($tio){
     $langdata
     $langd=@()
     $exfoldn
-    if($scid -eq "TOR GMH"){
-        $langh=@()
-        $langd=@()
-        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
-            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
-                $langh += $web2.assets.browser_download_url[$aii]
-            }elseif($($web2.assets.browser_download_url[$aii]).IndexOf(".dll") -gt 0){
-                $langd += $web2.assets.browser_download_url[$aii]
-            }
-        }
-        $checkzip = $true
-        $checkdll = $true
-        for($aiii = 0;$aiii -lt  $langh.Length;$aiii++){
-            if($($langh[$aiii]).IndexOf("$torv") -gt 0){
-                $tordlp = $($langh[$aiii])
-                $checkzip = $false
-                $checkgm = $false
-                $checkdll = $false
-            }
-        }
-        if($checkdll){
-            for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
-                if($($langd[$aiiii]).IndexOf("$torv") -gt 0){
-                    $torgmdll = $($langd[$aiiii])
-                    $checkdll = $false
-                }
-            }
-        }
-        $wvar = $true
-        while($wvar){
-            $vermet = @()
-            $vermet = $torv.split(".")
-            if($($vermet[2]) -ne 0){
-                $v3 = $vermet[2] -1
-            }else{
-                $v3 = 0
-            }
-            $torv = "$($vermet[0]).$($vermet[1]).$v3"
-            if($checkzip){
-                if($checkdll){
-                    Write-Output $(Get-Translate("ERROR:something wrong."))
-                    exit
-                }else{
-                    for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
-                        if($($langh[$aiv]).IndexOf("$torv") -gt 0){
-                            $tordlp = $($langh[$aiv])
-                            $checkzip = $false
-                        }
-                    }                
-                }
-            }else{
-                $wvar = $false
-            }
-        }
-    }elseif($scid -eq "TOR GMT"){
-        $langh=@()
-        $langd=@()
-        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
-            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
-                $langh += $web2.assets.browser_download_url[$aii]
-            }elseif($($web2.assets.browser_download_url[$aii]).IndexOf(".dll") -gt 0){
-                $langd += $web2.assets.browser_download_url[$aii]
-            }
-        }
-        $checkzip = $true
-        $checkdll = $true
-        for($aiii = 0;$aiii -lt  $langh.Length;$aiii++){
-            if($($langh[$aiii]).IndexOf("$torv") -gt 0){
-                $tordlp = $($langh[$aiii])
-                $checkzip = $false
-                $checkgm = $false
-                $checkdll = $false
-            }
-        }
-        if($checkdll){
-            for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
-                if($($langd[$aiiii]).IndexOf("$torv") -gt 0){
-                    $torgmdll = $($langd[$aiiii])
-                    $checkdll = $false
-                }
-            }
-        }
-        $wvar = $true
-        while($wvar){
-            $vermet = @()
-            $vermet = $torv.split(".")
-            if($($vermet[2]) -ne 0){
-                $v3 = $vermet[2] -1
-            }else{
-                $v3 = 0
-            }
-            $torv = "$($vermet[0]).$($vermet[1]).$v3"
-            if($checkzip){
-                if($checkdll){
-                    Write-Output $(Get-Translate("ERROR:something wrong."))
-                    exit
-                }else{
-                    for($aiv = 0;$aiv -lt  $langh.Length;$aiv++){
-                        if($($langh[$aiv]).IndexOf("$torv") -gt 0){
-                            $tordlp = $($langh[$aiv])
-                            $checkzip = $false
-                        }
-                    }                
-                }
-            }else{
-                $wvar = $false
-            }                    
-        }
-    }elseif($scid -eq "TOR MR"){
+    if($scid -eq "TOR MR"){
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
             if($($web2.assets.browser_download_url[$aii]).IndexOf("MR.zip") -gt 0){
                 $langd += $web2.assets.browser_download_url[$aii]
@@ -2017,7 +1759,6 @@ if($tio){
         }
         Write-Log $tordlp
         $exfoldn = [IO.Path]::GetFileNameWithoutExtension($(Split-Path $tordlp -Leaf));
-        $exfoldn = $exfoldn.Replace('.',' ')
         #$tordlp = "https://github.com/miru-y/TheOtherRoles-MR/releases/download/${torv}/TheOtherRolesMR.zip"
     }elseif($scid -eq "TOR"){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/${torv}/TheOtherRoles.zip"
@@ -2062,7 +1803,7 @@ if($tio){
             }
         }
         if($amsdll.indexof(".dll") -le 0){
-            Write-Log "Error: Critical 4 missing dll"
+            Write-Log "Critical Error: missing dll"
             Pause
             exit
         }
@@ -2239,10 +1980,6 @@ if($tio){
                 Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
                 New-Item -Path "C:\Temp\TheOtherHats" -ItemType Directory
                 Copy-Item "$aupathm\TheOtherHats\*" -Recurse "C:\Temp\TheOtherHats"
-            }
-            if(Test-Path "$aupathm\Regulations"){
-                New-Item -Path "C:\Temp\Regulations" -ItemType Directory
-                Copy-Item "$aupathm\Regulations\*" -Recurse "C:\Temp\Regulations"
             }
         }
         $Bar.Value = "42"
@@ -2659,6 +2396,13 @@ if($tio){
             Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "TOR MR"){
+        if(test-path "$aupathm\$exfoldn"){}
+        else{
+            $exfoldn2 = $exfoldn.Replace('.',' ')
+            if(Test-Path "$aupathm\$exfoldn2"){
+                $exfoldn = $exfoldn2
+            }
+        }
         if(test-path "$aupathm\$exfoldn"){
             robocopy "$aupathm\$exfoldn" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\$exfoldn" -recurse
