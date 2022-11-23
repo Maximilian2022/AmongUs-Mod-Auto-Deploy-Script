@@ -394,7 +394,7 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "Script Ends"
 Write-Log "-----------------------------------------------------------------"
 
-Invokw-Item $LogPath
+Invoke-Item $LogPath
 
 return $LogFileName
 
