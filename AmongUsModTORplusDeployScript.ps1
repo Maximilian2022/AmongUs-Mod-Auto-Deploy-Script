@@ -1686,62 +1686,10 @@ if($tio){
     #################################################################################################
     $web = Invoke-WebRequest $releasepage -UseBasicParsing
     $web2 = ConvertFrom-Json $web.Content
-    $Bar.Value = "11"
-    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-        if($web2.tag_name[$ai] -eq "$torpv"){
-            if($scid -eq "TOR"){
-                $modmin = $tormin
-            }elseif($scid -eq "TOU-R"){
-                $modmin = $tourmin
-            }elseif($scid -eq "ER"){
-                $modmin = $ermin
-            }elseif($scid -eq "ER+ES"){
-                $modmin = $esmin
-            }elseif(($scid -eq "NOT") -or ($scid -eq "NOS")){
-                $modmin = $nosmin
-            }elseif($scid -eq "LM"){
-                $modmin = $lmmin
-            }elseif($scid -eq "TOH"){
-                $modmin = $tohmin
-            }elseif($scid -eq "TOY"){
-                $modmin = $toymin
-            }elseif($scid -eq "AMS"){
-                $modmin = $amsmin
-            }elseif($scid -eq "SNR"){
-                $modmin = $snrmin
-            }elseif($scid -eq "TOR MR"){
-                $modmin = $tormmin
-            }else{
-                Write-Log $(Get-Translate("Critical Error : SCID unknown"))
-                Write-Log $(Get-Translate("処理を中止します"))
-                $Form2.Close()
-                pause
-                exit
-            }
-            #Check.
-            if($torpv -lt $modmin){
-                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("古いバージョンのため、現行のAmongUsでは動作しない可能性があります。`n続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                }else{
-                    Write-Log $(Get-Translate("処理を中止します"))
-                    $Form2.Close()
-                    pause
-                    exit
-                }  
-            }
-            $torv = $torpv
-            Write-Log $(Get-Translate("$scid Version $torv が選択されました"))
-            $checkt = $false
-        }
-    }
-    $Bar.Value = "17"
+    $Bar.Value = "15"
+    $torv = $torpv
+    Write-Log $(Get-Translate("$scid Version $torv が選択されました"))
 
-    if($checkt){
-        Write-Log $(Get-Translate("指定されたバージョンは見つかりませんでした"))
-        Write-Log $(Get-Translate("処理を中止します"))
-        $Form2.Close()
-        pause
-        exit
-    }
     $Bar.Value = "20"
     $langdata
     $langd=@()
