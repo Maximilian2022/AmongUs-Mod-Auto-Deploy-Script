@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.4.5"
+$version = "1.7.5"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -3015,6 +3015,7 @@ if($ckbci.Count -gt 0){
             $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
             $aurijson = ConvertFrom-Json $defjson
             ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+            Write-Log $(Get-Translate("サーバー情報を初期化しました。"))
             $Bar.Value = "88"
         }elseif($ckbci[$aa] -eq "カスタムサーバー情報追加"){
             Write-Log $(Get-Translate("カスタムサーバー情報を追加します。"))
@@ -3033,6 +3034,7 @@ if($ckbci.Count -gt 0){
                 Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
             }
             ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+            Write-Log $(Get-Translate("カスタムサーバー情報を追加しました。"))
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "健康ランド"){
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
