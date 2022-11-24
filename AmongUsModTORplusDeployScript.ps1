@@ -852,7 +852,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","配信ソフト","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","サーバー情報初期化","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -1095,7 +1095,7 @@ function Reload(){
             $RadioButton29.Checked = $True
         }"Tool Install Only"{
             $tio = $false
-            Write-Log "TOI Selected"
+            Write-Log "TIO Selected"
             $combo2.Enabled = $false
         }
     }
@@ -2857,7 +2857,7 @@ if($ckbci.Count -gt 0){
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
         }elseif($ckbci[$aa] -eq "NOS Webhook"){
-            Write-Log "NOS/NOT Webhook start"
+            Write-Log $(Get-Translate("NOS/NOT Webhook starts"))
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 if($gmhwebhooktxt -eq "None"){
                     Write-Log $(Get-Translate("NOS/NOT Webhook skipped."))
@@ -2895,6 +2895,19 @@ if($ckbci.Count -gt 0){
             }
             Write-Log $(Get-Translate("NOS/NOT Webhook ends"))
             $Bar.Value = "89"
+        }elseif($ckbci[$aa] -eq "サーバー情報初期化"){
+            if($tio){
+                Write-Log $(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません"))
+                Write-Log $(Get-Translate("Tool Install Onlyを選択してからこのオプションを有効にしてください"))
+                Start-Sleep -Seconds 5
+            }else{
+                Write-Log $(Get-Translate("サーバー情報を初期化します"))
+                $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+                Remove-Item $aurifile
+                Write-Log $(Get-Translate("サーバー情報を初期化しました"))    
+                Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください"))
+            }
+            $Bar.Value = "90"
         }elseif($ckbci[$aa] -eq "健康ランド"){
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 Write-Host $(Get-Translate("健康ランド化 start"))
@@ -2945,6 +2958,9 @@ if($ckbci.Count -gt 0){
                     ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
                     Write-Log $(Get-Translate("健康ランド化完了:Server"))
                     
+                }else{
+                    Write-Log $(Get-Translate("サーバー情報ファイルが見つかりません。"))
+                    Write-Log $(Get-Translate("Among Us本体を一度起動してから再度実行してください。"))
                 }
 
 <#
@@ -3052,7 +3068,6 @@ if($ckbci.Count -gt 0){
 #                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/KenkoLand.json" -OutFile "$aupathm\Presets\KenkoLand.json" -UseBasicParsing
 #                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/Nakarita.json" -OutFile "$aupathm\Presets\Nakarita.json" -UseBasicParsing
 #                Write-Log $(Get-Translate("健康ランド化完了:Regulation"))
-
                 Write-Log $(Get-Translate("健康ランド化 ends"))
                 $Bar.Value = "88"
             }elseif($ckbci[$aa] -eq "NOS CPU Affinity"){
@@ -3108,13 +3123,13 @@ if($ckbci.Count -gt 0){
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade streamlabs-obs obs-studio  -y" -Verb RunAs -Wait
             Stop-Transcript
             Write-Log "配信ソフトセットアップ完了"
-            $Bar.Value = "88"
+            $Bar.Value = "91"
         }else{
         }
     }
 }
 
-$Bar.Value = "90"
+$Bar.Value = "92"
 
 ####################
 #bat file auto update
