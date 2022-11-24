@@ -852,7 +852,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "270,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","サーバー情報初期化","配信ソフト","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -1657,6 +1657,109 @@ if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
         }    
     }    
 }
+#################################################################################################>
+#カスタムサーバー追加
+#################################################################################################>
+if($CheckedBox.CheckedItems -contains "カスタムサーバー情報追加"){
+    $form11130 = New-Object System.Windows.Forms.Form
+    $form11130.Text = $(Get-Translate("カスタムサーバー情報追加"))
+    $form11130.Size = New-Object System.Drawing.Size(500,280)
+    $form11130.StartPosition = 'CenterScreen'
+    
+    $okButton111110 = New-Object System.Windows.Forms.Button
+    $okButton111110.Location = New-Object System.Drawing.Point(380,200)
+    $okButton111110.Size = New-Object System.Drawing.Size(75,23)
+    $okButton111110.Text = 'OK'
+    $okButton111110.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $form11130.AcceptButton = $okButton111110
+    $form11130.Controls.Add($okButton111110)
+    
+    $label111110 = New-Object System.Windows.Forms.Label
+    $label111110.Location = New-Object System.Drawing.Point(10,10)
+    $label111110.Size = New-Object System.Drawing.Size(320,20)
+    $label111110.Text = $(Get-Translate("追加したいカスタムサーバーの名前を入力してください。"))
+    $form11130.Controls.Add($label111110)
+    
+    $textBox111110 = New-Object System.Windows.Forms.TextBox
+    $textBox111110.Location = New-Object System.Drawing.Point(10,30)
+    $textBox111110.Size = New-Object System.Drawing.Size(460,20)
+    $form11130.Controls.Add($textBox111110)
+
+    $label111111 = New-Object System.Windows.Forms.Label
+    $label111111.Location = New-Object System.Drawing.Point(10,60)
+    $label111111.Size = New-Object System.Drawing.Size(320,20)
+    $label111111.Text = $(Get-Translate("追加したいカスタムサーバーのFQDN/IPを入力してください。"))
+    $form11130.Controls.Add($label111111)
+    
+    $textBox111111 = New-Object System.Windows.Forms.TextBox
+    $textBox111111.Location = New-Object System.Drawing.Point(10,80)
+    $textBox111111.Size = New-Object System.Drawing.Size(460,20)
+    $form11130.Controls.Add($textBox111111)  
+
+    $label111112 = New-Object System.Windows.Forms.Label
+    $label111112.Location = New-Object System.Drawing.Point(10,110)
+    $label111112.Size = New-Object System.Drawing.Size(320,20)
+    $label111112.Text = $(Get-Translate("追加したいカスタムサーバーのポートを入力してください。"))
+    $form11130.Controls.Add($label111112)
+    
+    $textBox111112 = New-Object System.Windows.Forms.TextBox
+    $textBox111112.Location = New-Object System.Drawing.Point(10,130)
+    $textBox111112.Size = New-Object System.Drawing.Size(460,20)
+    $textBox111112.Text = "22023"
+    $form11130.Controls.Add($textBox111112)
+
+
+    $fqcheck = $false
+    $ipcheck = $false
+    $namechk = $false
+    $portchk = $false
+    $passchk = $false
+    $form11130.Topmost = $true   
+    $form11130.Add_Shown({$textBox111110.Select()})
+
+    while(!$passchk){
+        $result111110 = $form11130.ShowDialog()
+        if($result111110 -eq [System.Windows.Forms.DialogResult]::OK){
+            $fqregex = '(?=^.{1,254}$)(^(?:(?!\d+\.|-)[a-zA-Z0-9_\-]{1,63}(?<!-)\.?)+(?:[a-zA-Z]{2,})$)'
+            if($textBox111111.Text -match $fqregex){
+                $fqcheck = $true
+            }
+            $ipregex = '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$'
+            if($textBox111111.Text -match $ipregex){
+                $ipcheck = $true
+            }
+            
+            if($null -eq $textBox111110.Text){
+            }elseif($textBox111110.Text -eq ""){
+            }else{
+                $namechk = $true
+            }
+    
+            if($null -eq $textBox111112.Text){
+            }elseif($textBox111112.Text -eq ""){
+            }else{
+                $portchk = $true
+            }
+            if(($fqcheck -or $ipcheck) -and $namechk -and $portchk){
+                $passchk = $true
+            }
+
+            Write-Log ($fqcheck -or $ipcheck)
+            Write-Log $namechk
+            Write-Log $portchk
+
+            $xfqip = $textBox111111.Text      
+            $xname = $textBox111110.Text
+            $xport = $textBox111112.Text
+        }else{
+            Write-Log "Skipped."
+            $xfqip = "skip"
+            $xname = "skip"
+            $xport = "skip"
+            break
+        }
+    }
+}        
 #################################################################################################>
 
 # プログレスバー
@@ -2695,13 +2798,25 @@ if($tio -eq $false){
 $Bar.Value = "82"
 
 #reorder checkeditems
+$ckbci = @()
 $tempoitems = @()
 $kenkoitems = @()
+$ckbci2 = @()
+$tempoitems2 = @()
+$kenkoitems2 = @()
 for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
     if($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
         $kenkoitems += $CheckedBox.CheckedItems[$aa]
     }else{
         $tempoitems += $CheckedBox.CheckedItems[$aa]
+    }
+}
+$ckbci2 = $kenkoitems2 + $tempoitems2
+for($aa=0;$aa -le $ckbci2.Count;$aa++){
+    if($ckbci2[$aa] -eq "サーバー情報初期化"){
+        $kenkoitems += $ckbci2[$aa]
+    }else{
+        $tempoitems += $ckbci2[$aa]
     }
 }
 $ckbci = $kenkoitems + $tempoitems
@@ -2896,33 +3011,41 @@ if($ckbci.Count -gt 0){
             Write-Log $(Get-Translate("NOS/NOT Webhook ends"))
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "サーバー情報初期化"){
-            if($tio){
-                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません。Tool Install Onlyを選択してからこのオプションを有効にしてください")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    Write-Log $(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません"))
-                    Write-Log $(Get-Translate("Tool Install Onlyを選択してからこのオプションを有効にしてください"))
-                    }else{
-                    Write-Log $(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません"))
-                    Write-Log $(Get-Translate("Tool Install Onlyを選択してからこのオプションを有効にしてください"))
-                    }
-                Start-Sleep -Seconds 1
-            }else{
-                Write-Log $(Get-Translate("サーバー情報を初期化します。"))
-                $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-                if(Test-Path $aurifile){
-                    Remove-Item $aurifile
-                }else{
-                    Write-Log $(Get-Translate("既に初期化されています。"))
-                }
-                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("サーバー情報を初期化しました。もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                    Write-Log $(Get-Translate("サーバー情報を初期化しました。"))    
-                    Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。"))
-                }else{
-                    Write-Log $(Get-Translate("サーバー情報を初期化しました。"))    
-                    Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。"))        
-                }
-                Start-Sleep -Seconds 1
+            Write-Log $(Get-Translate("サーバー情報を初期化します。"))
+            $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+            if(Test-Path $aurifile){
+                Remove-Item $aurifile
             }
-            $Bar.Value = "90"
+            $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"NorthAmerica","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291}]}'
+            $aurijson = ConvertFrom-Json $defjson
+            ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+            $Bar.Value = "88"
+        }elseif($ckbci[$aa] -eq "カスタムサーバー情報追加"){
+            Write-Log $(Get-Translate("カスタムサーバー情報を追加します。"))
+            $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+            if(Test-Path $aurifile){
+                $kenkojson = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"$xfqip`",`"DefaultIp`":`"$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Name`":`"$xname`",`"TranslateName`": 1003}"
+                $auritext = Get-Content $aurifile -Raw
+                $aurijson = ConvertFrom-Json $auritext
+                $aurijson.Regions += $($kenkojson | ConvertFrom-Json)
+                if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+                    Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+                }
+                ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+            }else{
+                Write-Log $(Get-Translate("本オプションを実行する前にAmong Us本体を一度起動する必要があります。初期化が完了していません。"))
+            }
+
+
+            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("サーバー情報を初期化しました。もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                Write-Log $(Get-Translate("サーバー情報を初期化しました。"))    
+                Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。"))
+            }else{
+                Write-Log $(Get-Translate("サーバー情報を初期化しました。"))    
+                Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。"))        
+            }
+            Start-Sleep -Seconds 1
+            $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "健康ランド"){
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 Write-Host $(Get-Translate("健康ランド化 start"))
