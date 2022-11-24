@@ -2897,15 +2897,30 @@ if($ckbci.Count -gt 0){
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "サーバー情報初期化"){
             if($tio){
-                Write-Log $(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません"))
-                Write-Log $(Get-Translate("Tool Install Onlyを選択してからこのオプションを有効にしてください"))
-                Start-Sleep -Seconds 5
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません。Tool Install Onlyを選択してからこのオプションを有効にしてください")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    Write-Log $(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません"))
+                    Write-Log $(Get-Translate("Tool Install Onlyを選択してからこのオプションを有効にしてください"))
+                    }else{
+                    Write-Log $(Get-Translate("サーバー情報を初期化はツールインストールのみのモードでしか動作しません"))
+                    Write-Log $(Get-Translate("Tool Install Onlyを選択してからこのオプションを有効にしてください"))
+                    }
+                Start-Sleep -Seconds 1
             }else{
-                Write-Log $(Get-Translate("サーバー情報を初期化します"))
+                Write-Log $(Get-Translate("サーバー情報を初期化します。"))
                 $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-                Remove-Item $aurifile
-                Write-Log $(Get-Translate("サーバー情報を初期化しました"))    
-                Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください"))
+                if(Test-Path $aurifile){
+                    Remove-Item $aurifile
+                }else{
+                    Write-Log $(Get-Translate("既に初期化されています。"))
+                }
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("サーバー情報を初期化しました。もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    Write-Log $(Get-Translate("サーバー情報を初期化しました。"))    
+                    Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。"))
+                }else{
+                    Write-Log $(Get-Translate("サーバー情報を初期化しました。"))    
+                    Write-Log $(Get-Translate("もう一度このツールを動作させる前に必ずAmong Us本体を一度起動してください。"))        
+                }
+                Start-Sleep -Seconds 1
             }
             $Bar.Value = "90"
         }elseif($ckbci[$aa] -eq "健康ランド"){
