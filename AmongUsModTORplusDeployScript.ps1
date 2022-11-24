@@ -2802,9 +2802,9 @@ $tempoitems2 = @()
 $kenkoitems2 = @()
 for($aa=0;$aa -le $CheckedBox.CheckedItems.Count;$aa++){
     if($CheckedBox.CheckedItems[$aa] -eq "健康ランド"){
-        $kenkoitems += $CheckedBox.CheckedItems[$aa]
+        $kenkoitems2 += $CheckedBox.CheckedItems[$aa]
     }else{
-        $tempoitems += $CheckedBox.CheckedItems[$aa]
+        $tempoitems2 += $CheckedBox.CheckedItems[$aa]
     }
 }
 $ckbci2 = $kenkoitems2 + $tempoitems2
@@ -3033,7 +3033,6 @@ if($ckbci.Count -gt 0){
                 Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
             }
             ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-            Write-Log $aurijson
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "健康ランド"){
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
