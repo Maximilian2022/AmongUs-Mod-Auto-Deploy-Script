@@ -2903,39 +2903,48 @@ if($ckbci.Count -gt 0){
                 if(Test-Path $aurifile){
                     $auritext = Get-Content $aurifile -Raw
                     if($auritext.IndexOf("Modded EU (MEU)") -gt 0){
-                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
-                        $auritext = $auritext.Replace($torjson, '')    
+                        $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
+                        $auritext = $auritext.Replace($torjson, '')
+                        Write-Log "MEU Deleted."
                     }
                     if($auritext.IndexOf("Modded NA (MNA)") -gt 0){
-                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded NA (MNA)","PingServer":"https://aumods.one","Servers":[{"Name":"Http-1","Ip":"https://aumods.one","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
+                        $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded NA (MNA)","PingServer":"https://aumods.one","Servers":[{"Name":"Http-1","Ip":"https://aumods.one","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
                         $auritext = $auritext.Replace($torjson, '')    
+                        Write-Log "MNA Deleted."
                     }
                     if($auritext.IndexOf("Modded Asia (MAS)") -gt 0){
-                        $torjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded Asia (MAS)","PingServer":"https://au-as.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-as.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003},'
+                        $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded Asia (MAS)","PingServer":"https://au-as.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-as.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
                         $auritext = $auritext.Replace($torjson, '')    
+                        Write-Log "MAS Deleted."
                     }
-
-                    $kenkojson = '{"$type": "DnsRegionInfo, Assembly-CSharp","Fqdn": "amongus.kenko.land","DefaultIp": "amongus.kenko.land","Port": 22023,"UseDtls": false,"Name": "健康ランド","TranslateName": 1003}'
+                    if($auritext.IndexOf("haoming-server.com") -gt 0){
+                        $torjson =',{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"haoming-server.com","DefaultIp":"haoming-server.com","Port":22023,"UseDtls":false,"Name":"haoming-server","TranslateName":1003}'
+                        $auritext = $auritext.Replace($torjson, '')    
+                        Write-Log "HS Deleted."
+                    }
+                    Write-Log $auritext
+                    $kenkojson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"amongus.kenko.land","DefaultIp":"amongus.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランド","TranslateName": 1003}'
                     $kenkonewjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランド","PingServer":"amongus.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://amongus.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
                     $kenkonewtjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランドテスト","PingServer":"imposter.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://imposter.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
-                    if($auritext.IndexOf($kenkojson) -gt 0){
-                        $auritext = $auritext.Replace($kenkojson, $kenkonewjson)    
-                    }
-                    
-                    if($auritext.IndexOf("健康ランドテスト") -gt 0){
-                        Write-Log $(Get-Translate("健康ランド済:Server"))
-                    }else{
-                        if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
-                            Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
-                        }
-                        $aurijson = ConvertFrom-Json $auritext
-                        if($auritext.IndexOf("健康ランド") -le 0){
-                            $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
-                        }
+                    $aurijson = ConvertFrom-Json $auritext
+
+                    if($auritext.IndexOf("`"Name`":`"健康ランドテスト`"") -lt 0){
                         $aurijson.Regions += $($kenkonewtjson | ConvertFrom-Json)
-                        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-                        Write-Log $(Get-Translate("健康ランド化完了:Server"))
+                    }else{
+                        Write-Log $(Get-Translate("健康ランド済:Staging Server"))
                     }
+                    if($auritext.IndexOf("`"Name`":`"健康ランド`"") -lt 0){
+                        $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
+                    }else{
+                        Write-Log $(Get-Translate("健康ランド済:Production Server"))
+                    }
+
+                    if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+                        Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+                    }
+                    ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+                    Write-Log $(Get-Translate("健康ランド化完了:Server"))
+                    
                 }
 
 <#
