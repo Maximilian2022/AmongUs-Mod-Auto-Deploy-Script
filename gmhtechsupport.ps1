@@ -3,7 +3,7 @@
 #
 # Among Us Mod Tech Support Script
 #
-$version = "1.0.3"
+$version = "1.0.4"
 #
 #################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -72,12 +72,26 @@ function Get-FolderPathG{
     }
 }
 #################################################################################################
+#Mod Selecter
+#################################################################################################
+
+if($null -ne $Arg1){
+    $scid = $Arg1
+}else{
+    $scid = "NOS"
+}
+
+Write-Log $Arg1
+Write-Log $Arg2
+Write-Log $Arg3
+
+#################################################################################################
 # Log用Function
 #################################################################################################
 # ログの出力先
 $LogPath = "C:\Temp\AUM_Tech"
 # ログファイル名
-$LogName = "AmongUs_TechSupportLog"
+$LogName = "AmongUs_$($scid)_TechSupportLog"
 $Now = Get-Date
 # ログファイル名(XXXX_YYYY-MM-DD.log)
 $LogFile = $LogName + "_" +$Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".log"
@@ -97,18 +111,6 @@ function Write-Log($logstring){
     # echo させるために出力したログを戻す
     Return $(Get-Translate($Log))
 }
-#################################################################################################
-#Mod Selecter
-
-if($null -ne $Arg1){
-    $scid = $Arg1
-}else{
-    $scid = "TOR GMH"
-}
-
-Write-Log $Arg1
-Write-Log $Arg2
-Write-Log $Arg3
 
 #################################################################################################
 #AutoDetect用Static
