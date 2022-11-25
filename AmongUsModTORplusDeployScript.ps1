@@ -79,8 +79,8 @@ function Get-Translate($transtext){
 if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
 }else{
     Write-Host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
-    Write-Host "あなたのユーザー名($env:username)は管理者権限グループに属していません"
-    Write-Host "管理者権限グループに属しているユーザーは以下の通りです"
+    Write-Host $(Get-Translate("あなたのユーザー名($env:username)は管理者権限グループに属していません"))
+    Write-Host $(Get-Translate("管理者権限グループに属しているユーザーは以下の通りです"))
     $nn = net localgroup Administrators
     Write-Host $nn
     pause
@@ -625,15 +625,15 @@ if ($l.contains("0x80070426")){
     net start "windows time"
     start-sleep -Seconds 5
 }
-Write-Log $l
+#Write-Log $l
 $l = w32tm /monitor /computers:time.google.com
-Write-Log $l
+#Write-Log $l
 $l = w32tm /config /syncfromflags:manual /manualpeerlist:"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8" /reliable:yes /update
-Write-Log $l
+#Write-Log $l
 $l = w32tm /resync
-Write-Log $l
+#Write-Log $l
 $l = w32tm /query /status 
-Write-Log $l
+#Write-Log $l
 
 #################################################################################################
 ### Mod 選択メニュー表示
