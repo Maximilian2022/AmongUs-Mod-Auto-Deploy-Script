@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.5.4"
+$version = "1.7.5.5"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -53,7 +53,7 @@ $prevtargetid1 = "2481435393334839152"
 $gmhbool = $true
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-$nebulangdata = "https://cdn.discordapp.com/attachments/939804752580050985/1045717904538210355/Japanese.dat"
+$nebulangdata = "https://cdn.discordapp.com/attachments/939804752580050985/1046848618662989954/Language.7z"
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -2560,7 +2560,25 @@ if($tio){
         if(Test-Path "$aupathm\Language\Japanese.dat"){
             Copy-Item "$aupathm\Language\Japanese.dat" "$aupathm\Language\Japanese.dat.old"
         }
-        aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
+        $extens = $langdata.Substring($langdata.Length - 3, 3);
+        Write-Host $extens
+        if($extens -eq "dat"){
+            aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
+        }elseif ($extens -eq "zip") {
+            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.zip" $langdata
+            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.zip" -TargetPath "$aupathm\Language"
+        }elseif($extens -eq ".7z"){
+            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.7z" $langdata
+            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
+        }
+        if(test-path "$aupathm\Language\Language"){
+            robocopy "$aupathm\Language\Language" "$aupathm\Language" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\Language\Language" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
         Write-Log $(Get-Translate("日本語 データ Download 完了"))
     }elseif($scid -eq "NOT"){
         if(test-path "$aupathm\Nebula"){
@@ -2576,7 +2594,28 @@ if($tio){
         }
         Write-Log $(Get-Translate("日本語 データ Download 開始"))
         Write-Log $(Get-Translate("日本語 データ $langdata"))
-        aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
+        if(Test-Path "$aupathm\Language\Japanese.dat"){
+            Copy-Item "$aupathm\Language\Japanese.dat" "$aupathm\Language\Japanese.dat.old"
+        }
+        $extens = $langdata.Substring($langdata.Length - 3, 3);
+        Write-Host $extens
+        if($extens -eq "dat"){
+            aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
+        }elseif ($extens -eq "zip") {
+            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.zip" $langdata
+            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.zip" -TargetPath "$aupathm\Language"
+        }elseif($extens -eq ".7z"){
+            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.7z" $langdata
+            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
+        }
+        if(test-path "$aupathm\Language\Language"){
+            robocopy "$aupathm\Language\Language" "$aupathm\Language" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\Language\Language" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
         Write-Log $(Get-Translate("日本語 データ Download 完了"))
         #Mod Original DLL削除
         Remove-item -Path "$aupathm\BepInEx\plugins\Nebula.dll"
