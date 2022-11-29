@@ -100,7 +100,7 @@ catch{
     Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary speedtest microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary speedtest microsoft-windows-terminal 7zip.portable -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
@@ -178,7 +178,7 @@ Write-Log "                                                   Version: $version"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
-
+Install-Module -Name 7Zip4Powershell
 #################################################################################################
 # Folder用Function
 #################################################################################################
@@ -215,6 +215,7 @@ function Get-FolderPathG{
 }
 #################################################################################################
 # バイト配列を16進数文字列に変換する. 
+#################################################################################################
 function ToHex([byte[]] $hashBytes)
 {
     $builder = New-Object System.Text.StringBuilder
@@ -2091,7 +2092,7 @@ if($tio){
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
             if($prebool){
-                Expand-Archive -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
+                Expand-7Zip -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
                 $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
                 if(Test-Path "$aupathm\depot_945361"){
                     robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -2138,7 +2139,7 @@ if($tio){
     }else{
         # フォルダを中身を含めてコピーする
         if($prebool){
-            Expand-Archive -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
+            Expand-7Zip -path "$aupathb\$prefpth" -DestinationPath $aupathm -Force
             $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
             if(Test-Path "$aupathm\depot_945361"){
                 robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -2188,7 +2189,7 @@ if($tio){
     if (test-path "$aupathm\TheOtherRoles.zip"){
         Write-Log $(Get-Translate("ZIP DL OK"))
         Write-Log $(Get-Translate("ZIP 解凍開始"))
-        Expand-Archive -path $aupathm\TheOtherRoles.zip -DestinationPath $aupathm -Force
+        Expand-7zip -path $aupathm\TheOtherRoles.zip -DestinationPath $aupathm -Force
         Write-Log $(Get-Translate("ZIP 解凍完了"))
     }else{
         Write-Log $(Get-Translate("ZIP DL NG $tordlp "))
@@ -2873,7 +2874,7 @@ if($ckbci.Count -gt 0){
                 }
                 if($aurcheck){
                     Invoke-WebRequest $auriw -OutFile "$md\$auriwfile" -UseBasicParsing
-                    Expand-Archive -path $md\$auriwfile -DestinationPath $md\$auriwfn -Force
+                    Expand-7zip -path $md\$auriwfile -DestinationPath $md\$auriwfn -Force
                     Remove-Item $md\$auriwfile
                     Set-Location -Path $md\$auriwfn
                     Invoke-Item .
@@ -2911,7 +2912,7 @@ if($ckbci.Count -gt 0){
                 }
                 if($aucapcheck){
                     Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
-                    Expand-Archive -path $md\$aucapfile -DestinationPath $md\$aucapfn -Force
+                    Expand-7Zip -path $md\$aucapfile -DestinationPath $md\$aucapfn -Force
                     Remove-Item $md\$aucapfile
                     Set-Location -Path $md\$aucapfn
                     Invoke-Item .
