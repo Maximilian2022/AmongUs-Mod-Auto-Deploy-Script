@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.5.2"
+$version = "1.7.5.3"
 #
 #################################################################################################
 ### minimum version for v2022.10.25
@@ -354,7 +354,7 @@ function BackUpAU{
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
             write-log $e
             Write-log $r
-            Compress-7Zip -Path $aupatho -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
+            Compress-7Zip -Path $aupatho -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$amver.zip")
             Remove-Item -Path $backhashtxt -Force
             Remove-Item -Path $backuptxt -Force
             $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
@@ -366,7 +366,7 @@ function BackUpAU{
         $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
         Write-Output " $thash"> $backhashtxt
         Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
-        Compress-7Zip -Path $aupatho -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$amver.zip") -Force
+        Compress-7Zip -Path $aupatho -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$amver.zip")
     }
 
     #Manifest Backup
@@ -478,7 +478,7 @@ function BackUpAU{
                 }
             }
             if($presu){
-                Compress-Archive -Path $bupfolder $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
+                Compress-7Zip -Path $bupfolder -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$prever.zip")
                 Start-Sleep -Seconds 2
                 Remove-Item -Path $delfoldser -Recurse -Force    
             }else{
@@ -543,7 +543,7 @@ function BackUpAU{
                 if($pmver -eq $prever){
                     #success
                     Write-Log $(Get-Translate("Download 成功"))
-                    Compress-Archive -Path "$aupathb\AmongUs" $(Join-path $aupathb "Among Us-$datest-v$prever.zip") -Force
+                    Compress-7Zip -Path "$aupathb\AmongUs" -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$prever.zip")
 
                     if(!(Test-Path "$aupathb\epic_manifest")){
                         New-Item "$aupathb\epic_manifest" -Type Directory
@@ -2092,7 +2092,7 @@ if($tio){
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
             if($prebool){
-                Expand-7Zip -ArchiveFileName "$aupathb\$prefpth" -TargetPath $aupathm -Force
+                Expand-7Zip -ArchiveFileName "$aupathb\$prefpth" -TargetPath $aupathm
                 $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
                 if(Test-Path "$aupathm\depot_945361"){
                     robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -2139,7 +2139,7 @@ if($tio){
     }else{
         # フォルダを中身を含めてコピーする
         if($prebool){
-            Expand-7Zip -ArchiveFileName "$aupathb\$prefpth" -TargetPath $aupathm -Force
+            Expand-7Zip -ArchiveFileName "$aupathb\$prefpth" -TargetPath $aupathm
             $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
             if(Test-Path "$aupathm\depot_945361"){
                 robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -2189,7 +2189,7 @@ if($tio){
     if (test-path "$aupathm\TheOtherRoles.zip"){
         Write-Log $(Get-Translate("ZIP DL OK"))
         Write-Log $(Get-Translate("ZIP 解凍開始"))
-        Expand-7zip -ArchiveFileName $aupathm\TheOtherRoles.zip -TargetPath $aupathm -Force
+        Expand-7zip -ArchiveFileName $aupathm\TheOtherRoles.zip -TargetPath $aupathm
         Write-Log $(Get-Translate("ZIP 解凍完了"))
     }else{
         Write-Log $(Get-Translate("ZIP DL NG $tordlp "))
@@ -2874,7 +2874,7 @@ if($ckbci.Count -gt 0){
                 }
                 if($aurcheck){
                     Invoke-WebRequest $auriw -OutFile "$md\$auriwfile" -UseBasicParsing
-                    Expand-7zip -ArchiveFileName $md\$auriwfile -TargetPath $md\$auriwfn -Force
+                    Expand-7zip -ArchiveFileName $md\$auriwfile -TargetPath $md\$auriwfn
                     Remove-Item $md\$auriwfile
                     Set-Location -Path $md\$auriwfn
                     Invoke-Item .
@@ -2912,7 +2912,7 @@ if($ckbci.Count -gt 0){
                 }
                 if($aucapcheck){
                     Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
-                    Expand-7Zip -ArchiveFileName $md\$aucapfile -TargetPath $md\$aucapfn -Force
+                    Expand-7Zip -ArchiveFileName $md\$aucapfile -TargetPath $md\$aucapfn
                     Remove-Item $md\$aucapfile
                     Set-Location -Path $md\$aucapfn
                     Invoke-Item .
