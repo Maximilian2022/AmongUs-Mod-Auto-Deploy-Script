@@ -178,7 +178,9 @@ Write-Log "                                                   Version: $version"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
-Install-Module -Name 7Zip4Powershell -Force
+if($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip4Powershell).count -eq 0){
+    Install-Module -Name 7Zip4Powershell -Force
+}
 #################################################################################################
 # Folder用Function
 #################################################################################################
