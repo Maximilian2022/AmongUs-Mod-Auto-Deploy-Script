@@ -45,6 +45,8 @@ $amsmin2 = "NONE"
 $toymin2 = "NONE"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
+$prever2 = "2022.10.25"
+$prevtargetid2 = "4338750749031095433"
 $prever0 = "2022.10.18"
 $prevtargetid0 = "7491486149462341667"
 $prever1 = "2022.9.20"
@@ -1416,15 +1418,21 @@ function Reload(){
     #Write-Log $tt3
     $script:amver = $tt3[1].Value
     write-log $(Get-Translate("$script:amver が検出されました"))
-    $RadioButton114.Text = $(Get-Translate("$script:amver"))
-    $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
-    $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
+    if($script:amver -eq $script:prever2){
+        $RadioButton114.Text = $(Get-Translate("$script:amver"))
+        $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
+        $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
+    }else{
+        $RadioButton114.Text = $(Get-Translate("$script:amver"))
+        $RadioButton115.Text = $(Get-Translate("$script:prever2"))        
+        $RadioButton116.Text = $(Get-Translate("$script:prever0"))
+    }
     if($RadioButton114.Checked){
         Write-Log $(Get-Translate("本体バージョン v$script:amver が選択されています"))
     }elseif($RadioButton115.Checked){
-        Write-Log $(Get-Translate("本体バージョン v$script:prever0 が選択されています"))
+        Write-Log $(Get-Translate("本体バージョン v$RadioButton115.Text が選択されています"))
     }elseif($RadioButton116.Checked){
-        Write-Log $(Get-Translate("本体バージョン v$script:prever1 が選択されています"))
+        Write-Log $(Get-Translate("本体バージョン v$RadioButton116.Text が選択されています"))
     }else{
         Write-Log $(Get-Translate("Unknown ERROR:本体バージョン"))
     }
