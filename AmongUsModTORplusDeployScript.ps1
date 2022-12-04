@@ -2018,6 +2018,10 @@ if($tio){
             if(test-path "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" "C:\Temp\com.emptybottle.townofhost.cfg" -Force               
             }
+            if(!(test-path "$aupathm\TOH_DATA")){
+                New-Item -Path "C:\Temp\TOH_DATA" -ItemType Directory
+            }
+            Copy-Item "$aupathm\TOH_DATA\*" "C:\Temp\TOH_DATA" -Force               
         }elseif($scid -eq "TOY"){
             if(test-path "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" "C:\Temp\com.emptybottle.townofhost.cfg" -Force               
@@ -2291,6 +2295,13 @@ if($tio){
             }
             Copy-Item "C:\Temp\com.emptybottle.townofhost.cfg" "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" -Force
             Remove-Item "C:\Temp\com.emptybottle.townofhost.cfg" -Force    
+        }
+        if(test-path "C:\Temp\TOH_DATA"){
+            if(!(test-path "$aupathm\TOH_DATA\")){
+                New-Item -Path "$aupathm\TOH_DATA\" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\TOH_DATA\*" "$aupathm\TOH_DATA" -Force               
+            Remove-Item "C:\Temp\TOH_DATA" -Force    
         }
     }elseif($scid -eq "TOY"){
         if(test-path "C:\Temp\com.emptybottle.townofhost.cfg"){
