@@ -271,11 +271,11 @@ if(Test-Path "C:\Program Files\Epic Games\AmongUs"){
             if($($aus[$aaai]).IndexOf(".exe") -gt 0){
                 aria2c -x5 -V --allow-overwrite=true --dir "$Env:ALLUSERSPROFILE\chocolatey\bin" -o "legendary.exe" $($aus[$aaai])
                 Write-Log "$($aus[$aaai])"
-                Write-Log $(Get-Translate("Legendaryのバージョンが古いため、最新に更新しました。"))
+                Write-Log "Legendaryのバージョンが古いため、最新に更新しました。"
             }
         }
-        Write-Log $(Get-Translate("重要ファイルの更新がありました。"))
-        Write-Log $(Get-Translate("再度Batファイルを実行してください。"))
+        Write-Log "重要ファイルの更新がありました。"
+        Write-Log "再度Batファイルを実行してください。"
         Pause
         Exit
     }
@@ -314,7 +314,7 @@ function BackupMod{
                 Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
             }    
         }
-        Write-Log $(Get-Translate("Mod Backup Feature End"))
+        Write-Log "Mod Backup Feature End"
     }
 }
 
@@ -324,7 +324,7 @@ function BackUpAU{
     }else{
         New-Item $aupathb -ItemType Directory
     }
-    Write-Log $(Get-Translate("Backup Feature Start"))
+    Write-Log "Backup Feature Start"
 
     #Current Ver check
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
@@ -352,9 +352,9 @@ function BackUpAU{
         }
 
         if($r -eq $e){
-            Write-Log $(Get-Translate("古い同一Backupが見つかったのでSkipします"))
+            Write-Log "古い同一Backupが見つかったのでSkipします"
         }else{
-            Write-Log $(Get-Translate("新しいBackupが見つかったので生成します"))
+            Write-Log "新しいBackupが見つかったので生成します"
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
             write-log $e
             Write-log $r
@@ -366,7 +366,7 @@ function BackUpAU{
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
         }
     }else{
-        Write-Log $(Get-Translate("Backupが見つかりません。生成します。"))
+        Write-Log "Backupが見つかりません。生成します。"
         $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
         Write-Output " $thash"> $backhashtxt
         Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
@@ -398,9 +398,9 @@ function BackUpAU{
         if($platform -eq "steam"){
             $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
             if (Test-Path $steampth){
-                Write-Log $(Get-Translate("Steam アプリは以下で見つかりました。 $steampth"))
+                Write-Log "Steam アプリは以下で見つかりました。 $steampth"
             }else{
-                Write-Log $(Get-Translate("Steam アプリがデフォルトの場所に見つかりませんでした。"))
+                Write-Log "Steam アプリがデフォルトの場所に見つかりませんでした。"
                 Param(
                     [Parameter()]
                     [String] $FilePath
@@ -433,7 +433,7 @@ function BackUpAU{
                 try{
                     $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
                 }catch{
-                    Write-Log $(Get-Translate("Steam.exe 起動チェック。ログインできていない場合はログインしてください。"))           
+                    Write-Log "Steam.exe 起動チェック。ログインできていない場合はログインしてください。"       
                 }
                 if($null -eq $hwnd){
                     if($steamrunner){
@@ -467,18 +467,18 @@ function BackUpAU{
             while(!(Test-Path $bupfolder)){
                 Start-Sleep -Seconds 2
             }
-            Write-Log $(Get-Translate("Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。(Max10分でタイムアウトします)#0"))
+            Write-Log "Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。(Max10分でタイムアウトします)#0"
             $presu = $false
             while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
                 Start-sleep -Seconds 15
                 #timeout 10min.
                 if($counter -lt 40){
                     $counter++
-                    Write-Log $(Get-Translate("Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。#$counter $((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
+                    Write-Log "Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。#$counter $((Get-ChildItem $bupfolder | Measure-Object).Count)/8"
                     $presu = $true
                 }else{
                     break
-                    Write-Log $(Get-Translate("Steam.exe の前バージョン($prever)をダウンロードがタイムアウトしました。再度お試しください。$((Get-ChildItem $bupfolder | Measure-Object).Count)/8"))
+                    Write-Log "Steam.exe の前バージョン($prever)をダウンロードがタイムアウトしました。再度お試しください。$((Get-ChildItem $bupfolder | Measure-Object).Count)/8"
                 }
             }
             if($presu){
@@ -486,7 +486,7 @@ function BackUpAU{
                 Start-Sleep -Seconds 2
                 Remove-Item -Path $delfoldser -Recurse -Force    
             }else{
-                Write-Log $(Get-Translate("前バージョン($prever)のロードに失敗しました。再度お試しください。"))
+                Write-Log "前バージョン($prever)のロードに失敗しました。再度お試しください。"
             }
         }elseif($platform -eq "epic"){
             if($oldtype){
@@ -502,7 +502,7 @@ function BackUpAU{
                 }
                 if($epicmanifestchk){
                     #manifestがないから指定してもらう
-                    Write-Log $(Get-Translate("Epic Game の過去のManifestファイルが見つかりません。Manifestファイルを指定してください。"))            
+                    Write-Log "Epic Game の過去のManifestファイルが見つかりません。Manifestファイルを指定してください。"     
                 
                     Add-Type -assemblyName System.Windows.Forms
                     $dialog = New-Object System.Windows.Forms.OpenFileDialog
@@ -512,18 +512,18 @@ function BackUpAU{
                     if ($dialog.ShowDialog() -eq "OK") {
                         $epicmanifestfile = $dialog.FileName
                     } else {
-                        Write-Log $(Get-Translate("ファイルを選択しませんでした"))
+                        Write-Log "ファイルを選択しませんでした"
                     }
                 }
 
-                Write-Log $(Get-Translate("選択: $epicmanifestfile"))
+                Write-Log "選択: $epicmanifestfile"
                 if(!(Test-Path "$aupathb\epic_manifest")){
                     New-Item "$aupathb\epic_manifest" -Type Directory
                 }
                 $mfileName = Split-Path $epicmanifestfile -Leaf
                 Copy-Item $epicmanifestfile "$aupathb\epic_manifest\$mfilename"
                 $epicmanifestfile = "$aupathb\epic_manifest\$mfilename"
-                Write-Log $(Get-Translate("コピー: $epicmanifestfile"))
+                Write-Log "コピー: $epicmanifestfile"
 
                 #legendary でAmongusを落とす
                 legendary.exe auth --import
@@ -536,7 +536,7 @@ function BackUpAU{
                     Remove-item "$aupathb\AmongUs" -Recurse -Force
                     legendary.exe install "Among Us" --old-manifest "$epicmanifestfile" --disable-patching --enable-reordering --repair -y
                 }else{
-                    Write-Log $(Get-Translate("何かがおかしい・・・"))
+                    Write-Log "何かがおかしい・・・"
                 }
 
                 $ptt = (Format-Hex -Path "$aupathb\AmongUs\Among Us_Data\globalgamemanagers").Bytes
@@ -558,8 +558,8 @@ function BackUpAU{
                         Remove-Item $epicmanifestfile -Force
                     }
                 }else{
-                    Write-Log $(Get-Translate("Download 失敗か、指定されたManifestが選択されたバージョンではありませんでした"))
-                    Write-Log $(Get-Translate("指定したManifestを確認するか、再度やり直してください"))
+                    Write-Log "Download 失敗か、指定されたManifestが選択されたバージョンではありませんでした"
+                    Write-Log "指定したManifestを確認するか、再度やり直してください"
                     Remove-Item $epicmanifestfile -Force
                     Pause
                     Exit
@@ -571,7 +571,7 @@ function BackUpAU{
             }
         }
     }
-    Write-Log $(Get-Translate("Backup Feature Ends"))
+    Write-Log "Backup Feature Ends"
 }
 
 # パイプラインからのファイルのハッシュ情報を取得する.
@@ -1258,7 +1258,7 @@ function Reload(){
         if(Test-path "$au_path_steam_org\Among Us.exe"){
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
-                Write-Log $(Get-Translate("オリジナルのAmong Usではないフォルダが指定されている可能性があります"))
+                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
@@ -1271,14 +1271,14 @@ function Reload(){
                     $fichk = Test-Path "$aupatho\Among Us.exe"
                     while ($fichk){
                         Start-Sleep -Seconds 10
-                        Write-Log $(Get-Translate("再インストールが完了したことを確認してから以下の動作を実行してください"))
+                        Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
                         Pause
                         $fichk = Test-Path "$aupatho\Among Us.exe"
                     }
                     Remove-Item $fpth2 -Force
                 }else{
-                    Write-Log $(Get-Translate("フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"))
-                    Write-Log $(Get-Translate("処理を中止します"))
+                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
+                    Write-Log "処理を中止します"
                     pause
                     exit
                 }     
@@ -1291,7 +1291,7 @@ function Reload(){
         }elseif(Test-path "$au_path_epic_org\Among Us.exe"){
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_epic_org\BepInEx"){
-                Write-Log $(Get-Translate("オリジナルのAmong Usではないフォルダが指定されている可能性があります"))
+                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
@@ -1302,8 +1302,8 @@ function Reload(){
                     }
                     Remove-Item $fpth2 -Force
                 }else{
-                    Write-Log $(Get-Translate("フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"))
-                    Write-Log $(Get-Translate("処理を中止します"))
+                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
+                    Write-Log "処理を中止します"
                     pause
                     exit
                 }     
@@ -1324,8 +1324,8 @@ function Reload(){
                 Remove-Item $fileName
             }else{
                 #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
-                Write-Log $(Get-Translate("デフォルトフォルダにAmongUsを見つけることに失敗しました"))
-                Write-Log $(Get-Translate("フォルダをユーザーに選択するようダイアログを出します"))
+                Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"
+                Write-Log "フォルダをユーザーに選択するようダイアログを出します"
                 [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Mod Auto Deploy Tool")
                 $spath = Get-FolderPathG
             }
@@ -1335,7 +1335,7 @@ function Reload(){
                 Exit
             }
             if(test-path "$spath\Among Us.exe"){
-                Write-Log $(Get-Translate("$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"))
+                Write-Log "$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"
                 if(($script:platform -ne "Steam") -and ($script:platform -ne "Epic")){
                     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("PlatformはSteamですか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                         $script:platform = "Steam"
@@ -1344,15 +1344,15 @@ function Reload(){
                     }
                 }
             }else{
-                Write-Log $(Get-Translate("$spath にAmongUsのインストールが確認できませんでした"))
+                Write-Log "$spath にAmongUsのインストールが確認できませんでした"
                 pause
                 Exit
             }
             if(test-path $spath){
                 if(Test-path "$spath\BepInEx"){
-                    Write-Log $(Get-Translate("オリジナルのAmong Usではないフォルダが指定されている可能性があります"))
-                    Write-Log $(Get-Translate("フォルダ指定が正しい場合は、クリーンインストールを試してみてください"))
-                    Write-Log $(Get-Translate("処理を中止します"))
+                    Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+                    Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
+                    Write-Log "処理を中止します"
                     pause
                     exit
                 }
@@ -1363,7 +1363,7 @@ function Reload(){
                 Write-Log $str_path
                 $aupathm = "$str_path\Among Us $scid Mod"
                 $aupathb = "$str_path\Among Us Backup"
-                Write-Log $(Get-Translate("Mod入りAmongUsは以下のフォルダにDeployされます"))
+                Write-Log "Mod入りAmongUsは以下のフォルダにDeployされます"
                 Write-Log $aupathm
                 Write-Log $aupathb
                 ### Auto Save
@@ -1374,8 +1374,8 @@ function Reload(){
                 Write-Log "Amongus ModDeployScript Autosave function"
 
             }else{
-                Write-Log $(Get-Translate("選択されたフォルダにAmongUsを見つけることに失敗しました"))
-                Write-Log $(Get-Translate("処理を中止します"))
+                Write-Log "選択されたフォルダにAmongUsを見つけることに失敗しました"
+                Write-Log "処理を中止します"
                 pause
                 exit
             }
@@ -1416,18 +1416,18 @@ function Reload(){
     $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
     #Write-Log $tt3
     $script:amver = $tt3[1].Value
-    write-log $(Get-Translate("$script:amver が検出されました"))
+    write-log "$script:amver が検出されました"
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
     $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
     if($RadioButton114.Checked){
-        Write-Log $(Get-Translate("本体バージョン v$script:amver が選択されています"))
+        Write-Log "本体バージョン v$script:amver が選択されています"
     }elseif($RadioButton115.Checked){
-        Write-Log $(Get-Translate("本体バージョン v$($RadioButton115.Text) が選択されています"))
+        Write-Log "本体バージョン v$($RadioButton115.Text) が選択されています"
     }elseif($RadioButton116.Checked){
-        Write-Log $(Get-Translate("本体バージョン v$($RadioButton116.Text) が選択されています"))
+        Write-Log "本体バージョン v$($RadioButton116.Text) が選択されています"
     }else{
-        Write-Log $(Get-Translate("Unknown ERROR:本体バージョン"))
+        Write-Log "Unknown ERROR:本体バージョン"
     }
 }
 
@@ -1470,7 +1470,7 @@ if ($result -eq "OK"){
 $prefpth = ""
 if($RadioButton114.Checked){
     $prebool = $false
-    Write-Log $(Get-Translate("本体バージョン v$amver が選択されています"))
+    Write-Log "本体バージョン v$amver が選択されています"
     $oldtype = $false
     $prevtargetid = $prevtargetid0
     $prever = $prever0
@@ -1494,14 +1494,14 @@ if($RadioButton114.Checked){
     if($nbool){
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
-            Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
+            Write-Log "本体バージョン v$prever が選択されています"
         }else{
             $prebool = $false    
-            Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
+            Write-Log "本体バージョン v$amver に選択が変更されました"
         }    
     }else{
         $prebool = $false    
-        Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
+        Write-Log "本体バージョン v$amver に選択が変更されました"
     }
 }elseif($RadioButton116.Checked){
     $prevtargetid = $prevtargetid1
@@ -1523,22 +1523,22 @@ if($RadioButton114.Checked){
     if($nbool){
         if(Test-Path "$aupathb\$prefpth"){
             $prebool = $true
-            Write-Log $(Get-Translate("本体バージョン v$prever が選択されています"))
+            Write-Log "本体バージョン v$prever が選択されています"
         }else{
             $prebool = $false    
-            Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
+            Write-Log "本体バージョン v$amver に選択が変更されました"
         }    
     }else{
         $prebool = $false    
-        Write-Log $(Get-Translate("本体バージョン v$amver に選択が変更されました"))
+        Write-Log "本体バージョン v$amver に選択が変更されました"
     }
 }else{
-    Write-Log $(Get-Translate("Critical:AU ver chk"))
+    Write-Log "Critical:AU ver chk"
     exit
 }
 
-Write-Log $(Get-Translate("$mod が選択されました"))
-Write-Log $(Get-Translate("Version $torpv が選択されました"))
+Write-Log "$mod が選択されました"
+Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
 
 if($RadioButton28.Checked){
@@ -1585,9 +1585,9 @@ if($CheckedBox.CheckedItems -contains "GMH Webhook"){
             Write-Log $textBox11111.Text
             if($($textBox11111.Text).StartsWith("https")){
                 $gmhwebhooktxt = $textBox11111.Text
-                Write-Log $(Get-Translate("Webhook URL: $gmhwebhooktxt"))
+                Write-Log "Webhook URL: $gmhwebhooktxt"
             }else{
-                Write-Log $(Get-Translate("Webhook URLが無効、または入力されていません。Skipされます。"))
+                Write-Log "Webhook URLが無効、または入力されていません。Skipされます。"
                 $gmhwebhooktxt = "None"
             }
         }    
@@ -1657,7 +1657,7 @@ if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
             }elseif($RadioButton129.Checked){ #2CHT
                 $gmhwebhooktxt = "1"
             }
-            Write-Log $(Get-Translate("CPU Affinity: $gmhwebhooktxt"))
+            Write-Log "CPU Affinity: $gmhwebhooktxt"
         }    
     }    
 }
@@ -1791,7 +1791,7 @@ if($tio){
     $web2 = ConvertFrom-Json $web.Content
     $Bar.Value = "15"
     $torv = $torpv
-    Write-Log $(Get-Translate("$scid Version $torv が選択されました"))
+    Write-Log "$scid Version $torv が選択されました"
 
     $Bar.Value = "20"
     $langdata
@@ -1911,7 +1911,7 @@ if($tio){
         }
         $langdata = $nebulangdata
     }else{
-        Write-Log $(Get-Translate("Critical Error 3"))
+        Write-Log "Critical Error 3"
         $Form2.Close()
         pause
         exit
@@ -1930,7 +1930,7 @@ if($tio){
         $shortcut = $true
         $debugc = $true
     }else{
-        Write-Log $(Get-Translate("Critical Error: Shortcut"))
+        Write-Log "Critical Error: Shortcut"
     }
     $Bar.Value = "27"
     ###作成したModのExeへのショートカットをDesktopに配置する
@@ -1942,7 +1942,7 @@ if($tio){
     }elseif($RadioButton4.Checked){
         $startexewhendone = $false
     }else{
-        Write-Log $(Get-Translate("Critical Error: StartCheck"))
+        Write-Log "Critical Error: StartCheck"
     }
 
     $Bar.Value = "32"
@@ -1971,7 +1971,7 @@ if($tio){
             $ovwrite = $false
             $clean = $true
         }else{
-            Write-Log $(Get-Translate("Critical Error: Retry"))
+            Write-Log "Critical Error: Retry"
         }
         $Bar.Value = "36"
 
@@ -2041,13 +2041,13 @@ if($tio){
         if($clean -eq $true){
             if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
                 $rn = "steam"
-                Write-Log $(Get-Translate("Assume $rn is used."))
+                Write-Log "Assume $rn is used."
                 $stm = $true
             }
 
             if (Test-Path "C:\Program Files (x86)\Epic Games"){
                 $rn = "epic"
-                Write-Log $(Get-Translate("Assume $rn is used."))
+                Write-Log "Assume $rn is used."
                 $epc = $true
             }
             
@@ -2071,7 +2071,7 @@ if($tio){
                 Start-Sleep -Seconds 10
                 while (!(test-path "$aupatho\Among Us.exe")){
                     Start-Sleep -Seconds 10
-                    Write-Log $(Get-Translate("再インストールが完了したことを確認してから以下の動作を実行してください"))
+                    Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
                     write-log (test-path "$aupatho\Among Us.exe")
                     write-log "$aupathm\Among Us.exe"                  
                     Pause
@@ -2087,7 +2087,7 @@ if($tio){
                 }
                 Remove-Item $fpth2 -Force
             }else{
-                Write-Log $(Get-Translate("Critical Platform Selection"))
+                Write-Log "Critical Platform Selection"
                 Pause
                 Exit
             }
@@ -2095,7 +2095,7 @@ if($tio){
         }
 
         if ($retry -eq "true"){
-            Write-Log $(Get-Translate("既存のフォルダを中身を含めて削除します"))
+            Write-Log "既存のフォルダを中身を含めて削除します"
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
             if($prebool){
@@ -2128,15 +2128,15 @@ if($tio){
                 }
             }else{
                 Copy-Item $aupatho -destination $aupathm -recurse
-                Write-Log $(Get-Translate("$aupatho を $aupathm にコピーしました"))
+                Write-Log "$aupatho を $aupathm にコピーしました"
             }
         }else{
             # コピー先のパスにファイルやフォルダが存在する場合は処理を中止
-            Write-Log $(Get-Translate("$aupathm には既にファイル又はフォルダが存在します"))
+            Write-Log "$aupathm には既にファイル又はフォルダが存在します"
             if($ovwrite){
-                Write-Log $(Get-Translate("上書き処理が選択されました"))
+                Write-Log "上書き処理が選択されました"
             }else{
-                Write-Log $(Get-Translate("処理を中止しました"))
+                Write-Log "処理を中止しました"
                 $Form2.Close()
                 pause
                 Exit
@@ -2175,7 +2175,7 @@ if($tio){
             }
         }else{
             Copy-Item $aupatho -destination $aupathm -recurse
-            Write-Log $(Get-Translate("$aupatho を $aupathm にコピーしました"))
+            Write-Log "$aupatho を $aupathm にコピーしました"
         }
     }    
 
@@ -2183,31 +2183,31 @@ if($tio){
 
     ####
     #まずはTORをDL
-    Write-Log $(Get-Translate("Download ZIP 開始"))
+    Write-Log "Download ZIP 開始"
     Write-Log $tordlp
     #Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
     #curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
     aria2c -x5 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
 
-    Write-Log $(Get-Translate("Download ZIP 完了"))
+    Write-Log "Download ZIP 完了"
     $Bar.Value = "57"
 
     #DLしたTORを解凍
     if (test-path "$aupathm\TheOtherRoles.zip"){
-        Write-Log $(Get-Translate("ZIP DL OK"))
-        Write-Log $(Get-Translate("ZIP 解凍開始"))
+        Write-Log "ZIP Download OK"
+        Write-Log "ZIP 解凍開始"
         Expand-7zip -ArchiveFileName $aupathm\TheOtherRoles.zip -TargetPath $aupathm
-        Write-Log $(Get-Translate("ZIP 解凍完了"))
+        Write-Log "ZIP 解凍完了"
     }else{
-        Write-Log $(Get-Translate("ZIP DL NG $tordlp "))
-        Write-Log $(Get-Translate("何かがおかしい・・・。もう一度試してみてください。"))
+        Write-Log "ZIP Download NG $tordlp "
+        Write-Log "何かがおかしい・・・。もう一度試してみてください。"
         exit
     }
 
     $Bar.Value = "59"
 
     if(test-path "$aupathm\BepInEx"){
-        Write-Log $(Get-Translate("ZIP 解凍OK"))
+        Write-Log "ZIP 解凍OK"
     }
     $Bar.Value = "60"
 
@@ -2371,7 +2371,7 @@ if($tio){
     $Bar.Value = "68"
 
     if($submerged){
-        Write-Log $(Get-Translate("対応する最新のSubmerged配置開始"))
+        Write-Log "対応する最新のSubmerged配置開始"
         Write-Log "Submerged DLL download start"
         if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
             New-Item "$aupathm\BepInEx\plugins\" -Type Directory
@@ -2389,10 +2389,10 @@ if($tio){
         if($submdll -ne "NONE"){
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins\" -o "Submerged.dll" $submdll
             Write-Log "$submdll"
-            Write-Log $(Get-Translate("Submerged DLL download done"))
-            Write-Log $(Get-Translate("対応する最新のSubmerged配置完了"))    
+            Write-Log "Submerged DLL download done"
+            Write-Log "対応する最新のSubmerged配置完了"
         }else{
-            Write-Log $(Get-Translate("対応するSubmergedがありません"))    
+            Write-Log "対応するSubmergedがありません"
         }
     }
     $Bar.Value = "69"
@@ -2415,12 +2415,12 @@ if($tio){
         if($checkgm){
             #Mod Original DLL削除
             Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
-            Write-Log $(Get-Translate('Delete Original Mod DLL'))
+            Write-Log 'Delete Original Mod DLL'
             Write-Log $torgmdll
             #TOR+ DLLをDLして配置
-            Write-Log $(Get-Translate("Download $scid DLL 開始"))
+            Write-Log "Download $scid DLL 開始"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
-            Write-Log $(Get-Translate("Download $scid DLL 完了"))
+            Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOR GMT"){
         if(test-path "$aupathm\TheOtherRoles-GM-Haoming.$torv"){
@@ -2433,12 +2433,12 @@ if($tio){
         }
         #Mod Original DLL削除
         Remove-item -Path "$aupathm\BepInEx\plugins\TheOtherRolesGM.dll"
-        Write-Log $(Get-Translate('Delete Original Mod DLL'))
+        Write-Log 'Delete Original Mod DLL'
         Write-Log $torgmdll
         #TOR+ DLLをDLして配置
-        Write-Log $(Get-Translate("Download $scid DLL 開始"))
+        Write-Log "Download $scid DLL 開始"
         aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
-        Write-Log $(Get-Translate("Download $scid DLL 完了"))
+        Write-Log "Download $scid DLL 完了"
     }elseif($scid -eq "TOU-R"){
         if(test-path "$aupathm\ToU $torv"){
             robocopy "$aupathm\ToU $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -2529,12 +2529,12 @@ if($tio){
 
             if(Test-Path "$aupathm\BepInEx\plugins\Agartha.dll"){
                 Remove-item -Path "$aupathm\BepInEx\plugins\Agartha.dll"
-                Write-Log $(Get-Translate('Delete Original Agartha Mod DLL'))    
+                Write-Log 'Delete Original Agartha Mod DLL'
             }
             #Agartha DLLをDLして配置
-            Write-Log $(Get-Translate("Download $scid Agartha DLL 開始"))
+            Write-Log "Download $scid Agartha DLL 開始"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
-            Write-Log $(Get-Translate("Download $scid Agartha DLL 完了"))              
+            Write-Log "Download $scid Agartha DLL 完了"         
         }
     }elseif($scid -eq "AMS"){
         if(test-path "$aupathm\BepInEx"){
@@ -2546,16 +2546,16 @@ if($tio){
 
             if(Test-Path "$aupathm\BepInEx\plugins\AUModS.dll"){
                 Remove-item -Path "$aupathm\BepInEx\plugins\AUModS.dll"
-                Write-Log $(Get-Translate('Delete Original AUModS Mod DLL'))    
+                Write-Log 'Delete Original AUModS Mod DLL'
             }
             #AUModS DLLをDLして配置
             if(!(Test-Path "$aupathm\BepInEx\plugins")){
                 New-Item "$aupathm\BepInEx\plugins" -ItemType Directory 
             }
             Write-Log $amsdll
-            Write-Log $(Get-Translate("Download $scid AUModS DLL 開始"))
+            Write-Log "Download $scid AUModS DLL 開始"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUModS.dll" $amsdll
-            Write-Log $(Get-Translate("Download $scid AUModS DLL 完了"))              
+            Write-Log "Download $scid AUModS DLL 完了"    
         }
     }elseif($scid -eq "NOS"){
         if(test-path "$aupathm\Nebula"){
@@ -2569,8 +2569,8 @@ if($tio){
         if (!(Test-Path "$aupathm\Language\")) {
             New-Item "$aupathm\Language\" -Type Directory
         }
-        Write-Log $(Get-Translate("日本語 データ Download 開始"))
-        Write-Log $(Get-Translate("日本語 データ $langdata"))
+        Write-Log "日本語 データ Download 開始"
+        Write-Log "日本語 データ $langdata"
         if(Test-Path "$aupathm\Language\Japanese.dat"){
             Copy-Item "$aupathm\Language\Japanese.dat" "$aupathm\Language\Japanese.dat.old"
         }
@@ -2593,7 +2593,7 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
-        Write-Log $(Get-Translate("日本語 データ Download 完了"))
+        Write-Log "日本語 データ Download 完了"
     }elseif($scid -eq "NOT"){
         if(test-path "$aupathm\Nebula"){
             robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
@@ -2606,8 +2606,8 @@ if($tio){
         if (!(Test-Path "$aupathm\Language\")) {
             New-Item "$aupathm\Language\" -Type Directory
         }
-        Write-Log $(Get-Translate("日本語 データ Download 開始"))
-        Write-Log $(Get-Translate("日本語 データ $langdata"))
+        Write-Log "日本語 データ Download 開始"
+        Write-Log "日本語 データ $langdata"
         if(Test-Path "$aupathm\Language\Japanese.dat"){
             Copy-Item "$aupathm\Language\Japanese.dat" "$aupathm\Language\Japanese.dat.old"
         }
@@ -2630,27 +2630,27 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
-        Write-Log $(Get-Translate("日本語 データ Download 完了"))
+        Write-Log "日本語 データ Download 完了"
         #Mod Original DLL削除
         Remove-item -Path "$aupathm\BepInEx\plugins\Nebula.dll"
-        Write-Log $(Get-Translate('Delete Original Mod DLL'))
+        Write-Log 'Delete Original Mod DLL'
         Write-Log $torgmdll
         #TOR+ DLLをDLして配置
-        Write-Log $(Get-Translate("Download $scid DLL 開始"))
+        Write-Log "Download $scid DLL 開始"
         aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Nebula.dll" $torgmdll
-        Write-Log $(Get-Translate("Download $scid DLL 完了"))
+        Write-Log "Download $scid DLL 完了"
     }else{
     }
     $Bar.Value = "71"
 
     #解凍チェック
     if (test-path "$aupathm\BepInEx\plugins"){
-        Write-Log $(Get-Translate("ZIP 解凍OK"))
+        Write-Log "ZIP 解凍OK"
         BackupMod
         Remove-item -Path "$aupathm\TheOtherRoles.zip"
-        Write-Log $(Get-Translate("DLしたZIPを削除"))
+        Write-Log "DLしたZIPを削除"
     }else{
-        Write-Log $(Get-Translate("ZIP 解凍NG"))
+        Write-Log "ZIP 解凍NG"
     }
     $Bar.Value = "77"
 
@@ -2660,7 +2660,7 @@ if($tio){
 
         if(test-path "$scpath\Among Us Mod $scid.lnk"){
             Remove-item -Path "$scpath\Among Us Mod $scid.lnk"
-            Write-Log $(Get-Translate('既存のMod用Shortcut削除'))
+            Write-Log '既存のMod用Shortcut削除'
         }
         $Bar.Value = "79"
 
@@ -2802,7 +2802,7 @@ if($tio){
                 }'
                 $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "C:\temp\amongusrun_$scid2.ps1" 
             }else{
-                Write-Log $(Get-Translate("Something Wrong. Check Path."))
+                Write-Log "Something Wrong. Check Path."
             }
             $sShortcut.TargetPath = "C:\temp\startamongusrun_$scid2.bat"
         }else{
@@ -2813,7 +2813,7 @@ if($tio){
                 $sShortcut.Arguments = "-Command legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us"
                 $sShortcut.WorkingDirectory = $aupathm
             }else{
-                Write-Log $(Get-Translate("ERROR: Critical Shortcut"))
+                Write-Log "ERROR: Critical Shortcut"
             }                
         }
 
@@ -2828,9 +2828,9 @@ if($tio){
         $aupathb
 
         if(test-path "$scpath\Among Us Mod $scid.lnk"){
-            Write-Log $(Get-Translate("Shortcut 作成確認OK"))
+            Write-Log "Shortcut 作成確認OK"
         }else{
-            Write-Log $(Get-Translate("Shortcut 作成失敗"))
+            Write-Log "Shortcut 作成失敗"
         }
     }else{
         $here = Get-Location
@@ -2907,7 +2907,7 @@ if($ckbci.Count -gt 0){
         
                     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait        
                 }else{
-                    Write-Log $(Get-Translate("AmongUsReplayInWindowの処理を中止します"))
+                    Write-Log "AmongUsReplayInWindowの処理を中止します"
                     $qureq = $false
                 }    
 
@@ -2932,7 +2932,7 @@ if($ckbci.Count -gt 0){
                     Set-Location -Path $md\$auriwfn
                     Invoke-Item .
                 }else{
-                    Write-Log $(Get-Translate("AmongUsReplayInWindowの処理を中止します"))
+                    Write-Log "AmongUsReplayInWindowの処理を中止します"
                 }
             }
             $Bar.Value = "84"
@@ -2970,7 +2970,7 @@ if($ckbci.Count -gt 0){
                     Set-Location -Path $md\$aucapfn
                     Invoke-Item .
                 }else{
-                    Write-Log $(Get-Translate("AmongUsCaptureの処理を中止します"))
+                    Write-Log "AmongUsCaptureの処理を中止します"
                 }
             }
             $Bar.Value = "85"
@@ -3022,14 +3022,14 @@ if($ckbci.Count -gt 0){
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
         }elseif($ckbci[$aa] -eq "NOS Webhook"){
-            Write-Log $(Get-Translate("NOS/NOT Webhook starts"))
+            Write-Log "NOS/NOT Webhook starts"
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 if($gmhwebhooktxt -eq "None"){
-                    Write-Log $(Get-Translate("NOS/NOT Webhook skipped."))
+                    Write-Log "NOS/NOT Webhook skipped."
                 }else{
                     $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
                     if(!(Test-Path $gmhconfig)){
-                        Write-Log $(Get-Translate("Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"))
+                        Write-Log "Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"
                         $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt).Content
                         if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
                             New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
@@ -3046,7 +3046,7 @@ if($ckbci.Count -gt 0){
                                 $gmhnewconfig += "$gmhline `r`n"
                             }else{
                                 $gmhnewconfig += "WebhookUrl = $gmhwebhooktxt `r`n"                    
-                                Write-Log $(Get-Translate("GMH Webhook : $gmhwebhooktxt"))
+                                Write-Log "GMH Webhook : $gmhwebhooktxt"
                             }
                         }else{
                             $gmhnewconfig += "$gmhline `r`n"
@@ -3056,12 +3056,12 @@ if($ckbci.Count -gt 0){
                     $gmhnewconfig |Out-File $gmhconfig
                 }   
             }else{
-                Write-Log $(Get-Translate("NOS/NOT Webhook skipped."))
+                Write-Log "NOS/NOT Webhook skipped."
             }
-            Write-Log $(Get-Translate("NOS/NOT Webhook ends"))
+            Write-Log "NOS/NOT Webhook ends"
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "サーバー情報初期化"){
-            Write-Log $(Get-Translate("サーバー情報を初期化します。"))
+            Write-Log "サーバー情報を初期化します。"
             $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
             if(Test-Path $aurifile){
                 Remove-Item $aurifile
@@ -3069,10 +3069,10 @@ if($ckbci.Count -gt 0){
             $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
             $aurijson = ConvertFrom-Json $defjson
             ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-            Write-Log $(Get-Translate("サーバー情報を初期化しました。"))
+            Write-Log "サーバー情報を初期化しました。"
             $Bar.Value = "88"
         }elseif($ckbci[$aa] -eq "カスタムサーバー情報追加"){
-            Write-Log $(Get-Translate("カスタムサーバー情報を追加します。"))
+            Write-Log "カスタムサーバー情報を追加します。"
             $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
             if(Test-Path $aurifile){
             }else{
@@ -3088,11 +3088,11 @@ if($ckbci.Count -gt 0){
                 Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
             }
             ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-            Write-Log $(Get-Translate("カスタムサーバー情報を追加しました。"))
+            Write-Log "カスタムサーバー情報を追加しました。"
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "健康ランド"){
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
-                Write-Host $(Get-Translate("健康ランド化 start"))
+                Write-Host "健康ランド化 start"
                 #regioninfo.json
                 $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
                 if(Test-Path $aurifile){
@@ -3127,23 +3127,23 @@ if($ckbci.Count -gt 0){
                     if($auritext.IndexOf("`"Name`":`"健康ランドテスト`"") -lt 0){
                         $aurijson.Regions += $($kenkonewtjson | ConvertFrom-Json)
                     }else{
-                        Write-Log $(Get-Translate("健康ランド済:Staging Server"))
+                        Write-Log "健康ランド済:Staging Server"
                     }
                     if($auritext.IndexOf("`"Name`":`"健康ランド`"") -lt 0){
                         $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
                     }else{
-                        Write-Log $(Get-Translate("健康ランド済:Production Server"))
+                        Write-Log "健康ランド済:Production Server"
                     }
 
                     if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
                         Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
                     }
                     ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-                    Write-Log $(Get-Translate("健康ランド化完了:Server"))
+                    Write-Log "健康ランド化完了:Server"
                     
                 }else{
-                    Write-Log $(Get-Translate("サーバー情報ファイルが見つかりません。"))
-                    Write-Log $(Get-Translate("Among Us本体を一度起動してから再度実行してください。"))
+                    Write-Log "サーバー情報ファイルが見つかりません。"
+                    Write-Log "Among Us本体を一度起動してから再度実行してください。"
                 }
 
 <#
@@ -3241,7 +3241,7 @@ if($ckbci.Count -gt 0){
                     Start-Sleep -Seconds 2
                     $gmhnewconfig |Out-File $gmhconfig
                     Remove-Item $kenkofile -Force
-                    Write-Log $(Get-Translate("健康ランド化完了:Config"))
+                    Write-Log "健康ランド化完了:Config"
                 }
 #>
                 #regu
@@ -3251,17 +3251,17 @@ if($ckbci.Count -gt 0){
 #                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/KenkoLand.json" -OutFile "$aupathm\Presets\KenkoLand.json" -UseBasicParsing
 #                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/Nakarita.json" -OutFile "$aupathm\Presets\Nakarita.json" -UseBasicParsing
 #                Write-Log $(Get-Translate("健康ランド化完了:Regulation"))
-                Write-Log $(Get-Translate("健康ランド化 ends"))
+                Write-Log "健康ランド化 ends"
                 $Bar.Value = "88"
             }elseif($ckbci[$aa] -eq "NOS CPU Affinity"){
                 Write-Log "NOS CPU Affinity start"
                 if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                     if($gmhwebhooktxt -eq "None"){
-                        Write-Log $(Get-Translate("NOS CPU Affinity skipped."))
+                        Write-Log "NOS CPU Affinity skipped."
                     }else{
                         $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
                         if(!(Test-Path $gmhconfig)){
-                            Write-Log $(Get-Translate("Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"))
+                            Write-Log "Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"
                             $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt).Content
                             if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
                                 New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
@@ -3278,7 +3278,7 @@ if($ckbci.Count -gt 0){
                                     $gmhnewconfig += "$gmhline `r`n"
                                 }else{
                                     $gmhnewconfig += "ProcessorAffinity = $gmhwebhooktxt `r`n"                    
-                                    Write-Log $(Get-Translate("CPU Affinity : $gmhwebhooktxt"))
+                                    Write-Log "CPU Affinity : $gmhwebhooktxt"
                                 }
                             }else{
                                 $gmhnewconfig += "$gmhline `r`n"
@@ -3288,12 +3288,12 @@ if($ckbci.Count -gt 0){
                         $gmhnewconfig |Out-File $gmhconfig
                     }   
                 }else{
-                    Write-Log $(Get-Translate("NOS CPU Affinity skipped."))
+                    Write-Log "NOS CPU Affinity skipped."
                 }
-                Write-Log $(Get-Translate("NOS CPU Affinity ends"))
+                Write-Log "NOS CPU Affinity ends"
                 $Bar.Value = "89"
             }else{
-                Write-Log $(Get-Translate("健康ランド化を実行するにはNOS/NOTを選択してください。"))
+                Write-Log "健康ランド化を実行するにはNOS/NOTを選択してください。"
             }
         }elseif($ckbci[$aa] -eq "配信ソフト"){
             Write-Log "配信ソフトセットアップ"
@@ -3353,27 +3353,11 @@ if($platform -eq "Epic"){
     legendary.exe -y egl-sync
     Stop-Transcript
     Start-Sleep -Seconds 5
-    <# ショートカットを変えたのでもはや不要
-    Write-Output $(Get-Translate("`r`nEGL再起動開始`r`n"))
-    #Get-Process EpicGamesLauncher | ForEach-Object { Stop-Process $_; Start-Process $_.Path }
-    #Start-Sleep -Seconds 5
-    Add-Type -AssemblyName UIAutomationClient
-    try{
-        $hwnd=(Get-Process EpicGamesLauncher).MainWindowHandle
-    }catch{
-        Write-Log $(Get-Translate("EGL 起動チェック。ログインできていない場合はログインしてください。"))           
-    }
-    $window=[System.Windows.Automation.AutomationElement]::FromHandle($hwnd)
-    $windowPattern=$window.GetCurrentPattern([System.Windows.Automation.WindowPattern]::Pattern)
-    #ウィンドウサイズを最小化する
-    $windowPattern.SetWindowVisualState([System.Windows.Automation.WindowVisualState]::Minimized)    
-    Write-Output $(Get-Translate("`r`nEGL再起動完了`r`n"))
-    Start-Sleep -Seconds 20
-    #>
+
 }elseif($platform -eq "Steam"){
     if(!(Test-Path "$aupathm\steam_appid.txt")){
         Write-Output "945360"> "$aupathm\steam_appid.txt"
-        Write-Log $(Get-Translate("Steam AppID Patched."))
+        Write-Log "Steam AppID Patched."
     }
 }
 $Bar.Value = "97"
@@ -3388,7 +3372,7 @@ BackUpAU
 $Bar.Value = "100"
 
 $Form2.Close()
-Write-Log $(Get-Translate("$difftime 秒で完了しました。"))
+Write-Log "$difftime 秒で完了しました。"
 
 if($tio){
     if($startexewhendone -eq $true){
@@ -3398,7 +3382,7 @@ if($tio){
             Set-Location "$aupathb"
             legendary.exe launch Among Us
         }else{
-            Write-Log $(Get-Translate("ERROR:Critical run apps"))
+            Write-Log "ERROR:Critical run apps"
         }
     }else{
     }
@@ -3407,7 +3391,7 @@ if($tio){
 
 if($debugc){
     if($startexewhendone -eq $true){
-        Write-Output $(Get-Translate("`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"))
+        Write-Output "`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"
         #監視プロセス名
         $procName = "Among Us"
         $checkpro = $true
@@ -3426,7 +3410,7 @@ if($debugc){
                 $p.WaitForExit()
             }
             catch{
-                Write-Output $(Get-Translate("No Process"))
+                Write-Output "No Process"
             }
             finally{
                 $tsp = &"$npl\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
@@ -3434,9 +3418,9 @@ if($debugc){
                 $erchk = Get-content "$tsp" -Raw
                 Write-Log $(Get-Translate("After Game Exit:$tsp"))
                 if($erchk.LastIndexOf("error") -gt 0){
-                    Write-Log $(Get-Translate("Done."))
+                    Write-Log "Done."
                 }else{
-                    Write-Log $(Get-Translate("No Error founds."))
+                    Write-Log "No Error founds."
                 }
                 $checkpro = $false
             }
@@ -3450,7 +3434,7 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log $error.length
 
 if($error.length -eq 0){
-    Write-Log $(Get-Translate("Script実行時のエラーはなさそうです"))
+    Write-Log "Script実行時のエラーはなさそうです"
 }else{
     for($abc=0;$abc -le $error.Length;$abc++){
         $($error[$abc]) | Out-string | Write-Log 
