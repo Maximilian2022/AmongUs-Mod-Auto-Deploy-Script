@@ -5,33 +5,46 @@
 $version = "1.7.7"
 #
 #################################################################################################
+### minimum version for v2022.12.8
+$ermin = "NONE"
+$esmin = "NONE"
+$nosmin = "NONE"
+$tormin = "NONE"
+$tourmin = "NONE"
+$tohmin = "NONE"
+$snrmin = "NONE"
+$tormmin = "NONE"
+$lmmin = "NONE"
+$amsmin = "NONE"
+$toymin = "NONE"
+
 ### minimum version for v2022.10.25
-$ermin = "v4.0.0.0"
-$esmin = "v4.0.0.0"
-$nosmin = "1.16,2022.10.25"
-$tormin = "v4.2.0"
-$tourmin = "v3.4.0"
-$tohmin = "v3.0.2"
-$snrmin = "1.4.2.4"
-$tormmin = "MR_v2.5.0"
-$lmmin = "3.0.0"
-$amsmin = "v0.0.1"
-$toymin = "v3.0.2.2"
+$ermin1 = "v4.0.0.0"
+$esmin1 = "v4.0.0.0"
+$nosmin1 = "1.16,2022.10.25"
+$tormin1 = "v4.2.0"
+$tourmin1 = "v3.4.0"
+$tohmin1 = "v3.0.2"
+$snrmin1 = "1.4.2.4"
+$tormmin1 = "MR_v2.5.0"
+$lmmin1 = "3.0.0"
+$amsmin1 = "v0.0.1"
+$toymin1 = "v3.0.2.2"
 
 ### minimum version for v2022.10.18
-$ermin1 = "v3.3.0.3"
-$esmin1 = "v3.3.0.3"
-$nosmin1 = "NONE"
-$tormin1 = "NONE"
-$tourmin1 = "NONE"
-$tohmin1 = "NONE"
-$snrmin1 = "1.4.2.3"
-$tormmin1 = "NONE"
-$lmmin1 = "NONE"
-$amsmin1 = "NONE"
-$toymin1 = "NONE"
+$ermin2 = "v3.3.0.3"
+$esmin2 = "v3.3.0.3"
+$nosmin2 = "NONE"
+$tormin2 = "NONE"
+$tourmin2 = "NONE"
+$tohmin2 = "NONE"
+$snrmin2 = "1.4.2.3"
+$tormmin2 = "NONE"
+$lmmin2 = "NONE"
+$amsmin2 = "NONE"
+$toymin2 = "NONE"
 
-### minimum version for v2022.9.20(8.24)
+<### minimum version for v2022.9.20(8.24)
 $ermin2 = "v3.2.2.0"
 $esmin2 = "v3.2.2.0"
 $nosmin2 = "1.12.11,2022.8.24"
@@ -43,14 +56,16 @@ $tormmin2 = "MR_v2.3.0"
 $lmmin2 = "2.1.3"
 $amsmin2 = "NONE"
 $toymin2 = "NONE"
+#>
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-#$prever2 = "2022.10.25"
-#$prevtargetid2 = "4338750749031095433"
-$prever0 = "2022.10.18"
-$prevtargetid0 = "7491486149462341667"
-$prever1 = "2022.9.20"
-$prevtargetid1 = "2481435393334839152"
+
+$prever0 = "2022.10.25"
+$prevtargetid0 = "4338750749031095433"
+$prever1 = "2022.10.18"
+$prevtargetid1 = "7491486149462341667"
+#$prever1 = "2022.9.20"
+#$prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
 #Testdll: Snapshot 22.11.21c
@@ -1413,10 +1428,9 @@ function Reload(){
     #version detect
     $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
     $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
-    $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
-    #Write-Log $tt3
+    $tt3 = [regex]::Matches($tt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.]([1-9]|0[1-9]|[12][0-9]|3[01])")
     $script:amver = $tt3[1].Value
-    write-log "$script:amver が検出されました"
+    Write-Log "$script:amver が検出されました"
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
     $RadioButton116.Text = $(Get-Translate("$script:prever1"))        
