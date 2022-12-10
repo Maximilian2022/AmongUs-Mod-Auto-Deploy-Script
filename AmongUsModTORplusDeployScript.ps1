@@ -9,6 +9,7 @@ $version = "1.7.8"
 $ermin = "NONE"
 $esmin = "NONE"
 $nosmin = "NONE"
+$notmin = "2.0,2022.10.25"
 $tormin = "NONE"
 $tourmin = "NONE"
 $tohmin = "NONE"
@@ -22,6 +23,7 @@ $toymin = "NONE"
 $ermin1 = "v4.0.0.0"
 $esmin1 = "v4.0.0.0"
 $nosmin1 = "1.16,2022.10.25"
+$notmin1 = "1.16,2022.10.25"
 $tormin1 = "v4.2.0"
 $tourmin1 = "v3.4.0"
 $tohmin1 = "v3.0.2"
@@ -35,6 +37,7 @@ $toymin1 = "v3.0.2.2"
 $ermin2 = "v3.3.0.3"
 $esmin2 = "v3.3.0.3"
 $nosmin2 = "NONE"
+$notmin2 = "NONE"
 $tormin2 = "NONE"
 $tourmin2 = "NONE"
 $tohmin2 = "NONE"
@@ -1048,7 +1051,7 @@ function Reload(){
         }"NOT :Dolly1016/Nebula on the Test"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOT"
-            VerMinMax $nosmin $nosmin1 $nosmin2
+            VerMinMax $notmin $notmin1 $notmin2
             Write-Log "NOT Selected"
             $RadioButton29.Checked = $True
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
