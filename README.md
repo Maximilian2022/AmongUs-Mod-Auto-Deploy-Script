@@ -9,6 +9,7 @@
 <br>
 <p>このScriptは 以下の環境用のものです<br>
  ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
+ ・Nebula on the Test (Shanpshot) (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
  ・AUModS (<a rel="noreferrer noopener" href="https://github.com/AUModS/AUModS" target="_blank">AUModS/AUModS</a>)<br>
  ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
  ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
