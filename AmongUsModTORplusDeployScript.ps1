@@ -2475,8 +2475,11 @@ if($tio){
             Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "TOR MR"){
-        if(test-path "$aupathm\$exfoldn"){}
-        else{
+        if(test-path "$aupathm\$exfoldn"){
+
+        }elseif(test-path "$aupathm\TheOtherRoles MR"){
+            $exfoldn = "TheOtherRoles MR"
+        }else{
             $exfoldn2 = $exfoldn.Replace('.',' ')
             if(Test-Path "$aupathm\$exfoldn2"){
                 $exfoldn = $exfoldn2
