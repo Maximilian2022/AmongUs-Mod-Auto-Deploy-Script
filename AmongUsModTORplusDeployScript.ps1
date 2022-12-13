@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.8.2"
+$version = "1.7.8.3"
 #
 #################################################################################################
 ### minimum version for v2022.12.8
@@ -16,7 +16,7 @@ $tohmin = "NONE"
 $snrmin = "1.5.0.0"
 $tormmin = "NONE"
 $lmmin = "NONE"
-$amsmin = "NONE"
+$amsmin = "v22.12.8.0"
 $toymin = "NONE"
 
 ### minimum version for v2022.10.25
