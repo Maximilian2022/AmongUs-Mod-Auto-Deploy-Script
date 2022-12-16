@@ -73,7 +73,7 @@ $prevtargetid1 = "7491486149462341667"
 $gmhbool = $true
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-$nebulangdata = "https://cdn.discordapp.com/attachments/939804752580050985/1048990292331741294/Language.7z"
+$nebulangdata = "https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/download/latest/Language.7z"
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
