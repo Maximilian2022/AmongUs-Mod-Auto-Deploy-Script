@@ -73,7 +73,8 @@ $prevtargetid1 = "7491486149462341667"
 $gmhbool = $true
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-$nebulangdata = "https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/download/latest/Language.7z"
+
+
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -1900,6 +1901,15 @@ if($tio){
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum            
         }
+
+        #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
+        $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
+
+        for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+            if($($aucap[$aii]).IndexOf(".7z") -gt 0){
+                $nebulangdata = $($aucap[$aii])
+            }
+        }
         $langdata = $nebulangdata
     }elseif($scid -eq "NOT"){
         $langhead=@()
@@ -1926,6 +1936,16 @@ if($tio){
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum
         }
+
+        #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
+        $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
+
+        for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+            if($($aucap[$aii]).IndexOf(".7z") -gt 0){
+                $nebulangdata = $($aucap[$aii])
+            }
+        }
+
         $langdata = $nebulangdata
     }else{
         Write-Log "Critical Error 3"
