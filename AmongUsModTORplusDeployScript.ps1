@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.7.8.5"
+$version = "1.7.8.6"
 #
 #################################################################################################
 ### minimum version for v2022.12.8
@@ -1901,13 +1901,11 @@ if($tio){
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum            
         }
-
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
-
         for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-            if($($aucap[$aii]).IndexOf(".7z") -gt 0){
-                $nebulangdata = $($aucap[$aii])
+            if($($aucap[$ii]).IndexOf(".7z") -gt 0){
+                $nebulangdata = $($aucap[$ii])
             }
         }
         $langdata = $nebulangdata
@@ -1936,16 +1934,13 @@ if($tio){
         }else{
             $langdata = $($langtail|Measure-Object -Maximum).Maximum
         }
-
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
-
         for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-            if($($aucap[$aii]).IndexOf(".7z") -gt 0){
-                $nebulangdata = $($aucap[$aii])
+            if($($aucap[$ii]).IndexOf(".7z") -gt 0){
+                $nebulangdata = $($aucap[$ii])
             }
         }
-
         $langdata = $nebulangdata
     }else{
         Write-Log "Critical Error 3"
