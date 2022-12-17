@@ -1433,7 +1433,7 @@ function Reload(){
     $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
     $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
     $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
-    $script:amver = $tt3[1].Value
+    $script:amver = $tt3[0].Value
     Write-Log "$script:amver が検出されました"
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
