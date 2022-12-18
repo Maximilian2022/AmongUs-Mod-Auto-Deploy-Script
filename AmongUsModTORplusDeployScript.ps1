@@ -2972,41 +2972,38 @@ if($ckbci.Count -gt 0){
             }
             $Bar.Value = "84"
         }elseif($ckbci[$aa] -eq "AmongUsCapture"){
-            $qureq = $false
-            if((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 394802){
-                $qureq = $true
-            }else{
-                try{
-                    choco -v
-                }catch{
-                    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
-                }
-    
-                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
-                $qureq = $true
+            try{
+                choco -v
+            }catch{
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
-            if($qureq){
-                $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/automuteus/amonguscapture/releases/latest" -UseBasicParsing)).assets.browser_download_url
-                $aucapfile = split-path $aucap[0] -Leaf 
-                $aucapfn = $aucapfile.Substring(0, $aucapfile.LastIndexOf('.'))
-                $md = [System.Environment]::GetFolderPath("MyDocuments")
-                $aucapcheck = $true
-                if(Test-Path $md\$aucapfn){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("既に存在するようです。上書き展開しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                        $aucapcheck = $true
-                    }else{
-                        $aucapcheck = $false
-                    }
-                }
-                if($aucapcheck){
-                    Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
-                    Expand-7Zip -ArchiveFileName $md\$aucapfile -TargetPath $md\$aucapfn
-                    Remove-Item $md\$aucapfile
-                    Set-Location -Path $md\$aucapfn
-                    Invoke-Item .
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
+            $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/automuteus/amonguscapture/releases/latest" -UseBasicParsing)).assets.browser_download_url
+            $aucapfile = split-path $aucap[0] -Leaf 
+            $aucapfn = $aucapfile.Substring(0, $aucapfile.LastIndexOf('.'))
+            $md = [System.Environment]::GetFolderPath("MyDocuments")
+            $aucapcheck = $true
+            if(Test-Path $md\$aucapfn){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("既に存在するようです。上書き展開しますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    $aucapcheck = $true
                 }else{
-                    Write-Log "AmongUsCaptureの処理を中止します"
+                    $aucapcheck = $false
                 }
+            }
+            if($aucapcheck){
+                Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
+                Expand-7Zip -ArchiveFileName $md\$aucapfile -TargetPath $md\$aucapfn
+                Remove-Item $md\$aucapfile
+                Set-Location -Path $md\$aucapfn
+                Invoke-Item .
+            }else{
+                Write-Log "AmongUsCaptureの処理を中止します"
+            }
+            if(Test-Path "$md\$aucapfn\AmongUsCapture.exe"){
+                $scpath = [System.Environment]::GetFolderPath("Desktop")
+                $WsShell = New-Object -ComObject WScript.Shell
+                $sShortcut = $WsShell.CreateShortcut("$scpath\AmongUsCapture.lnk")
+                $sShortcut.TargetPath = "$md\$aucapfn\AmongUsCapture.exe"
             }
             $Bar.Value = "85"
         }elseif($ckbci[$aa] -eq "VC Redist"){
@@ -3352,16 +3349,28 @@ $Bar.Value = "92"
 ####################
 #bat file auto update
 ####################
-if(test-path "$npl\StartAmongUsModTORplusDeployScript.bat"){
-    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$npl\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
-    $ps1script += "chcp 65001 `r`n"
-    $ps1script += "@echo off `r`n"
-    $ps1script += "curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1 `r`n"
-    $ps1script += "pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1"
-    $ps1script += " `"$scid`" `"$aupathm`" `"$platform`" `r`n" 
-    $ps1script += "del .\gmhtechsupport.ps1 `r`n"
-    $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$npl\StartAmongUsGetLogScript_$scid.bat" 
+
+$scpath = [System.Environment]::GetFolderPath("Desktop")
+$WsShell = New-Object -ComObject WScript.Shell
+$dsk = "$scpath\AUMADS"
+
+if(!(Test-Path $dsk)){
+    New-Item $dsk -Type Directory
 }
+
+Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$dsk\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
+$ps1script += "chcp 65001 `r`n"
+$ps1script += "@echo off `r`n"
+$ps1script += "curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1 `r`n"
+$ps1script += "pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1"
+$ps1script += " `"$scid`" `"$aupathm`" `"$platform`" `r`n" 
+$ps1script += "del .\gmhtechsupport.ps1 `r`n"
+$ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScript_$scid.bat" 
+
+$sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
+$sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
+
+
 ####################
 
 $Bar.Value = "93"
@@ -3462,6 +3471,7 @@ if($debugc){
         }
     }
 }
+
 
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Install Error check"
