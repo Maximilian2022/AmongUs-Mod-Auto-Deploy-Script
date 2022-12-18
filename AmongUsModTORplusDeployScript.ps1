@@ -3370,6 +3370,9 @@ $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScri
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 
+if($npl -ne $dsk){
+    Remove-Item "$npl\StartAmongUsModTORplusDeployScript.bat" -Force
+}
 
 ####################
 
