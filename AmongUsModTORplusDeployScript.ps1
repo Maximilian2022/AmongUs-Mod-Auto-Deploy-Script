@@ -285,7 +285,7 @@ if(Test-Path "C:\Program Files\Epic Games\AmongUs"){
     $legver = legendary.exe -V            
     if($legver -ge 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'){
     }else{
-        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade legendary -y" -Verb RunAs -Wait   
         #legendaryが最新じゃないので手動でDL
     
         $rel2 = "https://api.github.com/repos/derrod/legendary/releases/latest"
@@ -648,7 +648,7 @@ catch{
     }catch{
         Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     }
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
 }
 #################################################################################################
 # Clock Sync
@@ -3404,7 +3404,7 @@ if($platform -eq "Epic"){
         }catch{
             Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
         }
-        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade legendary -y" -Verb RunAs -Wait   
     }
     
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command cup legendary -y" -Verb RunAs -Wait   
