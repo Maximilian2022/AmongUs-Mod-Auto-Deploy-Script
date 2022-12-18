@@ -3004,6 +3004,8 @@ if($ckbci.Count -gt 0){
                 $WsShell = New-Object -ComObject WScript.Shell
                 $sShortcut = $WsShell.CreateShortcut("$scpath\AmongUsCapture.lnk")
                 $sShortcut.TargetPath = "$md\$aucapfn\AmongUsCapture.exe"
+                $sShortcut.IconLocation = "$md\$aucapfn\AmongUsCapture.exe"
+                $sShortcut.Save()
             }
             $Bar.Value = "85"
         }elseif($ckbci[$aa] -eq "VC Redist"){
@@ -3369,6 +3371,7 @@ $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScri
 
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
+$sShortcut.Save()
 
 if($npl -ne $dsk){
     Remove-Item "$npl\StartAmongUsModTORplusDeployScript.bat" -Force
