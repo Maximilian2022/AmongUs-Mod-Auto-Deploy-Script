@@ -113,6 +113,7 @@ if((net localgroup Administrators) -contains $env:username -or (net localgroup A
 # Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
+$npl2 = Get-Location
 Write-Output $(Get-Translate("実行前チェック開始"))
 try{
     pwsh -Command '$PSVersionTable.PSVersion.major'
@@ -180,6 +181,15 @@ if( -not (Test-Path $LogPath) ) {
 }
 # ログファイル名
 $LogFileName = Join-Path $LogPath $LogFile
+
+$scpath = [System.Environment]::GetFolderPath("Desktop")
+$WsShell = New-Object -ComObject WScript.Shell
+$dsk = "$scpath\AUMADS"
+
+if(!(Test-Path $dsk)){
+    New-Item $dsk -Type Directory
+}
+
 function Write-Log($logstring){
     $Now = Get-Date
     # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
@@ -1333,7 +1343,12 @@ function Reload(){
             $aupathb = $au_path_epic_back
             $script:platform = "epic"
         }else{
-            $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
+            $fileName2 = Join-path $npl "\AmongUsModDeployScript.conf"
+            $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"
+
+            if(test-path "$fileName2"){
+                Move-Item $fileName2 $fileName
+            }
             ### Load
             if(test-path "$fileName"){
                 $spath2 = Get-content "$fileName"
@@ -3351,15 +3366,6 @@ $Bar.Value = "92"
 ####################
 #bat file auto update
 ####################
-
-$scpath = [System.Environment]::GetFolderPath("Desktop")
-$WsShell = New-Object -ComObject WScript.Shell
-$dsk = "$scpath\AUMADS"
-
-if(!(Test-Path $dsk)){
-    New-Item $dsk -Type Directory
-}
-
 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$dsk\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
 $ps1script += "chcp 65001 `r`n"
 $ps1script += "@echo off `r`n"
@@ -3373,8 +3379,15 @@ $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 $sShortcut.Save()
 
-if($npl -ne $dsk){
-    Remove-Item "$npl\StartAmongUsModTORplusDeployScript.bat" -Force
+Write-Log $npl2
+Write-Log $dsk
+if($npl2 -ne $dsk){
+    if(Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat"){
+        Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
+    }
+    if(Test-Path "$npl2\StartAmongUsGetLogScript_$scid.bat"){
+        Remove-Item "$npl2\StartAmongUsGetLogScript_$scid.bat" -Force
+    }
 }
 
 ####################
