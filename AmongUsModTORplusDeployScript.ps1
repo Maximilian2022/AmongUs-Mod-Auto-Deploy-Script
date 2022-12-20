@@ -16,7 +16,7 @@ $tohmin = "NONE"
 $snrmin = "1.5.0.0"
 $tormmin = "NONE"
 $lmmin = "NONE"
-$amsmin = "v22.12.8.0"
+$amsmin = "v22.12.14.0"
 $toymin = "NONE"
 
 ### minimum version for v2022.10.25
