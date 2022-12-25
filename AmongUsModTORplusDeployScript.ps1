@@ -2077,7 +2077,18 @@ if($tio){
             if(test-path "$aupathm\BepInEx\config\me.tomarai.aumod.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.tomarai.aumod.cfg" "C:\Temp\me.tomarai.aumod.cfg" -Force               
             }
+        }elseif($scid -eq "TOR MR"){
+            if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
+                New-Item -Path "C:\Temp\TheOtherHats" -ItemType Directory
+                Copy-Item "$aupathm\TheOtherHats\*" -Recurse "C:\Temp\TheOtherHats"
+            }
         }else{
+            if(test-path "$aupathm\CustomPreset"){
+                New-Item -Path "C:\Temp\CustomPreset" -ItemType Directory
+                Copy-Item "$aupathm\CustomPreset\*" -Recurse "C:\Temp\CustomPreset"
+            }
+
             if(test-path "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" "C:\Temp\me.eisbison.theotherroles.cfg" -Force
                 New-Item -Path "C:\Temp\TheOtherHats" -ItemType Directory
@@ -2385,7 +2396,7 @@ if($tio){
                 Remove-Item "C:\Temp\temp.log" -Force
             }
         }
-    }else{
+    }elseif($scid -eq "TOR MR"){
         if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
                 New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
@@ -2404,14 +2415,32 @@ if($tio){
                 Remove-Item "C:\Temp\temp.log" -Force
             }
         }
-        if(Test-Path "C:\Temp\Regulations"){
-            robocopy "C:\Temp\Regulations" "$aupathm\Regulations" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\Regulations" -Recurse
+        if(test-path "C:\Temp\CustomPreset"){
+            robocopy "C:\Temp\CustomPreset" "$aupathm\CustomPreset" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\CustomPreset" -Recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }else{
+        if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
+            Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force    
+            if(!(Test-Path "$aupathm\TheOtherHats")){
+                New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
+            }
+            if(test-path "C:\Temp\TheOtherHats"){
+                robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "C:\Temp\TheOtherHats" -Recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
+            }
         }
     }
     $Bar.Value = "64"
@@ -2506,7 +2535,6 @@ if($tio){
         }
     }elseif($scid -eq "TOR MR"){
         if(test-path "$aupathm\$exfoldn"){
-
         }elseif(test-path "$aupathm\TheOtherRoles MR"){
             $exfoldn = "TheOtherRoles MR"
         }else{
