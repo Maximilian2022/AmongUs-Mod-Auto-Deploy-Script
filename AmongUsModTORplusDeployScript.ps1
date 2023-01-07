@@ -3195,9 +3195,9 @@ if($ckbci.Count -gt 0){
                         Write-Log "HS Deleted."
                     }
                     Write-Log $auritext
-                    $kenkonewjson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"amongus.kenko.land","DefaultIp":"amongus.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランド","TranslateName": 1003}'
+                    #$kenkonewjson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"amongus.kenko.land","DefaultIp":"amongus.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランド","TranslateName": 1003}'
                     #$kenkonewtjson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"imposter.kenko.land","DefaultIp":"imposter.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランドテスト","TranslateName": 1003}'
-                    #$kenkonewjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランド","PingServer":"amongus.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://amongus.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
+                    $kenkonewjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランド","PingServer":"amongus.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://amongus.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
                     $kenkonewtjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランドテスト","PingServer":"imposter.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://imposter.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
                     $aurijson = ConvertFrom-Json $auritext
 
