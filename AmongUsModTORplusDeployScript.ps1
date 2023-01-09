@@ -3391,6 +3391,29 @@ if($ckbci.Count -gt 0){
 
 $Bar.Value = "92"
 
+#####
+# Nebula Server 追加
+#####
+if(($scid -eq "NOS") -OR ($scid -eq "NOT"){
+    Write-Log "Nebulaサーバー情報を追加します。"
+    $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+    if(Test-Path $aurifile){
+    }else{
+        $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
+        $aurijson = ConvertFrom-Json $defjson
+        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
+    }
+    $kenkojson2 = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"160.251.22.225`",`"DefaultIp`":`"160.251.22.225`",`"Port`":22000,`"UseDtls`":false,`"Name`":`"Nebula 公式`",`"TranslateName`": 1003}"
+    $auritext = Get-Content $aurifile -Raw
+    $aurijson = ConvertFrom-Json $auritext
+    $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
+    if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+        Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+    }
+    ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+    Write-Log "Nebulaサーバー情報を追加しました。"
+}
+
 ####################
 #bat file auto update
 ####################
