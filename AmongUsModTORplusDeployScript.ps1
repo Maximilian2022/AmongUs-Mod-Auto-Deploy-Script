@@ -3403,7 +3403,7 @@ if(($scid -eq "NOS") -OR ($scid -eq "NOT")){
         $aurijson = ConvertFrom-Json $defjson
         ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
     }
-    $kenkojson2 = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"160.251.22.225`",`"DefaultIp`":`"160.251.22.225`",`"Port`":22000,`"UseDtls`":false,`"Name`":`"Nebula 公式`",`"TranslateName`": 1003}"
+    $kenkojson2 = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Nebula 公式","PingServer":"160.251.22.225","Servers":[{"Name":"Http-1","Ip":"http://160.251.22.225","Port":22000,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
     $auritext = Get-Content $aurifile -Raw
     $aurijson = ConvertFrom-Json $auritext
     $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
