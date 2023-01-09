@@ -3394,7 +3394,7 @@ $Bar.Value = "92"
 #####
 # Nebula Server 追加
 #####
-if(($scid -eq "NOS") -OR ($scid -eq "NOT"){
+if(($scid -eq "NOS") -OR ($scid -eq "NOT")){
     Write-Log "Nebulaサーバー情報を追加します。"
     $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
     if(Test-Path $aurifile){
