@@ -1797,16 +1797,16 @@ if($CheckedBox.CheckedItems -contains "カスタムサーバー情報追加"){
 
 # プログレスバー
 $Form2 = New-Object System.Windows.Forms.Form
-$Form2.Size = "500,200"
+$Form2.Size = "500,150"
 $Form2.Startposition = "CenterScreen"
 $Form2.Text = "Among Us Mod Auto Deploy Tool"
 $form2.ShowIcon = $False
 $form2.FormBorderStyle = "Fixed3D"
 
 $label222 = New-Object System.Windows.Forms.Label
-$label222.Location = New-Object System.Drawing.Point(10,100)
-$label222.Size = New-Object System.Drawing.Size(320,20)
-$label222.Text = $(Get-Translate("この画面が消えるまでできるだけ何も触らず待ってください"))
+$label222.Location = New-Object System.Drawing.Point(10,80)
+$label222.Size = New-Object System.Drawing.Size(320,60)
+$label222.Text = $(Get-Translate("Among Us ModのDeployが進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
 $form2.Controls.Add($label222)
 
 # プログレスバー
