@@ -3406,13 +3406,18 @@ if(($scid -eq "NOS") -OR ($scid -eq "NOT")){
     Start-Sleep -Seconds 1
     $kenkojson2 = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Nebula 公式","PingServer":"160.251.22.225","Servers":[{"Name":"Http-1","Ip":"160.251.22.225","Port":22000,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
     $auritext = Get-Content $aurifile -Raw
-    $aurijson = ConvertFrom-Json $auritext
-    $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
-    if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
-        Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
-    }
-    ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-    Write-Log "Nebulaサーバー情報を追加しました。"
+
+    if($auritext.IndexOf("`"Name`":`"Nebula 公式`"") -lt 0){
+        $aurijson = ConvertFrom-Json $auritext
+        $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
+        if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+            Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+        }
+        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+        Write-Log "Nebulaサーバー情報を追加しました。"
+    }else{
+        Write-Log "Nebula 公式追加済 Server"
+    }   
 }
 
 ####################
