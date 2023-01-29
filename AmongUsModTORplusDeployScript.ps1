@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.0.1"
+$version = "1.8.0.2"
 #
 #################################################################################################
 ### minimum version for v2022.12.8
@@ -1924,10 +1924,22 @@ if($tio){
         }
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
+        $z7tr = $true
         for($ii = 0;$ii -lt  $aucap.Length;$ii++){
             if($($aucap[$ii]).IndexOf(".7z") -gt 0){
                 $nebulangdata = $($aucap[$ii])
+                $z7tr = $false
             }
+        }
+        if($z7tr){
+            for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+                if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
+                    $nebulangdata = $($aucap[$ii])
+                }
+                if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
+                    $nebulangdatajpc = $($aucap[$ii])
+                }
+            }    
         }
         $langdata = $nebulangdata
     }elseif($scid -eq "NOT"){
@@ -1974,7 +1986,6 @@ if($tio){
                 }
             }    
         }
-
         $langdata = $nebulangdata
     }else{
         Write-Log "Critical Error 3"
