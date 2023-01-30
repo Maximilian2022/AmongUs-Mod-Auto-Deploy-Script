@@ -3170,89 +3170,100 @@ if($ckbci.Count -gt 0){
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "サーバー情報初期化"){
             Write-Log "サーバー情報を初期化します。"
-            $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-            if(Test-Path $aurifile){
-                Remove-Item $aurifile
+            if(Test-Path "$env:APPDATA\..\LocalLow\Innersloth"){
+                $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+                if(Test-Path $aurifile){
+                    Remove-Item $aurifile
+                }
+                $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
+                $aurijson = ConvertFrom-Json $defjson
+                ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+                Write-Log "サーバー情報を初期化しました。"
+            }else{
+                Write-Log "AmongUsが一度も起動されていないようです。一度起動してから再度Scriptを動作させてください。"
             }
-            $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
-            $aurijson = ConvertFrom-Json $defjson
-            ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-            Write-Log "サーバー情報を初期化しました。"
             $Bar.Value = "88"
         }elseif($ckbci[$aa] -eq "カスタムサーバー情報追加"){
             Write-Log "カスタムサーバー情報を追加します。"
-            $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-            if(Test-Path $aurifile){
+            if(Test-Path "$env:APPDATA\..\LocalLow\Innersloth"){
+                $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+                if(Test-Path $aurifile){
+                }else{
+                    $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
+                    $aurijson = ConvertFrom-Json $defjson
+                    ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
+                }
+                $kenkojson2 = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"$xfqip`",`"DefaultIp`":`"$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Name`":`"$xname`",`"TranslateName`": 1003}"
+                $auritext = Get-Content $aurifile -Raw
+                $aurijson = ConvertFrom-Json $auritext
+                $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
+                if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+                    Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+                }
+                ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+                Write-Log "カスタムサーバー情報を追加しました。"
             }else{
-                $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
-                $aurijson = ConvertFrom-Json $defjson
-                ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
+                Write-Log "AmongUsが一度も起動されていないようです。一度起動してから再度Scriptを動作させてください。"
             }
-            $kenkojson2 = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"$xfqip`",`"DefaultIp`":`"$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Name`":`"$xname`",`"TranslateName`": 1003}"
-            $auritext = Get-Content $aurifile -Raw
-            $aurijson = ConvertFrom-Json $auritext
-            $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
-            if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
-                Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
-            }
-            ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-            Write-Log "カスタムサーバー情報を追加しました。"
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "健康ランド"){
             if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 Write-Host "健康ランド化 start"
                 #regioninfo.json
-                $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-                if(Test-Path $aurifile){
-                    $auritext = Get-Content $aurifile -Raw
-                    if($auritext.IndexOf("Modded EU (MEU)") -gt 0){
-                        $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
-                        $auritext = $auritext.Replace($torjson, '')
-                        Write-Log "MEU Deleted."
-                    }
-                    if($auritext.IndexOf("Modded NA (MNA)") -gt 0){
-                        $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded NA (MNA)","PingServer":"https://aumods.one","Servers":[{"Name":"Http-1","Ip":"https://aumods.one","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
-                        $auritext = $auritext.Replace($torjson, '')    
-                        Write-Log "MNA Deleted."
-                    }
-                    if($auritext.IndexOf("Modded Asia (MAS)") -gt 0){
-                        $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded Asia (MAS)","PingServer":"https://au-as.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-as.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
-                        $auritext = $auritext.Replace($torjson, '')    
-                        Write-Log "MAS Deleted."
-                    }
-                    if($auritext.IndexOf("haoming-server.com") -gt 0){
-                        $torjson =',{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"haoming-server.com","DefaultIp":"haoming-server.com","Port":22023,"UseDtls":false,"Name":"haoming-server","TranslateName":1003}'
-                        $auritext = $auritext.Replace($torjson, '')    
-                        Write-Log "HS Deleted."
-                    }
-                    Write-Log $auritext
-                    #$kenkonewjson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"amongus.kenko.land","DefaultIp":"amongus.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランド","TranslateName": 1003}'
-                    #$kenkonewtjson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"imposter.kenko.land","DefaultIp":"imposter.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランドテスト","TranslateName": 1003}'
-                    $kenkonewjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランド","PingServer":"amongus.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://amongus.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
-                    $kenkonewtjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランドテスト","PingServer":"imposter.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://imposter.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
-                    $aurijson = ConvertFrom-Json $auritext
+                if(Test-Path "$env:APPDATA\..\LocalLow\Innersloth"){
+                    $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+                    if(Test-Path $aurifile){
+                        $auritext = Get-Content $aurifile -Raw
+                        if($auritext.IndexOf("Modded EU (MEU)") -gt 0){
+                            $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded EU (MEU)","PingServer":"https://au-eu.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-eu.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
+                            $auritext = $auritext.Replace($torjson, '')
+                            Write-Log "MEU Deleted."
+                        }
+                        if($auritext.IndexOf("Modded NA (MNA)") -gt 0){
+                            $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded NA (MNA)","PingServer":"https://aumods.one","Servers":[{"Name":"Http-1","Ip":"https://aumods.one","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
+                            $auritext = $auritext.Replace($torjson, '')    
+                            Write-Log "MNA Deleted."
+                        }
+                        if($auritext.IndexOf("Modded Asia (MAS)") -gt 0){
+                            $torjson = ',{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Modded Asia (MAS)","PingServer":"https://au-as.duikbo.at","Servers":[{"Name":"Http-1","Ip":"https://au-as.duikbo.at","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'
+                            $auritext = $auritext.Replace($torjson, '')    
+                            Write-Log "MAS Deleted."
+                        }
+                        if($auritext.IndexOf("haoming-server.com") -gt 0){
+                            $torjson =',{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"haoming-server.com","DefaultIp":"haoming-server.com","Port":22023,"UseDtls":false,"Name":"haoming-server","TranslateName":1003}'
+                            $auritext = $auritext.Replace($torjson, '')    
+                            Write-Log "HS Deleted."
+                        }
+                        Write-Log $auritext
+                        #$kenkonewjson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"amongus.kenko.land","DefaultIp":"amongus.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランド","TranslateName": 1003}'
+                        #$kenkonewtjson = '{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"imposter.kenko.land","DefaultIp":"imposter.kenko.land","Port":22023,"UseDtls":false,"Name":"健康ランドテスト","TranslateName": 1003}'
+                        $kenkonewjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランド","PingServer":"amongus.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://amongus.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
+                        $kenkonewtjson = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"健康ランドテスト","PingServer":"imposter.kenko.land","Servers":[{"Name":"Http-1","Ip":"https://imposter.kenko.land","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
+                        $aurijson = ConvertFrom-Json $auritext
 
-                    if($auritext.IndexOf("`"Name`":`"健康ランドテスト`"") -lt 0){
-                        $aurijson.Regions += $($kenkonewtjson | ConvertFrom-Json)
-                    }else{
-                        Write-Log "健康ランド済:Staging Server"
-                    }
-                    if($auritext.IndexOf("`"Name`":`"健康ランド`"") -lt 0){
-                        $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
-                    }else{
-                        Write-Log "健康ランド済:Production Server"
-                    }
+                        if($auritext.IndexOf("`"Name`":`"健康ランドテスト`"") -lt 0){
+                            $aurijson.Regions += $($kenkonewtjson | ConvertFrom-Json)
+                        }else{
+                            Write-Log "健康ランド済:Staging Server"
+                        }
+                        if($auritext.IndexOf("`"Name`":`"健康ランド`"") -lt 0){
+                            $aurijson.Regions += $($kenkonewjson | ConvertFrom-Json)
+                        }else{
+                            Write-Log "健康ランド済:Production Server"
+                        }
 
-                    if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
-                        Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+                        if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+                            Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+                        }
+                        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+                        Write-Log "健康ランド化完了:Server"
+                    }else{
+                        Write-Log "サーバー情報ファイルが見つかりません。"
+                        Write-Log "Among Us本体を一度起動してから再度実行してください。"
                     }
-                    ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-                    Write-Log "健康ランド化完了:Server"
-                    
                 }else{
-                    Write-Log "サーバー情報ファイルが見つかりません。"
-                    Write-Log "Among Us本体を一度起動してから再度実行してください。"
-                }
+                    Write-Log "AmongUsが一度も起動されていないようです。一度起動してから再度Scriptを動作させてください。"
+                }        
 
 <#
                 if(!(Test-Path "$aupathm\BepInEx\config")){
@@ -3427,28 +3438,31 @@ $Bar.Value = "92"
 #####
 if(($scid -eq "NOS") -OR ($scid -eq "NOT")){
     Write-Log "Nebulaサーバー情報を追加します。"
-    $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
-    if(Test-Path $aurifile){
-    }else{
-        $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
-        $aurijson = ConvertFrom-Json $defjson
-        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
-    }
-    Start-Sleep -Seconds 1
-    $kenkojson2 = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Nebula 公式","PingServer":"160.251.22.225","Servers":[{"Name":"Http-1","Ip":"160.251.22.225","Port":22000,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
-    $auritext = Get-Content $aurifile -Raw
-
-    if($auritext.IndexOf("`"Name`":`"Nebula 公式`"") -lt 0){
-        $aurijson = ConvertFrom-Json $auritext
-        $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
-        if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
-            Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+    if(Test-Path "$env:APPDATA\..\LocalLow\Innersloth"){
+        $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
+        if(Test-Path $aurifile){
+        }else{
+            $defjson = '{"CurrentRegionIdx":0,"Regions":[{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":289},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":290},{"$type":"StaticHttpRegionInfo,Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":true,"Players":0,"ConnectionFailures":0}],"TranslateName":291},{"$type":"DnsRegionInfo,Assembly-CSharp","Fqdn":"127.0.0.1","DefaultIp":"127.0.0.1","Port":22023,"UseDtls":false,"Name":"Custom","TranslateName":1003}]}'
+            $aurijson = ConvertFrom-Json $defjson
+            ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile       
         }
-        ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
-        Write-Log "Nebulaサーバー情報を追加しました。"
+        Start-Sleep -Seconds 1
+        $kenkojson2 = '{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Nebula 公式","PingServer":"160.251.22.225","Servers":[{"Name":"Http-1","Ip":"160.251.22.225","Port":22000,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TranslateName":1003}'  
+        $auritext = Get-Content $aurifile -Raw
+        if($auritext.IndexOf("`"Name`":`"Nebula 公式`"") -lt 0){
+            $aurijson = ConvertFrom-Json $auritext
+            $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
+            if(!(Test-Path "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old")){
+                Copy-Item $aurifile "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json.old"
+            }
+            ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile
+            Write-Log "Nebulaサーバー情報を追加しました。"
+        }else{
+            Write-Log "Nebula 公式追加済 Server"
+        }   
     }else{
-        Write-Log "Nebula 公式追加済 Server"
-    }   
+        Write-Log "AmongUsが一度も起動されていないようです。一度起動してから再度Scriptを動作させてください。"
+    }
 }
 
 ####################
