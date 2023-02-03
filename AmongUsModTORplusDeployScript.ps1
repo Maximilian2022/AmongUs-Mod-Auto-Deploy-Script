@@ -3193,7 +3193,12 @@ if($ckbci.Count -gt 0){
                     $aurijson = ConvertFrom-Json $defjson
                     ConvertTo-Json($aurijson) -Compress -Depth 4 | Out-File $aurifile   
                 }
-                $kenkojson2 = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"$xfqip`",`"DefaultIp`":`"$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Name`":`"$xname`",`"TranslateName`": 1003}"
+                if($xport -eq "443"){
+                    $kenkojson2 = "{`"`$type`":`"StaticHttpRegionInfo, Assembly-CSharp`",`"Name`":`"$xname`",`"PingServer`":`"$xfqip`",`"Servers`":[{`"Name`":`"Http-1`",`"Ip`":`"https://$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Players`":0,`"ConnectionFailures`":0}],`"TranslateName`":1003}"  
+                }else{
+                    $kenkojson2 = "{`"`$type`":`"StaticHttpRegionInfo, Assembly-CSharp`",`"Name`":`"$xname`",`"PingServer`":`"$xfqip`",`"Servers`":[{`"Name`":`"Http-1`",`"Ip`":`"http://$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Players`":0,`"ConnectionFailures`":0}],`"TranslateName`":1003}"  
+                }
+                #$kenkojson2 = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"$xfqip`",`"DefaultIp`":`"$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Name`":`"$xname`",`"TranslateName`": 1003}"
                 $auritext = Get-Content $aurifile -Raw
                 $aurijson = ConvertFrom-Json $auritext
                 $aurijson.Regions += $($kenkojson2 | ConvertFrom-Json)
