@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.0.3"
+$version = "1.8.0.4"
 #
 #################################################################################################
 ### minimum version for v2022.12.8
@@ -1742,7 +1742,7 @@ if($CheckedBox.CheckedItems -contains "カスタムサーバー情報追加"){
     $textBox111112 = New-Object System.Windows.Forms.TextBox
     $textBox111112.Location = New-Object System.Drawing.Point(10,130)
     $textBox111112.Size = New-Object System.Drawing.Size(460,20)
-    $textBox111112.Text = "22023"
+    $textBox111112.Text = "22000"
     $form11130.Controls.Add($textBox111112)
 
 
@@ -3196,7 +3196,7 @@ if($ckbci.Count -gt 0){
                 if($xport -eq "443"){
                     $kenkojson2 = "{`"`$type`":`"StaticHttpRegionInfo, Assembly-CSharp`",`"Name`":`"$xname`",`"PingServer`":`"$xfqip`",`"Servers`":[{`"Name`":`"Http-1`",`"Ip`":`"https://$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Players`":0,`"ConnectionFailures`":0}],`"TranslateName`":1003}"  
                 }else{
-                    $kenkojson2 = "{`"`$type`":`"StaticHttpRegionInfo, Assembly-CSharp`",`"Name`":`"$xname`",`"PingServer`":`"$xfqip`",`"Servers`":[{`"Name`":`"Http-1`",`"Ip`":`"http://$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Players`":0,`"ConnectionFailures`":0}],`"TranslateName`":1003}"  
+                    $kenkojson2 = "{`"`$type`":`"StaticHttpRegionInfo, Assembly-CSharp`",`"Name`":`"$xname`",`"PingServer`":`"$xfqip`",`"Servers`":[{`"Name`":`"Http-1`",`"Ip`":`"$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Players`":0,`"ConnectionFailures`":0}],`"TranslateName`":1003}"  
                 }
                 #$kenkojson2 = "{`"`$type`":`"DnsRegionInfo, Assembly-CSharp`",`"Fqdn`":`"$xfqip`",`"DefaultIp`":`"$xfqip`",`"Port`":$xport,`"UseDtls`":false,`"Name`":`"$xname`",`"TranslateName`": 1003}"
                 $auritext = Get-Content $aurifile -Raw
