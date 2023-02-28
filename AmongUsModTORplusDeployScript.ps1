@@ -2,38 +2,52 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.1"
+$version = "1.8.1.1"
 #
 #################################################################################################
-### minimum version for v2022.12.8
-$ermin = "v5.0.0.0"
-$esmin = "v5.0.0.0"
-$nosmin = "2.0.1,2022.12.8"
-$notmin = "2.0,2022.10.25"
-$tormin = "v4.2.1"
-$tourmin = "v4.0.0"
-$tohmin = "v4.0.1"
-$snrmin = "1.5.0.0"
+### minimum version for v2023.2.28
+$ermin = "NONE"
+$esmin = "NONE"
+$nosmin = "NONE"
+$notmin = "NONE"
+$tormin = "NONE"
+$tourmin = "NONE"
+$tohmin = "NONE"
+$snrmin = "NONE"
 $tormmin = "NONE"
-$lmmin = "3.0.4"
-$amsmin = "v22.12.14.0"
-$toymin = "v402.3.9"
+$lmmin = "NONE"
+$amsmin = "NONE"
+$toymin = "NONE"
+
+### minimum version for v2022.12.16
+$ermin1 = "v5.0.0.0"
+$esmin1 = "v5.0.0.0"
+$nosmin1 = "2.0.1,2022.12.8"
+$notmin1 = "2.0,2022.10.25"
+$tormin1 = "v4.2.1"
+$tourmin1 = "v4.0.0"
+$tohmin1 = "v4.0.1"
+$snrmin1 = "1.5.0.0"
+$tormmin1 = "NONE"
+$lmmin1 = "3.0.4"
+$amsmin1 = "v22.12.14.0"
+$toymin1 = "v402.3.9"
 
 ### minimum version for v2022.10.25
-$ermin1 = "v4.0.0.0"
-$esmin1 = "v4.0.0.0"
-$nosmin1 = "1.16,2022.10.25"
-$notmin1 = "1.16,2022.10.25"
-$tormin1 = "v4.2.0"
-$tourmin1 = "v3.4.0"
-$tohmin1 = "v3.0.2"
-$snrmin1 = "1.4.2.4"
-$tormmin1 = "MR_v2.5.0"
-$lmmin1 = "3.0.0"
-$amsmin1 = "v0.0.1"
-$toymin1 = "v3.0.2.2"
+$ermin2 = "v4.0.0.0"
+$esmin2 = "v4.0.0.0"
+$nosmin2 = "1.16,2022.10.25"
+$notmin2 = "1.16,2022.10.25"
+$tormin2 = "v4.2.0"
+$tourmin2 = "v3.4.0"
+$tohmin2 = "v3.0.2"
+$snrmin2 = "1.4.2.4"
+$tormmin2 = "MR_v2.5.0"
+$lmmin2 = "3.0.0"
+$amsmin2 = "v0.0.1"
+$toymin2 = "v3.0.2.2"
 
-### minimum version for v2022.10.18
+<### minimum version for v2022.10.18
 $ermin2 = "v3.3.0.3"
 $esmin2 = "v3.3.0.3"
 $nosmin2 = "NONE"
@@ -47,7 +61,7 @@ $lmmin2 = "NONE"
 $amsmin2 = "NONE"
 $toymin2 = "NONE"
 
-<### minimum version for v2022.9.20(8.24)
+### minimum version for v2022.9.20(8.24)
 $ermin2 = "v3.2.2.0"
 $esmin2 = "v3.2.2.0"
 $nosmin2 = "1.12.11,2022.8.24"
@@ -63,10 +77,12 @@ $toymin2 = "NONE"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 
-$prever0 = "2022.10.25"
-$prevtargetid0 = "4338750749031095433"
-$prever1 = "2022.10.18"
-$prevtargetid1 = "7491486149462341667"
+$prever0 = "2022.12.16"
+$prevtargetid0 = "3833836818403923932"
+$prever1 = "2022.10.25"
+$prevtargetid1 = "4338750749031095433"
+#$prever1 = "2022.10.18"
+#$prevtargetid1 = "7491486149462341667"
 #$prever1 = "2022.9.20"
 #$prevtargetid1 = "2481435393334839152"
 
