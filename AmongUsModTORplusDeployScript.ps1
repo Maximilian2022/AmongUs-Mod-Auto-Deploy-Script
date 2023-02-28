@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.1.1"
+$version = "1.8.1.2"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
@@ -77,12 +77,12 @@ $toymin2 = "NONE"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 
-$prever0 = "2022.12.16"
+$prever0 = "2022.12.14"
 $prevtargetid0 = "3833836818403923932"
 $prever1 = "2022.10.25"
 $prevtargetid1 = "4338750749031095433"
-#$prever1 = "2022.10.18"
-#$prevtargetid1 = "7491486149462341667"
+#$prever1 = "2022.10.19"
+#$prevtargetid1 = "4338750749031095433"
 #$prever1 = "2022.9.20"
 #$prevtargetid1 = "2481435393334839152"
 
