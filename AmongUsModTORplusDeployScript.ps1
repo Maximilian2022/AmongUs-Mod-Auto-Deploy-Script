@@ -9,7 +9,7 @@ $version = "1.8.1.2"
 $ermin = "NONE"
 $esmin = "NONE"
 $nosmin = "NONE"
-$notmin = "NONE"
+$notmin = "2.1,2022.12.8"
 $tormin = "NONE"
 $tourmin = "NONE"
 $tohmin = "NONE"
@@ -23,7 +23,7 @@ $toymin = "NONE"
 $ermin1 = "v5.0.0.0"
 $esmin1 = "v5.0.0.0"
 $nosmin1 = "2.0.1,2022.12.8"
-$notmin1 = "2.0,2022.10.25"
+$notmin1 = "2.0.1,2022.12.8"
 $tormin1 = "v4.2.1"
 $tourmin1 = "v4.0.0"
 $tohmin1 = "v4.0.1"
@@ -1976,6 +1976,10 @@ if($tio){
                 }
             }
         }
+
+        #temp
+        $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
+
         $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
         $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
         if($lheadnum -gt $ltailnum){
