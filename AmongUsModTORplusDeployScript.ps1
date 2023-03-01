@@ -899,7 +899,7 @@ $form.Controls.Add($label2)
 # チェックボックスを作成
 $CheckedBox = New-Object System.Windows.Forms.CheckedListBox
 $CheckedBox.Location = "55,270"
-$CheckedBox.Size = "350,185"
+$CheckedBox.Size = "330,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",
 $RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS CPU Affinity","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
@@ -913,7 +913,7 @@ $form.Controls.Add($CheckedBox)
 # コンボボックスを作成
 $Combo = New-Object System.Windows.Forms.Combobox
 $Combo.Location = New-Object System.Drawing.Point(55,95)
-$Combo.size = New-Object System.Drawing.Size(350,30)
+$Combo.size = New-Object System.Drawing.Size(330,30)
 $Combo.DropDownStyle = "DropDownList"
 $Combo.FlatStyle = "standard"
 $Combo.font = $Font
@@ -951,7 +951,7 @@ $form.Controls.Add($label7)
 # コンボボックスを作成
 $Combo2 = New-Object System.Windows.Forms.Combobox
 $Combo2.Location = New-Object System.Drawing.Point(55,180)
-$Combo2.size = New-Object System.Drawing.Size(350,30)
+$Combo2.size = New-Object System.Drawing.Size(330,30)
 $Combo2.DropDownStyle = "DropDownList"
 $Combo2.FlatStyle = "standard"
 $Combo2.font = $Font
