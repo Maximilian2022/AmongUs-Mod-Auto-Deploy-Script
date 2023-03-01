@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.1.2"
+$version = "1.8.1.3"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
@@ -2106,6 +2106,10 @@ if($tio){
                 New-Item -Path "C:\Temp\Presets" -ItemType Directory
                 Copy-Item "$aupathm\Presets\*" -Recurse "C:\Temp\Presets"
             }
+            if(test-path "$aupathm\TexturePack"){
+                New-Item -Path "C:\Temp\TexturePack" -ItemType Directory
+                Copy-Item "$aupathm\TexturePack\*" -Recurse "C:\Temp\TexturePack"
+            }
         }elseif($scid -eq "LM"){
             if(test-path "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg" "C:\Temp\me.allul.lasmonjas.cfg" -Force
@@ -2387,6 +2391,14 @@ if($tio){
             if(test-path "C:\Temp\Presets"){
                 robocopy "C:\Temp\Presets" "$aupathm\Presets" /unilog:C:\Temp\temp.log /E >nul 2>&1
                 Remove-Item "C:\Temp\Presets" -Recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force
+            }
+            if(test-path "C:\Temp\TexturePack"){
+                robocopy "C:\Temp\TexturePack" "$aupathm\TexturePack" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "C:\Temp\TexturePack" -Recurse
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
                 Write-Log "`r`n $content"
