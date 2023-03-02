@@ -2,14 +2,14 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.1.4"
+$version = "1.8.1.5"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
 $ermin = "NONE"
 $esmin = "NONE"
-$nosmin = "NONE"
-$notmin = "2.1,2022.12.8"
+$nosmin = "2.2,2023.2.28"
+$notmin = "2.2,2023.2.28"
 $tormin = "NONE"
 $tourmin = "NONE"
 $tohmin = "v4.1.1"
@@ -1978,7 +1978,7 @@ if($tio){
         }
 
         #temp
-        $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
+        #$tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
 
         $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
         $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
