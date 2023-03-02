@@ -1941,21 +1941,25 @@ if($tio){
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
         $z7tr = $true
-        for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-            if($($aucap[$ii]).IndexOf(".7z") -gt 0){
-                $nebulangdata = $($aucap[$ii])
-                $z7tr = $false
-            }
-        }
-        if($z7tr){
+        if($aucap[0].length -gt 1){
             for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
+                if($($aucap[$ii]).IndexOf(".7z") -gt 0){
                     $nebulangdata = $($aucap[$ii])
+                    $z7tr = $false
                 }
-                if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
-                    $nebulangdatajpc = $($aucap[$ii])
-                }
-            }    
+            }
+            if($z7tr){
+                for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+                    if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
+                        $nebulangdata = $($aucap[$ii])
+                    }
+                    if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
+                        $nebulangdatajpc = $($aucap[$ii])
+                    }
+                }    
+            }
+        }else{
+            $nebulangdata = $aucap
         }
         $langdata = $nebulangdata
     }elseif($scid -eq "NOT"){
@@ -2009,7 +2013,6 @@ if($tio){
             }   
         }else{
             $nebulangdata = $aucap
-            $nebulangdatajpc = "https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/download/202302222246/Japanese_Color.dat"
         }
         $langdata = $nebulangdata
     }else{
