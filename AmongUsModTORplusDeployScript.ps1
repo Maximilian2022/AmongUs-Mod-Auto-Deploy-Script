@@ -2743,6 +2743,12 @@ if($tio){
             Remove-Item "C:\Temp\temp.log" -Force
         }
         Write-Log "日本語 データ Download 完了"
+        Write-Log "Download Small Tracker Arrow 開始"
+        if(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip"){
+            aria2c -x5 -V --dir "$aupathm\TexturePack" -o "MoreSmallTrackerArrow.zip" "https://cdn.discordapp.com/attachments/906766074131927071/1080729380667535390/MoreSmallTrackerArrow.zip"
+        }
+        Write-Log "Download Small Tracker Arrow 完了"
+
     }elseif($scid -eq "NOT"){
         if(test-path "$aupathm\Nebula"){
             robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
