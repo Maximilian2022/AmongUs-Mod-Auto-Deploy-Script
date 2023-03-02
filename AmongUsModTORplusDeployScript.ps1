@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.1.8"
+$version = "1.8.1.9"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
@@ -2748,7 +2748,7 @@ if($tio){
             New-Item "$aupathm\TexturePack" -Type Directory
         }
         Write-Log "Download Small Tracker Arrow 開始"
-        if(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip"){
+        if(!(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip")){
             aria2c -x5 -V --dir "$aupathm\TexturePack" -o "MoreSmallTrackerArrow.zip" "https://cdn.discordapp.com/attachments/906766074131927071/1080729380667535390/MoreSmallTrackerArrow.zip"
         }
         Write-Log "Download Small Tracker Arrow 完了"
@@ -2802,7 +2802,7 @@ if($tio){
             New-Item "$aupathm\TexturePack" -Type Directory
         }
         Write-Log "Download Small Tracker Arrow 開始"
-        if(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip"){
+        if(!(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip")){
             aria2c -x5 -V --dir "$aupathm\TexturePack" -o "MoreSmallTrackerArrow.zip" "https://cdn.discordapp.com/attachments/906766074131927071/1080729380667535390/MoreSmallTrackerArrow.zip"
         }
         Write-Log "Download Small Tracker Arrow 完了"
