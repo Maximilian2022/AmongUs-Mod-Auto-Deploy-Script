@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.1.6"
+$version = "1.8.1.7"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
@@ -2781,13 +2781,23 @@ if($tio){
         }
         Write-Log "日本語 データ Download 完了"
         #Mod Original DLL削除
-        #Remove-item -Path "$aupathm\BepInEx\plugins\Nebula.dll"
-        #Write-Log 'Delete Original Mod DLL'
-        #Write-Log $torgmdll
+        Remove-item -Path "$aupathm\BepInEx\plugins\Nebula.dll"
+        Write-Log 'Delete Original Mod DLL'
+        Write-Log $torgmdll
         #TOR+ DLLをDLして配置
-        #Write-Log "Download $scid DLL 開始"
-        #aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Nebula.dll" $torgmdll
-        #Write-Log "Download $scid DLL 完了"
+        Write-Log "Download $scid DLL 開始"
+        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Nebula.dll" $torgmdll
+        Write-Log "Download $scid DLL 完了"
+        if(Test-Path "$aupathm\TexturePack"){
+        }else{
+            New-Item "$aupathm\TexturePack" -Type Directory
+        }
+        Write-Log "Download Small Tracker Arrow 開始"
+        if(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip"){
+            aria2c -x5 -V --dir "$aupathm\TexturePack" -o "MoreSmallTrackerArrow.zip" "https://cdn.discordapp.com/attachments/906766074131927071/1080729380667535390/MoreSmallTrackerArrow.zip"
+        }
+        Write-Log "Download Small Tracker Arrow 完了"
+
     }else{
     }
     $Bar.Value = "71"
