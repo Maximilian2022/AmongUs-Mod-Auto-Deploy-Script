@@ -6,8 +6,8 @@ $version = "1.8.1.9"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
-$ermin = "NONE"
-$esmin = "NONE"
+$ermin = "v6.0.0.0"
+$esmin = "v6.0.0.0"
 $nosmin = "2.2,2023.2.28"
 $notmin = "2.2,2023.2.28"
 $tormin = "v4.3.0"
@@ -16,7 +16,7 @@ $tohmin = "v4.1.1"
 $snrmin = "1.6.0.0"
 $tormmin = "NONE"
 $lmmin = "3.1.2"
-$amsmin = "NONE"
+$amsmin = "v23.2.28.0"
 $toymin = "NONE"
 
 ### minimum version for v2022.12.16
