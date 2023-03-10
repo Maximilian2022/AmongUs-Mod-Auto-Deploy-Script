@@ -17,7 +17,7 @@ $snrmin = "1.6.0.0"
 $tormmin = "NONE"
 $lmmin = "3.1.2"
 $amsmin = "v23.2.28.0"
-$toymin = "NONE"
+$toymin = "v411.7"
 
 ### minimum version for v2022.12.16
 $ermin1 = "v5.0.0.0"
