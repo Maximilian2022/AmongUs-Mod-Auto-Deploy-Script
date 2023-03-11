@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.1.9"
+$version = "1.8.2"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
@@ -3093,7 +3093,8 @@ if($ckbci.Count -gt 0){
                     }
                 }
                 if($aurcheck){
-                    Invoke-WebRequest $auriw -OutFile "$md\$auriwfile" -UseBasicParsing
+                    aria2c -x5 -V --allow-overwrite=true --dir "$md" -o "$auriwfile" $auriw
+                    #Invoke-WebRequest $auriw -OutFile "$md\$auriwfile" -UseBasicParsing
                     Expand-7zip -ArchiveFileName $md\$auriwfile -TargetPath $md\$auriwfn
                     Remove-Item $md\$auriwfile
                     Set-Location -Path $md\$auriwfn
@@ -3123,7 +3124,8 @@ if($ckbci.Count -gt 0){
                 }
             }
             if($aucapcheck){
-                Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
+                #Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
+                aria2c -x5 -V --allow-overwrite=true --dir "$md" -o "$aucapfile" $aucap[0]                
                 Expand-7Zip -ArchiveFileName $md\$aucapfile -TargetPath $md\$aucapfn
                 Remove-Item $md\$aucapfile
                 Set-Location -Path $md\$aucapfn
@@ -3143,17 +3145,6 @@ if($ckbci.Count -gt 0){
         }elseif($ckbci[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
             Start-Transcript -Append -Path "$LogFileName"
-            try{
-                pwsh -Command '$PSVersionTable.PSVersion.major'
-            }
-            catch{
-                Write-Output $(Get-Translate("Powershell 7を導入中・・・。"))
-                $com = 'Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"'
-                $com | Out-File -Encoding "UTF8" -FilePath ".\ps.ps1" 
-                Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\ps.ps1`"" -Verb RunAs -Wait
-                Remove-Item "$npl\ps.ps1" -Force
-            }
-
             try{
                 choco -v
             }catch{
