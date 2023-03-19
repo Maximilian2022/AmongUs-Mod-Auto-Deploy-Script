@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.2"
+$version = "1.8.3"
 #
 #################################################################################################
 ### minimum version for v2023.2.28
@@ -11,7 +11,7 @@ $esmin = "v6.0.0.0"
 $nosmin = "2.2,2023.2.28"
 $notmin = "2.2,2023.2.28"
 $tormin = "v4.3.0"
-$tourmin = "NONE"
+$tourmin = "v4.0.3"
 $tohmin = "v4.1.1"
 $snrmin = "1.6.0.0"
 $tormmin = "NONE"
