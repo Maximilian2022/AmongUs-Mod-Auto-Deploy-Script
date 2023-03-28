@@ -1029,6 +1029,9 @@ function VerMinMax($ver0, $ver1, $ver2){
             if($ver0 -eq "NONE"){
                 $script:aumax = "NONE"
                 $script:aumin = $ver1
+            }elseif($ver0 -eq $ver1){
+                $script:aumax = "NONE"
+                $script:aumin = $ver1
             }else{
                 $script:aumax = $ver0
                 $script:aumin = $ver1    
@@ -1047,6 +1050,9 @@ function VerMinMax($ver0, $ver1, $ver2){
                     $script:aumax = $ver0
                     $script:aumin = $ver2    
                 }
+            }elseif($ver1 -eq $ver2){
+                $script:aumax = $ver0
+                $script:aumin = $ver2    
             }else{
                 $script:aumax = $ver1
                 $script:aumin = $ver2
