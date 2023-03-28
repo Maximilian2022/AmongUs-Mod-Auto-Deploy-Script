@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.5"
+$version = "1.8.6"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -20,32 +20,32 @@ $amsmin = "v23.2.28.0"
 $toymin = "v411.7"
 
 ### minimum version for v2023.2.28
-$ermin = "v6.0.0.0"
-$esmin = "v6.0.0.0"
-$nosmin = "2.2,2023.2.28"
-$notmin = "2.2,2023.2.28"
-$tormin = "v4.3.0"
-$tourmin = "v4.0.3"
-$tohmin = "v4.1.1"
-$snrmin = "1.6.0.0"
-$tormmin = "NONE"
-$lmmin = "3.1.2"
-$amsmin = "v23.2.28.0"
-$toymin = "v411.7"
+$ermin1 = "v6.0.0.0"
+$esmin1 = "v6.0.0.0"
+$nosmin1 = "2.2,2023.2.28"
+$notmin1 = "2.2,2023.2.28"
+$tormin1 = "v4.3.0"
+$tourmin1 = "v4.0.3"
+$tohmin1 = "v4.1.1"
+$snrmin1 = "1.6.0.0"
+$tormmin1 = "NONE"
+$lmmin1 = "3.1.2"
+$amsmin1 = "v23.2.28.0"
+$toymin1 = "v411.7"
 
 ### minimum version for v2022.12.16
-$ermin1 = "v5.0.0.0"
-$esmin1 = "v5.0.0.0"
-$nosmin1 = "2.0.1,2022.12.8"
-$notmin1 = "2.0.1,2022.12.8"
-$tormin1 = "v4.2.1"
-$tourmin1 = "v4.0.0"
-$tohmin1 = "v4.0.1"
-$snrmin1 = "1.5.0.0"
-$tormmin1 = "NONE"
-$lmmin1 = "3.0.4"
-$amsmin1 = "v22.12.14.0"
-$toymin1 = "v402.3.9"
+$ermin2 = "v5.0.0.0"
+$esmin2 = "v5.0.0.0"
+$nosmin2 = "2.0.1,2022.12.8"
+$notmin2 = "2.0.1,2022.12.8"
+$tormin2 = "v4.2.1"
+$tourmin2 = "v4.0.0"
+$tohmin2 = "v4.0.1"
+$snrmin2 = "1.5.0.0"
+$tormmin2 = "NONE"
+$lmmin2 = "3.0.4"
+$amsmin2 = "v22.12.14.0"
+$toymin2 = "v402.3.9"
 
 <### minimum version for v2022.10.25
 $ermin2 = "v4.0.0.0"
