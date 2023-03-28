@@ -11,7 +11,6 @@
  ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
  ・Nebula on the Test (Shanpshot) (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
  ・AUModS (<a rel="noreferrer noopener" href="https://github.com/AUModS/AUModS" target="_blank">AUModS/AUModS</a>)<br>
- ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
  ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
  ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
  ・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
@@ -182,6 +181,8 @@ EpicはGame Launcherにインストールパスを都度変更する形での実
  ・The Other Roles: GM Edition (<a href="https://github.com/yukinogatari/TheOtherRoles-GM">yukinogatari/TheOtherRoles-GM</a>)<br>
  ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>) <br>
  ・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
+ ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
+
 <br>
 </p>
 
