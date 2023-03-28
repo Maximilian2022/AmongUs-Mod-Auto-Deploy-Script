@@ -5,6 +5,20 @@
 $version = "1.8.3"
 #
 #################################################################################################
+### minimum version for v2023.3.28
+$ermin = "v6.0.0.0"
+$esmin = "v6.0.0.0"
+$nosmin = "2.2,2023.2.28"
+$notmin = "2.2,2023.2.28"
+$tormin = "v4.3.0"
+$tourmin = "v4.0.3"
+$tohmin = "v4.1.1"
+$snrmin = "1.6.0.0"
+$tormmin = "NONE"
+$lmmin = "3.1.2"
+$amsmin = "v23.2.28.0"
+$toymin = "v411.7"
+
 ### minimum version for v2023.2.28
 $ermin = "v6.0.0.0"
 $esmin = "v6.0.0.0"
@@ -33,7 +47,7 @@ $lmmin1 = "3.0.4"
 $amsmin1 = "v22.12.14.0"
 $toymin1 = "v402.3.9"
 
-### minimum version for v2022.10.25
+<### minimum version for v2022.10.25
 $ermin2 = "v4.0.0.0"
 $esmin2 = "v4.0.0.0"
 $nosmin2 = "1.16,2022.10.25"
@@ -47,7 +61,7 @@ $lmmin2 = "3.0.0"
 $amsmin2 = "v0.0.1"
 $toymin2 = "v3.0.2.2"
 
-<### minimum version for v2022.10.18
+### minimum version for v2022.10.18
 $ermin2 = "v3.3.0.3"
 $esmin2 = "v3.3.0.3"
 $nosmin2 = "NONE"
@@ -77,10 +91,12 @@ $toymin2 = "NONE"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 
-$prever0 = "2022.12.14"
-$prevtargetid0 = "3833836818403923932"
-$prever1 = "2022.10.25"
-$prevtargetid1 = "4338750749031095433"
+$prever0 = "2023.2.28"
+$prevtargetid0 = "1390179653173000898"
+$prever1 = "2022.12.14"
+$prevtargetid1 = "3833836818403923932"
+#$prever1 = "2022.10.25"
+#$prevtargetid1 = "4338750749031095433"
 #$prever1 = "2022.10.19"
 #$prevtargetid1 = "4338750749031095433"
 #$prever1 = "2022.9.20"
@@ -927,7 +943,7 @@ if($gmhbool){
     [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
 }
 [void] $Combo.Items.Add("AMS :AUModS/AUModS")
-[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
+#[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
