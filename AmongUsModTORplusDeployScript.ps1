@@ -2,18 +2,18 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.6"
+$version = "1.8.7"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
-$ermin = "v6.0.0.0"
-$esmin = "v6.0.0.0"
+$ermin = "v7.0.0.0"
+$esmin = "v7.0.0.0"
 $nosmin = "2.2,2023.2.28"
 $notmin = "2.2,2023.2.28"
 $tormin = "v4.3.0"
 $tourmin = "v4.0.3"
 $tohmin = "v4.1.1"
-$snrmin = "1.6.0.0"
+$snrmin = "1.7.0.0"
 $tormmin = "NONE"
 $lmmin = "3.1.2"
 $amsmin = "v23.2.28.0"
@@ -103,6 +103,7 @@ $prevtargetid1 = "3833836818403923932"
 #$prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
+$nebubool = $true
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
 
@@ -2004,7 +2005,9 @@ if($tio){
         }
 
         #temp
-        $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
+        if($nebubool){
+            $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
+        }
 
         $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
         $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
