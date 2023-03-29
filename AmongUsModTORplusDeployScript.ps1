@@ -2004,7 +2004,7 @@ if($tio){
         }
 
         #temp
-        #$tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
+        $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
 
         $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
         $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
