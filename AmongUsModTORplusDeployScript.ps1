@@ -103,7 +103,7 @@ $prevtargetid1 = "3833836818403923932"
 #$prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true
-$nebubool = $true
+$nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
 
