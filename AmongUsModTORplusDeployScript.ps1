@@ -1898,7 +1898,23 @@ if($tio){
     }elseif($scid -eq "ER+ES"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
     }elseif($scid -eq "TOH"){
-        $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
+        $tohver = $torv.Substring(1)
+        Write-Log $tohver
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf("${tohver}.zip") -gt 0){
+                $langd += $web2.assets.browser_download_url[$aii]
+            }
+        }      
+        for($aii = 0;$aii -lt $langd.Length;$aii++){
+            if($($langd[$aii]).IndexOf("${tohver}") -gt 0){
+                $tordlp = $langd[$aii]
+            }
+        }
+        if($tordlp.Indexof(${torv}.zip) -gt 0){
+            $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
+        }
+        Write-Log $tordlp
+        $exfoldn = [IO.Path]::GetFileNameWithoutExtension($(Split-Path $tordlp -Leaf));
     }elseif($scid -eq "TOY"){
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
             if($($web2.assets.browser_download_url[$aii]).IndexOf("${torv}.zip") -gt 0){
@@ -2686,6 +2702,13 @@ if($tio){
         if(test-path "$aupathm\TownOfHost-$torv"){
             robocopy "$aupathm\TownOfHost-$torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\TownOfHost-$torv" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }elseif(test-path "$aupathm\$exfoldn"){
+            robocopy "$aupathm\$exfoldn" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\$exfoldn" -recurse
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
