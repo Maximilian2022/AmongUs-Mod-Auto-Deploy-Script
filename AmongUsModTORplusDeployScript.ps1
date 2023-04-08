@@ -1953,8 +1953,6 @@ if($tio){
             exit
         }
     }elseif($scid -eq "NOS"){
-        $langhead=@()
-        $langtail=@()
         $torvtmp = $torv.Replace(",","%2C")
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
             if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
@@ -1962,20 +1960,6 @@ if($tio){
                     $tordlp = $web2.assets.browser_download_url[$aii]
                 }
             }  
-            if($($web2.assets.browser_download_url[$aii]).IndexOf("Japanese.dat") -gt 0){
-                if($($web2.assets.browser_download_url[$aii]).IndexOf("download/LANG") -gt 0){
-                    $langhead += $web2.assets.browser_download_url[$aii]
-                }else{
-                    $langtail += $web2.assets.browser_download_url[$aii]
-                }
-            }
-        }
-        $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
-        $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
-        if($lheadnum -gt $ltailnum){
-            $langdata = $($langhead|Measure-Object -Maximum).Maximum
-        }else{
-            $langdata = $($langtail|Measure-Object -Maximum).Maximum            
         }
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
@@ -2002,8 +1986,6 @@ if($tio){
         }
         $langdata = $nebulangdata
     }elseif($scid -eq "NOT"){
-        $langhead=@()
-        $langtail=@()
         $torvtmp = $torv.Replace(",","%2C")
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
             if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
@@ -2011,13 +1993,6 @@ if($tio){
                     $tordlp = $web2.assets.browser_download_url[$aii]
                 }
             }  
-            if($($web2.assets.browser_download_url[$aii]).IndexOf("Japanese.dat") -gt 0){
-                if($($web2.assets.browser_download_url[$aii]).IndexOf("download/LANG") -gt 0){
-                    $langhead += $web2.assets.browser_download_url[$aii]
-                }else{
-                    $langtail += $web2.assets.browser_download_url[$aii]
-                }
-            }
         }
 
         #temp
@@ -2025,13 +2000,6 @@ if($tio){
             $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
         }
 
-        $lheadnum = $($($langhead|Measure-Object -Maximum).Maximum).Substring(66,7)
-        $ltailnum = $($($langtail|Measure-Object -Maximum).Maximum).Substring(54,7)
-        if($lheadnum -gt $ltailnum){
-            $langdata = $($langhead|Measure-Object -Maximum).Maximum
-        }else{
-            $langdata = $($langtail|Measure-Object -Maximum).Maximum
-        }
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
         $z7tr = $true
