@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.9.2"
+$version = "1.9.0"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1471,7 +1471,6 @@ function Reload(){
         }else{
             $fileName2 = Join-path $npl "\AmongUsModDeployScript.conf"
             $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"
-
             if(test-path "$fileName2"){
                 Move-Item -Path $fileName2 -Destination $fileName
             }
