@@ -1323,6 +1323,24 @@ function Reload(){
         #Among Us Backup ：Backup用フォルダ
         $au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
   
+        #detector
+        #E:\SteamLibrary\steamapps\common
+        $detector = $true
+        $detected_path =""
+        while($detector){
+            foreach ($num in 65..90) {                                     
+                if(Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us"){
+                    $detector = $false                    
+                    $detected_path ="$([char]$num):\SteamLibrary\steamapps\common\Among Us"
+                    $detected_path_mod ="$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
+                    $detected_path_backup ="$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
+                    break
+                }     
+            }
+        }
+
+
+
         if(Test-path "$au_path_steam_org\Among Us.exe"){
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
@@ -1381,6 +1399,31 @@ function Reload(){
             $aupathm = $au_path_epic_mod
             $aupathb = $au_path_epic_back
             $script:platform = "epic"
+        }elseif(Test-Path "$detected_path\Among Us.exe"){
+            #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
+            if(Test-path "$detected_path\BepInEx"){
+                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+                    $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
+                    if(test-path "$env:ProgramFiles\PowerShell\7"){
+                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
+                    }else{
+                        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
+                    }
+                    Remove-Item $fpth2 -Force
+                }else{
+                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
+                    Write-Log "処理を中止します"
+                    pause
+                    exit
+                }     
+                Remove-Item "$npl\AmongusCleanInstall_Epic.ps1"
+            }
+            $aupatho = $detected_path
+            $aupathm = $detected_path_mod
+            $aupathb = $detected_path_back
+            $script:platform = "steam"
         }else{
             $fileName2 = Join-path $npl "\AmongUsModDeployScript.conf"
             $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"
