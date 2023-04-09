@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.8.9"
+$version = "1.8.9.1"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1333,7 +1333,7 @@ function Reload(){
                     $detector = $false                    
                     $detected_path ="$([char]$num):\SteamLibrary\steamapps\common\Among Us"
                     $detected_path_mod ="$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
-                    $detected_path_backup ="$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
+                    $detected_path_back ="$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
                     break
                 }     
             }
