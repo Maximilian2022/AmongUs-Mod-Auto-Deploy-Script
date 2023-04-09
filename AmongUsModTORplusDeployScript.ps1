@@ -1326,14 +1326,13 @@ function Reload(){
         #detector
         #E:\SteamLibrary\steamapps\common
         $detector = $true
-        $detected_path =""
         while($detector){
             foreach ($num in 65..90) {                                     
                 if(Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us"){
                     $detector = $false                    
-                    $detected_path ="$([char]$num):\SteamLibrary\steamapps\common\Among Us"
-                    $detected_path_mod ="$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
-                    $detected_path_back ="$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
+                    $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
+                    $detected_path_mod = "$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
+                    $detected_path_back = "$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
                     break
                 }     
             }
