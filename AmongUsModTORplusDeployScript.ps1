@@ -3718,15 +3718,15 @@ $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScri
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 aria2c -x5 -V --dir "$dsk" -o "icon.png" "http://www.defaulticon.com/images/icons32x32/3D-Z-Axis-Rotation.png?itok=MExRl8h1"
-
 Add-Type -AssemblyName System.Drawing
 #対象の画像を読み込む
 $img =[System.Drawing.Image]::FromFile("$dsk\icon.png")
 #任意の形式で保存する
 $img.Save("$dsk\icon.icon", [System.Drawing.Imaging.ImageFormat]::icon)
-
 $sShortcut.IconLocation = "$dsk\icon.icon"
 $sShortcut.Save()
+Remove-Item -Force "$dsk\icon.png"
+
 
 Write-Log $npl2
 Write-Log $dsk
