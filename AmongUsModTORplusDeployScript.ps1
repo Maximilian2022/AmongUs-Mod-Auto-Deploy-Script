@@ -3717,6 +3717,8 @@ $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScri
 
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
+aria2c -x5 -V --dir "$dsk" -o "icon.png" "http://www.defaulticon.com/images/icons32x32/3D-Z-Axis-Rotation.png?itok=MExRl8h1"
+$sShortcut.IconLocation = "$dsk\icon.png"
 $sShortcut.Save()
 
 Write-Log $npl2
