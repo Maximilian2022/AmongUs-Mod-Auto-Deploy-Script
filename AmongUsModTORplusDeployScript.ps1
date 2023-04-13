@@ -242,9 +242,7 @@ Write-Log "                                                   Version: $version"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
-if($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip4Powershell).count -eq 0){
-    Install-Module -Name 7Zip4Powershell -Force
-}
+
 #################################################################################################
 # Folder用Function
 #################################################################################################
@@ -1778,7 +1776,9 @@ if($RadioButton114.Checked){
 Write-Log "$mod が選択されました"
 Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
-
+if($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip4Powershell).count -eq 0){
+    Install-Module -Name 7Zip4Powershell -Force
+}
 if($RadioButton28.Checked){
     $submerged = $true
 }else{
