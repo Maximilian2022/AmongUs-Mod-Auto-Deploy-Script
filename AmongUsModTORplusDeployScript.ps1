@@ -2868,12 +2868,6 @@ if($tio){
         }
     }elseif($scid -eq "AMS"){
         if(test-path "$aupathm\BepInEx"){
-#            robocopy "$aupathm\BepInEx_UnityIL2CPP_x86_6.0.0-pre.1" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-#            Remove-Item "$aupathm\BepInEx_UnityIL2CPP_x86_6.0.0-pre.1" -recurse
-#            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-#            Write-Log "`r`n $content"
-#            Remove-Item "C:\Temp\temp.log" -Force
-
             if(Test-Path "$aupathm\BepInEx\plugins\AUModS.dll"){
                 Remove-item -Path "$aupathm\BepInEx\plugins\AUModS.dll"
                 Write-Log 'Delete Original AUModS Mod DLL'
