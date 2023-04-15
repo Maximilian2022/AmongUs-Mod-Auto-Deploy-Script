@@ -3735,6 +3735,8 @@ if($npl2 -eq $dsk){
     Write-Log "Current location is not Working Directory"
     Write-Log $npl2
     Write-Log $dsk
+    Write-Log $npl2.length
+    Write-Log $dsk.length
     if(Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat"){
         Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
     }
