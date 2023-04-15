@@ -3732,7 +3732,7 @@ Write-Log $dsk
 if($npl2 -ne $dsk){
     Write-Log "Current location is not Working Directory"
     if(Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat"){
-        Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
+        Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat"
     }
     if(Test-Path "$npl2\StartAmongUsGetLogScript_$scid.bat"){
         Remove-Item "$npl2\StartAmongUsGetLogScript_$scid.bat" -Force
