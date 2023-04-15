@@ -3712,18 +3712,16 @@ $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScri
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 
-<#
-aria2c -x5 -V --dir "$dsk" -o "icon.png" "http://www.defaulticon.com/images/icons32x32/3D-Z-Axis-Rotation.png?itok=MExRl8h1"
+
+aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/puzzle-dynamic-premium.png"
 Add-Type -AssemblyName System.Drawing
 #対象の画像を読み込む
 $img =[System.Drawing.Image]::FromFile("$dsk\icon.png")
 #任意の形式で保存する
 $img.Save("$dsk\icon.ico", [System.Drawing.Imaging.ImageFormat]::Icon)
 $sShortcut.IconLocation = "$dsk\icon.ico"
-Remove-Item "$dsk\icon.png" -Force 
-#>
-
 $sShortcut.Save()
+Remove-Item "$dsk\icon.png" -Force 
 
 
 Write-Log $npl2
