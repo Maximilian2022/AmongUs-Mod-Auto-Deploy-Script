@@ -3709,10 +3709,12 @@ $ps1script += " `"$scid`" `"$aupathm`" `"$platform`" `r`n"
 $ps1script += "del .\gmhtechsupport.ps1 `r`n"
 $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScript_$scid.bat" 
 
+if(Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk"){
+    Remove-Item "$scpath\StartAmongUsModTORplusDeployScript.lnk"    
+}
+
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
-
-
 aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/puzzle-dynamic-premium.png"
 Add-Type -AssemblyName System.Drawing
 #対象の画像を読み込む
