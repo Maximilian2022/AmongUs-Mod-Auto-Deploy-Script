@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1"
+$version = "1.9.1.1"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -156,11 +156,6 @@ catch{
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary -y" -Verb RunAs -Wait   
-    try{
-        magick.exe -help | Out-Null
-    }catch{
-        Start-Process powershell.exe -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
-    }
     Write-Output "`r`n"
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
@@ -3708,11 +3703,6 @@ try{
 }catch{
     Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
 }
-try{
-    magick.exe -help | Out-Null
-}catch{
-    Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
-}
 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$dsk\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
 $ps1script += "chcp 65001 `r`n"
 $ps1script += "@echo off `r`n"
@@ -3728,14 +3718,24 @@ if(Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk"){
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 $sShortcut.WorkingDirectory = "$dsk"
-aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png"
-if(Test-Path "$dsk\AUMADS.ico"){
-    Remove-Item "$dsk\AUMADS.ico" -Force 
+
+aria2c -x5 -V --dir "$dsk" -o "$dsk\AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico"
+
+if(!(Test-Path "$dsk\AUMADS.ico")){
+    try{
+        magick.exe -help | Out-Null
+    }catch{
+        Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
+    }
+    aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png"
+    if(Test-Path "$dsk\AUMADS.ico"){
+        Remove-Item "$dsk\AUMADS.ico" -Force 
+    }
+    magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"    
+    Remove-Item "$dsk\icon.png" -Force 
 }
-magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"
 $sShortcut.IconLocation = "$dsk\AUMADS.ico"
 $sShortcut.Save()
-Remove-Item "$dsk\icon.png" -Force 
 Write-Log $npl2.Path
 Write-Log $dsk
 if($npl2.Path -eq $dsk){
