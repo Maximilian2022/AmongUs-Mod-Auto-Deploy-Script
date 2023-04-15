@@ -3722,8 +3722,6 @@ magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress 
 $sShortcut.IconLocation = "$dsk\AUMADS.ico"
 $sShortcut.Save()
 Remove-Item "$dsk\icon.png" -Force 
-
-
 Write-Log $npl2
 Write-Log $dsk
 if($npl2 -ne $dsk){
