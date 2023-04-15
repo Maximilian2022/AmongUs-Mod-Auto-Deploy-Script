@@ -3721,6 +3721,7 @@ Add-Type -AssemblyName System.Drawing
 $img =[System.Drawing.Image]::FromFile("$dsk\icon.png")
 #任意の形式で保存する
 $img.Save("$dsk\icon.ico", [System.Drawing.Imaging.ImageFormat]::Icon)
+$img.Dispose()
 $sShortcut.IconLocation = "$dsk\icon.ico"
 $sShortcut.Save()
 Remove-Item "$dsk\icon.png" -Force 
