@@ -3712,11 +3712,13 @@ $ps1script += "pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps
 $ps1script += " `"$scid`" `"$aupathm`" `"$platform`" `r`n" 
 $ps1script += "del .\gmhtechsupport.ps1 `r`n"
 $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScript_$scid.bat" 
+
 if(Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk"){
     Remove-Item "$scpath\StartAmongUsModTORplusDeployScript.lnk"    
 }
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
+$sShortcut.WorkingDirectory = "$dsk"
 aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png"
 if(Test-Path "$dsk\AUMADS.ico"){
     Remove-Item "$dsk\AUMADS.ico" -Force 
@@ -3728,6 +3730,7 @@ Remove-Item "$dsk\icon.png" -Force
 Write-Log $npl2
 Write-Log $dsk
 if($npl2 -ne $dsk){
+    Write-Log "Current location is not Working Directory"
     if(Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat"){
         Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
     }
