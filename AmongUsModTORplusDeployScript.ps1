@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1.1"
+$version = "1.9.1.2"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -3718,9 +3718,10 @@ if(Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk"){
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 $sShortcut.WorkingDirectory = "$dsk"
-
+if(Test-Path "$dsk\AUMADS.ico"){
+    Remove-Item "$dsk\AUMADS.ico" -Force 
+}
 aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico"
-
 if(!(Test-Path "$dsk\AUMADS.ico")){
     try{
         magick.exe -help | Out-Null
@@ -3728,9 +3729,6 @@ if(!(Test-Path "$dsk\AUMADS.ico")){
         Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
     }
     aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png"
-    if(Test-Path "$dsk\AUMADS.ico"){
-        Remove-Item "$dsk\AUMADS.ico" -Force 
-    }
     magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"    
     Remove-Item "$dsk\icon.png" -Force 
 }
