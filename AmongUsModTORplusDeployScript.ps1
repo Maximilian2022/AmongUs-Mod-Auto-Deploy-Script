@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.0.3"
+$version = "1.9.0.5"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -3729,10 +3729,14 @@ $sShortcut.Save()
 Remove-Item "$dsk\icon.png" -Force 
 Write-Log $npl2
 Write-Log $dsk
-if($npl2 -ne $dsk){
+if($npl2 -eq $dsk){
+    Write-Log "Current location is Working Directory"
+}else{
     Write-Log "Current location is not Working Directory"
+    Write-Log $npl2
+    Write-Log $dsk
     if(Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat"){
-        Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat"
+        Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
     }
     if(Test-Path "$npl2\StartAmongUsGetLogScript_$scid.bat"){
         Remove-Item "$npl2\StartAmongUsGetLogScript_$scid.bat" -Force
