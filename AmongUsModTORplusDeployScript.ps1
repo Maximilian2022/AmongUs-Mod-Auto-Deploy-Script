@@ -4018,6 +4018,7 @@ Write-Log $error.length
 if($error.length -eq 0){
     Write-Log "Script実行時のエラーはなさそうです"
 }else{
+    Write-Log $error
     for($abc=0;$abc -le $error.Length;$abc++){
         $($error[$abc]) | Out-string | Write-Log 
     }    
