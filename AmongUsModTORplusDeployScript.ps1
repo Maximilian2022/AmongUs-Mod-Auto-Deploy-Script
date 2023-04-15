@@ -3719,7 +3719,7 @@ $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 $sShortcut.WorkingDirectory = "$dsk"
 
-aria2c -x5 -V --dir "$dsk" -o "$dsk\AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico"
+aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico"
 
 if(!(Test-Path "$dsk\AUMADS.ico")){
     try{
