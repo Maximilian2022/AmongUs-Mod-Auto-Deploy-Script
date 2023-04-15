@@ -3727,15 +3727,15 @@ magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress 
 $sShortcut.IconLocation = "$dsk\AUMADS.ico"
 $sShortcut.Save()
 Remove-Item "$dsk\icon.png" -Force 
-Write-Log $npl2
+Write-Log $npl2.Path
 Write-Log $dsk
-if($npl2 -eq $dsk){
+if($npl2.Path -eq $dsk){
     Write-Log "Current location is Working Directory"
 }else{
     Write-Log "Current location is not Working Directory"
-    Write-Log $npl2
+    Write-Log $npl2.Path
     Write-Log $dsk
-    Write-Log $npl2.length
+    Write-Log $($npl2.Path).length
     Write-Log $dsk.length
     if(Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat"){
         Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
