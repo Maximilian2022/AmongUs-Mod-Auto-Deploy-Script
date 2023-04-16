@@ -246,6 +246,23 @@ if($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip
     Install-Module -Name 7Zip4Powershell -Force
 }
 #################################################################################################
+# Icon and AUMADS Folder on Desktop
+#################################################################################################
+if(Test-Path "$dsk\AUMADS.ico"){
+    Remove-Item "$dsk\AUMADS.ico" -Force 
+}
+aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico"
+if(!(Test-Path "$dsk\AUMADS.ico")){
+    try{
+        magick.exe -help | Out-Null
+    }catch{
+        Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
+    }
+    aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png"
+    magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"    
+    Remove-Item "$dsk\icon.png" -Force 
+}
+#################################################################################################
 # Folder用Function
 #################################################################################################
 #Special Thanks
@@ -983,8 +1000,7 @@ $Combo.size = New-Object System.Drawing.Size(330,30)
 $Combo.DropDownStyle = "DropDownList"
 $Combo.FlatStyle = "standard"
 $Combo.font = $Font
-$form.ShowIcon = $False
-
+$form.Icon = "$dsk\AUMADS.ico"
 # コンボボックスに項目を追加
 #[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 #[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
@@ -2003,7 +2019,7 @@ $Form2 = New-Object System.Windows.Forms.Form
 $Form2.Size = "500,150"
 $Form2.Startposition = "CenterScreen"
 $Form2.Text = "Among Us Mod Auto Deploy Tool"
-$form2.ShowIcon = $False
+$form2.Icon = "$dsk\AUMADS.ico"
 $form2.FormBorderStyle = "Fixed3D"
 
 $label222 = New-Object System.Windows.Forms.Label
@@ -3718,20 +3734,6 @@ if(Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk"){
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
 $sShortcut.WorkingDirectory = "$dsk"
-if(Test-Path "$dsk\AUMADS.ico"){
-    Remove-Item "$dsk\AUMADS.ico" -Force 
-}
-aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico"
-if(!(Test-Path "$dsk\AUMADS.ico")){
-    try{
-        magick.exe -help | Out-Null
-    }catch{
-        Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
-    }
-    aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png"
-    magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"    
-    Remove-Item "$dsk\icon.png" -Force 
-}
 $sShortcut.IconLocation = "$dsk\AUMADS.ico"
 $sShortcut.Save()
 Write-Log $npl2.Path
