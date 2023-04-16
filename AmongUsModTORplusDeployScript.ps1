@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1.2"
+$version = "1.9.1.3"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -2556,7 +2556,7 @@ if($tio){
                 New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
             }
             robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
-            Remove-Item "C:\Temp\ExtremeHat" -Recurse
+            Remove-Item "C:\Temp\ExtremeHat" -Recurse -Force
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
@@ -2575,7 +2575,7 @@ if($tio){
                 New-Item -Path "$aupathm\MoreCosmic" -ItemType Directory
             }    
             robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\MoreCosmic" -Recurse
+            Remove-Item "C:\Temp\MoreCosmic" -Recurse -Force
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
@@ -2586,7 +2586,7 @@ if($tio){
                 New-Item -Path "$aupathm\Presets" -ItemType Directory
             }    
             robocopy "C:\Temp\Presets" "$aupathm\Presets" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\Presets" -Recurse
+            Remove-Item "C:\Temp\Presets" -Recurse -Force
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
@@ -2597,7 +2597,7 @@ if($tio){
                 New-Item -Path "$aupathm\TexturePack" -ItemType Directory
             }    
             robocopy "C:\Temp\TexturePack" "$aupathm\TexturePack" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\TexturePack" -Recurse
+            Remove-Item "C:\Temp\TexturePack" -Recurse -Force
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
@@ -2625,7 +2625,7 @@ if($tio){
                 New-Item -Path "$aupathm\TOH_DATA\" -ItemType Directory
             }
             Copy-Item "C:\Temp\TOH_DATA\*" "$aupathm\TOH_DATA" -Force               
-            Remove-Item "C:\Temp\TOH_DATA" -Force    
+            Remove-Item "C:\Temp\TOH_DATA" -Recurse -Force    
         }
     }elseif($scid -eq "TOY"){
         if(test-path "C:\Temp\com.emptybottle.townofhost.cfg"){
@@ -2655,7 +2655,7 @@ if($tio){
             }
             if(test-path "C:\Temp\SuperNewRoles"){
                 robocopy "C:\Temp\SuperNewRoles" "$aupathm\SuperNewRoles" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "C:\Temp\SuperNewRoles" -Recurse
+                Remove-Item "C:\Temp\SuperNewRoles" -Recurse -Force
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
                 Write-Log "`r`n $content"
@@ -2683,7 +2683,7 @@ if($tio){
         }
         if(test-path "C:\Temp\CustomPreset"){
             robocopy "C:\Temp\CustomPreset" "$aupathm\CustomPreset" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\CustomPreset" -Recurse
+            Remove-Item "C:\Temp\CustomPreset" -Recurse -Force
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
@@ -2702,7 +2702,7 @@ if($tio){
                 New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
             }
             robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\TheOtherHats" -Recurse
+            Remove-Item "C:\Temp\TheOtherHats" -Recurse -Force
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
