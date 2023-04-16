@@ -2550,17 +2550,17 @@ if($tio){
             }
             Copy-Item "C:\Temp\me.yukieiji.extremeskins.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg" -Force
             Remove-Item "C:\Temp\me.yukieiji.extremeskins.cfg" -Force    
+        }
+        if(test-path "C:\Temp\ExtremeHat"){
             if(!(Test-Path "$aupathm\ExtremeHat")){
                 New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
             }
-            if(test-path "C:\Temp\ExtremeHat"){
-                robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
-                Remove-Item "C:\Temp\ExtremeHat" -Recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
+            Remove-Item "C:\Temp\ExtremeHat" -Recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force
-            }
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
@@ -2569,34 +2569,41 @@ if($tio){
             }
             Copy-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" -Force
             Remove-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force    
+        }
+        if(test-path "C:\Temp\MoreCosmic"){
             if(!(Test-Path "$aupathm\MoreCosmic")){
                 New-Item -Path "$aupathm\MoreCosmic" -ItemType Directory
-            }
-            if(test-path "C:\Temp\MoreCosmic"){
-                robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "C:\Temp\MoreCosmic" -Recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            }    
+            robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\MoreCosmic" -Recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force
-            }
-            if(test-path "C:\Temp\Presets"){
-                robocopy "C:\Temp\Presets" "$aupathm\Presets" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "C:\Temp\Presets" -Recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force
-            }
-            if(test-path "C:\Temp\TexturePack"){
-                robocopy "C:\Temp\TexturePack" "$aupathm\TexturePack" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "C:\Temp\TexturePack" -Recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force
-            }
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
+        if(test-path "C:\Temp\Presets"){
+            if(!(Test-Path "$aupathm\Presets")){
+                New-Item -Path "$aupathm\Presets" -ItemType Directory
+            }    
+            robocopy "C:\Temp\Presets" "$aupathm\Presets" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\Presets" -Recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+        if(test-path "C:\Temp\TexturePack"){
+            if(!(Test-Path "$aupathm\TexturePack")){
+                New-Item -Path "$aupathm\TexturePack" -ItemType Directory
+            }    
+            robocopy "C:\Temp\TexturePack" "$aupathm\TexturePack" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\TexturePack" -Recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+        
     }elseif($scid -eq "LM"){
         if(test-path "C:\Temp\me.allul.lasmonjas.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -2689,17 +2696,17 @@ if($tio){
             }
             Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
             Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force    
+        }
+        if(test-path "C:\Temp\TheOtherHats"){
             if(!(Test-Path "$aupathm\TheOtherHats")){
                 New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
             }
-            if(test-path "C:\Temp\TheOtherHats"){
-                robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "C:\Temp\TheOtherHats" -Recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\TheOtherHats" -Recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force
-            }
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
     }
     $Bar.Value = "64"
