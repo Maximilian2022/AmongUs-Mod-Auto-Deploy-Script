@@ -247,14 +247,14 @@ if($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip
 if(Test-Path "$dsk\AUMADS.ico"){
     Remove-Item "$dsk\AUMADS.ico" -Force 
 }
-aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico"
+aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
 if(!(Test-Path "$dsk\AUMADS.ico")){
     try{
         magick.exe -help | Out-Null
     }catch{
         Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
     }
-    aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png"
+    aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png" --disable-ipv6
     magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"    
     Remove-Item "$dsk\icon.png" -Force 
 }
