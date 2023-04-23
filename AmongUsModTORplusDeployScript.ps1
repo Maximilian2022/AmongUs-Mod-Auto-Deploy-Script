@@ -130,8 +130,7 @@ function Get-Translate($transtext){
 #################################################################################################
 # 権限チェック
 #################################################################################################
-if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
-}else{
+if(!((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username")){
     Write-Host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
     Write-Host $(Get-Translate("あなたのユーザー名($env:username)は管理者権限グループに属していません"))
     Write-Host $(Get-Translate("管理者権限グループに属しているユーザーは以下の通りです"))
@@ -140,7 +139,6 @@ if((net localgroup Administrators) -contains $env:username -or (net localgroup A
     pause
     exit
 }
-
 
 #################################################################################################
 # Run w/ Powershell v7 if available.
@@ -163,16 +161,14 @@ catch{
 }
 
 Unblock-File "$npl\AmongUsModTORplusDeployScript.ps1"
-function IsZenkaku
-{
+function IsZenkaku{
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateLength(1, 1)]
         [string]
         $Text
     )
-    process
-    {
+    process{
         $shiftJis = [System.Text.Encoding]::GetEncoding("Shift_JIS")
         $shiftJis.GetByteCount($Text) -eq 2
     }
@@ -299,8 +295,7 @@ function Get-FolderPathG{
 #################################################################################################
 # バイト配列を16進数文字列に変換する. 
 #################################################################################################
-function ToHex([byte[]] $hashBytes)
-{
+function ToHex([byte[]] $hashBytes){
     $builder = New-Object System.Text.StringBuilder
     $hashBytes | ForEach-Object{ [void] $builder.Append($_.ToString("x2")) }
     $builder.ToString()
@@ -308,8 +303,7 @@ function ToHex([byte[]] $hashBytes)
 
 # 指定したフォルダ以下の全てのファイルを取得する.
 # (ファイルが指定された場合はファイル自身を返す)
-function GetFilesRecurse([string] $path)
-{
+function GetFilesRecurse([string] $path){
     Get-ChildItem $path -Recurse |
         Where-Object -FilterScript {
             # ディレクトリ以外のみ (ディレクトリのビットマスク値は16)
@@ -317,8 +311,7 @@ function GetFilesRecurse([string] $path)
         }
 }
 
-function MakeEntry
-{
+function MakeEntry{
     process {
         New-Object PSObject -Property @{
             LastWriteTime = $_.LastWriteTime;
@@ -655,8 +648,7 @@ function BackUpAU{
 
 # パイプラインからのファイルのハッシュ情報を取得する.
 #https://gist.github.com/seraphy/4674696
-function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを指定します."))
-{
+function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを指定します.")){
     begin {
         $algo = [System.Security.Cryptography.HashAlgorithm]::Create($algoName)
 
