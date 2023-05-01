@@ -2033,7 +2033,6 @@ $torgmdll
 $Bar.Value = "0"
 
 if($tio){
-
     $Form2.Show()
     $Bar.Value = "10"
     #################################################################################################
@@ -2068,7 +2067,11 @@ if($tio){
     }elseif($scid -eq "ER"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
     }elseif($scid -eq "ER+ES"){
-        $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
+        if(${torv} -lt "v7.1.0.0"){
+            $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
+        }else{
+            $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins_spon.zip"
+        }
     }elseif($scid -eq "TOH"){
         $tohver = $torv.Substring(1)
         Write-Log $tohver
