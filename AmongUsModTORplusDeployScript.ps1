@@ -2017,7 +2017,7 @@ $form2.FormBorderStyle = "Fixed3D"
 $label222 = New-Object System.Windows.Forms.Label
 $label222.Location = New-Object System.Drawing.Point(10,60)
 $label222.Size = New-Object System.Drawing.Size(320,60)
-$label222.Text = $(Get-Translate("Among Us ModのDeployが進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+$label222.Text = $(Get-Translate("Among Us Mod $scid のDeployが進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
 $form2.Controls.Add($label222)
 
 # プログレスバー
