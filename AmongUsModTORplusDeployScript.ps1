@@ -2,7 +2,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1.3"
+$version = "1.9.1.4"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -2089,7 +2089,7 @@ if($tio){
         $exfoldn = [IO.Path]::GetFileNameWithoutExtension($(Split-Path $tordlp -Leaf));
     }elseif($scid -eq "TOY"){
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
-            if($($web2.assets.browser_download_url[$aii]).IndexOf("${torv}.zip") -gt 0){
+            if(($($web2.assets.browser_download_url[$aii]).IndexOf("Y-${torv}") -gt 0) -and ($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0)){
                 $langd += $web2.assets.browser_download_url[$aii]
             }
         }
