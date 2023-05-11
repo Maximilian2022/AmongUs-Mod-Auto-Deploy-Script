@@ -155,7 +155,7 @@ catch{
     Write-Output "`r`n"
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
     Exit
 }
@@ -190,7 +190,7 @@ if ($achk){
 Write-Output $(Get-Translate("実行前チェック完了"))
 
 if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($($PSVersionTable.PSVersion.Major) -ne "7")) {
-    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     exit
 }
 
@@ -252,7 +252,7 @@ if(!(Test-Path "$dsk\AUMADS.ico")){
     try{
         magick.exe -help | Out-Null
     }catch{
-        Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
+        Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
     }
     aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png" --disable-ipv6
     magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"    
@@ -328,7 +328,7 @@ if(Test-Path "C:\Program Files\Epic Games\AmongUs"){
     $legver = legendary.exe -V            
     if($legver -ge 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"'){
     }else{
-        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade legendary -y" -Verb RunAs -Wait   
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade legendary -y" -Verb RunAs -Wait   
         #legendaryが最新じゃないので手動でDL
     
         $rel2 = "https://api.github.com/repos/derrod/legendary/releases/latest"
@@ -739,7 +739,7 @@ catch{
     }catch{
         Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     }
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
 }
 #################################################################################################
 # Clock Sync
@@ -1721,9 +1721,9 @@ if($isall){
     for($iall = 0;$iall -lt 9;$iall++){
         Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
         if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
         }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$dsk\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$dsk\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
         }else{
             Write-Log "何かがおかしい。"
         }
@@ -3097,7 +3097,7 @@ if($tio){
                     }else{
                         $v5run = $true
                         if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-                            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `'
+                            Start-Process powershell.exe -ArgumentList "-NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File `'
                 $ps1script += "$ps1name"
                 $ps1script += '`"" -Verb RunAs -Wait
                             exit
@@ -3106,7 +3106,7 @@ if($tio){
                 }elseif($PSVersionTable.PSVersion.major -gt 5){
                     $v5run = $true
                     if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `'
+                        Start-Process pwsh.exe -ArgumentList "-NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File `'
                 $ps1script += "$ps1name"
                 $ps1script += '`"" -Verb RunAs -Wait
                         exit
@@ -3285,7 +3285,7 @@ if($ckbci.Count -gt 0){
                         Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
                     }
         
-                    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait        
+                    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait        
                 }else{
                     Write-Log "AmongUsReplayInWindowの処理を中止します"
                     $qureq = $false
@@ -3323,7 +3323,7 @@ if($ckbci.Count -gt 0){
             }catch{
                 Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
             $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/automuteus/amonguscapture/releases/latest" -UseBasicParsing)).assets.browser_download_url
             $aucapfile = split-path $aucap[0] -Leaf 
             $aucapfn = $aucapfile.Substring(0, $aucapfile.LastIndexOf('.'))
@@ -3361,10 +3361,10 @@ if($ckbci.Count -gt 0){
             try{
                 choco -v
             }catch{
-                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -WindowStyle Minimized -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
 
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 vcredist-all -y" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 vcredist-all -y" -Verb RunAs -Wait
             Stop-Transcript
             Write-Log "VC Redist Install ends"
             $Bar.Value = "86"
@@ -3373,9 +3373,9 @@ if($ckbci.Count -gt 0){
             try{
                 choco -v
             }catch{
-                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -WindowStyle Minimized -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 pwsh powershell-core -y" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 pwsh powershell-core -y" -Verb RunAs -Wait
             Write-Log "PS7 Install ends"
             $Bar.Value = "87"
         }elseif($ckbci[$aa] -eq "dotNetFramework"){
@@ -3384,10 +3384,10 @@ if($ckbci.Count -gt 0){
             try{
                 choco -v
             }catch{
-                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -WindowStyle Minimized -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
 
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait
             Stop-Transcript
             Write-Log ".Net Framework Install ends"
             $Bar.Value = "88"
@@ -3689,7 +3689,7 @@ if($ckbci.Count -gt 0){
             }catch{
                 Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
             }
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade streamlabs-obs obs-studio  -y" -Verb RunAs -Wait
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade streamlabs-obs obs-studio  -y" -Verb RunAs -Wait
             Stop-Transcript
             Write-Log "配信ソフトセットアップ完了"
             $Bar.Value = "91"
@@ -3805,10 +3805,10 @@ if($platform -eq "Epic"){
         }catch{
             Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
         }
-        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade legendary -y" -Verb RunAs -Wait   
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade legendary -y" -Verb RunAs -Wait   
     }
     
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command cup legendary -y" -Verb RunAs -Wait   
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command cup legendary -y" -Verb RunAs -Wait   
     Start-Transcript -Append -Path "$LogFileName"
     Set-Location "$aupathb"
     legendary.exe auth --import
