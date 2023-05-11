@@ -3774,9 +3774,9 @@ if($npl2.Path -eq $dsk){
     if(Test-Path "$npl2\StartAmongUsGetLogScript_$scid.bat"){
         Remove-Item "$npl2\StartAmongUsGetLogScript_$scid.bat" -Force
     }
-    if(Test-Path "$npl2\AmongUsModTORplusDeployScript.ps1"){
-        Remove-Item "$npl2\AmongUsModTORplusDeployScript.ps1" -Force
-    }
+ #   if(Test-Path "$npl2\AmongUsModTORplusDeployScript.ps1"){
+ #       Remove-Item "$npl2\AmongUsModTORplusDeployScript.ps1" -Force
+ #   }
 }
 
 ####################
