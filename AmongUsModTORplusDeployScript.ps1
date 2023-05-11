@@ -1010,7 +1010,7 @@ if($gmhbool){
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
 [void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
-[void] $Combo.Items.Add("Install/Update ALL")
+[void] $Combo.Items.Add("Install/Update Selected")
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
 
@@ -1227,9 +1227,9 @@ function Reload(){
             VerMinMax $toymin $toymin1 $toymin2
             Write-Log "TOY Selected"
             $RadioButton29.Checked = $True
-        }"Install/Update ALL"{
+        }"Install/Update Selected"{
             $tio = $false
-            Write-Log "ALL Selected"
+            Write-Log "SAL Selected"
             $combo2.Enabled = $false
             $script:isall = $true
         }"Tool Install Only"{
@@ -1718,18 +1718,78 @@ if($null -eq $Args1){
 }
 
 if($isall){
+    #選択式
+
+    # フォーム全体の設定
+    $form0 = New-Object System.Windows.Forms.Form
+    $form0.Text = "選択"
+    $form0.Size = New-Object System.Drawing.Size(250,300)
+    $form0.StartPosition = "CenterScreen"
+
+    # ラベルを表示
+    $label0 = New-Object System.Windows.Forms.Label
+    $label0.Location = New-Object System.Drawing.Point(10,10)
+    $label0.Size = New-Object System.Drawing.Size(230,20)
+    $label0.Text = "InstallするModを選択してください"
+
+    # OKボタンの設定
+    $OKButton0 = New-Object System.Windows.Forms.Button
+    $OKButton0.Location = New-Object System.Drawing.Point(40,200)
+    $OKButton0.Size = New-Object System.Drawing.Size(75,30)
+    $OKButton0.Text = "OK"
+    $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
+
+    # キャンセルボタンの設定
+    $CancelButton0 = New-Object System.Windows.Forms.Button
+    $CancelButton0.Location = New-Object System.Drawing.Point(130,200)
+    $CancelButton0.Size = New-Object System.Drawing.Size(75,30)
+    $CancelButton0.Text = "Cancel"
+    $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+
+    # リストボックスの設定
+    $listBox0 = New-Object System.Windows.Forms.ListBox
+    $listBox0.Location = New-Object System.Drawing.Point(10,30)
+    $listBox0.Size = New-Object System.Drawing.Size(210,150)
+
+    for($ial = 0;$ial -lt 9;$ial++){
+        [void] $listBox0.Items.Add("$($combo.items[$iall])")
+    }
+    # フォームにアイテムを追加
+    $form0.Controls.Add($label0)
+    $form0.Controls.Add($OKButton0)
+    $form0.Controls.Add($CancelButton0)
+    $form0.Controls.Add($listBox0)
+
+    # キーとボタンの関係
+    $form0.AcceptButton = $OKButton0
+    $form0.CancelButton = $CancelButton0
+
+    # フォームを最前面に表示
+    $form0.Topmost = $True
+
+    # フォームを表示＋選択結果を変数に格納
+    $result0 = $form0.ShowDialog()
+
+    # 選択後、OKボタンが押された場合、選択項目を表示
+    if ($result0 -eq "OK")
+    {
+        $AAA = $listBox0.SelectedItem
+    }else{
+        exit
+    }
+
     # プログレスバー
     $Form22 = New-Object System.Windows.Forms.Form
-    $Form22.Size = "500,150"
+    $Form22.Size = "520,170"
     $Form22.Startposition = "CenterScreen"
     $Form22.Text = "Among Us Mod Auto Deploy Tool"
     $form22.Icon = "$dsk\AUMADS.ico"
     $form22.FormBorderStyle = "Fixed3D"
 
     $label2222 = New-Object System.Windows.Forms.Label
-    $label2222.Location = New-Object System.Drawing.Point(10,60)
+    $label2222.Location = New-Object System.Drawing.Point(10,70)
     $label2222.Size = New-Object System.Drawing.Size(320,60)
-    $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update All が進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+    $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected が進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
     $form22.Controls.Add($label2222)
 
     # プログレスバー
@@ -1745,15 +1805,17 @@ if($isall){
 
     for($iall = 0;$iall -lt 9;$iall++){
         $Bar2.Value = "$iall"
-        Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
-        if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
-        }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$dsk\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
-        }else{
-            Write-Log "何かがおかしい。"
+        if($AAA.contains($iall)){
+            Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
+            if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+            }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$dsk\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+            }else{
+                Write-Log "何かがおかしい。"
+            }
+            Write-Log "$($combo.items[$iall]) のインストールが完了しました。"    
         }
-        Write-Log "$($combo.items[$iall]) のインストールが完了しました。"
     }
 
     $Form22.Close()
