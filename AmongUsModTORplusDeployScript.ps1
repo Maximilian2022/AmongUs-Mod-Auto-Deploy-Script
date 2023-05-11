@@ -1736,7 +1736,7 @@ if($isall){
     $CheckedBox0.Location = "5,40"
     $CheckedBox0.Size = "220,150"
 
-    $RETU2 =@()
+    $RETU2 =@("ALL")
     # 配列を作成
     for($ial = 0;$ial -lt 9;$ial++){
         $RETU2 += $($combo.items[$ial])
@@ -1812,7 +1812,7 @@ if($isall){
 
     for($iall = 0;$iall -lt 9;$iall++){
         $Bar2.Value = "$iall"
-        if($AAA2.contains($iall)){
+        if($AAA2.contains($iall) -OR $AAA2.contains("ALL")){
             Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
             if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
                 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
