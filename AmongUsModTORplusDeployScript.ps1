@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1.5"
+$version = "1.9.1.6"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1726,7 +1726,7 @@ if($null -eq $Args1){
 
 if($isall){
     for($iall = 0;$iall -lt 9;$iall++){
-        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1 `"$iall`" `"" -Verb RunAs -Wait
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
     }
     exit
 }
