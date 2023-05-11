@@ -1737,8 +1737,8 @@ if($isall){
     $CheckedBox0.Size = "220,150"
 
     # 配列を作成
-    for($iall = 0;$iall -lt 9;$iall++){
-        $RETU += $($combo.items[$iall])
+    for($ial = 0;$ial -lt 9;$ial++){
+        $RETU += $($combo.items[$ial])
     }
 
     # チェックボックスに10項目を追加
@@ -1778,8 +1778,7 @@ if($isall){
     $result0 = $Form0.ShowDialog()
 
     # 処理分岐
-    if ( $result0 -eq "OK" )
-    {
+    if ( $result0 -eq "OK" ){
         $AAA = @($CheckedBox0.CheckedItems)
     }else{
         exit
