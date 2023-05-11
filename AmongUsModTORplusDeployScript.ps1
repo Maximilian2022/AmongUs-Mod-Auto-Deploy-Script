@@ -1736,6 +1736,7 @@ if($isall){
     $CheckedBox0.Location = "5,40"
     $CheckedBox0.Size = "220,150"
 
+    $RETU2 =@()
     # 配列を作成
     for($ial = 0;$ial -lt 9;$ial++){
         $RETU2 += $($combo.items[$ial])
