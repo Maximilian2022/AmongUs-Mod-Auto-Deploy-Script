@@ -1730,7 +1730,6 @@ if($isall){
         Write-Log "$($combo.items[$iall]) のインストールが完了しました。"
         Start-Sleep -Seconds 1
     }
-    exit
 }
 
 
