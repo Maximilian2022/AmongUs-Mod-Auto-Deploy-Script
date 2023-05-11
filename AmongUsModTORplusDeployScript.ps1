@@ -1779,7 +1779,7 @@ if($isall){
 
     # 処理分岐
     if ( $result0 -eq "OK" ){
-        $AAA = @($CheckedBox0.CheckedItems)
+        $AAA2 = @($CheckedBox0.CheckedItems)
     }else{
         exit
     }
@@ -1811,7 +1811,7 @@ if($isall){
 
     for($iall = 0;$iall -lt 9;$iall++){
         $Bar2.Value = "$iall"
-        if($AAA.contains($iall)){
+        if($AAA2.contains($iall)){
             Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
             if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
                 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
