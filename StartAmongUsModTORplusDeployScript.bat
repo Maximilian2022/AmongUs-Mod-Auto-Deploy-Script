@@ -7,5 +7,5 @@ curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-A
 
 powershell -NoProfile -ExecutionPolicy Unrestricted .\AmongUsModTORplusDeployScript.ps1
 
-del .\AmongUsModTORplusDeployScript.ps1
+del /F /Q .\AmongUsModTORplusDeployScript.ps1
 
