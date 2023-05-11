@@ -3746,7 +3746,7 @@ $ps1script += "@echo off `r`n"
 $ps1script += "curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1 `r`n"
 $ps1script += "pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1"
 $ps1script += " `"$scid`" `"$aupathm`" `"$platform`" `r`n" 
-$ps1script += "del .\gmhtechsupport.ps1 `r`n"
+$ps1script += "del /F /Q .\gmhtechsupport.ps1 `r`n"
 $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScript_$scid.bat" 
 
 if(Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk"){
