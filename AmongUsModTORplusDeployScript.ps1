@@ -1725,7 +1725,7 @@ if($isall){
         }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$dsk\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
         }else{
-            Write-Log "なんかまずい"
+            Write-Log "何かがおかしい。"
         }
         Write-Log "$($combo.items[$iall]) のインストールが完了しました。"
         Start-Sleep -Seconds 1
