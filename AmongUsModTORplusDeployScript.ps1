@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1.8"
+$version = "1.9.1.9"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1718,7 +1718,33 @@ if($null -eq $Args1){
 }
 
 if($isall){
+    # プログレスバー
+    $Form22 = New-Object System.Windows.Forms.Form
+    $Form22.Size = "500,150"
+    $Form22.Startposition = "CenterScreen"
+    $Form22.Text = "Among Us Mod Auto Deploy Tool"
+    $form22.Icon = "$dsk\AUMADS.ico"
+    $form22.FormBorderStyle = "Fixed3D"
+
+    $label2222 = New-Object System.Windows.Forms.Label
+    $label2222.Location = New-Object System.Drawing.Point(10,60)
+    $label2222.Size = New-Object System.Drawing.Size(320,60)
+    $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update All が進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+    $form22.Controls.Add($label2222)
+
+    # プログレスバー
+    $Bar2 = New-Object System.Windows.Forms.ProgressBar
+    $Bar2.Location = "10,20"
+    $Bar2.Size = "460,30"
+    $Bar2.Maximum = "10"
+    $Bar2.Minimum = "0"
+    $Bar2.Style = "Continuous"
+    $Form22.Controls.Add($Bar2)
+    $Bar2.Value = "0"
+    $Form22.Show()
+
     for($iall = 0;$iall -lt 9;$iall++){
+        $Bar2.Value = "$iall"
         Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
         if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
@@ -1728,8 +1754,9 @@ if($isall){
             Write-Log "何かがおかしい。"
         }
         Write-Log "$($combo.items[$iall]) のインストールが完了しました。"
-        Start-Sleep -Seconds 1
     }
+
+    $Form22.Close()
 }
 
 
