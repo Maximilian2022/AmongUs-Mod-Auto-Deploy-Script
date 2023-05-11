@@ -1015,6 +1015,9 @@ if($gmhbool){
 $Combo.SelectedIndex = 0
 
 $isall = $false
+$opflag = $false
+$ym = Get-Date -Format yyyyMM
+
 ##############################################
 
 # ラベルを表示
@@ -1640,25 +1643,15 @@ function Reload(){
         $script:releasepage = $releasepage2
         $script:scid = $scid
         $script:aumin = $aumin
-        $ym = Get-Date -Format yyyyMM
+        $ym = $script:ym
         if(!(Test-Path "$aupathb\chk$ym.txt")){
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"), $true)
-            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"), $true)                       
-
+            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"), $true)                         
             $pwshv = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases/latest" -UseBasicParsing)).tag_name
-
             if("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv"){
                 $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"), $true)
             }
-
-            if(!(Test-Path "$aupathb")){
-                New-Item $aupathb -Type Directory 
-            }
-            Write-Output $ym |Out-File -FilePath "$aupathb\chk$ym.txt"
-            $ym2 = $ym -1
-            if(Test-Path "$aupathb\chk$ym2.txt"){
-                Remove-Item "$aupathb\chk$ym2.txt" -Force
-            }
+            $script:opflag = $true
         }
     }
     $script:tio = $tio
@@ -3786,6 +3779,19 @@ if($npl2.Path -eq $dsk){
     }
 }
 
+####################
+## Option Check
+####################
+if($opflag){
+    if(!(Test-Path "$aupathb")){
+        New-Item $aupathb -Type Directory 
+    }
+    Write-Output $ym |Out-File -FilePath "$aupathb\chk$ym.txt"
+    $ym2 = $ym -1
+    if(Test-Path "$aupathb\chk$ym2.txt"){
+        Remove-Item "$aupathb\chk$ym2.txt" -Force
+    }    
+}
 ####################
 
 $Bar.Value = "93"
