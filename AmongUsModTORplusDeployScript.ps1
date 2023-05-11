@@ -1,8 +1,9 @@
-﻿################################################################################################
+﻿Param($Args1) #modnum
+################################################################################################
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1.4"
+$version = "1.9.1.5"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -106,7 +107,6 @@ $gmhbool = $true
 $nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -1010,9 +1010,11 @@ if($gmhbool){
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
 [void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
+[void] $Combo.Items.Add("Install/Update ALL")
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
 
+$isall = $false
 ##############################################
 
 # ラベルを表示
@@ -1222,6 +1224,11 @@ function Reload(){
             VerMinMax $toymin $toymin1 $toymin2
             Write-Log "TOY Selected"
             $RadioButton29.Checked = $True
+        }"Install/Update ALL"{
+            $tio = $false
+            Write-Log "ALL Selected"
+            $combo2.Enabled = $false
+            $script:isall = $true
         }"Tool Install Only"{
             $tio = $false
             Write-Log "TIO Selected"
@@ -1697,19 +1704,33 @@ $form.Controls.Add($Combo2)
 Invoke-Command -ScriptBlock $Combo_SelectedIndexChanged
 $Combo.add_SelectedIndexChanged($Combo_SelectedIndexChanged)
 
-# フォームを最前面に表示
-$form.Topmost = $True
+if($null -eq $Args1){
+    # フォームを最前面に表示
+    $form.Topmost = $True
+    # フォームを表示＋選択結果を変数に格納
+    $result = $form.ShowDialog()
 
-# フォームを表示＋選択結果を変数に格納
-$result = $form.ShowDialog()
-
-# 選択後、OKボタンが押された場合、選択項目を表示
-if ($result -eq "OK"){
+    # 選択後、OKボタンが押された場合、選択項目を表示
+    if ($result -eq "OK"){
+        $mod = $combo.Text
+        $torpv = $combo2.Text
+    }else{
+        exit
+    }
+}else{
+    $combo.SelectedIndex = $Args1
+    Reload
     $mod = $combo.Text
     $torpv = $combo2.Text
-}else{
+}
+
+if($isall){
+    for($iall = 0;$iall -lt 9;$iall++){
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1 `"$iall`" `"" -Verb RunAs -Wait
+    }
     exit
 }
+
 
 $prefpth = ""
 if($RadioButton114.Checked){
