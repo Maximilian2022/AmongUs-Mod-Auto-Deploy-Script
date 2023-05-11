@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.1.7"
+$version = "1.9.1.8"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1726,8 +1726,16 @@ if($null -eq $Args1){
 
 if($isall){
     for($iall = 0;$iall -lt 9;$iall++){
-        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+        Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
+        if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+        }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$dsk\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+        }else{
+            Write-Log "なんかまずい"
+        }
         Write-Log "$($combo.items[$iall]) のインストールが完了しました。"
+        Start-Sleep -Seconds 1
     }
     exit
 }
