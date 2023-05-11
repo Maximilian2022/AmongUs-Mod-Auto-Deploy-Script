@@ -1727,7 +1727,7 @@ if($null -eq $Args1){
 if($isall){
     for($iall = 0;$iall -lt 9;$iall++){
         Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
-        Write-Log "$combo.items[$iall] のインストールが完了しました。"
+        Write-Log "$($combo.items[$iall]) のインストールが完了しました。"
     }
     exit
 }
