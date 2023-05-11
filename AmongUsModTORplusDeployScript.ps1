@@ -1719,61 +1719,68 @@ if($null -eq $Args1){
 
 if($isall){
     #選択式
-
-    # フォーム全体の設定
+    # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
+    $form0.Size = "250,280"
+    $form0.Startposition = "CenterScreen"
     $form0.Text = "選択"
-    $form0.Size = New-Object System.Drawing.Size(250,300)
-    $form0.StartPosition = "CenterScreen"
 
-    # ラベルを表示
+    # ラベルを作成
     $label0 = New-Object System.Windows.Forms.Label
-    $label0.Location = New-Object System.Drawing.Point(10,10)
-    $label0.Size = New-Object System.Drawing.Size(230,20)
+    $label0.Location = "10,20"
+    $label0.Size = "250,20"
     $label0.Text = "InstallするModを選択してください"
+
+    # チェックボックスを作成
+    $CheckedBox0 = New-Object System.Windows.Forms.CheckedListBox
+    $CheckedBox0.Location = "5,40"
+    $CheckedBox0.Size = "220,150"
+
+    # 配列を作成
+    for($iall = 0;$iall -lt 9;$iall++){
+        $RETU += $($combo.items[$iall])
+    }
+
+    # チェックボックスに10項目を追加
+    $CheckedBox0.Items.AddRange($RETU)
+
+    # すべての既存の選択をクリア
+    $CheckedBox0.ClearSelected()
 
     # OKボタンの設定
     $OKButton0 = New-Object System.Windows.Forms.Button
-    $OKButton0.Location = New-Object System.Drawing.Point(40,200)
-    $OKButton0.Size = New-Object System.Drawing.Size(75,30)
+    $OKButton0.Location = "40,200"
+    $OKButton0.Size = "75,30"
     $OKButton0.Text = "OK"
     $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
 
     # キャンセルボタンの設定
     $CancelButton0 = New-Object System.Windows.Forms.Button
-    $CancelButton0.Location = New-Object System.Drawing.Point(130,200)
-    $CancelButton0.Size = New-Object System.Drawing.Size(75,30)
+    $CancelButton0.Location = "130,200"
+    $CancelButton0.Size = "75,30"
     $CancelButton0.Text = "Cancel"
     $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
 
-    # リストボックスの設定
-    $listBox0 = New-Object System.Windows.Forms.ListBox
-    $listBox0.Location = New-Object System.Drawing.Point(10,30)
-    $listBox0.Size = New-Object System.Drawing.Size(210,150)
-
-    for($ial = 0;$ial -lt 9;$ial++){
-        [void] $listBox0.Items.Add("$($combo.items[$iall])")
-    }
     # フォームにアイテムを追加
     $form0.Controls.Add($label0)
     $form0.Controls.Add($OKButton0)
     $form0.Controls.Add($CancelButton0)
-    $form0.Controls.Add($listBox0)
+    $form0.Controls.Add($CheckedBox0)
 
     # キーとボタンの関係
     $form0.AcceptButton = $OKButton0
     $form0.CancelButton = $CancelButton0
 
-    # フォームを最前面に表示
+    # 最前面に表示：する
     $form0.Topmost = $True
 
-    # フォームを表示＋選択結果を変数に格納
-    $result0 = $form0.ShowDialog()
+    # フォームを表示
+    $result0 = $Form0.ShowDialog()
 
-    # 選択後、OKボタンが押された場合、選択項目を表示
-    if ($result0 -eq "OK")
+    # 処理分岐
+    if ( $result0 -eq "OK" )
     {
-        $AAA = $listBox0.SelectedItem
+        $AAA = @($CheckedBox0.CheckedItems)
     }else{
         exit
     }
