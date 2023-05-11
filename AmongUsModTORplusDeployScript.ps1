@@ -1738,11 +1738,11 @@ if($isall){
 
     # 配列を作成
     for($ial = 0;$ial -lt 9;$ial++){
-        $RETU += $($combo.items[$ial])
+        $RETU2 += $($combo.items[$ial])
     }
 
     # チェックボックスに10項目を追加
-    $CheckedBox0.Items.AddRange($RETU)
+    $CheckedBox0.Items.AddRange($RETU2)
 
     # すべての既存の選択をクリア
     $CheckedBox0.ClearSelected()
