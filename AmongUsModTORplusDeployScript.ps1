@@ -1802,12 +1802,11 @@ if($isall){
 
     # プログレスバー
     $Form22 = New-Object System.Windows.Forms.Form
-    $Form22.Size = "520,170"
+    $Form22.Size = "520,270"
     $Form22.Startposition = "CenterScreen"
     $Form22.Text = "Among Us Mod Auto Deploy Tool"
     $form22.Icon = "$dsk\AUMADS.ico"
     $form22.FormBorderStyle = "Fixed3D"
-    $form22.Icon = "$dsk\AUMADS.ico"
 
     $label2222 = New-Object System.Windows.Forms.Label
     $label2222.Location = New-Object System.Drawing.Point(10,70)
@@ -1817,7 +1816,7 @@ if($isall){
 
     # プログレスバー
     $Bar2 = New-Object System.Windows.Forms.ProgressBar
-    $Bar2.Location = "10,20"
+    $Bar2.Location = "10,120"
     $Bar2.Size = "460,30"
     $Bar2.Maximum = "10"
     $Bar2.Minimum = "0"
