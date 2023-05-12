@@ -1232,11 +1232,13 @@ function Reload(){
             Write-Log "TOY Selected"
             $RadioButton29.Checked = $True
         }"Install/Update Selected"{
+            $scid = "IUS"
             $tio = $false
             Write-Log "SAL Selected"
             $combo2.Enabled = $false
             $script:isall = $true
         }"Tool Install Only"{
+            $scid = "TIO"
             $tio = $false
             Write-Log "TIO Selected"
             $combo2.Enabled = $false
@@ -1731,8 +1733,6 @@ if($null -eq $Args1){
 }
 
 if($isall){
-    $scid = "SAL"
-    #選択式 見た目調整★
     # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
     $form0.Size = "300,350"
