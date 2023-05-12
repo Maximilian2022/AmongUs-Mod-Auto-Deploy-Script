@@ -1317,7 +1317,7 @@ function Reload(){
             }else{
                 $web = $script:toyweb
             }
-        }elseif($scid -eq "ams"){
+        }elseif($scid -eq "AMS"){
             if($null -eq $script:amsweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
                 $script:amsweb = $web
