@@ -1813,6 +1813,7 @@ if($isall){
     $Form22.Text = "Among Us Mod Auto Deploy Tool"
     $form22.Icon = "$dsk\AUMADS.ico"
     $form22.FormBorderStyle = "Fixed3D"
+    $Form22.font = $Font
 
     $label2222 = New-Object System.Windows.Forms.Label
     $label2222.Location = New-Object System.Drawing.Point(10,10)
@@ -1951,7 +1952,8 @@ if($CheckedBox.CheckedItems -contains "GMH Webhook"){
         $form1113.Size = New-Object System.Drawing.Size(500,140)
         $form1113.StartPosition = 'CenterScreen'
         $form1113.Icon = "$dsk\AUMADS.ico"
-        
+        $form1113.font = $Font
+
         $okButton11111 = New-Object System.Windows.Forms.Button
         $okButton11111.Location = New-Object System.Drawing.Point(380,70)
         $okButton11111.Size = New-Object System.Drawing.Size(75,23)
@@ -1999,7 +2001,8 @@ if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
         $form11113.Size = New-Object System.Drawing.Size(400,150)
         $form11113.StartPosition = 'CenterScreen'
         $form11113.Icon = "$dsk\AUMADS.ico"
-        
+        $form11113.font = $Font
+
         $okButton111111 = New-Object System.Windows.Forms.Button
         $okButton111111.Location = New-Object System.Drawing.Point(300,80)
         $okButton111111.Size = New-Object System.Drawing.Size(75,23)
@@ -2067,7 +2070,8 @@ if($CheckedBox.CheckedItems -contains "カスタムサーバー情報追加"){
     $form11130.Size = New-Object System.Drawing.Size(500,280)
     $form11130.StartPosition = 'CenterScreen'
     $form11130.Icon = "$dsk\AUMADS.ico"
-    
+    $form11130.font = $Font
+
     $okButton111110 = New-Object System.Windows.Forms.Button
     $okButton111110.Location = New-Object System.Drawing.Point(380,200)
     $okButton111110.Size = New-Object System.Drawing.Size(75,23)
@@ -2168,6 +2172,7 @@ $Form2.Text = "Among Us Mod Auto Deploy Tool"
 $form2.Icon = "$dsk\AUMADS.ico"
 $form2.FormBorderStyle = "Fixed3D"
 $Form2.Topmost = $True
+$Form2.font = $Font
 
 $label222 = New-Object System.Windows.Forms.Label
 $label222.Location = New-Object System.Drawing.Point(10,60)
