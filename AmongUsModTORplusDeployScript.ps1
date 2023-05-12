@@ -1741,6 +1741,8 @@ if($isall){
     $form0.Text = "選択"
     $form0.FormBorderStyle = "Fixed3D"
     $form0.Icon = "$dsk\AUMADS.ico"
+    $form0.font = $Font
+    $form0.TopLevel = $true
 
     # ラベルを作成
     $label0 = New-Object System.Windows.Forms.Label
