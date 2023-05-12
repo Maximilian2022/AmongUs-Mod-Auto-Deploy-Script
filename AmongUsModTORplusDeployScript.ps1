@@ -1649,6 +1649,7 @@ function Reload(){
         $script:releasepage = $releasepage2
         $script:scid = $scid
         $script:aumin = $aumin
+        $script:tio = $tio
         $ym = $script:ym
         if(!(Test-Path "$aupathb\chk$ym.txt")){
             $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"), $true)
