@@ -1810,8 +1810,8 @@ if($isall){
     $form22.FormBorderStyle = "Fixed3D"
 
     $label2222 = New-Object System.Windows.Forms.Label
-    $label2222.Location = New-Object System.Drawing.Point(10,70)
-    $label2222.Size = New-Object System.Drawing.Size(320,60)
+    $label2222.Location = New-Object System.Drawing.Point(10,10)
+    $label2222.Size = New-Object System.Drawing.Size(500,60)
     $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected が進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
     $form22.Controls.Add($label2222)
 
