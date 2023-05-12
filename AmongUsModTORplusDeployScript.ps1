@@ -1731,6 +1731,7 @@ if($null -eq $Args1){
 }
 
 if($isall){
+    $scid = "SAL"
     #選択式 見た目調整★
     # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
