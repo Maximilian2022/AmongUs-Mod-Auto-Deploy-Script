@@ -1816,7 +1816,7 @@ if($isall){
 
     # プログレスバー
     $Bar2 = New-Object System.Windows.Forms.ProgressBar
-    $Bar2.Location = "10,120"
+    $Bar2.Location = "10,220"
     $Bar2.Size = "460,30"
     $Bar2.Maximum = "10"
     $Bar2.Minimum = "0"
