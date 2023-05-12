@@ -1834,7 +1834,7 @@ if($isall){
     Write-Log "SAL: $AAA2"
     for($iall = 0;$iall -lt $modnum;$iall++){
         $Bar2.Value = "$iall"
-        if($AAA2.contains("$iall") -OR $AAA2.contains("ALL")){
+        if($AAA2.contains("$($combo.items[$iall])") -OR $AAA2.contains("ALL")){
             $currentphase++
             Write-Log "$($combo.items[$iall]) のインストールを開始しました。$currentphase/$modsel"
             $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall]) が進行中です。 $currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
