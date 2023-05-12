@@ -1734,7 +1734,7 @@ if($isall){
     #選択式 見た目調整★
     # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
-    $form0.Size = "300,400"
+    $form0.Size = "300,350"
     $form0.Startposition = "CenterScreen"
     $form0.Text = "選択"
     $form0.FormBorderStyle = "Fixed3D"
@@ -1742,14 +1742,14 @@ if($isall){
 
     # ラベルを作成
     $label0 = New-Object System.Windows.Forms.Label
-    $label0.Location = "10,20"
+    $label0.Location = "10,10"
     $label0.Size = "250,20"
     $label0.Text = "InstallするModを選択してください"
 
     # チェックボックスを作成
     $CheckedBox0 = New-Object System.Windows.Forms.CheckedListBox
-    $CheckedBox0.Location = "5,40"
-    $CheckedBox0.Size = "270,350"
+    $CheckedBox0.Location = "5,30"
+    $CheckedBox0.Size = "270,250"
 
     $RETU2 =@("ALL")
     # 配列を作成
@@ -1765,14 +1765,14 @@ if($isall){
 
     # OKボタンの設定
     $OKButton0 = New-Object System.Windows.Forms.Button
-    $OKButton0.Location = "90,360"
+    $OKButton0.Location = "90,290"
     $OKButton0.Size = "75,30"
     $OKButton0.Text = "OK"
     $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
 
     # キャンセルボタンの設定
     $CancelButton0 = New-Object System.Windows.Forms.Button
-    $CancelButton0.Location = "180,360"
+    $CancelButton0.Location = "180,290"
     $CancelButton0.Size = "75,30"
     $CancelButton0.Text = "Cancel"
     $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
