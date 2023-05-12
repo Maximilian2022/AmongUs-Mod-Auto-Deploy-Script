@@ -1824,7 +1824,7 @@ if($isall){
     $Bar2 = New-Object System.Windows.Forms.ProgressBar
     $Bar2.Location = "10,190"
     $Bar2.Size = "460,30"
-    $Bar2.Maximum = "10"
+    $Bar2.Maximum = "$($modnum + 1)"
     $Bar2.Minimum = "0"
     $Bar2.Style = "Continuous"
     $Form22.Controls.Add($Bar2)
@@ -1841,7 +1841,7 @@ if($isall){
     Write-Log "SAL: $modnum $modsel"
     Write-Log "SAL: $AAA2"
     for($iall = 0;$iall -lt $modnum;$iall++){
-        $Bar2.Value = "$iall"
+        $Bar2.Value = "$($iall + 1)"
         if($AAA2.contains("$($combo.items[$iall])") -OR $AAA2.contains("ALL")){
             $currentphase++
             Write-Log "$($combo.items[$iall]) のインストールを開始しました。$currentphase/$modsel"
