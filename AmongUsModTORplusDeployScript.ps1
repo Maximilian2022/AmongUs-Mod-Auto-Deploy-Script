@@ -1765,14 +1765,14 @@ if($isall){
 
     # OKボタンの設定
     $OKButton0 = New-Object System.Windows.Forms.Button
-    $OKButton0.Location = "90,290"
+    $OKButton0.Location = "90,270"
     $OKButton0.Size = "75,30"
     $OKButton0.Text = "OK"
     $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
 
     # キャンセルボタンの設定
     $CancelButton0 = New-Object System.Windows.Forms.Button
-    $CancelButton0.Location = "180,290"
+    $CancelButton0.Location = "180,270"
     $CancelButton0.Size = "75,30"
     $CancelButton0.Text = "Cancel"
     $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
