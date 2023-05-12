@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.3"
+$version = "1.9.3.1"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1734,10 +1734,11 @@ if($isall){
     #選択式 見た目調整★
     # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
-    $form0.Size = "250,600"
+    $form0.Size = "300,400"
     $form0.Startposition = "CenterScreen"
     $form0.Text = "選択"
     $form0.FormBorderStyle = "Fixed3D"
+    $form0.Icon = "$dsk\AUMADS.ico"
 
     # ラベルを作成
     $label0 = New-Object System.Windows.Forms.Label
@@ -1748,7 +1749,7 @@ if($isall){
     # チェックボックスを作成
     $CheckedBox0 = New-Object System.Windows.Forms.CheckedListBox
     $CheckedBox0.Location = "5,40"
-    $CheckedBox0.Size = "220,550"
+    $CheckedBox0.Size = "270,350"
 
     $RETU2 =@("ALL")
     # 配列を作成
@@ -1764,14 +1765,14 @@ if($isall){
 
     # OKボタンの設定
     $OKButton0 = New-Object System.Windows.Forms.Button
-    $OKButton0.Location = "40,550"
+    $OKButton0.Location = "90,360"
     $OKButton0.Size = "75,30"
     $OKButton0.Text = "OK"
     $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
 
     # キャンセルボタンの設定
     $CancelButton0 = New-Object System.Windows.Forms.Button
-    $CancelButton0.Location = "130,550"
+    $CancelButton0.Location = "180,360"
     $CancelButton0.Size = "75,30"
     $CancelButton0.Text = "Cancel"
     $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
@@ -1806,6 +1807,7 @@ if($isall){
     $Form22.Text = "Among Us Mod Auto Deploy Tool"
     $form22.Icon = "$dsk\AUMADS.ico"
     $form22.FormBorderStyle = "Fixed3D"
+    $form22.Icon = "$dsk\AUMADS.ico"
 
     $label2222 = New-Object System.Windows.Forms.Label
     $label2222.Location = New-Object System.Drawing.Point(10,70)
@@ -1940,6 +1942,7 @@ if($CheckedBox.CheckedItems -contains "GMH Webhook"){
         $form1113.Text = "GMH Webhook URL"
         $form1113.Size = New-Object System.Drawing.Size(500,140)
         $form1113.StartPosition = 'CenterScreen'
+        $form1113.Icon = "$dsk\AUMADS.ico"
         
         $okButton11111 = New-Object System.Windows.Forms.Button
         $okButton11111.Location = New-Object System.Drawing.Point(380,70)
@@ -1987,6 +1990,7 @@ if($CheckedBox.CheckedItems -contains "NOS CPU Affinity"){
         $form11113.Text = "NOS CPU Affinity"
         $form11113.Size = New-Object System.Drawing.Size(400,150)
         $form11113.StartPosition = 'CenterScreen'
+        $form11113.Icon = "$dsk\AUMADS.ico"
         
         $okButton111111 = New-Object System.Windows.Forms.Button
         $okButton111111.Location = New-Object System.Drawing.Point(300,80)
@@ -2054,6 +2058,7 @@ if($CheckedBox.CheckedItems -contains "カスタムサーバー情報追加"){
     $form11130.Text = $(Get-Translate("カスタムサーバー情報追加"))
     $form11130.Size = New-Object System.Drawing.Size(500,280)
     $form11130.StartPosition = 'CenterScreen'
+    $form11130.Icon = "$dsk\AUMADS.ico"
     
     $okButton111110 = New-Object System.Windows.Forms.Button
     $okButton111110.Location = New-Object System.Drawing.Point(380,200)
