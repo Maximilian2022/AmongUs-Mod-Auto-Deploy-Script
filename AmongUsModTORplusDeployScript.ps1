@@ -1842,7 +1842,7 @@ if($isall){
         if($AAA2.contains("$($combo.items[$iall])") -OR $AAA2.contains("ALL")){
             $currentphase++
             Write-Log "$($combo.items[$iall]) のインストールを開始しました。$currentphase/$modsel"
-            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall]) が進行中です。 $currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall]) が進行中です。`r`n$currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
             if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
                 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
             }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
@@ -1851,7 +1851,7 @@ if($isall){
                 Write-Log "何かがおかしい。"
             }
             Write-Log "$($combo.items[$iall]) のインストールが完了しました。 $currentphase/$modsel"    
-            $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected が進行中です。 $currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+            $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected が進行中です。`r`n$currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
         }
     }
 
