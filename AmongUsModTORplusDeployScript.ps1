@@ -1831,7 +1831,8 @@ if($isall){
     #選択されたModの数
     $modsel = $CheckedBox0.SelectedItems.Count
     $currentphase = 0
-
+    Write-Log "SAL: $modnum $modsel"
+    Write-Log "SAL: $AAA2"
     for($iall = 0;$iall -lt $modnum;$iall++){
         $Bar2.Value = "$iall"
         if($AAA2.contains($iall) -OR $AAA2.contains("ALL")){
