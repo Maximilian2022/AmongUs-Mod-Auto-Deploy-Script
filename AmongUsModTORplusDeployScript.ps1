@@ -2165,6 +2165,7 @@ $Form2.Startposition = "CenterScreen"
 $Form2.Text = "Among Us Mod Auto Deploy Tool"
 $form2.Icon = "$dsk\AUMADS.ico"
 $form2.FormBorderStyle = "Fixed3D"
+$Form2.Topmost = $True
 
 $label222 = New-Object System.Windows.Forms.Label
 $label222.Location = New-Object System.Drawing.Point(10,60)
