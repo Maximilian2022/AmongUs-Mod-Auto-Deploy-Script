@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.4.1"
+$version = "1.9.4.2"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1754,10 +1754,12 @@ if($isall){
     $CheckedBox0 = New-Object System.Windows.Forms.CheckedListBox
     $CheckedBox0.Location = "5,30"
     $CheckedBox0.Size = "270,250"
+    #Modの数-2(ALL)
+    $modnum = $($combo.items.count) -2
 
     $RETU2 =@("ALL")
     # 配列を作成
-    for($ial = 0;$ial -lt 9;$ial++){
+    for($ial = 0;$ial -lt $modnum;$ial++){
         $RETU2 += $($combo.items[$ial])
     }
 
@@ -1829,8 +1831,6 @@ if($isall){
     $Bar2.Value = "0"
     $Form22.Show()
 
-    #Modの数-2(ALL)
-    $modnum = $($combo.items.count) -2
     #選択されたModの数
     if($AAA2.contains("ALL")){
         $modsel = $modnum
