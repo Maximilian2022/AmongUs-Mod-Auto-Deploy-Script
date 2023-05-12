@@ -1074,6 +1074,7 @@ $releasepage =""
 $ovwrite = $false
 $amver = ""
 $prebool = $false
+$latestflag = 0
 
 function VerMinMax($ver0, $ver1, $ver2){
     if($RadioButton114.Checked){
@@ -1084,6 +1085,7 @@ function VerMinMax($ver0, $ver1, $ver2){
             $script:aumax = "NONE"
             $script:aumin = $ver0
         }
+        $script:latestflag = 1
     }elseif($RadioButton115.Checked){
         if($ver1 -eq "NONE"){
             $script:aumax = "NONE"
@@ -1100,6 +1102,7 @@ function VerMinMax($ver0, $ver1, $ver2){
                 $script:aumin = $ver1    
             }
         }
+        $script:latestflag = 2
     }elseif($RadioButton116.Checked){
         if($ver2 -eq "NONE"){
             $script:aumax = "NONE"
@@ -1121,6 +1124,7 @@ function VerMinMax($ver0, $ver1, $ver2){
                 $script:aumin = $ver2
             }
         }
+        $script:latestflag = 3
     }
 }
 
@@ -1711,6 +1715,15 @@ if($null -eq $Args1){
         exit
     }
 }else{
+    if($latestflag -eq 1){
+        $RadioButton114.Checked = $True
+    }elseif($latestflag -eq 2){
+        $RadioButton115.Checked = $True
+    }elseif($latestflag -eq 3){
+        $RadioButton116.Checked = $True
+    }else{
+        Write-Log "Critical:Latest Flag"
+    }
     $combo.SelectedIndex = $Args1
     Reload
     $mod = $combo.Text
@@ -1718,12 +1731,13 @@ if($null -eq $Args1){
 }
 
 if($isall){
-    #選択式
+    #選択式 見た目調整★
     # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
-    $form0.Size = "250,280"
+    $form0.Size = "250,600"
     $form0.Startposition = "CenterScreen"
     $form0.Text = "選択"
+    $form0.FormBorderStyle = "Fixed3D"
 
     # ラベルを作成
     $label0 = New-Object System.Windows.Forms.Label
@@ -1734,7 +1748,7 @@ if($isall){
     # チェックボックスを作成
     $CheckedBox0 = New-Object System.Windows.Forms.CheckedListBox
     $CheckedBox0.Location = "5,40"
-    $CheckedBox0.Size = "220,150"
+    $CheckedBox0.Size = "220,550"
 
     $RETU2 =@("ALL")
     # 配列を作成
@@ -1750,14 +1764,14 @@ if($isall){
 
     # OKボタンの設定
     $OKButton0 = New-Object System.Windows.Forms.Button
-    $OKButton0.Location = "40,200"
+    $OKButton0.Location = "40,550"
     $OKButton0.Size = "75,30"
     $OKButton0.Text = "OK"
     $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
 
     # キャンセルボタンの設定
     $CancelButton0 = New-Object System.Windows.Forms.Button
-    $CancelButton0.Location = "130,200"
+    $CancelButton0.Location = "130,550"
     $CancelButton0.Size = "75,30"
     $CancelButton0.Text = "Cancel"
     $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
@@ -1773,10 +1787,10 @@ if($isall){
     $form0.CancelButton = $CancelButton0
 
     # 最前面に表示：する
-    $form0.Topmost = $True
+    $form0.Topmost = $false
 
     # フォームを表示
-    $result0 = $Form0.ShowDialog()
+    $result0 = $form0.ShowDialog()
 
     # 処理分岐
     if ( $result0 -eq "OK" ){
@@ -1810,10 +1824,18 @@ if($isall){
     $Bar2.Value = "0"
     $Form22.Show()
 
-    for($iall = 0;$iall -lt 9;$iall++){
+    #Modの数-2(ALL)
+    $modnum = $($combo.items.count) -2
+    #選択されたModの数
+    $modsel = $CheckedBox0.SelectedItems.Count
+    $currentphase = 0
+
+    for($iall = 0;$iall -lt $modnum;$iall++){
         $Bar2.Value = "$iall"
         if($AAA2.contains($iall) -OR $AAA2.contains("ALL")){
-            Write-Log "$($combo.items[$iall]) のインストールを開始しました。"
+            $currentphase++
+            Write-Log "$($combo.items[$iall]) のインストールを開始しました。$currentphase/$modsel"
+            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall]) が進行中です。 $currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
             if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
                 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
             }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
@@ -1821,7 +1843,8 @@ if($isall){
             }else{
                 Write-Log "何かがおかしい。"
             }
-            Write-Log "$($combo.items[$iall]) のインストールが完了しました。"    
+            Write-Log "$($combo.items[$iall]) のインストールが完了しました。 $currentphase/$modsel"    
+            $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected が進行中です。 $currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
         }
     }
 
