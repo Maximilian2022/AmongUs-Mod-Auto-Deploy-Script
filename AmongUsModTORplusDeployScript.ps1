@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.3.3"
+$version = "1.9.4"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1828,7 +1828,11 @@ if($isall){
     #Modの数-2(ALL)
     $modnum = $($combo.items.count) -2
     #選択されたModの数
-    $modsel = $CheckedBox0.SelectedItems.Count
+    if($AAA2.contains("ALL")){
+        $modsel = $modnum
+    }else{
+        $modsel = $AAA2.Count
+    }
     $currentphase = 0
     Write-Log "SAL: $modnum $modsel"
     Write-Log "SAL: $AAA2"
