@@ -1824,7 +1824,7 @@ if($isall){
     # プログレスバー
     $Bar2 = New-Object System.Windows.Forms.ProgressBar
     $Bar2.Location = "10,190"
-    $Bar2.Size = "460,30"
+    $Bar2.Size = "480,30"
     $Bar2.Maximum = "$($modnum + 1)"
     $Bar2.Minimum = "0"
     $Bar2.Style = "Continuous"
@@ -2183,7 +2183,7 @@ $form2.Controls.Add($label222)
 # プログレスバー
 $Bar = New-Object System.Windows.Forms.ProgressBar
 $Bar.Location = "10,20"
-$Bar.Size = "480,30"
+$Bar.Size = "460,30"
 $Bar.Maximum = "100"
 $Bar.Minimum = "0"
 $Bar.Style = "Continuous"
