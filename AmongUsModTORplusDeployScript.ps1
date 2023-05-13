@@ -1817,8 +1817,8 @@ if($isall){
 
     $label2222 = New-Object System.Windows.Forms.Label
     $label2222.Location = New-Object System.Drawing.Point(10,10)
-    $label2222.Size = New-Object System.Drawing.Size(500,60)
-    $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected が進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+    $label2222.Size = New-Object System.Drawing.Size(500,120)
+    $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected`r`n Deploy中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
     $form22.Controls.Add($label2222)
 
     # プログレスバー
@@ -1846,7 +1846,7 @@ if($isall){
         if($AAA2.contains("$($combo.items[$iall])") -OR $AAA2.contains("ALL")){
             $currentphase++
             Write-Log "$($combo.items[$iall]) のインストールを開始しました。$currentphase/$modsel"
-            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall]) が進行中です。`r`n$currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall])`r`n Deploy中です。`r`n$currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
             if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
                 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
             }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
@@ -2176,7 +2176,7 @@ $Form2.font = $Font
 
 $label222 = New-Object System.Windows.Forms.Label
 $label222.Location = New-Object System.Drawing.Point(10,60)
-$label222.Size = New-Object System.Drawing.Size(320,60)
+$label222.Size = New-Object System.Drawing.Size(420,60)
 $label222.Text = $(Get-Translate("Among Us Mod $scid のDeployが進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
 $form2.Controls.Add($label222)
 
