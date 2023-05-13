@@ -1846,7 +1846,7 @@ if($isall){
         if($AAA2.contains("$($combo.items[$iall])") -OR $AAA2.contains("ALL")){
             $currentphase++
             Write-Log "$($combo.items[$iall]) のインストールを開始しました。$currentphase/$modsel"
-            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall])`r`n Deploy中です。`r`n$currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall])`r`nDeploy中です。 n$currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
             if(Test-Path "$npl\AmongUsModTORplusDeployScript.ps1"){
                 Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
             }elseif(Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1"){
@@ -2176,14 +2176,14 @@ $Form2.font = $Font
 
 $label222 = New-Object System.Windows.Forms.Label
 $label222.Location = New-Object System.Drawing.Point(10,60)
-$label222.Size = New-Object System.Drawing.Size(420,60)
+$label222.Size = New-Object System.Drawing.Size(480,60)
 $label222.Text = $(Get-Translate("Among Us Mod $scid のDeployが進行中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
 $form2.Controls.Add($label222)
 
 # プログレスバー
 $Bar = New-Object System.Windows.Forms.ProgressBar
 $Bar.Location = "10,20"
-$Bar.Size = "460,30"
+$Bar.Size = "480,30"
 $Bar.Maximum = "100"
 $Bar.Minimum = "0"
 $Bar.Style = "Continuous"
