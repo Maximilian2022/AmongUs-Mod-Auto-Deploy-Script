@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.4.2"
+$version = "1.9.4.3"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1736,9 +1736,9 @@ if($null -eq $Args1){
 if($isall){
     # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
-    $form0.Size = "300,350"
+    $form0.Size = "350,400"
     $form0.Startposition = "CenterScreen"
-    $form0.Text = "選択"
+    $form0.Text = "Among Us Mod Auto Deploy Tool"
     $form0.FormBorderStyle = "Fixed3D"
     $form0.Icon = "$dsk\AUMADS.ico"
     $form0.font = $Font
@@ -1747,13 +1747,13 @@ if($isall){
     # ラベルを作成
     $label0 = New-Object System.Windows.Forms.Label
     $label0.Location = "10,10"
-    $label0.Size = "250,20"
+    $label0.Size = "340,20"
     $label0.Text = "InstallするModを選択してください"
 
     # チェックボックスを作成
     $CheckedBox0 = New-Object System.Windows.Forms.CheckedListBox
     $CheckedBox0.Location = "5,30"
-    $CheckedBox0.Size = "270,250"
+    $CheckedBox0.Size = "320,300"
     #Modの数-2(ALL)
     $modnum = $($combo.items.count) -2
 
@@ -1771,14 +1771,14 @@ if($isall){
 
     # OKボタンの設定
     $OKButton0 = New-Object System.Windows.Forms.Button
-    $OKButton0.Location = "90,270"
+    $OKButton0.Location = "140,320"
     $OKButton0.Size = "75,30"
     $OKButton0.Text = "OK"
     $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
 
     # キャンセルボタンの設定
     $CancelButton0 = New-Object System.Windows.Forms.Button
-    $CancelButton0.Location = "180,270"
+    $CancelButton0.Location = "120,320"
     $CancelButton0.Size = "75,30"
     $CancelButton0.Text = "Cancel"
     $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
