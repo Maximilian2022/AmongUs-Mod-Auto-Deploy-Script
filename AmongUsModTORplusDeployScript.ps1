@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.4.6"
+$version = "1.9.4.7"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1733,6 +1733,16 @@ if($null -eq $Args1){
     $torpv = $combo2.Text
 }
 
+$screensize = [System.Windows.Forms.Screen]::AllScreens
+$screens=[System.Windows.Forms.Screen]::AllScreens.Count
+for($scs =0 ;$scs -lt $screens; $scs++){
+    if($($screensize[$scs]).Primary -eq $True){
+        $prime = $scs
+    }
+}
+$wdh = $($screensize[$prime]).Bounds.Width
+$hgt = $($screensize[$prime]).Bounds.Height
+
 if($isall){
     # フォームの作成
     $form0 = New-Object System.Windows.Forms.Form
@@ -1809,11 +1819,14 @@ if($isall){
     # プログレスバー
     $Form22 = New-Object System.Windows.Forms.Form
     $Form22.Size = "520,270"
-    $Form22.Startposition = "CenterScreen"
     $Form22.Text = "Among Us Mod Auto Deploy Tool"
     $form22.Icon = "$dsk\AUMADS.ico"
     $form22.FormBorderStyle = "Fixed3D"
     $Form22.font = $Font
+
+    $form22.StartPosition = "Manual"
+    $form22.Left = ($wdh /2)-($form22.Width /2)
+    $form22.Top = ($hgt /2)- 3*($form22.Height /2)
 
     $label2222 = New-Object System.Windows.Forms.Label
     $label2222.Location = New-Object System.Drawing.Point(10,10)
@@ -2167,12 +2180,15 @@ if($CheckedBox.CheckedItems -contains "カスタムサーバー情報追加"){
 # プログレスバー
 $Form2 = New-Object System.Windows.Forms.Form
 $Form2.Size = "500,150"
-$Form2.Startposition = "CenterScreen"
 $Form2.Text = "Among Us Mod Auto Deploy Tool"
 $form2.Icon = "$dsk\AUMADS.ico"
 $form2.FormBorderStyle = "Fixed3D"
 $Form2.Topmost = $True
 $Form2.font = $Font
+
+$form2.StartPosition = "Manual"
+$form2.Left = ($wdh /2)-($form2.Width /2)
+$form2.Top = ($hgt /2)+ 3*($form2.Height /2)
 
 $label222 = New-Object System.Windows.Forms.Label
 $label222.Location = New-Object System.Drawing.Point(10,60)
