@@ -3,7 +3,7 @@
 #
 # Among Us Clean Install Script Epic
 #
-$version = "1.0.0"
+$version = "1.0.1"
 #
 #################################################################################################
 # Translate Function
