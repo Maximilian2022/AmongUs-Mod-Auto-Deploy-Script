@@ -1,4 +1,4 @@
-﻿Param($Args1) #modnum
+﻿Param($Args1) #skipconfirmation
 ################################################################################################
 #
 # Among Us Mod Auto Deploy Script
@@ -1415,7 +1415,7 @@ function Reload(){
                     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                     $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
                     if(test-path "$env:ProgramFiles\PowerShell\7"){
-                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
+                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" " -Verb RunAs -Wait
                     }else{
                         Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
                     }
@@ -2525,9 +2525,9 @@ if($tio){
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
                 if(test-path "$env:ProgramFiles\PowerShell\7"){
-                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
+                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 }else{
-                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
+                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 }
                 Start-Sleep -Seconds 10
                 while (!(test-path "$aupatho\Among Us.exe")){
@@ -2542,9 +2542,9 @@ if($tio){
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
                 if(test-path "$env:ProgramFiles\PowerShell\7"){
-                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
+                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 }else{
-                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
+                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 }
                 Remove-Item $fpth2 -Force
             }else{

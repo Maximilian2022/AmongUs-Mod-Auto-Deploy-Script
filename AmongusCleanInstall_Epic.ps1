@@ -1,4 +1,5 @@
-﻿#################################################################################################
+﻿Param($Args1) #modnum
+#################################################################################################
 #
 # Among Us Clean Install Script Epic
 #
@@ -171,14 +172,15 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
 }
 
 Write-Log "Delete AmongUs First"
-if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("クリーンインストールのために選択したFolderは削除されます`n続行しますか？")), "Among Us Clean Install Tool",4) -eq "Yes"){
-}else{
-    Write-Log "処理を中止します"
-    exit
+if($null -eq $Args1){
+    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("クリーンインストールのために選択したFolderは削除されます`n続行しますか？")), "Among Us Clean Install Tool",4) -eq "Yes"){
+    }else{
+        Write-Log "処理を中止します"
+        exit
+    }        
 }
 
 Start-Transcript -Append -Path "$LogFileName"
-
 
 try{
     legendary -V

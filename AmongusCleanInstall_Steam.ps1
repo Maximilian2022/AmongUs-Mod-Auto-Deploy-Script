@@ -1,4 +1,5 @@
-﻿#################################################################################################
+﻿Param($Args1) #skipconfirmation
+#################################################################################################
 #
 # Among Us Clean Install Script Steam
 #
@@ -178,11 +179,14 @@ if(Test-path "$au_path_steam_org\Among Us.exe"){
 }
 
 Write-Log "Delete AmongUs First"
-if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("クリーンインストールのために選択したFolderは削除されます`n続行しますか？")), "Among Us Clean Install Tool",4) -eq "Yes"){
-}else{
-    Write-Log "処理を中止します"
-    exit
+if($null -eq $Args1){
+    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("クリーンインストールのために選択したFolderは削除されます`n続行しますか？")), "Among Us Clean Install Tool",4) -eq "Yes"){
+    }else{
+        Write-Log "処理を中止します"
+        exit
+    }    
 }
+
 Remove-Item -Path $spath -Recurse -Force
 Start-Sleep -Seconds 1
 
