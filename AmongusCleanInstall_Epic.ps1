@@ -115,7 +115,7 @@ function Write-Log($logstring){
     # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
-        # ログ出力
+    # ログ出力
     Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
     # echo させるために出力したログを戻す
     Return $(Get-Translate($Log))
