@@ -1728,6 +1728,10 @@ function Reload(){
     }else{
         Write-Log "Unknown ERROR:本体バージョン"
     }
+    if($RadioButton114.Text -eq $RadioButton115.Text){
+        Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
+        $RadioButton17.Checked = $true
+    }
 }
 
 $Combo_SelectedIndexChanged= {
