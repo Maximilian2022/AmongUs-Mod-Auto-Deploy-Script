@@ -469,7 +469,20 @@ function BackUpAU{
     if($prevchk){
         if($platform -eq "steam"){
             $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
+            $proclist = get-process
+            $procnum
+            for($i=0;$i -lt $proclist.count;$i++){
+            
+                if($test.ProcessName[$i] -eq "steam"){
+                    write-log $i
+                    $procnum = $i
+                }
+            
+            }           
             if (Test-Path $steampth){
+                Write-Log "Steam アプリは以下で見つかりました。 $steampth"
+            }elseif(Test-Path $($proclist[$procnum].path)){
+                $steampth = $($proclist[$procnum].path)
                 Write-Log "Steam アプリは以下で見つかりました。 $steampth"
             }else{
                 Write-Log "Steam アプリがデフォルトの場所に見つかりませんでした。"
@@ -1406,7 +1419,29 @@ function Reload(){
                 break
             }     
         }
-
+        #detect running detect path
+        $proclist = Get-Process
+        $procnum
+        $epicbool = $false
+        for($i=0;$i -lt $proclist.count;$i++){
+            if($proclist.ProcessName[$i] -eq "steam"){
+                write-log "$i Steam"
+                $procnum = $i
+            }
+            if($proclist.ProcessName[$i] -eq "EpicGamesLauncher"){
+                write-log "$i EGL"
+                $procnum = $i
+                $epicbool = $true
+            }
+        }
+        if($null -ne $procnum){
+            $procpath = Split-Path $proclist[$procnum].path -Parent
+            Write-Log $procpath
+            $detected_path = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us"
+            $detected_path_mod = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us $scid Mod"
+            $detected_path_back = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us Backup"
+        }
+        
         if(Test-path "$au_path_steam_org\Among Us.exe"){
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
@@ -1490,6 +1525,19 @@ function Reload(){
             $aupathm = $detected_path_mod
             $aupathb = $detected_path_back
             $script:platform = "steam"
+        }elseif($epicbool){
+            #detect epic path
+            $epicinfo = legendary.exe info AmongUs
+            $epicpath = $epicinfo | Select-String "Install path"
+            $epicrow = $($epicpath.ToString()).Split(": ")
+            $epicreal = Split-Path -Path "$epicrow[1]"
+            $epicreal = "$epicreal/AmongUs"
+            if(Test-Path $epicreal){
+                $aupatho = $epicreal
+                $aupathm = "$epicreal $scid Mod"
+                $aupathb = "$($epicreal)Backup"                
+                $script:platform = "epic"
+            }
         }else{
             $fileName2 = Join-path $npl "\AmongUsModDeployScript.conf"
             $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"

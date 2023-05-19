@@ -138,9 +138,29 @@ $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
 $au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
 $spath = ""
 
+$proclist = Get-Process
+$epicbool = $false
+for($i=0;$i -lt $proclist.count;$i++){
+    if($proclist.ProcessName[$i] -eq "EpicGamesLauncher"){
+        write-log "$i EGL"
+        $epicbool = $true
+    }
+}
+
 if(Test-path "$au_path_epic_org\Among Us.exe"){
     $spath = $au_path_epic_org
     $sback = $au_path_epic_back
+}elseif($epicbool){
+    #detect epic path
+    $epicinfo = legendary.exe info AmongUs
+    $epicpath = $epicinfo | Select-String "Install path"
+    $epicrow = $($epicpath.ToString()).Split(": ")
+    $epicreal = Split-Path -Path "$epicrow[1]"
+    $epicreal = "$epicreal/AmongUs"
+    if(Test-Path $epicreal){
+        $spath = $epicreal        
+        $sback = "$($epicreal)Backup"                
+    }    
 }else{
     $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
     ### Load
@@ -170,7 +190,8 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
     $sback = "$str_path\Among Us Backup"
     Set-Location $curloc
 }
-
+Write-Log "$spath"
+Write-Log "$sback"
 Write-Log "Delete AmongUs First"
 if($null -eq $Args1){
     if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("クリーンインストールのために選択したFolderは削除されます`n続行しますか？")), "Among Us Clean Install Tool",4) -eq "Yes"){

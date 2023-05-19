@@ -118,8 +118,22 @@ Write-Log "Clean Installation Starts"
 Write-Log "-----------------------------------------------------------------"
 
 $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
+$proclist = get-process
+$procnum
+
+for($i=0;$i -lt $proclist.count;$i++){
+
+    if($test.ProcessName[$i] -eq "steam"){
+        write-log $i
+        $procnum = $i
+    }
+
+}
 if (Test-Path $steampth){
     Write-Log "Steam Application is found on $steampth"
+}elseif(Test-Path $($proclist[$procnum].path)){
+    $steampth = $($proclist[$procnum].path)
+    Write-Log "Steam アプリは以下で見つかりました。 $steampth"
 }else{
     Write-Log "Steam Application is not on default location"
     Param(
