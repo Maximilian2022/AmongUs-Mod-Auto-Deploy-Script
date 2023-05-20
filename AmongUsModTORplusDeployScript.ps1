@@ -107,6 +107,7 @@ $gmhbool = $true
 $nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
+$debugform = $false
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -1048,31 +1049,31 @@ $Combo2.DropDownStyle = "DropDownList"
 $Combo2.FlatStyle = "standard"
 $Combo2.font = $Font
 
-# ラベルを表示
+# ラベルを表示:Original Path
 $label3 = New-Object System.Windows.Forms.Label
 $label3.Location = New-Object System.Drawing.Point(15,460)
 $label3.Size = New-Object System.Drawing.Size(570,20)
 $label3.Text = $(Get-Translate("オリジナルのAmongUsは以下の場所に検出されました"))
 $form.Controls.Add($label3)
 
-# ラベルを表示
+# ラベルを表示:Original Path
 $label4 = New-Object System.Windows.Forms.Label
 $label4.Location = New-Object System.Drawing.Point(20,480)
-$label4.Size = New-Object System.Drawing.Size(770,50)
+$label4.Size = New-Object System.Drawing.Size(770,40)
 $label4.Text = ""
 $form.Controls.Add($label4)
 
-# ラベルを表示
+# ラベルを表示:Mod Path
 $label5 = New-Object System.Windows.Forms.Label
 $label5.Location = New-Object System.Drawing.Point(15,530)
 $label5.Size = New-Object System.Drawing.Size(570,20)
 $label5.Text = $(Get-Translate("Mod化バージョンは以下の場所に作成されます"))
 $form.Controls.Add($label5)
 
-# ラベルを表示
+# ラベルを表示:Mod Path
 $label6 = New-Object System.Windows.Forms.Label
 $label6.Location = New-Object System.Drawing.Point(20,550)
-$label6.Size = New-Object System.Drawing.Size(770,50)
+$label6.Size = New-Object System.Drawing.Size(770,40)
 $label6.Text = ""
 $form.Controls.Add($label6)
 
@@ -1157,7 +1158,6 @@ function Reload(){
     $combo2.DataSource=@()
     $combo2.Enabled = $true
     $tio = $true
-
     Switch ($combo.text){
         default{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
@@ -1443,6 +1443,7 @@ function Reload(){
         }
         
         if(Test-path "$au_path_steam_org\Among Us.exe"){
+            Write-Log "Steam Original"
             #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_steam_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
@@ -1476,6 +1477,7 @@ function Reload(){
             $aupathb = $au_path_steam_back
             $script:platform = "steam"
         }elseif(Test-path "$au_path_epic_org\Among Us.exe"){
+            Write-Log "Epic Original"
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$au_path_epic_org\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
@@ -1501,6 +1503,7 @@ function Reload(){
             $aupathb = $au_path_epic_back
             $script:platform = "epic"
         }elseif(Test-Path "$detected_path\Among Us.exe"){
+            Write-Log "Detected"
             #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
             if(Test-path "$detected_path\BepInEx"){
                 Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
@@ -1526,6 +1529,7 @@ function Reload(){
             $aupathb = $detected_path_back
             $script:platform = "steam"
         }elseif($epicbool){
+            Write-Log "Epic Detected"
             #detect epic path
             $epicinfo = legendary.exe info AmongUs
             $epicpath = $epicinfo | Select-String "Install path"
@@ -1539,17 +1543,15 @@ function Reload(){
                 $script:platform = "epic"
             }
         }else{
+            Write-Log "Failed to Detected"
             $fileName2 = Join-path $npl "\AmongUsModDeployScript.conf"
             $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"
             if(test-path "$fileName2"){
                 Move-Item -Path $fileName2 -Destination $fileName
             }
             $chkvdf = $false
-            if(Test-Path "C:\Program Files (x86)\Steam\steamapps\libraryfolders.vdf"){
-                $stvdf = Get-Content "C:\Program Files (x86)\Steam\steamapps\libraryfolders.vdf"
-                $chkvdf = $true
-            }elseif(Test-Path "D:\Program Files (x86)\Steam\steamapps\libraryfolders.vdf"){
-                $stvdf = Get-Content "D:\Program Files (x86)\Steam\steamapps\libraryfolders.vdf"
+            if(Test-Path "$procpath\steamapps\libraryfolders.vdf"){
+                $stvdf = Get-Content "$procpath\steamapps\libraryfolders.vdf"
                 $chkvdf = $true
             }
             ### Load
@@ -1761,6 +1763,11 @@ if($null -eq $Args1){
     $form.Topmost = $True
     # フォームを表示＋選択結果を変数に格納
     $result = $form.ShowDialog()
+
+    if($debugform){
+        Write-Log "Form Debug Exit"
+        exit
+    }
 
     # 選択後、OKボタンが押された場合、選択項目を表示
     if ($result -eq "OK"){
