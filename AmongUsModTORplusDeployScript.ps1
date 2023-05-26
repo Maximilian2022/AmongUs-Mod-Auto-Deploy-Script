@@ -107,7 +107,7 @@ $gmhbool = $true
 $nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-$debugform = $true
+$debugform = $false
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -3603,6 +3603,24 @@ if($ckbci.Count -gt 0){
                 $sShortcut.IconLocation = "$md\$aucapfn\AmongUsCapture.exe"
                 $sShortcut.Save()
             }
+            $Bar.Value = "85"
+        }elseif($ckbci[$aa] -eq "VOICEVOX"){
+            try{
+                choco -v
+            }catch{
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+            }
+            #https://github.com/VOICEVOX/voicevox/releases/tag/0.14.6
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
+            $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/VOICEVOX/voicevox/releases/latest" -UseBasicParsing)).assets.browser_download_url
+            for($vve = 0;$vve -lt $aucap.count; $vve++){
+                if($($aucap[$vve]).contains("VOICEVOX.Web.Setup")){
+                    $vvexe = $($aucap[$vve])
+                }
+            }
+            Write-Log $vvexe          
+            aria2c -x5 -V --allow-overwrite=true --dir "$dsk" -o "VOICEVOX.Web.Setup.exe" $vvexe                
+            Start-process "$dsk\VOICEVOX.Web.Setup.exe" -Verb RunAs -Wait
             $Bar.Value = "85"
         }elseif($ckbci[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
