@@ -3634,6 +3634,7 @@ if($ckbci.Count -gt 0){
             Write-Log $vvexe          
             aria2c -x5 -V --allow-overwrite=true --dir "$dsk" -o "VOICEVOX.Web.Setup.exe" $vvexe                
             Start-process "$dsk\VOICEVOX.Web.Setup.exe" -Verb RunAs -Wait
+            Remove-Item "$dsk\VOICEVOX*" -Force
             $Bar.Value = "85"
         }elseif($ckbci[$aa] -eq "VC Redist"){
             Write-Log "VC Redist Install start"
