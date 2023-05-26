@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.4.9"
+$version = "1.9.5"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -1702,10 +1702,10 @@ function Reload(){
         $script:tio = $tio
         $script:CheckedBox.ClearSelected()
         for($cbc=0; $cbc -lt $script:ChekedListBox.Items.Count; $cbc++){
-            $script:ChekedListBox.SetItemChecked($cbc,false);
+            $script:ChekedListBox.SetItemChecked($cbc,$false)
         }
         if(($script:scid -eq "ER") -or ($script:scid -eq "ER+ES")){
-            $vv=Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | % { Get-ItemProperty $_.PsPath | Select-Object DisplayName} |select-string "VOICEVOX"
+            $vv=Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | ForEach-Object { Get-ItemProperty $_.PsPath | Select-Object DisplayName} |select-string "VOICEVOX"
             if($vv.ToString().contains("VOICEVOX")){
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $false)
             }else{
