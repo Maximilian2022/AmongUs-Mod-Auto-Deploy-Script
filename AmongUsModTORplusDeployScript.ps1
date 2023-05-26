@@ -107,7 +107,7 @@ $gmhbool = $true
 $nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
-$debugform = $false
+$debugform = $true
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -991,7 +991,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "330,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",,"NOS CPU Affinity"
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -1153,7 +1153,7 @@ function Reload(){
         # echo させるために出力したログを戻す
         Write-Host $Log
     }
-
+    $CheckedBox.ClearSelected()
     $combo2.Text = ""
     $combo2.DataSource=@()
     $combo2.Enabled = $true
@@ -1700,13 +1700,25 @@ function Reload(){
         $script:scid = $scid
         $script:aumin = $aumin
         $script:tio = $tio
+        $script:CheckedBox.ClearSelected()
+        for($cbc=0; $cbc -lt $script:ChekedListBox.Items.Count; $cbc++){
+            $script:ChekedListBox.SetItemChecked($cbc,false);
+        }
+        if(($script:scid -eq "ER") -or ($script:scid -eq "ER+ES")){
+            $vv=Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | % { Get-ItemProperty $_.PsPath | Select-Object DisplayName} |select-string "VOICEVOX"
+            if($vv.ToString().contains("VOICEVOX")){
+                $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $false)
+            }else{
+                $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
+            }
+        }
         $ym = $script:ym
         if(!(Test-Path "$aupathb\chk$ym.txt")){
-            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("VC Redist"), $true)
-            $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("dotNetFramework"), $true)                         
+            $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VC Redist"), $true)
+            $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("dotNetFramework"), $true)                         
             $pwshv = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases/latest" -UseBasicParsing)).tag_name
             if("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv"){
-                $CheckedBox.SetItemChecked($CheckedBox.items.IndexOf("PowerShell 7"), $true)
+                $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("PowerShell 7"), $true)
             }
             $script:opflag = $true
         }
@@ -2514,6 +2526,10 @@ if($tio){
                 Copy-Item "$aupathm\BepInEx\config\me.yukieiji.extremeskins.cfg" "C:\Temp\me.yukieiji.extremeskins.cfg" -Force               
                 New-Item -Path "C:\Temp\ExtremeHat" -ItemType Directory
                 Copy-Item "$aupathm\ExtremeHat\*" -Recurse "C:\Temp\ExtremeHat"
+                New-Item -Path "C:\Temp\ExtremeNamePlate" -ItemType Directory
+                Copy-Item "$aupathm\ExtremeNamePlate\*" -Recurse "C:\Temp\ExtremeNamePlate"
+                New-Item -Path "C:\Temp\ExtremeVisor" -ItemType Directory
+                Copy-Item "$aupathm\ExtremeVisor\*" -Recurse "C:\Temp\ExtremeVisor"
             }
         }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
@@ -2784,8 +2800,18 @@ if($tio){
             if(!(Test-Path "$aupathm\ExtremeHat")){
                 New-Item -Path "$aupathm\ExtremeHat" -ItemType Directory
             }
+            if(!(Test-Path "$aupathm\ExtremeNamePlate")){
+                New-Item -Path "$aupathm\ExtremeNamePlate" -ItemType Directory
+            }
+            if(!(Test-Path "$aupathm\ExtremeVisor")){
+                New-Item -Path "$aupathm\ExtremeVisor" -ItemType Directory
+            }
             robocopy "C:\Temp\ExtremeHat" "$aupathm\ExtremeHat" /unilog:C:\Temp\temp.log /E >nul 2>&1 
             Remove-Item "C:\Temp\ExtremeHat" -Recurse -Force
+            robocopy "C:\Temp\ExtremeNamePlate" "$aupathm\ExtremeNamePlate" /unilog:C:\Temp\temp.log /E >nul 2>&1 
+            Remove-Item "C:\Temp\ExtremeNamePlate" -Recurse -Force
+            robocopy "C:\Temp\ExtremeVisor" "$aupathm\ExtremeVisor" /unilog:C:\Temp\temp.log /E >nul 2>&1 
+            Remove-Item "C:\Temp\ExtremeVisor" -Recurse -Force
             $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
 
             Write-Log "`r`n $content"
