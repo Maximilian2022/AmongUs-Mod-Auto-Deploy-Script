@@ -3057,7 +3057,7 @@ if($tio){
             #ExVE DLLをDLして配置
             Write-Log "Download $scid Extreme Voice Engine DLL 開始"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
-            Write-Log "Download $scid $scid Extreme Voice Engine  DLL 完了"                 }
+            Write-Log "Download $scid $scid Extreme Voice Engine  DLL 完了"                 
         }
     }elseif($scid -eq "ER+ES"){
         if(test-path "$aupathm\ExtremeRoles-$torv"){
@@ -3070,7 +3070,8 @@ if($tio){
             #ExVE DLLをDLして配置
             Write-Log "Download $scid Extreme Voice Engine DLL 開始"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
-            Write-Log "Download $scid $scid Extreme Voice Engine  DLL 完了"                 }
+            Write-Log "Download $scid $scid Extreme Voice Engine  DLL 完了"                 
+        }
     }elseif($scid -eq "LM"){
         if(test-path "$aupathm\Las Monjas $torv"){
             robocopy "$aupathm\Las Monjas $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
