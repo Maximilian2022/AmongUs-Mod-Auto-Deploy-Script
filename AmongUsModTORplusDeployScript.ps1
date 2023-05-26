@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.4.7"
+$version = "1.9.4.8"
 #
 #################################################################################################
 ### minimum version for v2023.3.28
@@ -2302,8 +2302,10 @@ if($tio){
         $tordlp = "https://github.com/eDonnes124/Town-Of-Us-R/releases/download/${torv}/ToU.${torv}.zip"
     }elseif($scid -eq "ER"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
+        $exve = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeVoiceEngine.dll"
     }elseif($scid -eq "ER+ES"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
+        $exve = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeVoiceEngine.dll"
     }elseif($scid -eq "TOH"){
         $tohver = $torv.Substring(1)
         Write-Log $tohver
@@ -3052,6 +3054,10 @@ if($tio){
 
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
+            #ExVE DLLをDLして配置
+            Write-Log "Download $scid Extreme Voice Engine DLL 開始"
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
+            Write-Log "Download $scid $scid Extreme Voice Engine  DLL 完了"                 }
         }
     }elseif($scid -eq "ER+ES"){
         if(test-path "$aupathm\ExtremeRoles-$torv"){
@@ -3061,7 +3067,10 @@ if($tio){
 
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
-        }
+            #ExVE DLLをDLして配置
+            Write-Log "Download $scid Extreme Voice Engine DLL 開始"
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
+            Write-Log "Download $scid $scid Extreme Voice Engine  DLL 完了"                 }
     }elseif($scid -eq "LM"){
         if(test-path "$aupathm\Las Monjas $torv"){
             robocopy "$aupathm\Las Monjas $torv" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
