@@ -1165,47 +1165,55 @@ function Reload(){
             VerMinMax $nosmin $nosmin1 $nosmin2
             Write-Log "NOS Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"AMS :AUModS/AUModS"{
             $releasepage2 = "https://api.github.com/repos/AUModS/AUModS/releases"
             $scid = "AMS"
             VerMinMax $amsmin $amsmin1 $amsmin2
             Write-Log "AMS Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"TOR MR :miru-y/TheOtherRoles-MR"{
             $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
             $scid = "TOR MR"
             VerMinMax $tormmin $tormmin1 $tormmin2
             Write-Log "TOR MR Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"NOT :Dolly1016/Nebula on the Test"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOT"
             VerMinMax $notmin $notmin1 $notmin2
             Write-Log "NOT Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
             VerMinMax $torhmin $torhmin1 $torhmin2
             Write-Log "TOR GMH Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"TOR :TheOtherRolesAU/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/TheOtherRolesAU/TheOtherRoles/releases"
             $scid = "TOR"
             VerMinMax $tormin $tormin1 $tormin2
             Write-Log "TOR Selected"
             $RadioButton28.Checked = $True
+            $script:isall = $false
         }"TOU-R :eDonnes124/Town-Of-Us-R"{
             $releasepage2 = "https://api.github.com/repos/eDonnes124/Town-Of-Us-R/releases"
             $scid = "TOU-R"
             VerMinMax $tourmin $tourmin1 $tourmin2
             Write-Log "TOU-R Selected"
+            $script:isall = $false
             $RadioButton29.Checked = $True
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
             VerMinMax $ermin $ermin1 $ermin2
             Write-Log "ER Selected"
+            $script:isall = $false
             $RadioButton29.Checked = $True
         }"ER+ES :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
@@ -1214,17 +1222,20 @@ function Reload(){
             $aumin = $esmin
             Write-Log "ER+ES Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"NOS :Dolly1016/Nebula"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOS"
             VerMinMax $nosmin $nosmin1 $nosmin2
             Write-Log "NOS Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"LM :KiraYamato94/LasMonjas"{
             $releasepage2 = "https://api.github.com/repos/KiraYamato94/LasMonjas/releases"
             $scid = "LM"
             VerMinMax $lmmin $lmmin1 $lmmin2
             Write-Log "LM Selected"
+            $script:isall = $false
             $RadioButton29.Checked = $True
         }"SNR :ykundesu/SuperNewRoles"{
             $releasepage2 = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
@@ -1232,11 +1243,13 @@ function Reload(){
             VerMinMax $snrmin $snrmin1 $snrmin2
             Write-Log "SNR Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"TOH :tukasa0001/TownOfHost"{
             $releasepage2 = "https://api.github.com/repos/tukasa0001/TownOfHost/releases"
             $scid = "TOH"
             VerMinMax $tohmin $tohmin1 $tohmin2
             Write-Log "TOH Selected"
+            $script:isall = $false
             $RadioButton29.Checked = $True
         }"TOY :Yumenopai/TownOfHost_Y"{
             $releasepage2 = "https://api.github.com/repos/Yumenopai/TownOfHost_Y/releases"
@@ -1244,6 +1257,7 @@ function Reload(){
             VerMinMax $toymin $toymin1 $toymin2
             Write-Log "TOY Selected"
             $RadioButton29.Checked = $True
+            $script:isall = $false
         }"Install/Update Selected"{
             $scid = "IUS"
             $tio = $false
@@ -1255,6 +1269,7 @@ function Reload(){
             $tio = $false
             Write-Log "TIO Selected"
             $combo2.Enabled = $false
+            $script:isall = $false
         }
     }
 
@@ -1702,7 +1717,7 @@ function Reload(){
         $script:tio = $tio
         $script:CheckedBox.ClearSelected()
         for($cbc=0; $cbc -lt $script:ChekedListBox.Items.Count; $cbc++){
-            $script:ChekedListBox.SetItemChecked($cbc,$false)
+            $script:ChekedListBox.SetItemChecked($cbc, $false)
         }
         if(($script:scid -eq "ER") -or ($script:scid -eq "ER+ES")){
             $vv=Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | ForEach-Object { Get-ItemProperty $_.PsPath | Select-Object DisplayName} |select-string "VOICEVOX"
