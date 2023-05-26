@@ -1721,9 +1721,7 @@ function Reload(){
         }
         if(($script:scid -eq "ER") -or ($script:scid -eq "ER+ES")){
             $vv=Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | ForEach-Object { Get-ItemProperty $_.PsPath | Select-Object DisplayName} |select-string "VOICEVOX"
-            if($vv.ToString().contains("VOICEVOX")){
-                $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $false)
-            }else{
+            if($null -eq $vv){
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
             }
         }
