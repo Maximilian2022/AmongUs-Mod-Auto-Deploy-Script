@@ -1259,16 +1259,16 @@ function Reload(){
             $RadioButton29.Checked = $True
             $script:isall = $false
         }"Install/Update Selected"{
-            $scid = "IUS"
-            $tio = $false
+            $script:scid = "IUS"
+            $script:tio = $false
             Write-Log "SAL Selected"
-            $combo2.Enabled = $false
+            $script:combo2.Enabled = $false
             $script:isall = $true
         }"Tool Install Only"{
-            $scid = "TIO"
-            $tio = $false
+            $script:scid = "TIO"
+            $script:tio = $false
             Write-Log "TIO Selected"
-            $combo2.Enabled = $false
+            $script:combo2.Enabled = $false
             $script:isall = $false
         }
     }
