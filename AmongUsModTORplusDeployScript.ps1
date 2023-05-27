@@ -474,7 +474,7 @@ function BackUpAU{
             $procnum
             for($i=0;$i -lt $proclist.count;$i++){
             
-                if($test.ProcessName[$i] -eq "steam"){
+                if($proclist.ProcessName[$i] -eq "steam"){
                     write-log $i
                     $procnum = $i
                 }
