@@ -3626,10 +3626,22 @@ if($ckbci.Count -gt 0){
             #https://github.com/VOICEVOX/voicevox/releases/tag/0.14.6
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
             $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/VOICEVOX/voicevox/releases/latest" -UseBasicParsing)).assets.browser_download_url
-            for($vve = 0;$vve -lt $aucap.count; $vve++){
-                if($($aucap[$vve]).contains("VOICEVOX.Web.Setup")){
-                    $vvexe = $($aucap[$vve])
-                }
+            #GPU check
+            # ビデオカード
+            $VideoController = Get-WmiObject Win32_VideoController
+            Write-log "ビデオカード:" $VideoController.Name
+            if($($VideoController.Name).contains("nvidia")){
+                for($vve = 0;$vve -lt $aucap.count; $vve++){
+                    if($($aucap[$vve]).contains("VOICEVOX-CUDA.Web.Setup")){
+                        $vvexe = $($aucap[$vve])
+                    }
+                }    
+            }else{
+                for($vve = 0;$vve -lt $aucap.count; $vve++){
+                    if($($aucap[$vve]).contains("VOICEVOX.Web.Setup")){
+                        $vvexe = $($aucap[$vve])
+                    }
+                }    
             }
             Write-Log $vvexe          
             aria2c -x5 -V --allow-overwrite=true --dir "$dsk" -o "VOICEVOX.Web.Setup.exe" $vvexe                
