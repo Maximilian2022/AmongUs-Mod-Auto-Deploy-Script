@@ -3628,8 +3628,16 @@ if($ckbci.Count -gt 0){
             $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/VOICEVOX/voicevox/releases/latest" -UseBasicParsing)).assets.browser_download_url
             #GPU check
             # ビデオカード
-            $VideoController = Get-WmiObject Win32_VideoController
-            Write-log "ビデオカード:" $VideoController.Name
+            try{
+                $VideoController = Get-WmiObject Win32_VideoController
+                Write-log "ビデオカード:" $VideoController.Name    
+            }catch{
+                for($vve = 0;$vve -lt $aucap.count; $vve++){
+                    if($($aucap[$vve]).contains("VOICEVOX.Web.Setup")){
+                        $vvexe = $($aucap[$vve])
+                    }
+                }    
+            }
             if($($VideoController.Name).contains("nvidia")){
                 for($vve = 0;$vve -lt $aucap.count; $vve++){
                     if($($aucap[$vve]).contains("VOICEVOX-CUDA.Web.Setup")){
