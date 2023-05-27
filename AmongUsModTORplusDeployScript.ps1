@@ -1261,12 +1261,14 @@ function Reload(){
         }"Install/Update Selected"{
             $script:scid = "IUS"
             $script:tio = $false
+            $tio = $false
             Write-Log "SAL Selected"
             $script:combo2.Enabled = $false
             $script:isall = $true
         }"Tool Install Only"{
             $script:scid = "TIO"
             $script:tio = $false
+            $tio = $false
             Write-Log "TIO Selected"
             $script:combo2.Enabled = $false
             $script:isall = $false
