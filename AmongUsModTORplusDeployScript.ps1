@@ -3,38 +3,55 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.5"
+$version = "1.9.5.1"
 #
 #################################################################################################
-### minimum version for v2023.3.28
-$ermin = "v7.0.0.0"
-$esmin = "v7.0.0.0"
-$nosmin = "2.3,2023.3.28"
-$notmin = "2.3,2023.3.28"
-$tormin = "v4.3.1"
-$tourmin = "v4.0.4 "
-$tohmin = "v4.1.2"
-$snrmin = "1.7.0.0"
+### minimum version for v2023.6.13
+$ermin = "NONE"
+$esmin = "NONE"
+$nosmin = "NONE"
+$notmin = "NONE"
+$tormin = "NONE"
+$tourmin = "NONE"
+$tohmin = "NONE"
+$snrmin = "NONE"
 $tormmin = "NONE"
-$lmmin = "3.1.6"
-$amsmin = "v23.2.28.0"
-$toymin = "v412.8"
+$lmmin = "NONE"
+$amsmin = "NONE"
+$toymin = "NONE"
+$rhrmin = "NONE"
+
+### minimum version for v2023.3.28
+$ermin1 = "v7.0.0.0"
+$esmin1 = "v7.0.0.0"
+$nosmin1 = "2.3,2023.3.28"
+$notmin1 = "2.3,2023.3.28"
+$tormin1 = "v4.3.1"
+$tourmin1 = "v4.0.4 "
+$tohmin1 = "v4.1.2"
+$snrmin1 = "1.7.0.0"
+$tormmin1 = "NONE"
+$lmmin1 = "3.1.6"
+$amsmin1 = "v23.2.28.0"
+$toymin1 = "v412.8"
+$rhrmin1 = "release1"
 
 ### minimum version for v2023.2.28
-$ermin1 = "v6.0.0.0"
-$esmin1 = "v6.0.0.0"
-$nosmin1 = "2.2,2023.2.28"
-$notmin1 = "2.2,2023.2.28"
-$tormin1 = "v4.3.0"
-$tourmin1 = "v4.0.3"
-$tohmin1 = "v4.1.1"
-$snrmin1 = "1.6.0.0"
-$tormmin1 = "NONE"
-$lmmin1 = "3.1.2"
-$amsmin1 = "v23.2.28.0"
-$toymin1 = "v411.7"
+$ermin2 = "v6.0.0.0"
+$esmin2 = "v6.0.0.0"
+$nosmin2 = "2.2,2023.2.28"
+$notmin2 = "2.2,2023.2.28"
+$tormin2 = "v4.3.0"
+$tourmin2 = "v4.0.3"
+$tohmin2 = "v4.1.1"
+$snrmin2 = "1.6.0.0"
+$tormmin2 = "NONE"
+$lmmin2 = "3.1.2"
+$amsmin2 = "v23.2.28.0"
+$toymin2 = "v411.7"
+$rhrmin2 = "NONE"
 
-### minimum version for v2022.12.16
+<### minimum version for v2022.12.16
 $ermin2 = "v5.0.0.0"
 $esmin2 = "v5.0.0.0"
 $nosmin2 = "2.0.1,2022.12.8"
@@ -47,6 +64,7 @@ $tormmin2 = "NONE"
 $lmmin2 = "3.0.4"
 $amsmin2 = "v22.12.14.0"
 $toymin2 = "v402.3.9"
+$rhrmin2 = "NONE"
 
 <### minimum version for v2022.10.25
 $ermin2 = "v4.0.0.0"
@@ -92,10 +110,12 @@ $toymin2 = "NONE"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 
-$prever0 = "2023.2.28"
-$prevtargetid0 = "1390179653173000898"
-$prever1 = "2022.12.14"
-$prevtargetid1 = "3833836818403923932"
+$prever0 = "2023.3.28"
+$prevtargetid0 = "2741278786821271696"
+$prever1 = "2023.2.28"
+$prevtargetid1 = "1390179653173000898"
+#$prever1 = "2022.12.14"
+#$prevtargetid1 = "3833836818403923932"
 #$prever1 = "2022.10.25"
 #$prevtargetid1 = "4338750749031095433"
 #$prever1 = "2022.10.19"
@@ -1024,6 +1044,7 @@ if($gmhbool){
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
 [void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
+#[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
 [void] $Combo.Items.Add("Install/Update Selected")
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
@@ -1258,6 +1279,13 @@ function Reload(){
             Write-Log "TOY Selected"
             $RadioButton29.Checked = $True
             $script:isall = $false
+        }"RHR :sansaaaaai/RevolutionaryHostRoles"{
+            $releasepage2 = "https://api.github.com/repos/sansaaaaai/Revolutionary-host-roles/releases"
+            $scid = "RHR"
+            VerMinMax $rhrmin $rhrmin1 $rhrmin2
+            Write-Log "RHR Selected"
+            $RadioButton29.Checked = $True
+            $script:isall = $false
         }"Install/Update Selected"{
             $script:scid = "IUS"
             $script:tio = $false
@@ -1346,6 +1374,13 @@ function Reload(){
                 $script:toyweb = $web
             }else{
                 $web = $script:toyweb
+            }
+        }elseif($scid -eq "RHR"){
+            if($null -eq $script:toyweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:rhrweb = $web
+            }else{
+                $web = $script:rhrweb
             }
         }elseif($scid -eq "AMS"){
             if($null -eq $script:amsweb){
