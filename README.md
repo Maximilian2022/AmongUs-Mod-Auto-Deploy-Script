@@ -65,6 +65,8 @@
 古い本体バージョンでの自動作成機能があります。（Steam/Epic両対応）<br>
 ただし、Epicについては戻りたいバージョンのManifestファイルが必要です。<br>
 Manifestファイルの配布は行いません。持ってる人から譲ってもらいましょう。<br>
+この機能は各PlatformでAmongUsを購入してないと当然動作しません。<br>
+動作としてSteamの場合Steam.exeがEpicの場合互換ClientであるLegendaryでDLしています。<br>
 </p>
 
 <p>■[Epicの動作について]<br>
