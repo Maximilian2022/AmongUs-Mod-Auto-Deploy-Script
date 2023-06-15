@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.5.1"
+$version = "1.9.5.2"
 #
 #################################################################################################
 ### minimum version for v2023.6.13
@@ -151,7 +151,7 @@ function Get-Translate($transtext){
 #################################################################################################
 # 権限チェック
 #################################################################################################
-if(!((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username")){
+if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localgroup Administrators) -contains "$env:userdomain\$env:username"))){
     Write-Host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
     Write-Host $(Get-Translate("あなたのユーザー名($env:username)は管理者権限グループに属していません"))
     Write-Host $(Get-Translate("管理者権限グループに属しているユーザーは以下の通りです"))
