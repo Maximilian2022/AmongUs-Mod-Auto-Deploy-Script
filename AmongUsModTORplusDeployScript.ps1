@@ -66,7 +66,7 @@ $amsmin2 = "v22.12.14.0"
 $toymin2 = "v402.3.9"
 $rhrmin2 = "NONE"
 
-<### minimum version for v2022.10.25
+### minimum version for v2022.10.25
 $ermin2 = "v4.0.0.0"
 $esmin2 = "v4.0.0.0"
 $nosmin2 = "1.16,2022.10.25"
@@ -149,6 +149,22 @@ function Get-Translate($transtext){
 }
 
 #################################################################################################
+# 権限チェック
+#################################################################################################
+$TempMyOutputEncode=[System.Console]::OutputEncoding
+[System.Console]::OutputEncoding=[System.Text.Encoding]::GetEncoding('shift_jis')
+if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localgroup Administrators) -contains "$env:userdomain\$env:username"))){
+    Write-Host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
+    Write-Host $(Get-Translate("あなたのユーザー名($env:username)は管理者権限グループに属していません"))
+    Write-Host $(Get-Translate("管理者権限グループに属しているユーザーは以下の通りです"))
+    $nn = net localgroup Administrators
+    Write-Host $nn
+    pause
+    exit
+}
+[System.Console]::OutputEncoding=$TempMyOutputEncode
+
+#################################################################################################
 # Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
@@ -199,19 +215,6 @@ Write-Output $(Get-Translate("実行前チェック完了"))
 
 if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($($PSVersionTable.PSVersion.Major) -ne "7")) {
     Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
-    exit
-}
-
-#################################################################################################
-# 権限チェック
-#################################################################################################
-if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localgroup Administrators) -contains "$env:userdomain\$env:username"))){
-    Write-Host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
-    Write-Host $(Get-Translate("あなたのユーザー名($env:username)は管理者権限グループに属していません"))
-    Write-Host $(Get-Translate("管理者権限グループに属しているユーザーは以下の通りです"))
-    $nn = net localgroup Administrators
-    Write-Host $nn
-    pause
     exit
 }
 
