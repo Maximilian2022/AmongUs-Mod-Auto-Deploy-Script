@@ -573,12 +573,12 @@ function BackUpAU{
             while(!(Test-Path $bupfolder)){
                 Start-Sleep -Seconds 2
             }
-            Write-Log "Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。(Max10分でタイムアウトします)#0"
+            Write-Log "Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。(Max20分でタイムアウトします)#0"
             $presu = $false
             while (((Get-ChildItem $bupfolder | Measure-Object).Count) -ne 8){
                 Start-sleep -Seconds 15
                 #timeout 10min.
-                if($counter -lt 40){
+                if($counter -lt 80){
                     $counter++
                     Write-Log "Steam.exe は前バージョン($prever)をダウンロード中です。しばらくお待ちください。#$counter $((Get-ChildItem $bupfolder | Measure-Object).Count)/8"
                     $presu = $true
