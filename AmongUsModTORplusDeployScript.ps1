@@ -7,8 +7,8 @@ $version = "1.9.5.2"
 #
 #################################################################################################
 ### minimum version for v2023.6.13
-$ermin = "NONE"
-$esmin = "NONE"
+$ermin = "v8.0.0.0"
+$esmin = "v8.0.0.0"
 $nosmin = "NONE"
 $notmin = "NONE"
 $tormin = "NONE"
