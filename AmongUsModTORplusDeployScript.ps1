@@ -1046,7 +1046,7 @@ if($gmhbool){
 [void] $Combo.Items.Add("LM :KiraYamato94/LasMonjas")
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
-#[void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
+[void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
 #[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
 [void] $Combo.Items.Add("Install/Update Selected")
 [void] $Combo.Items.Add("Tool Install Only")
