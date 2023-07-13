@@ -6,7 +6,7 @@
 $version = "1.9.5.2"
 #
 #################################################################################################
-### minimum version for v2023.6.13
+### minimum version for v2023.7.11
 $ermin = "v8.0.0.0"
 $esmin = "v8.0.0.0"
 $nosmin = "NONE"
@@ -16,7 +16,7 @@ $tourmin = "v5.0.0"
 $tohmin = "v5.0.1"
 $snrmin = "1.8.0.0"
 $tormmin = "NONE"
-$lmmin = "NONE"
+$lmmin = "3.2.0"
 $amsmin = "NONE"
 $toymin = "NONE"
 $rhrmin = "NONE"
