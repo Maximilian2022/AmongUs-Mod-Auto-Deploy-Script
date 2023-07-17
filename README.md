@@ -1,4 +1,4 @@
-# AU MAD Script
+# AU MAD Script   (AUMADS)
 ## AmongUs Mod Auto Deploy Script <br> AmongUs Mod自動導入スクリプト
 
 <p>■AmongUs Mod入れるのが面倒なので作った自動化Script</p>
