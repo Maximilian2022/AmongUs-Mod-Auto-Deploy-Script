@@ -3734,7 +3734,7 @@ if($ckbci.Count -gt 0){
             $Bar.Value = "88"
         }elseif($ckbci[$aa] -eq "NOS Webhook"){
             Write-Log "NOS/NOT Webhook starts"
-            if(($scid -eq "NOS") -or ($scid -eq "NOT")-or ($scid -eq "SNR")){
+            if(($scid -eq "NOS") -or ($scid -eq "NOT")){
                 if($gmhwebhooktxt -eq "None"){
                     Write-Log "NOS/NOT Webhook skipped."
                 }else{
@@ -3815,7 +3815,7 @@ if($ckbci.Count -gt 0){
             }
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "健康ランド"){
-            if(($scid -eq "NOS") -or ($scid -eq "NOT")){
+            if(($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "SNR")){
                 Write-Host "健康ランド化 start"
                 #regioninfo.json
                 if(Test-Path "$env:APPDATA\..\LocalLow\Innersloth"){
