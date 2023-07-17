@@ -3734,7 +3734,7 @@ if($ckbci.Count -gt 0){
             $Bar.Value = "88"
         }elseif($ckbci[$aa] -eq "NOS Webhook"){
             Write-Log "NOS/NOT Webhook starts"
-            if(($scid -eq "NOS") -or ($scid -eq "NOT")){
+            if(($scid -eq "NOS") -or ($scid -eq "NOT")-or ($scid -eq "SNR")){
                 if($gmhwebhooktxt -eq "None"){
                     Write-Log "NOS/NOT Webhook skipped."
                 }else{
