@@ -15,7 +15,7 @@ $tohmin = "v5.0.1"
 $snrmin = "1.8.0.0"
 $lmmin = "3.2.0"
 $nosmin = "NONE"
-$notmin = "NONE"
+$notmin = "ex1"
 $amsmin = "NONE"
 
 ### minimum version for v2023.3.28
@@ -2474,31 +2474,39 @@ if($tio){
 
         #temp
         if($nebubool){
-            $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"
-        }
-
-        #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
-        $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
-        $z7tr = $true
-        if($aucap[0].length -gt 1){
-            for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                if($($aucap[$ii]).IndexOf(".7z") -gt 0){
-                    $nebulangdata = $($aucap[$ii])
-                    $z7tr = $false
+            if($RadioButton114.Checked){
+                $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/ex1/Nebula_Experimental_1.zip"
+                $nebulangdata = ""
+            }elseif($RadioButton115.Checked){
+                $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"                
+                #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
+                $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
+                $z7tr = $true
+                if($aucap[0].length -gt 1){
+                    for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+                        if($($aucap[$ii]).IndexOf(".7z") -gt 0){
+                            $nebulangdata = $($aucap[$ii])
+                            $z7tr = $false
+                        }
+                    }    
+                    if($z7tr){
+                        for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+                            if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
+                                $nebulangdata = $($aucap[$ii])
+                            }
+                            if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
+                                $nebulangdatajpc = $($aucap[$ii])
+                            }
+                        }    
+                    }   
+                }else{
+                    $nebulangdata = $aucap
                 }
-            }    
-            if($z7tr){
-                for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                    if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
-                        $nebulangdata = $($aucap[$ii])
-                    }
-                    if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
-                        $nebulangdatajpc = $($aucap[$ii])
-                    }
-                }    
-            }   
-        }else{
-            $nebulangdata = $aucap
+            }else{
+                Write-Log "このバージョンにテスト版は存在しません。終了します"
+                Start-Sleep -Seconds 10
+                exit
+            }
         }
         $langdata = $nebulangdata
     }else{
