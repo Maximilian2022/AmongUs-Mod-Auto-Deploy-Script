@@ -2476,11 +2476,33 @@ if($tio){
         if($nebubool){
             if($RadioButton114.Checked){
                 $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/ex1/Nebula_Experimental_1.zip"
-                $nebulangdata = ""
+                #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
+                $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
+                $z7tr = $true
+                if($aucap[0].length -gt 1){
+                    for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+                        if($($aucap[$ii]).IndexOf(".7z") -gt 0){
+                            $nebulangdata = $($aucap[$ii])
+                            $z7tr = $false
+                        }
+                    }    
+                    if($z7tr){
+                        for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+                            if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
+                                $nebulangdata = $($aucap[$ii])
+                            }
+                            if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
+                                $nebulangdatajpc = $($aucap[$ii])
+                            }
+                        }    
+                    }   
+                }else{
+                    $nebulangdata = $aucap
+                }
             }elseif($RadioButton115.Checked){
                 $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"                
                 #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
-                $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
+                $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/tags/202304091106" -UseBasicParsing)).assets.browser_download_url
                 $z7tr = $true
                 if($aucap[0].length -gt 1){
                     for($ii = 0;$ii -lt  $aucap.Length;$ii++){
