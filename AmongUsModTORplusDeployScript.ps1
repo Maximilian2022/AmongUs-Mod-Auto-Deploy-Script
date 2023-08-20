@@ -3312,8 +3312,8 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
-        Write-Log "日本語 データ Download 完了"
-        <#if(!($nebubool)){
+        Write-Log "日本語 データ Download 完了"        
+        if(!($nebubool) -and ($RadioButton115.Checked) ){
             #Mod Original DLL削除
             Remove-item -Path "$aupathm\BepInEx\plugins\Nebula.dll"
             Write-Log 'Delete Original Mod DLL'
@@ -3322,7 +3322,7 @@ if($tio){
             Write-Log "Download $scid DLL 開始"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Nebula.dll" $torgmdll
             Write-Log "Download $scid DLL 完了"
-        }#>
+        }
         if(Test-Path "$aupathm\TexturePack"){
         }else{
             New-Item "$aupathm\TexturePack" -Type Directory
