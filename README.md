@@ -15,6 +15,7 @@
  ・Las Monjas (<a rel="noreferrer noopener" href="https://github.com/KiraYamato94/LasMonjas" target="_blank">KiraYamato94/LasMonjas</a>)<br>
  ・SuperNewRoles (<a rel="noreferrer noopener" href="https://github.com/ykundesu/SuperNewRoles" target="_blank">ykundesu/SuperNewRoles</a>)<br>
  ・TownOfHost (<a rel="noreferrer noopener" href="https://github.com/tukasa0001/TownOfHost" target="_blank">tukasa0001/TownOfHost</a>)<br>
+ ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
 </p>
 <p>Option<br>
   ・Submerged (<a rel="noreferrer noopener" href="https://github.com/SubmergedAmongUs/Submerged" target="_blank">SubmergedAmongUs/Submerged</a>)<br>
@@ -180,7 +181,6 @@ EpicはGame Launcherにインストールパスを都度変更する形での実
  ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>) <br>
  ・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
  ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
- ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
  ・AUModS (<a rel="noreferrer noopener" href="https://github.com/AUModS/AUModS" target="_blank">AUModS/AUModS</a>)<br>
 
 <br>
