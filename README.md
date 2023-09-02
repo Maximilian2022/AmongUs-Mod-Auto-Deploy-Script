@@ -5,12 +5,9 @@
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
 <p>MODとMODバージョン、本体バージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
 <br>
-<p>GMH公開終了に伴い、ScriptでのGMH対応は終了しました。</p>
-<br>
 <p>このScriptは 以下の環境用のものです<br>
  ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
  ・Nebula on the Test (Shanpshot) (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
- ・AUModS (<a rel="noreferrer noopener" href="https://github.com/AUModS/AUModS" target="_blank">AUModS/AUModS</a>)<br>
  ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
  ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
  ・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
@@ -18,6 +15,7 @@
  ・Las Monjas (<a rel="noreferrer noopener" href="https://github.com/KiraYamato94/LasMonjas" target="_blank">KiraYamato94/LasMonjas</a>)<br>
  ・SuperNewRoles (<a rel="noreferrer noopener" href="https://github.com/ykundesu/SuperNewRoles" target="_blank">ykundesu/SuperNewRoles</a>)<br>
  ・TownOfHost (<a rel="noreferrer noopener" href="https://github.com/tukasa0001/TownOfHost" target="_blank">tukasa0001/TownOfHost</a>)<br>
+ ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
 </p>
 <p>Option<br>
   ・Submerged (<a rel="noreferrer noopener" href="https://github.com/SubmergedAmongUs/Submerged" target="_blank">SubmergedAmongUs/Submerged</a>)<br>
@@ -183,7 +181,7 @@ EpicはGame Launcherにインストールパスを都度変更する形での実
  ・AUShipMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUShipMod" target="_blank">tomarai/AUShipMod</a>) <br>
  ・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
  ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
- ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
+ ・AUModS (<a rel="noreferrer noopener" href="https://github.com/AUModS/AUModS" target="_blank">AUModS/AUModS</a>)<br>
 
 <br>
 </p>
