@@ -14,7 +14,7 @@ $tourmin = "v5.0.0"
 $tohmin = "v5.0.1"
 $snrmin = "1.8.0.0"
 $lmmin = "3.2.0"
-$nosmin = "NONE"
+$nosmin = "ex1"
 $notmin = "ex1"
 $toymin = "v503.14"
 
