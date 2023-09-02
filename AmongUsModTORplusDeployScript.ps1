@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.6.4"
+$version = "1.9.6.6"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -2416,7 +2416,7 @@ if($tio){
         $sweb = Invoke-WebRequest $snL -UseBasicParsing
         $sweb2 = ConvertFrom-Json $sweb.Content   
         for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
-            if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImpostor.dll") -gt 0){
+            if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImposter.dll") -gt 0){
                 $snLevel = $sweb2.assets.browser_download_url[$aii]
                 Write-Log $snLevel
                 break
