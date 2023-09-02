@@ -1043,7 +1043,7 @@ $form.Icon = "$dsk\AUMADS.ico"
 if($gmhbool){
     [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
 }
-[void] $Combo.Items.Add("AMS :AUModS/AUModS")
+#[void] $Combo.Items.Add("AMS :AUModS/AUModS")
 #[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
