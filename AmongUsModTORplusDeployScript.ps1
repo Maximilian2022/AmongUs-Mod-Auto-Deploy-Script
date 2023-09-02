@@ -2411,8 +2411,25 @@ if($tio){
     }elseif($scid -eq "SNR"){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
         $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
-        $snLevel= "https://github.com/DigiWorm0/LevelImposter/releases/download/latest/LevelImposter.dll"
-        $snreactor = "https://github.com/NuclearPowered/Reactor/releases/download/latest/Reactor.dll"
+
+        $snL = "https://api.github.com/DigiWorm0/LevelImposter/releases/latest/"        
+        $sweb = Invoke-WebRequest $snL -UseBasicParsing
+        $sweb2 = ConvertFrom-Json $sweb.Content   
+        for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
+            if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImpostor.dll") -gt 0){
+                $snLevel = $sweb2.assets.browser_download_url[$aii]
+            }
+        }
+
+        $snRe = "https://api.github.com/NuclearPowered/Reactor/releases/latest/"        
+        $snweb = Invoke-WebRequest $snRe -UseBasicParsing
+        $snweb2 = ConvertFrom-Json $snweb.Content   
+        for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
+            if($($snweb2.assets.browser_download_url[$aii]).IndexOf("Reactor.dll") -gt 0){
+                $snreactor = $snweb2.assets.browser_download_url[$aii]
+            }
+        }
+
     }elseif($scid -eq "AMS"){
         $tordlp = "https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityIL2CPP_x86_6.0.0-pre.1.zip"
         $langd = @()
