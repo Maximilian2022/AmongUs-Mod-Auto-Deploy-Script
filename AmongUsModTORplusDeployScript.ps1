@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.6.2"
+$version = "1.9.6.3"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -2412,7 +2412,7 @@ if($tio){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
         $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
 
-        $snL = "https://api.github.com/DigiWorm0/LevelImposter/releases/latest/"        
+        $snL = "https://api.github.com/repos/DigiWorm0/LevelImposter/releases/latest/"        
         $sweb = Invoke-WebRequest $snL -UseBasicParsing
         $sweb2 = ConvertFrom-Json $sweb.Content   
         for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
@@ -2421,7 +2421,7 @@ if($tio){
             }
         }
 
-        $snRe = "https://api.github.com/NuclearPowered/Reactor/releases/latest/"        
+        $snRe = "https://api.github.com/repos/NuclearPowered/Reactor/releases/latest/"        
         $snweb = Invoke-WebRequest $snRe -UseBasicParsing
         $snweb2 = ConvertFrom-Json $snweb.Content   
         for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
