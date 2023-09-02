@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.5.3"
+$version = "1.9.6"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -2411,6 +2411,8 @@ if($tio){
     }elseif($scid -eq "SNR"){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
         $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
+        $snLevel= "https://github.com/DigiWorm0/LevelImposter/releases/download/latest/LevelImposter.dll"
+        $snreactor = "https://github.com/NuclearPowered/Reactor/releases/download/latest/Reactor.dll"
     }elseif($scid -eq "AMS"){
         $tordlp = "https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityIL2CPP_x86_6.0.0-pre.1.zip"
         $langd = @()
@@ -3235,6 +3237,25 @@ if($tio){
             Write-Log "Download $scid Agartha DLL 開始"
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
             Write-Log "Download $scid Agartha DLL 完了"         
+
+            if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
+                Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
+                Write-Log 'Delete Original Reactor Mod DLL'
+            }
+            #Agartha DLLをDLして配置
+            Write-Log "Download $scid Reactor DLL 開始"
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
+            Write-Log "Download $scid Reactor DLL 完了"         
+
+            if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
+                Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
+                Write-Log 'Delete Original LevelImposter Mod DLL'
+            }
+            #Agartha DLLをDLして配置
+            Write-Log "Download $scid LevelImposter DLL 開始"
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
+            Write-Log "Download $scid LevelImposter DLL 完了"         
+
         }
     }elseif($scid -eq "AMS"){
         if(test-path "$aupathm\BepInEx"){
