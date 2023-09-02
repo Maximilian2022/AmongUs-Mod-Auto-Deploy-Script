@@ -3709,7 +3709,6 @@ if($ckbci.Count -gt 0){
             for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
                 if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImposter.dll") -gt 0){
                     $snLevel = $sweb2.assets.browser_download_url[$aii]
-                    Write-Log $snLevel
                     break
                 }
             }
@@ -3720,7 +3719,6 @@ if($ckbci.Count -gt 0){
             for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
                 if($($snweb2.assets.browser_download_url[$aii]).IndexOf("Reactor.dll") -gt 0){
                     $snreactor = $snweb2.assets.browser_download_url[$aii]
-                    Write-Log $snreactor
                     break
                 }
             }
@@ -3731,6 +3729,7 @@ if($ckbci.Count -gt 0){
             }
             #Reactor DLLをDLして配置
             Write-Log "Download $scid Reactor DLL 開始"
+            Write-Log $snreactor
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
             Write-Log "Download $scid Reactor DLL 完了"         
     
@@ -3740,6 +3739,7 @@ if($ckbci.Count -gt 0){
             }
             #LevelImposter DLLをDLして配置
             Write-Log "Download $scid LevelImposter DLL 開始"
+            Write-Log $snLevel
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
             Write-Log "Download $scid LevelImposter DLL 完了"         
 
