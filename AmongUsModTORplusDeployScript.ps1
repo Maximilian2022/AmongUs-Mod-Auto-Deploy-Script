@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.6"
+$version = "1.9.6.1"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -3228,35 +3228,34 @@ if($tio){
 
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
-
-            if(Test-Path "$aupathm\BepInEx\plugins\Agartha.dll"){
-                Remove-item -Path "$aupathm\BepInEx\plugins\Agartha.dll"
-                Write-Log 'Delete Original Agartha Mod DLL'
-            }
-            #Agartha DLLをDLして配置
-            Write-Log "Download $scid Agartha DLL 開始"
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
-            Write-Log "Download $scid Agartha DLL 完了"         
-
-            if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
-                Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
-                Write-Log 'Delete Original Reactor Mod DLL'
-            }
-            #Agartha DLLをDLして配置
-            Write-Log "Download $scid Reactor DLL 開始"
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
-            Write-Log "Download $scid Reactor DLL 完了"         
-
-            if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
-                Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
-                Write-Log 'Delete Original LevelImposter Mod DLL'
-            }
-            #Agartha DLLをDLして配置
-            Write-Log "Download $scid LevelImposter DLL 開始"
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
-            Write-Log "Download $scid LevelImposter DLL 完了"         
-
         }
+        if(Test-Path "$aupathm\BepInEx\plugins\Agartha.dll"){
+            Remove-item -Path "$aupathm\BepInEx\plugins\Agartha.dll"
+            Write-Log 'Delete Original Agartha Mod DLL'
+        }
+        #Agartha DLLをDLして配置
+        Write-Log "Download $scid Agartha DLL 開始"
+        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
+        Write-Log "Download $scid Agartha DLL 完了"         
+
+        if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
+            Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
+            Write-Log 'Delete Original Reactor Mod DLL'
+        }
+        #Reactor DLLをDLして配置
+        Write-Log "Download $scid Reactor DLL 開始"
+        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
+        Write-Log "Download $scid Reactor DLL 完了"         
+
+        if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
+            Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
+            Write-Log 'Delete Original LevelImposter Mod DLL'
+        }
+        #LevelImposter DLLをDLして配置
+        Write-Log "Download $scid LevelImposter DLL 開始"
+        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
+        Write-Log "Download $scid LevelImposter DLL 完了"         
+
     }elseif($scid -eq "AMS"){
         if(test-path "$aupathm\BepInEx"){
             if(Test-Path "$aupathm\BepInEx\plugins\AUModS.dll"){
