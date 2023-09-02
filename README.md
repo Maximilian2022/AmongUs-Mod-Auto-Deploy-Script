@@ -19,7 +19,7 @@
 </p>
 <p>Option<br>
   ・Submerged (<a rel="noreferrer noopener" href="https://github.com/SubmergedAmongUs/Submerged" target="_blank">SubmergedAmongUs/Submerged</a>)<br>
-  ・LevelImpostor (<a rel="noreferrer noopener" href="https://github.com/DigiWorm0/LevelImposter" target="_blank">DigiWorm0/LevelImposter</a>)<br>
+  ・LevelImposter (<a rel="noreferrer noopener" href="https://github.com/DigiWorm0/LevelImposter" target="_blank">DigiWorm0/LevelImposter</a>)<br>
 </p>
 
 
