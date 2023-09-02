@@ -16,7 +16,7 @@ $snrmin = "1.8.0.0"
 $lmmin = "3.2.0"
 $nosmin = "NONE"
 $notmin = "ex1"
-$amsmin = "NONE"
+$toymin = "v503.14"
 
 ### minimum version for v2023.3.28
 $ermin1 = "v7.0.0.0"
@@ -28,7 +28,7 @@ $tourmin1 = "v4.0.4"
 $tohmin1 = "v4.1.2"
 $snrmin1 = "1.7.0.0"
 $lmmin1 = "3.1.6"
-$amsmin1 = "v23.2.28.0"
+$toymin1 = "v412.8"
 
 ### minimum version for v2023.2.28
 $ermin2 = "v6.0.0.0"
@@ -40,7 +40,7 @@ $tourmin2 = "v4.0.3"
 $tohmin2 = "v4.1.1"
 $snrmin2 = "1.6.0.0"
 $lmmin2 = "3.1.2"
-$amsmin2 = "v23.2.28.0"
+$toymin2 = "v411.7"
 
 <### minimum version for v2022.12.16
 $ermin2 = "v5.0.0.0"
@@ -103,12 +103,12 @@ $toymin2 = "NONE"
 $tormmin = "NONE"
 $tormmin1 = "NONE"
 $tormmin2 = "NONE"
-$toymin = "NONE"
-$toymin1 = "v412.8"
-$toymin2 = "v411.7"
 $rhrmin = "NONE"
 $rhrmin1 = "release1"
 $rhrmin2 = "NONE"
+$amsmin = "NONE"
+$amsmin1 = "v23.2.28.0"
+$amsmin2 = "v23.2.28.0"
 
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
@@ -1049,7 +1049,7 @@ if($gmhbool){
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("LM :KiraYamato94/LasMonjas")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
-#[void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
+[void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
 #[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
 [void] $Combo.Items.Add("Install/Update Selected")
 [void] $Combo.Items.Add("Tool Install Only")
