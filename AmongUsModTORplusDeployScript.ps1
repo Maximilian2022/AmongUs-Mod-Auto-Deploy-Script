@@ -1017,7 +1017,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "330,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",,"NOS CPU Affinity"
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","LevelImposter","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -1768,6 +1768,9 @@ function Reload(){
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
             }
         }
+        if($script:scid -eq "SNR"){
+            $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("LevelImposter"), $true)
+        }
         $ym = $script:ym
         if(!(Test-Path "$aupathb\chk$ym.txt")){
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VC Redist"), $true)
@@ -2412,27 +2415,6 @@ if($tio){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
         $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
 
-        $snL = "https://api.github.com/repos/DigiWorm0/LevelImposter/releases"        
-        $sweb = Invoke-WebRequest $snL -UseBasicParsing
-        $sweb2 = ConvertFrom-Json $sweb.Content   
-        for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
-            if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImposter.dll") -gt 0){
-                $snLevel = $sweb2.assets.browser_download_url[$aii]
-                Write-Log $snLevel
-                break
-            }
-        }
-
-        $snRe = "https://api.github.com/repos/NuclearPowered/Reactor/releases"        
-        $snweb = Invoke-WebRequest $snRe -UseBasicParsing
-        $snweb2 = ConvertFrom-Json $snweb.Content   
-        for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
-            if($($snweb2.assets.browser_download_url[$aii]).IndexOf("Reactor.dll") -gt 0){
-                $snreactor = $snweb2.assets.browser_download_url[$aii]
-                Write-Log $snreactor
-                break
-            }
-        }
 
     }elseif($scid -eq "AMS"){
         $tordlp = "https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityIL2CPP_x86_6.0.0-pre.1.zip"
@@ -3259,24 +3241,6 @@ if($tio){
         aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
         Write-Log "Download $scid Agartha DLL 完了"         
 
-        if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
-            Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
-            Write-Log 'Delete Original Reactor Mod DLL'
-        }
-        #Reactor DLLをDLして配置
-        Write-Log "Download $scid Reactor DLL 開始"
-        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
-        Write-Log "Download $scid Reactor DLL 完了"         
-
-        if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
-            Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
-            Write-Log 'Delete Original LevelImposter Mod DLL'
-        }
-        #LevelImposter DLLをDLして配置
-        Write-Log "Download $scid LevelImposter DLL 開始"
-        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
-        Write-Log "Download $scid LevelImposter DLL 完了"         
-
     }elseif($scid -eq "AMS"){
         if(test-path "$aupathm\BepInEx"){
             if(Test-Path "$aupathm\BepInEx\plugins\AUModS.dll"){
@@ -3731,6 +3695,54 @@ if($ckbci.Count -gt 0){
                 $sShortcut.Save()
             }
             $Bar.Value = "85"
+        }elseif($ckbci[$aa] -eq "LevelImposter"){
+            try{
+                choco -v
+            }catch{
+                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+            }
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
+
+            $snL = "https://api.github.com/repos/DigiWorm0/LevelImposter/releases"        
+            $sweb = Invoke-WebRequest $snL -UseBasicParsing
+            $sweb2 = ConvertFrom-Json $sweb.Content   
+            for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
+                if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImposter.dll") -gt 0){
+                    $snLevel = $sweb2.assets.browser_download_url[$aii]
+                    Write-Log $snLevel
+                    break
+                }
+            }
+    
+            $snRe = "https://api.github.com/repos/NuclearPowered/Reactor/releases"        
+            $snweb = Invoke-WebRequest $snRe -UseBasicParsing
+            $snweb2 = ConvertFrom-Json $snweb.Content   
+            for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
+                if($($snweb2.assets.browser_download_url[$aii]).IndexOf("Reactor.dll") -gt 0){
+                    $snreactor = $snweb2.assets.browser_download_url[$aii]
+                    Write-Log $snreactor
+                    break
+                }
+            }
+    
+            if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
+                Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
+                Write-Log 'Delete Original Reactor Mod DLL'
+            }
+            #Reactor DLLをDLして配置
+            Write-Log "Download $scid Reactor DLL 開始"
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
+            Write-Log "Download $scid Reactor DLL 完了"         
+    
+            if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
+                Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
+                Write-Log 'Delete Original LevelImposter Mod DLL'
+            }
+            #LevelImposter DLLをDLして配置
+            Write-Log "Download $scid LevelImposter DLL 開始"
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
+            Write-Log "Download $scid LevelImposter DLL 完了"         
+
         }elseif($ckbci[$aa] -eq "VOICEVOX"){
             try{
                 choco -v
