@@ -1242,6 +1242,10 @@ function Reload(){
             Write-Log "ER Selected"
             $script:isall = $false
             $RadioButton29.Checked = $True
+            $vv=Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | ForEach-Object { Get-ItemProperty $_.PsPath | Select-Object DisplayName} |select-string "VOICEVOX"
+            if($null -eq $vv){
+                $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
+            }
         }"ER+ES :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER+ES"
@@ -1767,9 +1771,13 @@ function Reload(){
             if($null -eq $vv){
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
             }
+        }else{
+            $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $false)
         }
         if($script:scid -eq "SNR"){
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("LevelImposter"), $true)
+        }else{
+            $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("LevelImposter"), $false)
         }
         $ym = $script:ym
         if(!(Test-Path "$aupathb\chk$ym.txt")){
