@@ -2412,21 +2412,25 @@ if($tio){
         $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
         $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
 
-        $snL = "https://api.github.com/repos/DigiWorm0/LevelImposter/releases/latest/"        
+        $snL = "https://api.github.com/repos/DigiWorm0/LevelImposter/releases"        
         $sweb = Invoke-WebRequest $snL -UseBasicParsing
         $sweb2 = ConvertFrom-Json $sweb.Content   
         for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
             if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImpostor.dll") -gt 0){
                 $snLevel = $sweb2.assets.browser_download_url[$aii]
+                Write-Log $snLevel
+                break
             }
         }
 
-        $snRe = "https://api.github.com/repos/NuclearPowered/Reactor/releases/latest/"        
+        $snRe = "https://api.github.com/repos/NuclearPowered/Reactor/releases"        
         $snweb = Invoke-WebRequest $snRe -UseBasicParsing
         $snweb2 = ConvertFrom-Json $snweb.Content   
         for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
             if($($snweb2.assets.browser_download_url[$aii]).IndexOf("Reactor.dll") -gt 0){
                 $snreactor = $snweb2.assets.browser_download_url[$aii]
+                Write-Log $snreactor
+                break
             }
         }
 
