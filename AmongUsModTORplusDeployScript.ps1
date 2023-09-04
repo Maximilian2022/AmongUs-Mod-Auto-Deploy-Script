@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.6.8"
+$version = "1.9.6.9"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -2469,6 +2469,9 @@ if($tio){
                     if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
                         $nebulangdatajpc = $($aucap[$ii])
                     }
+                    if($($aucap[$ii]).IndexOf("Japanese.zip") -gt 0){
+                        $nebulangdata = $($aucap[$ii])
+                    }
                 }    
             }
         }else{
@@ -2630,7 +2633,19 @@ if($tio){
                 New-Item -Path "C:\Temp\ExtremeVisor" -ItemType Directory
                 Copy-Item "$aupathm\ExtremeVisor\*" -Recurse "C:\Temp\ExtremeVisor"
             }
-        }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
+        }elseif($scid -eq "NOS"){
+            if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
+            }
+            if(test-path "$aupathm\MoreCosmic"){
+                New-Item -Path "C:\Temp\MoreCosmic" -ItemType Directory
+                Copy-Item "$aupathm\MoreCosmic\*" -Recurse "C:\Temp\MoreCosmic"
+            }
+            if(test-path "$aupathm\Addons"){
+                New-Item -Path "C:\Temp\Addons" -ItemType Directory
+                Copy-Item "$aupathm\Addons\*" -Recurse "C:\Temp\Addons"
+            }
+        }elseif($scid -eq "NOT"){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
             }
@@ -2916,7 +2931,37 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
-    }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
+    }elseif($scid -eq "NOS"){
+        if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" -Force
+            Remove-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force    
+        }
+        if(test-path "C:\Temp\MoreCosmic"){
+            if(!(Test-Path "$aupathm\MoreCosmic")){
+                New-Item -Path "$aupathm\MoreCosmic" -ItemType Directory
+            }    
+            robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\MoreCosmic" -Recurse -Force
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+        if(test-path "C:\Temp\Addons"){
+            if(!(Test-Path "$aupathm\Addons")){
+                New-Item -Path "$aupathm\Addons" -ItemType Directory
+            }    
+            robocopy "C:\Temp\Addons" "$aupathm\Addons" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "C:\Temp\Addons" -Recurse -Force
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }elseif($scid -eq "NOT"){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
                 New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
@@ -3273,44 +3318,23 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
-        if (!(Test-Path "$aupathm\Language\")) {
-            New-Item "$aupathm\Language\" -Type Directory
+        if (!(Test-Path "$aupathm\Addons\")) {
+            New-Item "$aupathm\Addons\" -Type Directory
         }
         Write-Log "日本語 データ Download 開始"
         Write-Log "日本語 データ $langdata"
-        if(Test-Path "$aupathm\Language\Japanese.dat"){
-            Copy-Item "$aupathm\Language\Japanese.dat" "$aupathm\Language\Japanese.dat.old"
-        }
         $extens = $langdata.Substring($langdata.Length - 3, 3);
         Write-Host $extens
         if($extens -eq "dat"){
             aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
             aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese_Color.dat" $nebulangdatajpc
         }elseif ($extens -eq "zip") {
-            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.zip" $langdata
-            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.zip" -TargetPath "$aupathm\Language"
+            aria2c -x5 -V --dir "$aupathm\Addons" -o "Japanese.zip" $langdata --allow-overwrite=true 
         }elseif($extens -eq ".7z"){
             aria2c -x5 -V --dir "$aupathm\Language" -o "Language.7z" $langdata
             Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
         }
-        if(test-path "$aupathm\Language\Language"){
-            robocopy "$aupathm\Language\Language" "$aupathm\Language" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "$aupathm\Language\Language" -recurse
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
-        }
         Write-Log "日本語 データ Download 完了"
-        if(Test-Path "$aupathm\TexturePack"){
-        }else{
-            New-Item "$aupathm\TexturePack" -Type Directory
-        }
-        Write-Log "Download Small Tracker Arrow 開始"
-        if(!(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip")){
-            aria2c -x5 -V --dir "$aupathm\TexturePack" -o "MoreSmallTrackerArrow.zip" "https://cdn.discordapp.com/attachments/906766074131927071/1080729380667535390/MoreSmallTrackerArrow.zip"
-        }
-        Write-Log "Download Small Tracker Arrow 完了"
     }elseif($scid -eq "NOT"){
         if(test-path "$aupathm\Nebula"){
             robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
