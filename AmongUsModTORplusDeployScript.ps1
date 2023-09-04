@@ -3602,7 +3602,6 @@ $ckbci = $kenkoitems + $tempoitems
 Write-Log $ckbci
 
 if($ckbci.Count -gt 0){
-
     for($aa=0;$aa -le $ckbci.Count;$aa++){
         if($ckbci[$aa] -eq "BetterCrewLink"){
             Write-Log "BCL Install Start"
@@ -3704,53 +3703,56 @@ if($ckbci.Count -gt 0){
             }
             $Bar.Value = "85"
         }elseif($ckbci[$aa] -eq "LevelImposter"){
-            try{
-                choco -v
-            }catch{
-                Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
-            }
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
-
-            $snL = "https://api.github.com/repos/DigiWorm0/LevelImposter/releases"        
-            $sweb = Invoke-WebRequest $snL -UseBasicParsing
-            $sweb2 = ConvertFrom-Json $sweb.Content   
-            for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
-                if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImposter.dll") -gt 0){
-                    $snLevel = $sweb2.assets.browser_download_url[$aii]
-                    break
+            if(($scid -eq "TOR") -or ($scid -eq "ER") -or ($scid -eq "ER+ES") -or ($scid -eq "LM") -or ($scid -eq "SNR") -or ($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "TOU-R") ){
+                try{
+                    choco -v
+                }catch{
+                    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
                 }
-            }
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
     
-            $snRe = "https://api.github.com/repos/NuclearPowered/Reactor/releases"        
-            $snweb = Invoke-WebRequest $snRe -UseBasicParsing
-            $snweb2 = ConvertFrom-Json $snweb.Content   
-            for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
-                if($($snweb2.assets.browser_download_url[$aii]).IndexOf("Reactor.dll") -gt 0){
-                    $snreactor = $snweb2.assets.browser_download_url[$aii]
-                    break
+                $snL = "https://api.github.com/repos/DigiWorm0/LevelImposter/releases"        
+                $sweb = Invoke-WebRequest $snL -UseBasicParsing
+                $sweb2 = ConvertFrom-Json $sweb.Content   
+                for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
+                    if($($sweb2.assets.browser_download_url[$aii]).IndexOf("LevelImposter.dll") -gt 0){
+                        $snLevel = $sweb2.assets.browser_download_url[$aii]
+                        break
+                    }
                 }
+        
+                $snRe = "https://api.github.com/repos/NuclearPowered/Reactor/releases"        
+                $snweb = Invoke-WebRequest $snRe -UseBasicParsing
+                $snweb2 = ConvertFrom-Json $snweb.Content   
+                for($aii = 0;$aii -lt  $($snweb2.assets.browser_download_url).Length;$aii++){
+                    if($($snweb2.assets.browser_download_url[$aii]).IndexOf("Reactor.dll") -gt 0){
+                        $snreactor = $snweb2.assets.browser_download_url[$aii]
+                        break
+                    }
+                }
+        
+                if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
+                    Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
+                    Write-Log 'Delete Original Reactor Mod DLL'
+                }
+                #Reactor DLLをDLして配置
+                Write-Log "Download $scid Reactor DLL 開始"
+                Write-Log $snreactor
+                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
+                Write-Log "Download $scid Reactor DLL 完了"         
+        
+                if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
+                    Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
+                    Write-Log 'Delete Original LevelImposter Mod DLL'
+                }
+                #LevelImposter DLLをDLして配置
+                Write-Log "Download $scid LevelImposter DLL 開始"
+                Write-Log $snLevel
+                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
+                Write-Log "Download $scid LevelImposter DLL 完了"             
+            }else{
+                Write-Log "$scid では LevelImposterは入りません"
             }
-    
-            if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
-                Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
-                Write-Log 'Delete Original Reactor Mod DLL'
-            }
-            #Reactor DLLをDLして配置
-            Write-Log "Download $scid Reactor DLL 開始"
-            Write-Log $snreactor
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
-            Write-Log "Download $scid Reactor DLL 完了"         
-    
-            if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
-                Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
-                Write-Log 'Delete Original LevelImposter Mod DLL'
-            }
-            #LevelImposter DLLをDLして配置
-            Write-Log "Download $scid LevelImposter DLL 開始"
-            Write-Log $snLevel
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
-            Write-Log "Download $scid LevelImposter DLL 完了"         
-
         }elseif($ckbci[$aa] -eq "VOICEVOX"){
             try{
                 choco -v
