@@ -4161,7 +4161,7 @@ if($ckbci.Count -gt 0){
 
 $Bar.Value = "92"
 
-#####
+<#####
 # Nebula Server 追加
 #####
 if(($scid -eq "NOS") -OR ($scid -eq "NOT")){
@@ -4193,6 +4193,7 @@ if(($scid -eq "NOS") -OR ($scid -eq "NOT")){
     }
 }
 
+#>
 ####################
 #bat file auto update
 ####################
