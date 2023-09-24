@@ -3330,6 +3330,8 @@ if($tio){
             aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese_Color.dat" $nebulangdatajpc
         }elseif ($extens -eq "zip") {
             aria2c -x5 -V --dir "$aupathm\Addons" -o "Japanese.zip" $langdata --allow-overwrite=true 
+            $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip"
+            aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         }elseif($extens -eq ".7z"){
             aria2c -x5 -V --dir "$aupathm\Language" -o "Language.7z" $langdata
             Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
