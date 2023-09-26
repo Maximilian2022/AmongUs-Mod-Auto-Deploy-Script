@@ -13,7 +13,7 @@
  ・SuperNewRoles (<a rel="noreferrer noopener" href="https://github.com/ykundesu/SuperNewRoles" target="_blank">ykundesu/SuperNewRoles</a>)<br>
  ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
  ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
- ・StellarRoles (<a rel="noreferrer noopener" href="https://github.com/Mr-Fluuff/StellarRolesAU" target="_blank">Mr-Fluuff/AU</a>)<br>
+ ・StellarRoles (<a rel="noreferrer noopener" href="https://github.com/Mr-Fluuff/StellarRolesAU" target="_blank">Mr-Fluuff/StellarRolesAU</a>)<br>
  ・Las Monjas (<a rel="noreferrer noopener" href="https://github.com/KiraYamato94/LasMonjas" target="_blank">KiraYamato94/LasMonjas</a>)<br>
  ・TownOfHost (<a rel="noreferrer noopener" href="https://github.com/tukasa0001/TownOfHost" target="_blank">tukasa0001/TownOfHost</a>)<br>
  ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
