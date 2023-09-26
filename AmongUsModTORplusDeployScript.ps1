@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.6.9"
+$version = "1.9.7"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -17,6 +17,7 @@ $lmmin = "3.2.0"
 $nosmin = "ex1"
 $notmin = "ex1"
 $toymin = "v503.14"
+$sramin = "v1.4.4"
 
 ### minimum version for v2023.3.28
 $ermin1 = "v7.0.0.0"
@@ -29,6 +30,7 @@ $tohmin1 = "v4.1.2"
 $snrmin1 = "1.7.0.0"
 $lmmin1 = "3.1.6"
 $toymin1 = "v412.8"
+$sramin1 = "v1.3.0"
 
 ### minimum version for v2023.2.28
 $ermin2 = "v6.0.0.0"
@@ -41,6 +43,7 @@ $tohmin2 = "v4.1.1"
 $snrmin2 = "1.6.0.0"
 $lmmin2 = "3.1.2"
 $toymin2 = "v411.7"
+$sramin2 = "v1.2.4"
 
 <### minimum version for v2022.12.16
 $ermin2 = "v5.0.0.0"
@@ -1036,6 +1039,9 @@ $form.Icon = "$dsk\AUMADS.ico"
 # コンボボックスに項目を追加
 #[void] $Combo.Items.Add("TOR GMH :haoming37/TheOtherRoles-GM-Haoming")
 #[void] $Combo.Items.Add("TOR GMH Test :haoming37/TheOtherRoles-GM-Haoming-Test")
+#[void] $Combo.Items.Add("AMS :AUModS/AUModS")
+#[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
+#[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("NOS :Dolly1016/Nebula on the Ship")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
@@ -1043,14 +1049,12 @@ $form.Icon = "$dsk\AUMADS.ico"
 if($gmhbool){
     [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
 }
-#[void] $Combo.Items.Add("AMS :AUModS/AUModS")
-#[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
 [void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
+[void] $Combo.Items.Add("SRA :Mr-Fluuff/StellarRolesAU")
 [void] $Combo.Items.Add("LM :KiraYamato94/LasMonjas")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
 [void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
-#[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
 [void] $Combo.Items.Add("Install/Update Selected")
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
@@ -1235,6 +1239,13 @@ function Reload(){
             Write-Log "TOU-R Selected"
             $script:isall = $false
             $RadioButton29.Checked = $True
+        }"Mr-Fluuff/StellarRolesAU"{
+            $releasepage2 = "https://api.github.com/repos/Mr-Fluuff/StellarRolesAU/releases"
+            $scid = "SRA"
+            VerMinMax $sramin $sramin1 $sramin2
+            Write-Log "SRA Selected"
+            $script:isall = $false
+            $RadioButton29.Checked = $True
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
@@ -1342,6 +1353,13 @@ function Reload(){
                 $script:tourweb = $web
             }else{
                 $web = $script:tourweb
+            }
+        }elseif($scid -eq "SRA"){
+            if($null -eq $script:sraweb){
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                $script:sraweb = $web
+            }else{
+                $web = $script:sraweb
             }
         }elseif(($scid -eq "ER") -or ($scid -eq "ER+ES")){
             if($null -eq $script:erweb){
@@ -1774,7 +1792,7 @@ function Reload(){
         }else{
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $false)
         }
-        if($script:scid -eq "SNR"){
+        if(($script:scid -eq "SNR") -or ($script:scid -eq "SRA")){
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("LevelImposter"), $true)
         }else{
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("LevelImposter"), $false)
@@ -2012,7 +2030,6 @@ if($isall){
 
     $Form22.Close()
 }
-
 
 $prefpth = ""
 if($RadioButton114.Checked){
@@ -2379,6 +2396,63 @@ if($tio){
         $tordlp = "https://github.com/Eisbison/TheOtherRoles/releases/download/${torv}/TheOtherRoles.zip"
     }elseif($scid -eq "TOU-R"){
         $tordlp = "https://github.com/eDonnes124/Town-Of-Us-R/releases/download/${torv}/ToU.${torv}.zip"
+    }elseif($scid -eq "SRA"){
+        #ZIPが無いときに一個前のZIPあるとこまでさかのぼる必要あり
+        $langd = @()
+        $langz = @()
+        $sradllc = $false
+        $srazipc = $false
+
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
+                $langz += $web2.assets.browser_download_url[$aii]
+            }
+        }
+        for($aiiii = 0;$aiiii -lt  $langz.Length;$aiiii++){
+            if($($web2.tag_name[$aiiii]) -eq "$torv"){
+                $srazip = $($langz[$aiiii])
+                $srazipc = $true
+            }
+        }
+
+        if(!$srazipc){
+            for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+                if($($web2.assets.browser_download_url[$aii]).IndexOf(".dll") -gt 0){
+                    $langd += $web2.assets.browser_download_url[$aii]
+                }
+            }
+            for($aiiii = 0;$aiiii -lt  $langd.Length;$aiiii++){
+                if($($web2.tag_name[$aiiii]) -eq "$torv"){
+                    $sradll = $($langd[$aiiii])
+                    $sradllc = $true
+                }
+            }    
+        }
+
+        if($srazipc){
+            $tordlp = $srazip
+        }elseif($sradllc){
+            $detzip = $true
+            $temptorv = $torv
+            while ($detzip) {
+                if($($temptorv.Substring($temptorv.Length - 1, 1)) -eq 0){
+                    $temptorv = "$($temptorv.Substring(0, 2))$($temptorv.Substring(2, 1)-1).9"
+                }else{
+                    $temptorv = "$($temptorv.Substring(0, 4))$($temptorv.Substring(4, 1)-1)"
+                }
+                for($aiiii = 0;$aiiii -lt  $langz.Length;$aiiii++){
+                    if($($web2.tag_name[$aiiii]) -eq "$temptorv"){
+                        $srazip = $($langz[$aiiii])
+                        $detzip = $false
+                    }
+                }        
+            }
+            $tordlp = $srazip
+            $sradll
+        }else{
+            Write-Log "Critical Error: File Not Found."
+        }
+
     }elseif($scid -eq "ER"){
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
         $exve = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeVoiceEngine.dll"
@@ -2392,7 +2466,7 @@ if($tio){
             if($($web2.assets.browser_download_url[$aii]).IndexOf("${tohver}.zip") -gt 0){
                 $langd += $web2.assets.browser_download_url[$aii]
             }
-        }      
+        }
         for($aii = 0;$aii -lt $langd.Length;$aii++){
             if($($langd[$aii]).IndexOf("${tohver}") -gt 0){
                 $tordlp = $langd[$aii]
@@ -2615,6 +2689,14 @@ if($tio){
         if($scid -eq "TOU-R"){
             if(test-path "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg"){                
                 Copy-Item "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" "C:\Temp\com.slushiegoose.townofus.cfg" -Force
+            }
+        }elseif($scid -eq "SRA"){
+            if(test-path "$aupathm\BepInEx\config\me.fluff.stellarroles.cfg"){
+                Copy-Item "$aupathm\BepInEx\config\me.fluff.stellarroles.cfg" "C:\Temp\me.fluff.stellarroles.cfg" -Force               
+                New-Item -Path "C:\Temp\StellarHats" -ItemType Directory
+                Copy-Item "$aupathm\StellarHats\*" -Recurse "C:\Temp\StellarHats"
+                New-Item -Path "C:\Temp\StellarVisors" -ItemType Directory
+                Copy-Item "$aupathm\StellarVisors\*" -Recurse "C:\Temp\StellarVisors"
             }
         }elseif($scid -eq "ER"){
             if(test-path "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg"){
@@ -2867,9 +2949,13 @@ if($tio){
         Expand-7zip -ArchiveFileName $aupathm\TheOtherRoles.zip -TargetPath $aupathm
         Write-Log "ZIP 解凍完了"
     }else{
-        Write-Log "ZIP Download NG $tordlp "
-        Write-Log "何かがおかしい・・・。もう一度試してみてください。"
-        exit
+        if($scid -eq "SRA"){
+            #あーあーあーあー
+        }else{
+            Write-Log "ZIP Download NG $tordlp "
+            Write-Log "何かがおかしい・・・。もう一度試してみてください。"
+            exit                
+        }
     }
 
     $Bar.Value = "59"
@@ -2886,6 +2972,30 @@ if($tio){
             }
             Copy-Item "C:\Temp\com.slushiegoose.townofus.cfg" "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" -Force
             Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force    
+        }
+    }elseif($scid -eq "SRA"){
+        if(test-path "C:\Temp\me.fluff.stellarroles.cfg"){
+            if(!(test-path "$aupathm\BepInEx\config")){
+                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
+            }
+            Copy-Item "C:\Temp\me.fluff.stellarroles.cfg" "$aupathm\BepInEx\config\me.fluff.stellarroles.cfg" -Force
+            Remove-Item "C:\Temp\me.fluff.stellarroles.cfg" -Force    
+        }
+        if(test-path "C:\Temp\StellarHats"){
+            if(!(Test-Path "$aupathm\StellarHats")){
+                New-Item -Path "$aupathm\StellarHats" -ItemType Directory
+            }
+            if(!(Test-Path "$aupathm\StellarVisors")){
+                New-Item -Path "$aupathm\StellarVisors" -ItemType Directory
+            }
+            robocopy "C:\Temp\StellarHats" "$aupathm\StellarHats" /unilog:C:\Temp\temp.log /E >nul 2>&1 
+            Remove-Item "C:\Temp\StellarHats" -Recurse -Force
+            robocopy "C:\Temp\StellarVisors" "$aupathm\StellarVisors" /unilog:C:\Temp\temp.log /E >nul 2>&1 
+            Remove-Item "C:\Temp\StellarVisors" -Recurse -Force
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
         }
     }elseif($scid -eq "ER"){
         if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
@@ -3188,6 +3298,26 @@ if($tio){
 
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
+        }
+    }elseif($scid -eq "SRA"){ 
+        if(test-path "$aupathm\StellarRoles"){
+            robocopy "$aupathm\StellarRoles" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+            Remove-Item "$aupathm\StellarRoles" -recurse
+            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+
+            Write-Log "`r`n $content"
+            Remove-Item "C:\Temp\temp.log" -Force
+        }
+        #Latest DLL DL and replace.
+        if(!$srazipc){
+            #Mod Original DLL削除
+            Remove-item -Path "$aupathm\BepInEx\plugins\StellarRoles.dll"
+            Write-Log 'Delete Original Mod DLL'
+            Write-Log $torgmdll
+            #TOR+ DLLをDLして配置
+            Write-Log "Download $scid DLL 開始"
+            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "StellarRoles.dll" $sradll
+            Write-Log "Download $scid DLL 完了"
         }
     }elseif($scid -eq "TOR"){
         if(test-path "$aupathm\TheOtherRoles"){
