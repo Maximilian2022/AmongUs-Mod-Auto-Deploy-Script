@@ -1246,6 +1246,7 @@ function Reload(){
             Write-Log "SRA Selected"
             $script:isall = $false
             $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $true
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
             $scid = "ER"
@@ -3859,7 +3860,9 @@ if($ckbci.Count -gt 0){
             }
             $Bar.Value = "85"
         }elseif($ckbci[$aa] -eq "LevelImposter"){
-            if(($scid -eq "TOR") -or ($scid -eq "ER") -or ($scid -eq "ER+ES") -or ($scid -eq "LM") -or ($scid -eq "SNR") -or ($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "TOU-R") ){
+            if(($scid -eq "IUS")  -or ($scid -eq "TIO")){
+                Write-Log "$scid では LevelImposterは入りません"
+            }else{
                 try{
                     choco -v
                 }catch{
@@ -3906,8 +3909,6 @@ if($ckbci.Count -gt 0){
                 Write-Log $snLevel
                 aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
                 Write-Log "Download $scid LevelImposter DLL 完了"             
-            }else{
-                Write-Log "$scid では LevelImposterは入りません"
             }
         }elseif($ckbci[$aa] -eq "VOICEVOX"){
             try{
