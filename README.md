@@ -8,12 +8,13 @@
 <p>このScriptは 以下の環境用のものです<br>
  ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
  ・Nebula on the Test (Shanpshot) (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
- ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
- ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
  ・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
  ・Extreme Roles with Extreme Skins (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
- ・Las Monjas (<a rel="noreferrer noopener" href="https://github.com/KiraYamato94/LasMonjas" target="_blank">KiraYamato94/LasMonjas</a>)<br>
  ・SuperNewRoles (<a rel="noreferrer noopener" href="https://github.com/ykundesu/SuperNewRoles" target="_blank">ykundesu/SuperNewRoles</a>)<br>
+ ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
+ ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
+ ・StellarRoles (<a rel="noreferrer noopener" href="https://github.com/Mr-Fluuff/StellarRolesAU" target="_blank">Mr-Fluuff/AU</a>)<br>
+ ・Las Monjas (<a rel="noreferrer noopener" href="https://github.com/KiraYamato94/LasMonjas" target="_blank">KiraYamato94/LasMonjas</a>)<br>
  ・TownOfHost (<a rel="noreferrer noopener" href="https://github.com/tukasa0001/TownOfHost" target="_blank">tukasa0001/TownOfHost</a>)<br>
  ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
 </p>
