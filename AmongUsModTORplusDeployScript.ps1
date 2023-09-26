@@ -3,7 +3,7 @@
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.7"
+$version = "1.9.7.1"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -1239,7 +1239,7 @@ function Reload(){
             Write-Log "TOU-R Selected"
             $script:isall = $false
             $RadioButton29.Checked = $True
-        }"Mr-Fluuff/StellarRolesAU"{
+        }"SRA :Mr-Fluuff/StellarRolesAU"{
             $releasepage2 = "https://api.github.com/repos/Mr-Fluuff/StellarRolesAU/releases"
             $scid = "SRA"
             VerMinMax $sramin $sramin1 $sramin2
