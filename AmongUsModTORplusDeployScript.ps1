@@ -790,18 +790,10 @@ catch{
 
 $l = w32tm /query /status 
 if ($l.contains("0x80070426")){
-    net start "windows time"
-    start-sleep -Seconds 5
+    Start-Process pwsh -ArgumentList "net start `"windows time`" ;start-sleep -Seconds 5; w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8" /reliable:yes /update;w32tm /resync;w32tm /query /status" -Verb RunAs
+}else{
+    Start-Process pwsh -ArgumentList "w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8" /reliable:yes /update;w32tm /resync;w32tm /query /status" -Verb RunAs      
 }
-#Write-Log $l
-$l = w32tm /monitor /computers:time.google.com
-#Write-Log $l
-$l = w32tm /config /syncfromflags:manual /manualpeerlist:"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8" /reliable:yes /update
-#Write-Log $l
-$l = w32tm /resync
-#Write-Log $l
-$l = w32tm /query /status 
-#Write-Log $l
 
 #################################################################################################
 ### Mod 選択メニュー表示
