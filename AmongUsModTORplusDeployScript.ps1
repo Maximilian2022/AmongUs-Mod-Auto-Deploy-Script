@@ -788,11 +788,11 @@ catch{
 # Clock Sync
 #################################################################################################
 
-$l = w32tm /query /status 
+$l = w32tm /query /status #-ArgumentList "
 if ($l.contains("0x80070426")){
-    Start-Process pwsh -ArgumentList "net start `"windows time`" ;start-sleep -Seconds 5; w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8" /reliable:yes /update;w32tm /resync;w32tm /query /status" -Verb RunAs
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'net start `"windows time`" ;start-sleep -Seconds 5; w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs
 }else{
-    Start-Process pwsh -ArgumentList "w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8" /reliable:yes /update;w32tm /resync;w32tm /query /status" -Verb RunAs      
+    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs      
 }
 
 #################################################################################################
