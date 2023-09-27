@@ -4372,11 +4372,8 @@ if($opflag){
     if(!(Test-Path "$aupathb")){
         New-Item $aupathb -Type Directory 
     }
+    Remove-Item "$aupathb\chk*.txt" -Force
     Write-Output $ym |Out-File -FilePath "$aupathb\chk$ym.txt"
-    $ym2 = $ym -1
-    if(Test-Path "$aupathb\chk$ym2.txt"){
-        Remove-Item "$aupathb\chk$ym2.txt" -Force
-    }    
 }
 ####################
 
