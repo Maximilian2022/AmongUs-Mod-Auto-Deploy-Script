@@ -1,7 +1,7 @@
 ﻿Param($Args1) #skipconfirmation
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
-Write-Output $(Get-Translate("$Log PS1 Loading Start"))
+Write-Output "$Log PS1 Loading Start"
 
 ################################################################################################
 #
@@ -159,7 +159,7 @@ function Get-Translate($transtext){
 }
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
-Write-Output $(Get-Translate("$Log Loading Done."))
+Write-Output "$Log Loading Done."
 
 #################################################################################################
 # 権限チェック
