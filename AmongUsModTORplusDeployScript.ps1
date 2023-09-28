@@ -1,4 +1,8 @@
 ﻿Param($Args1) #skipconfirmation
+$Now = Get-Date
+$Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+Write-Output $(Get-Translate("$Log PS1 Loading Start"))
+
 ################################################################################################
 #
 # Among Us Mod Auto Deploy Script
@@ -153,10 +157,16 @@ function Get-Translate($transtext){
         return $transtext
     }
 }
+$Now = Get-Date
+$Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+Write-Output $(Get-Translate("$Log Loading Done."))
 
 #################################################################################################
 # 権限チェック
 #################################################################################################
+$Now = Get-Date
+$Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+Write-Output $(Get-Translate("$Log 実行前権限チェック開始"))
 $TempMyOutputEncode=[System.Console]::OutputEncoding
 [System.Console]::OutputEncoding=[System.Text.Encoding]::GetEncoding('shift_jis')
 if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localgroup Administrators) -contains "$env:userdomain\$env:username"))){
@@ -177,6 +187,9 @@ if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localg
     exit
 }
 [System.Console]::OutputEncoding=$TempMyOutputEncode
+$Now = Get-Date
+$Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+Write-Output $(Get-Translate("$Log 実行前権限チェック終了"))
 
 #################################################################################################
 # Run w/ Powershell v7 if available.
