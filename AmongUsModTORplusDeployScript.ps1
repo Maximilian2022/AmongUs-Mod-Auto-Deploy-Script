@@ -160,10 +160,18 @@ function Get-Translate($transtext){
 $TempMyOutputEncode=[System.Console]::OutputEncoding
 [System.Console]::OutputEncoding=[System.Text.Encoding]::GetEncoding('shift_jis')
 if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localgroup Administrators) -contains "$env:userdomain\$env:username"))){
-    Write-Host $(Get-Translate("このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
-    Write-Host $(Get-Translate("あなたのユーザー名($env:username)は管理者権限グループに属していません"))
-    Write-Host $(Get-Translate("管理者権限グループに属しているユーザーは以下の通りです"))
+    $Now = Get-Date
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+    Write-Host $(Get-Translate("$Log このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
+    $Now = Get-Date
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+    Write-Host $(Get-Translate("$Log あなたのユーザー名($env:username)は管理者権限グループに属していません"))
+    $Now = Get-Date
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+    Write-Host $(Get-Translate("$Log 管理者権限グループに属しているユーザーは以下の通りです"))
     $nn = net localgroup Administrators
+    $Now = Get-Date
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
     Write-Host $nn
     pause
     exit
@@ -175,12 +183,16 @@ if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localg
 #################################################################################################
 $npl = Get-Location
 $npl2 = Get-Location
-Write-Output $(Get-Translate("実行前チェック開始"))
+$Now = Get-Date
+$Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+Write-Output $(Get-Translate("$Log 実行前チェック開始"))
 try{
     pwsh -Command '$PSVersionTable.PSVersion.major'
 }
 catch{
-    Write-Output $(Get-Translate("初起動時のみ: Powershell 7を導入中・・・。"))
+    $Now = Get-Date
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+    Write-Output $(Get-Translate("$Log 初起動時のみ: Powershell 7を導入中・・・。"))
     Start-Process powershell.exe -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
     Write-Output "`r`n"
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary -y" -Verb RunAs -Wait   
@@ -213,11 +225,15 @@ for ($x=0; $x -lt $a.Length; $x++){
     }
 }
 if ($achk){
-    Write-Output $(Get-Translate("PCの名前に全角が含まれています。Modがうまく起動しない場合があります。英数字への名前変更を推奨します。"))
+    $Now = Get-Date
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+    Write-Output $(Get-Translate("$Log PCの名前に全角が含まれています。Modがうまく起動しない場合があります。英数字への名前変更を推奨します。"))
     Start-Process "https://support.lenovo.com/jp/ja/solutions/ht105079"
 }
 
-Write-Output $(Get-Translate("実行前チェック完了"))
+$Now = Get-Date
+$Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+Write-Output $(Get-Translate("$Log 実行前チェック完了"))
 
 if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($($PSVersionTable.PSVersion.Major) -ne "7")) {
     Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
