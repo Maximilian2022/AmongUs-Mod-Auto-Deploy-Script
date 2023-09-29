@@ -1515,16 +1515,6 @@ function Reload(){
         #Among Us Backup ：Backup用フォルダ
         $au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
   
-        #detector
-        #E:\SteamLibrary\steamapps\common
-        foreach ($num in 65..90) {                                     
-            if(Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us"){
-                $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
-                $detected_path_mod = "$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
-                $detected_path_back = "$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
-                break
-            }     
-        }
         #detect running detect path
         $proclist = Get-Process
         $procnum
@@ -1542,10 +1532,21 @@ function Reload(){
         }
         if($null -ne $procnum){
             $procpath = Split-Path $proclist[$procnum].path -Parent
-            Write-Log $procpath
             $detected_path = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us"
             $detected_path_mod = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us $scid Mod"
             $detected_path_back = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us Backup"
+        }
+        if(!(Test-Path $detected_path)){
+            #detector
+            #E:\SteamLibrary\steamapps\common
+            foreach ($num in 65..90) {                                     
+                if(Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us"){
+                    $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
+                    $detected_path_mod = "$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
+                    $detected_path_back = "$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
+                    break
+                }     
+            }
         }
         
         if(Test-path "$au_path_steam_org\Among Us.exe"){
