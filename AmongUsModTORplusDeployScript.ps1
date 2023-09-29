@@ -1,30 +1,31 @@
 ﻿Param($Args1) #skipconfirmation
+if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+    Set-Alias ngen @(
+        Get-ChildItem (join-path ${env:\windir} "Microsoft.NET\Framework") ngen.exe -recurse |
+        Sort-Object -descending lastwritetime
+    )[0].fullName
+
+    Set-Alias ngen64 @(
+        Get-ChildItem (join-path ${env:\windir} “Microsoft.NET\Framework64”) ngen.exe -recurse |
+        Sort-Object -descending lastwritetime
+    )[0].fullName
+
+    [appdomain]::currentdomain.getassemblies() | ForEach-Object {
+        if($_.location -match $(‘\\assembly\\GAC_64’)){
+            ngen64 install $_.location
+        } else {
+            ngen install $_.location
+        }
+    }
+}
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 Write-Output "$Log PS1 Loading Start"
-
-Set-Alias ngen @(
-    Get-ChildItem (join-path ${env:\windir} "Microsoft.NET\Framework") ngen.exe -recurse |
-    Sort-Object -descending lastwritetime
-)[0].fullName
-
-Set-Alias ngen64 @(
-    Get-ChildItem (join-path ${env:\windir} “Microsoft.NET\Framework64”) ngen.exe -recurse |
-    Sort-Object -descending lastwritetime
-)[0].fullName
-
-[appdomain]::currentdomain.getassemblies() | ForEach-Object {
-    if($_.location -match $(‘\\assembly\\GAC_64’)){
-        ngen64 install $_.location
-    } else {
-        ngen install $_.location
-    }
-}
 ################################################################################################
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.7.2"
+$version = "1.9.7.3"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
