@@ -19,7 +19,7 @@ Set-Alias ngen64 @(
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.7.1"
+$version = "1.9.7.2"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
