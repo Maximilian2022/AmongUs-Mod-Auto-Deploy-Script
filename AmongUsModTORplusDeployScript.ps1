@@ -3,6 +3,18 @@ $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 Write-Output "$Log PS1 Loading Start"
 
+Set-Alias ngen64 @(
+    Get-ChildItem (join-path ${env:\windir} “Microsoft.NET\Framework64”) ngen.exe -recurse |
+    Sort-Object -descending lastwritetime
+)[0].fullName
+
+[appdomain]::currentdomain.getassemblies() | ForEach-Object {
+    if($_.location -match $(‘\\assembly\\GAC_64’)){
+        ngen64 install $_.location
+    } else {
+        ngen install $_.location
+    }
+}
 ################################################################################################
 #
 # Among Us Mod Auto Deploy Script
