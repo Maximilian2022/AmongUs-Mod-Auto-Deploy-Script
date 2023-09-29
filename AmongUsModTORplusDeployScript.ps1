@@ -138,6 +138,7 @@ $nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
 $debugform = $false
+$icorenew = $false
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -303,10 +304,13 @@ if($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip
 #################################################################################################
 # Icon and AUMADS Folder on Desktop
 #################################################################################################
-if(Test-Path "$dsk\AUMADS.ico"){
-    Remove-Item "$dsk\AUMADS.ico" -Force 
+if(!(Test-Path "$dsk\AUMADS.ico")){
+    aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
 }
-aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
+if($icorenew){
+    Remove-Item "$dsk\AUMADS.ico" -Force 
+    aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
+}
 if(!(Test-Path "$dsk\AUMADS.ico")){
     try{
         magick.exe -help | Out-Null
