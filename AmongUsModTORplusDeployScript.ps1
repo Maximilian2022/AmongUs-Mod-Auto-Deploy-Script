@@ -281,7 +281,7 @@ if(!(Test-Path $dsk)){
 function Write-Log($logstring){
     $Now = Get-Date
     # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
-    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + "  "
     $Log += $LogString
     # ログ出力
     Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding utf8 -Append
