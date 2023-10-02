@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.7.4"
+$version = "1.9.7.5"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -1241,6 +1241,7 @@ function Reload(){
             VerMinMax $notmin $notmin1 $notmin2
             Write-Log "NOT Selected"
             $RadioButton29.Checked = $True
+            $RadioButton115.Checked = $True
             $script:isall = $false
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
