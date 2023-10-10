@@ -2904,6 +2904,13 @@ if($tio){
                 }
             }else{
                 Copy-Item $aupatho -destination $aupathm -recurse
+                if(Test-Path "$aupathm\Among Us\"){
+                    robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                    Remove-Item "$aupathm\AmongUs" -recurse
+                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                    Write-Log "`r`n $content"
+                    Remove-Item "C:\Temp\temp.log" -Force                            
+                }
                 Write-Log "$aupatho を $aupathm にコピーしました"
             }
         }else{
@@ -2951,6 +2958,13 @@ if($tio){
             }
         }else{
             Copy-Item $aupatho -destination $aupathm -recurse
+            if(Test-Path "$aupathm\Among Us\"){
+                robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
+                Remove-Item "$aupathm\AmongUs" -recurse
+                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                Write-Log "`r`n $content"
+                Remove-Item "C:\Temp\temp.log" -Force                            
+            }
             Write-Log "$aupatho を $aupathm にコピーしました"
         }
     }    
