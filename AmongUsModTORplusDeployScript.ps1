@@ -2870,7 +2870,7 @@ if($tio){
             Start-Sleep -Seconds 10
         }
 
-        if ($retry -eq "true"){
+        if ($retry -eq $true){
             Write-Log "既存のフォルダを中身を含めて削除します"
             Remove-Item $aupathm -Recurse
             # フォルダを中身を含めてコピーする
