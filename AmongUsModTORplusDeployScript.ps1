@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.7.6"
+$version = "1.9.7.7"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -25,8 +25,8 @@ $sramin = "v1.4.4"
 ### minimum version for v2023.3.28
 $ermin1 = "v7.0.0.0"
 $esmin1 = "v7.0.0.0"
-$nosmin1 = "2.3,2023.3.28"
-$notmin1 = "2.3,2023.3.28"
+$nosmin1 = "NONE"
+$notmin1 = "NONE"
 $tormin1 = "v4.3.1"
 $tourmin1 = "v4.0.4"
 $tohmin1 = "v4.1.2"
@@ -38,8 +38,8 @@ $sramin1 = "v1.3.0"
 ### minimum version for v2023.2.28
 $ermin2 = "v6.0.0.0"
 $esmin2 = "v6.0.0.0"
-$nosmin2 = "2.2,2023.2.28"
-$notmin2 = "2.2,2023.2.28"
+$nosmin2 = "NONE"
+$notmin2 = "NONE"
 $tormin2 = "v4.3.0"
 $tourmin2 = "v4.0.3"
 $tohmin2 = "v4.1.1"
@@ -132,7 +132,7 @@ $prevtargetid1 = "1390179653173000898"
 #$prever1 = "2022.9.20"
 #$prevtargetid1 = "2481435393334839152"
 
-$gmhbool = $true
+$gmhbool = $false #flag for Test
 $nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
