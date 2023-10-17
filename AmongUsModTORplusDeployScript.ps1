@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.7.8"
+$version = "1.9.7.9"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -1006,24 +1006,24 @@ $form.Controls.Add($MyGroupBox2)
 $MyGroupBox24 = New-Object System.Windows.Forms.GroupBox
 $MyGroupBox24.Location = New-Object System.Drawing.Point(400,360)
 $MyGroupBox24.size = New-Object System.Drawing.Size(375,70)
-$MyGroupBox24.text = $(Get-Translate("Submerged を同梱しますか？"))
+$MyGroupBox24.text = $(Get-Translate("CPU Affinity設定"))
 
 # グループの中のラジオボタンを作る
 $RadioButton28 = New-Object System.Windows.Forms.RadioButton
 $RadioButton28.Location = New-Object System.Drawing.Point(10,30)
 $RadioButton28.size = New-Object System.Drawing.Size(100,30)
-$RadioButton28.Text = $(Get-Translate("同梱する"))
+$RadioButton28.Text = $(Get-Translate("CPU 0 1"))
 
 $RadioButton29 = New-Object System.Windows.Forms.RadioButton
 $RadioButton29.Location = New-Object System.Drawing.Point(130,30)
 $RadioButton29.size = New-Object System.Drawing.Size(110,30)
-$RadioButton29.Text = $(Get-Translate("同梱しない"))
+$RadioButton29.Text = $(Get-Translate("CPU 0のみ"))
 $RadioButton29.Checked = $True
 
 $RadioButton27 = New-Object System.Windows.Forms.RadioButton
 $RadioButton27.Location = New-Object System.Drawing.Point(250,30)
 $RadioButton27.size = New-Object System.Drawing.Size(100,30)
-$RadioButton27.Text = $(Get-Translate("除去する"))
+$RadioButton27.Text = $(Get-Translate("設定しない"))
 
 # グループにラジオボタンを入れる
 $MyGroupBox24.Controls.AddRange(@($Radiobutton28, $RadioButton29, $RadioButton27))
@@ -1044,7 +1044,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "330,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",,"NOS CPU Affinity"
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","LevelImposter","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","LevelImposter","Submerged","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -1219,35 +1219,35 @@ function Reload(){
             $scid = "NOS"
             VerMinMax $nosmin $nosmin1 $nosmin2
             Write-Log "NOS Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"AMS :AUModS/AUModS"{
             $releasepage2 = "https://api.github.com/repos/AUModS/AUModS/releases"
             $scid = "AMS"
             VerMinMax $amsmin $amsmin1 $amsmin2
             Write-Log "AMS Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"TOR MR :miru-y/TheOtherRoles-MR"{
             $releasepage2 = "https://api.github.com/repos/miru-y/TheOtherRoles-MR/releases"
             $scid = "TOR MR"
             VerMinMax $tormmin $tormmin1 $tormmin2
             Write-Log "TOR MR Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"NOT :Dolly1016/Nebula on the Test"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOT"
             VerMinMax $notmin $notmin1 $notmin2
             Write-Log "NOT Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"TOR GMH :haoming37/TheOtherRoles-GM-Haoming"{
             $releasepage2 = "https://api.github.com/repos/haoming37/TheOtherRoles-GM-Haoming/releases"
             $scid = "TOR GMH"
             VerMinMax $torhmin $torhmin1 $torhmin2
             Write-Log "TOR GMH Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"TOR :TheOtherRolesAU/TheOtherRoles"{
             $releasepage2 = "https://api.github.com/repos/TheOtherRolesAU/TheOtherRoles/releases"
@@ -1262,14 +1262,13 @@ function Reload(){
             VerMinMax $tourmin $tourmin1 $tourmin2
             Write-Log "TOU-R Selected"
             $script:isall = $false
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
         }"SRA :Mr-Fluuff/StellarRolesAU"{
             $releasepage2 = "https://api.github.com/repos/Mr-Fluuff/StellarRolesAU/releases"
             $scid = "SRA"
             VerMinMax $sramin $sramin1 $sramin2
             Write-Log "SRA Selected"
             $script:isall = $false
-            $RadioButton29.Checked = $True
             $RadioButton28.Checked = $true
         }"ER :yukieiji/ExtremeRoles"{
             $releasepage2 = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
@@ -1277,7 +1276,7 @@ function Reload(){
             VerMinMax $ermin $ermin1 $ermin2
             Write-Log "ER Selected"
             $script:isall = $false
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $vv=Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | ForEach-Object { Get-ItemProperty $_.PsPath | Select-Object DisplayName} |select-string "VOICEVOX"
             if($null -eq $vv){
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
@@ -1288,14 +1287,14 @@ function Reload(){
             VerMinMax $esmin $esmin1 $esmin2
             $aumin = $esmin
             Write-Log "ER+ES Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"NOS :Dolly1016/Nebula"{
             $releasepage2 = "https://api.github.com/repos/Dolly1016/Nebula/releases"
             $scid = "NOS"
             VerMinMax $nosmin $nosmin1 $nosmin2
             Write-Log "NOS Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"LM :KiraYamato94/LasMonjas"{
             $releasepage2 = "https://api.github.com/repos/KiraYamato94/LasMonjas/releases"
@@ -1303,13 +1302,13 @@ function Reload(){
             VerMinMax $lmmin $lmmin1 $lmmin2
             Write-Log "LM Selected"
             $script:isall = $false
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
         }"SNR :ykundesu/SuperNewRoles"{
             $releasepage2 = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
             $scid = "SNR"
             VerMinMax $snrmin $snrmin1 $snrmin2
             Write-Log "SNR Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"TOH :tukasa0001/TownOfHost"{
             $releasepage2 = "https://api.github.com/repos/tukasa0001/TownOfHost/releases"
@@ -1317,20 +1316,20 @@ function Reload(){
             VerMinMax $tohmin $tohmin1 $tohmin2
             Write-Log "TOH Selected"
             $script:isall = $false
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
         }"TOY :Yumenopai/TownOfHost_Y"{
             $releasepage2 = "https://api.github.com/repos/Yumenopai/TownOfHost_Y/releases"
             $scid = "TOY"
             VerMinMax $toymin $toymin1 $toymin2
             Write-Log "TOY Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"RHR :sansaaaaai/RevolutionaryHostRoles"{
             $releasepage2 = "https://api.github.com/repos/sansaaaaai/Revolutionary-host-roles/releases"
             $scid = "RHR"
             VerMinMax $rhrmin $rhrmin1 $rhrmin2
             Write-Log "RHR Selected"
-            $RadioButton29.Checked = $True
+            $RadioButton28.Checked = $True
             $script:isall = $false
         }"Install/Update Selected"{
             $script:scid = "IUS"
@@ -2133,11 +2132,14 @@ Write-Log "$mod が選択されました"
 Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
 
-if($RadioButton28.Checked){
-    $submerged = $true
+if($RadioButton29.Checked){
+    $cpun = 1
+}elseif($RadioButton28.Checked){
+    $cpun = 3
 }else{
-    $submerged = $false
+    $cpun = 0
 }
+
 #################################################################################################>
 #Webhook
 #################################################################################################>
@@ -3261,40 +3263,8 @@ if($tio){
         }
     }
     $Bar.Value = "64"
-    $Bar.Value = "68"
-
-    if($submerged){
-        Write-Log "対応する最新のSubmerged配置開始"
-        Write-Log "Submerged DLL download start"
-        if (!(Test-Path "$aupathm\BepInEx\plugins\")) {
-            New-Item "$aupathm\BepInEx\plugins\" -Type Directory
-        }
-
-        if($RadioButton114.Checked){
-            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.10.26/Submerged.dll"
-        }elseif($RadioButton115.Checked){
-            Write-Log "Submerged is not compatible this version yet."
-            $submdll = "NONE"
-        }elseif($RadioButton116.Checked){
-            $submdll = "https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.8.26/Submerged.dll"
-        }
-
-        if($submdll -ne "NONE"){
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins\" -o "Submerged.dll" $submdll
-            Write-Log "$submdll"
-            Write-Log "Submerged DLL download done"
-            Write-Log "対応する最新のSubmerged配置完了"
-        }else{
-            Write-Log "対応するSubmergedがありません"
-        }
-    }
+    $Bar.Value = "68"    
     $Bar.Value = "69"
-
-    if($RadioButton27.Checked){
-        if(Test-Path "$aupathm\BepInEx\plugins\Submerged.dll"){
-            Remove-item "$aupathm\BepInEx\plugins\Submerged.dll" -Force
-        }        
-    }
 
     if($scid -eq "TOR GMH"){
         if(test-path "$aupathm\TheOtherRoles-GM-Haoming.$torv"){
@@ -3614,12 +3584,21 @@ if($tio){
                 if(test-path "C:\temp\startamongusrun_$scid2.bat"){
                     Remove-Item "C:\temp\startamongusrun_$scid2.bat"
                 }
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1" -OutFile "C:\temp\gmhtechsupport.ps1" -UseBasicParsing
+                if(test-path "$dsk\gmhtechsupport.ps1"){
+                    Remove-Item "$dsk\gmhtechsupport.ps1"
+                }
+                if(test-path "$dsk\amongusrun_$scid2.ps1"){
+                    Remove-Item "$dsk\amongusrun_$scid2.ps1"
+                }
+                if(test-path "$dsk\startamongusrun_$scid2.bat"){
+                    Remove-Item "$dsk\startamongusrun_$scid2.bat"
+                }
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1" -OutFile "$dsk\gmhtechsupport.ps1" -UseBasicParsing
                 $batscript = "chcp 65001 `r`n"
                 $batscript += "@echo off `r`n"
-                $batscript += "powershell -NoProfile -ExecutionPolicy Unrestricted `"C:\temp\amongusrun_$scid2.ps1`" `r`n"
+                $batscript += "powershell -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                 $batscript += "exit"
-                $batscript | Out-File -Encoding default -FilePath "C:\temp\startamongusrun_$scid2.bat" 
+                $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                 $ps1script = '$platform="'
                 $ps1script += "$platform`"`r`n"
                 $ps1script += '$aupathb="'
@@ -3628,7 +3607,7 @@ if($tio){
                 $ps1script += "$aupathm`"`r`n"
                 $ps1script += '$scid="'
                 $ps1script += "$scid`"`r`n"
-                $ps1name = "C:\temp\amongusrun_$scid2.ps1"
+                $ps1name = "$dsk\amongusrun_$scid2.ps1"
                 $ps1script += '
                 #################################################################################################
                 # Run w/ Powershell v7 if available.
@@ -3685,58 +3664,73 @@ if($tio){
                 $ps1script += "'"
                 $ps1script += '","'
                 $ps1script += "'"
-                $ps1script += '
-                        return $Resulttxt[0]
+                $ps1script += "
+                        return `$Resulttxt[0]
                     }else{
-                        return $transtext
+                        return `$transtext
                     }
                 }
-
-                if($platform -eq "Steam"){
-                    Start-Process "$aupathm\Among Us.exe"
-                }elseif($platform -eq "Epic"){
+                if(`$platform -eq `"Steam`"){
+                    Start-Process `"`$aupathm\Among Us.exe`"
+                }elseif(`$platform -eq `"Epic`"){
                     legendary.exe launch Among Us
                 }else{
-                    Write-Output "ERROR:Critical run apps"
+                    Write-Output `"ERROR:Critical run apps`"
                 }
                 Start-Sleep -Seconds 2
-                Write-Output "`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n"
-                $procName = "Among Us"
-                $execPath = "$aupathm\Among Us.exe"
-                $checkpro = $true
-                $tsp = &"C:\temp\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
-                Write-Output "Game Start:$tsp"
-                while($checkpro){
+                Write-Output `"`r`nAmong Us 本体の起動中です。本体が終了するまでこのまま放置してください。`r`n`"
+                `$procName = `"Among Us`"
+                `$execPath = `"`$aupathm\Among Us.exe`"
+                `$checkpro = `$true
+                `$tsp = &`"$dsk\gmhtechsupport.ps1`" `"`$scid`" `"`$aupathm`" `"`$platform`" |Select-Object -Last 1
+                Write-Output `"Game Start:`$tsp`"
+                while(`$checkpro){
                     try{
-                        $p = Get-Process $procName -ErrorAction SilentlyContinue
-                        $p.WaitForExit()
+                        `$p = Get-Process `$procName -ErrorAction SilentlyContinue
+                        `$p.WaitForExit()
                     }
                     catch{
-                        Write-Output "No Process"
+                        Write-Output `"No Process`"
                     }
                     finally{
-                        $tsp = &"C:\temp\gmhtechsupport.ps1" "$scid" "$aupathm" "$platform" |Select-Object -Last 1
-                        $erchk = Get-content "$tsp" -Raw
-                        Write-Output "Game Exit:$tsp"
-                        if($erchk.LastIndexOf("error") -gt 0){
-                            Write-Output "Done."
+                        `$tsp = &`"$dsk\gmhtechsupport.ps1`" `"`$scid`" `"`$aupathm`" `"`$platform`" |Select-Object -Last 1
+                        `$erchk = Get-content `"`$tsp`" -Raw
+                        Write-Output `"Game Exit:`$tsp`"
+                        if(`$erchk.LastIndexOf(`"error`") -gt 0){
+                            Write-Output `"Done.`"
                         }else{
-                            Write-Output "No Error founds."
+                            Write-Output `"No Error founds.`"
                         }
-                        $checkpro = $false
+                        `$checkpro = `$false
                     }
-                }'
-                $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "C:\temp\amongusrun_$scid2.ps1" 
+                }"
+                $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\amongusrun_$scid2.ps1" 
             }else{
                 Write-Log "Something Wrong. Check Path."
             }
-            $sShortcut.TargetPath = "C:\temp\startamongusrun_$scid2.bat"
+            $sShortcut.TargetPath = "$dsk\startamongusrun_$scid2.bat"
         }else{
             if($platform -eq "Steam"){
-                $sShortcut.TargetPath = "$aupathm\Among Us.exe"
+                if($cpun -eq 1){
+                    $sShortcut.TargetPath = "pwsh.exe"
+                    $sShortcut.Arguments = "-Command Start-Process `"$aupathm\Among Us.exe`" && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=1;}"
+                }elseif($cpun -eq 3){
+                    $sShortcut.TargetPath = "pwsh.exe"
+                    $sShortcut.Arguments = "-Command Start-Process `"$aupathm\Among Us.exe`" && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=3;}"
+                }else{
+                    $sShortcut.WorkingDirectory = $aupathm
+                }
+#                $sShortcut.TargetPath = "$aupathm\Among Us.exe"
             }elseif($platform -eq "Epic"){
                 $sShortcut.TargetPath = "pwsh.exe"
-                $sShortcut.Arguments = "-Command legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us"
+                if($cpun -eq 1){
+                    $sShortcut.Arguments = "-Command legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=1;}"
+                }elseif($cpun -eq 3){
+                    $sShortcut.Arguments = "-Command legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=3;}"
+                }else{
+                    $sShortcut.Arguments = "-Command legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us"
+                }
+
                 $sShortcut.WorkingDirectory = $aupathm
             }else{
                 Write-Log "ERROR: Critical Shortcut"
@@ -3950,6 +3944,37 @@ if($ckbci.Count -gt 0){
                 Write-Log $snLevel
                 aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
                 Write-Log "Download $scid LevelImposter DLL 完了"             
+            }
+        }elseif($ckbci[$aa] -eq "Submerged"){
+            if(($scid -eq "IUS")  -or ($scid -eq "TIO")){
+                Write-Log "$scid では Submergedは入りません"
+            }else{
+                try{
+                    choco -v
+                }catch{
+                    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+                }
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
+    
+                $snL = "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases"        
+                $sweb = Invoke-WebRequest $snL -UseBasicParsing
+                $sweb2 = ConvertFrom-Json $sweb.Content   
+                for($aii = 0;$aii -lt  $($sweb2.assets.browser_download_url).Length;$aii++){
+                    if($($sweb2.assets.browser_download_url[$aii]).IndexOf("Submerged.dll") -gt 0){
+                        $snLevel = $sweb2.assets.browser_download_url[$aii]
+                        break
+                    }
+                }
+                
+                if(Test-Path "$aupathm\BepInEx\plugins\Submerged.dll"){
+                    Remove-item -Path "$aupathm\BepInEx\plugins\Submerged.dll"
+                    Write-Log 'Delete Original Submerged Mod DLL'
+                }
+                #Submerged DLLをDLして配置
+                Write-Log "Download $scid Submerged DLL 開始"
+                Write-Log $snLevel
+                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $snLevel
+                Write-Log "Download $scid Submerged DLL 完了"             
             }
         }elseif($ckbci[$aa] -eq "VOICEVOX"){
             try{
