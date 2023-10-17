@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.7.7"
+$version = "1.9.7.8"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -1818,11 +1818,13 @@ function Reload(){
         }else{
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $false)
         }
+        <#
         if(($script:scid -eq "SNR") -or ($script:scid -eq "SRA")){
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("LevelImposter"), $true)
         }else{
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("LevelImposter"), $false)
         }
+        #>
         $ym = $script:ym
         if(!(Test-Path "$aupathb\chk$ym.txt")){
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VC Redist"), $true)
