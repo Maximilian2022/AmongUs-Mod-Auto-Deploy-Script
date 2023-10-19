@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.8.1"
+$version = "1.9.8.2"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -3754,7 +3754,7 @@ if($tio){
 
         $sShortcut.IconLocation = "$aupathm\Among Us.exe"
         $sShortcut.Save()
-        if(($platform -eq "Epic") -or ($cpun -ne 0)){
+        if($platform -eq "Epic"){
             $bytes = [System.IO.File]::ReadAllBytes("$scpath\Among Us Mod $scid.lnk")
             $bytes[0x15] = $bytes[0x15] -bor 0x20 #set byte 21 (0x15) bit 6 (0x20) ON
             [System.IO.File]::WriteAllBytes("$scpath\Among Us Mod $scid.lnk", $bytes)    
