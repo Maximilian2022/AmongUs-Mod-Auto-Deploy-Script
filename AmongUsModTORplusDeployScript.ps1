@@ -3713,10 +3713,10 @@ if($tio){
             if($platform -eq "Steam"){
                 if($cpun -eq 1){
                     $sShortcut.TargetPath = "pwsh.exe"
-                    $sShortcut.Arguments = "-Command `"`'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=1;}`""
+                    $sShortcut.Arguments = "-Command `"Start-Process `'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=1;}`""
                 }elseif($cpun -eq 3){
                     $sShortcut.TargetPath = "pwsh.exe"
-                    $sShortcut.Arguments = "-Command `"`'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=3;}`""
+                    $sShortcut.Arguments = "-Command `"Start-Process `'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=3;}`""
                 }else{
                     $sShortcut.TargetPath = "$aupathm\Among Us.exe"
                 }
