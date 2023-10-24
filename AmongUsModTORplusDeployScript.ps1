@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.8.4"
+$version = "1.9.8.5"
 #
 #################################################################################################
 ### minimum version for v2023.7.12
@@ -133,7 +133,6 @@ $prevtargetid1 = "1390179653173000898"
 #$prevtargetid1 = "2481435393334839152"
 
 $gmhbool = $true #flag for Test
-$nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
 $debugform = $false
@@ -2565,111 +2564,28 @@ if($tio){
             Pause
             exit
         }
-    }elseif($scid -eq "NOS"){
-        $torvtmp = $torv.Replace(",","%2C")
-        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
-            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
-                if($($web2.assets.browser_download_url[$aii]).IndexOf("$torvtmp") -gt 0){
-                    $tordlp = $web2.assets.browser_download_url[$aii]
-                }
-            }  
-        }
+    }elseif(($scid -eq "NOS") -eq ($scid -eq "NOT")){
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
-        $z7tr = $true
         if($aucap[0].length -gt 1){
             for($ii = 0;$ii -lt  $aucap.Length;$ii++){
+                if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
+                    $nebulangdata = $($aucap[$ii])
+                }
+                if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
+                    $nebulangdatajpc = $($aucap[$ii])
+                }
                 if($($aucap[$ii]).IndexOf(".7z") -gt 0){
                     $nebulangdata = $($aucap[$ii])
-                    $z7tr = $false
                 }
-            }
-            if($z7tr){
-                for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                    if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
-                        $nebulangdata = $($aucap[$ii])
-                    }
-                    if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
-                        $nebulangdatajpc = $($aucap[$ii])
-                    }
-                    if($($aucap[$ii]).IndexOf("Japanese.zip") -gt 0){
-                        $nebulangdata = $($aucap[$ii])
-                    }
-                }    
-            }
+                if($($aucap[$ii]).IndexOf("Japanese.zip") -gt 0){
+                    $nebulangdata = $($aucap[$ii])
+                }
+            }    
         }else{
             $nebulangdata = $aucap
         }
-        $langdata = $nebulangdata
-    }elseif($scid -eq "NOT"){
-        $torvtmp = $torv.Replace(",","%2C")
-        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
-            if($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0){
-                if($($web2.assets.browser_download_url[$aii]).IndexOf("$torvtmp") -gt 0){
-                    $tordlp = $web2.assets.browser_download_url[$aii]
-                }
-            }  
-        }
-
-        #temp
-        if($nebubool){
-            if($RadioButton114.Checked){
-                $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/ex1/Nebula_Experimental_1.zip"
-                #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
-                $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
-                $z7tr = $true
-                if($aucap[0].length -gt 1){
-                    for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                        if($($aucap[$ii]).IndexOf(".7z") -gt 0){
-                            $nebulangdata = $($aucap[$ii])
-                            $z7tr = $false
-                        }
-                    }    
-                    if($z7tr){
-                        for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                            if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
-                                $nebulangdata = $($aucap[$ii])
-                            }
-                            if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
-                                $nebulangdatajpc = $($aucap[$ii])
-                            }
-                        }    
-                    }   
-                }else{
-                    $nebulangdata = $aucap
-                }
-            }elseif($RadioButton115.Checked){
-                $tordlp = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.zip"                
-                #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
-                $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/tags/202304091106" -UseBasicParsing)).assets.browser_download_url
-                $z7tr = $true
-                if($aucap[0].length -gt 1){
-                    for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                        if($($aucap[$ii]).IndexOf(".7z") -gt 0){
-                            $nebulangdata = $($aucap[$ii])
-                            $z7tr = $false
-                        }
-                    }    
-                    if($z7tr){
-                        for($ii = 0;$ii -lt  $aucap.Length;$ii++){
-                            if($($aucap[$ii]).IndexOf("Japanese.dat") -gt 0){
-                                $nebulangdata = $($aucap[$ii])
-                            }
-                            if($($aucap[$ii]).IndexOf("Japanese_Color.dat") -gt 0){
-                                $nebulangdatajpc = $($aucap[$ii])
-                            }
-                        }    
-                    }   
-                }else{
-                    $nebulangdata = $aucap
-                }
-            }else{
-                Write-Log "このバージョンにテスト版は存在しません。終了します"
-                Start-Sleep -Seconds 10
-                exit
-            }
-        }
-        $langdata = $nebulangdata
+        $langdata = $nebulangdata    
     }else{
         Write-Log "Critical Error 3"
         $Form2.Close()
