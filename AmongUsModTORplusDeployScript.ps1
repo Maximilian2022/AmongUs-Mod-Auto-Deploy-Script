@@ -3618,10 +3618,10 @@ if($tio){
             if($platform -eq "Steam"){
                 if($cpun -eq 1){
                     $sShortcut.TargetPath = "pwsh.exe"
-                    $sShortcut.Arguments = "-Command `"Start-Process `'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=1;}`""
+                    $sShortcut.Arguments = "-WindowStyle Hidden -Command `"Start-Process `'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=1;}`""
                 }elseif($cpun -eq 3){
                     $sShortcut.TargetPath = "pwsh.exe"
-                    $sShortcut.Arguments = "-Command `"Start-Process `'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=3;}`""
+                    $sShortcut.Arguments = "-WindowStyle Hidden -Command `"Start-Process `'$aupathm\Among Us.exe`' && Start-Sleep -seconds 5 && Get-Process -Name 'Among Us' | % { `$_.ProcessorAffinity=3;}`""
                 }else{
                     $sShortcut.TargetPath = "$aupathm\Among Us.exe"
                 }
@@ -3631,7 +3631,7 @@ if($tio){
                 if($cpun -eq 1){
                     $batscript = "chcp 65001 `r`n"
                     $batscript += "@echo off `r`n"
-                    $batscript += "powershell -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
+                    $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                     $batscript += "exit"
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                     $ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=1;}"
@@ -3641,7 +3641,7 @@ if($tio){
                 }elseif($cpun -eq 3){
                     $batscript = "chcp 65001 `r`n"
                     $batscript += "@echo off `r`n"
-                    $batscript += "powershell -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
+                    $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                     $batscript += "exit"
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                     $ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=3;}"
@@ -3649,7 +3649,7 @@ if($tio){
                     $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$ps1name" 
                     $sShortcut.Arguments = "-Command Start-Process '$dsk\startamongusrun_$scid2.bat'"
                 }else{
-                    $sShortcut.Arguments = "-Command legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us"
+                    $sShortcut.Arguments = "-WindowStyle Hidden -Command `"legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us`""
                 }
                 $sShortcut.WorkingDirectory = $aupathm
             }else{
