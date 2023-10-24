@@ -17,8 +17,8 @@ $tourmin = "v5.0.0"
 $tohmin = "v5.0.1"
 $snrmin = "1.8.0.0"
 $lmmin = "3.2.0"
-$nosmin = "ex1"
-$notmin = "ex1"
+$nosmin = "100"
+$notmin = "100"
 $toymin = "v503.14"
 $sramin = "v1.4.4"
 
@@ -132,7 +132,7 @@ $prevtargetid1 = "1390179653173000898"
 #$prever1 = "2022.9.20"
 #$prevtargetid1 = "2481435393334839152"
 
-$gmhbool = $false #flag for Test
+$gmhbool = $true #flag for Test
 $nebubool = $false
 #Testdll: Snapshot 22.11.21c
 $torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
@@ -1448,16 +1448,27 @@ function Reload(){
         $web2 = ConvertFrom-Json $web.Content
     
         $list2 =@()
+        $tmparr =@()
         # コンボボックスに項目を追加
         $OKButton.Enabled=$True
         if($script:aumin -ne "NONE"){
             if($script:aumax -ne "NONE"){
-                if(($scid -eq "NOS") -or ($scid -eq "NOT")){
+                if($scid -eq "NOS"){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-                        if(($web2.tag_name[$ai] -ge $script:aumin) -and ($web2.tag_name[$ai] -lt $script:aumax)){
-                            if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
-                                $list2 += $($web2.tag_name[$ai])
-                            }        
+                        $tmparr = $($web2.tag_name[$ai]).split(",")
+                        if($tmparr[2] -eq $script:aumin){
+                            if($tmparr[0] -eq "v"){
+                                $list2 += $tmparr[1]
+                            }
+                        }
+                    }
+                }elseif($scid -eq "NOT"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        $tmparr = $($web2.tag_name[$ai]).split(",")
+                        if($tmparr[2] -eq $script:aumin){
+                            if($tmparr[0] -ne "v"){
+                                $list2 += $tmparr[1]
+                            }
                         }
                     }            
                 }else{            
@@ -1468,14 +1479,22 @@ function Reload(){
                     }
                 }    
             }else{
-                if(($scid -eq "NOS") -or ($scid -eq "NOT")){
+                if($scid -eq "NOS"){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
-                        if(($web2.tag_name[$ai] -ge $script:aumin)){
-                            if($($($web2.tag_name[$ai]).ToLower()).indexof("lang") -lt 0){
-                                if($($web2.tag_name[$ai]) -ne "snapshot"){
-                                    $list2 += $($web2.tag_name[$ai])
-                                }
-                            }        
+                        $tmparr = $($web2.tag_name[$ai]).split(",")
+                        if($tmparr[2] -eq $script:aumin){
+                            if($tmparr[0] -eq "v"){
+                                $list2 += $tmparr[1]
+                            }
+                        }
+                    }            
+                }elseif($scid -eq "NOT"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        $tmparr = $($web2.tag_name[$ai]).split(",")
+                        if($tmparr[2] -eq $script:aumin){
+                            if($tmparr[0] -ne "v"){
+                                $list2 += $tmparr[1]
+                            }
                         }
                     }            
                 }else{            
