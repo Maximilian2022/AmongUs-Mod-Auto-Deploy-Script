@@ -3104,7 +3104,7 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
-    }elseif($scid -eq "NOS"){
+    }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
                 New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
@@ -3134,48 +3134,6 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
-    }elseif($scid -eq "NOT"){
-        if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
-            if(!(test-path "$aupathm\BepInEx\config")){
-                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
-            }
-            Copy-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" -Force
-            Remove-Item "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force    
-        }
-        if(test-path "C:\Temp\MoreCosmic"){
-            if(!(Test-Path "$aupathm\MoreCosmic")){
-                New-Item -Path "$aupathm\MoreCosmic" -ItemType Directory
-            }    
-            robocopy "C:\Temp\MoreCosmic" "$aupathm\MoreCosmic" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\MoreCosmic" -Recurse -Force
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
-        }
-        if(test-path "C:\Temp\Presets"){
-            if(!(Test-Path "$aupathm\Presets")){
-                New-Item -Path "$aupathm\Presets" -ItemType Directory
-            }    
-            robocopy "C:\Temp\Presets" "$aupathm\Presets" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\Presets" -Recurse -Force
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
-        }
-        if(test-path "C:\Temp\TexturePack"){
-            if(!(Test-Path "$aupathm\TexturePack")){
-                New-Item -Path "$aupathm\TexturePack" -ItemType Directory
-            }    
-            robocopy "C:\Temp\TexturePack" "$aupathm\TexturePack" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\TexturePack" -Recurse -Force
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
-        }
-        
     }elseif($scid -eq "LM"){
         if(test-path "C:\Temp\me.allul.lasmonjas.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -4225,155 +4183,8 @@ if($ckbci.Count -gt 0){
                 }else{
                     Write-Log "AmongUsが一度も起動されていないようです。一度起動してから再度Scriptを動作させてください。"
                 }        
-
-<#
-                if(!(Test-Path "$aupathm\BepInEx\config")){
-                    New-Item "$aupathm\BepInEx\config" -Type Directory
-                }
-                $kenkofile = "$aupathm\BepInEx\config\kenkoland.txt"
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt" -OutFile "$kenkofile" -UseBasicParsing
-                $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
-                $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg.beforekenkoland.old"
-
-                if(Test-Path $gmhconfig){
-                    #configからWebhookを救出
-                    $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
-                    foreach ($gmhline2 in $gmhfile) {
-                        if ($gmhline2.StartsWith("WebhookUrl = https://")){
-                            Write-Log "WebhookUrl is already set: $gmhline2"
-                            $gmhwh = "$gmhline2"
-                        }
-                    } 
-                    #configからProcessorAffinityを救出
-                    foreach ($gmhline4 in $gmhfile) {
-                        if ($gmhline4.StartsWith("ProcessorAffinity = 0")){
-                            Write-Log "ProcessorAffinity is already set: $gmhline4"
-                            $gmhpa = "$gmhline4"
-                        }
-                        if ($gmhline4.StartsWith("ProcessorAffinity = 1")){
-                            Write-Log "ProcessorAffinity is already set: $gmhline4"
-                            $gmhpa = "$gmhline4"
-                        }
-                        if ($gmhline4.StartsWith("ProcessorAffinity = 2")){
-                            Write-Log "ProcessorAffinity is already set: $gmhline4"
-                            $gmhpa = "$gmhline4"
-                        }
-                        if ($gmhline4.StartsWith("ProcessorAffinity = 3")){
-                            Write-Log "ProcessorAffinity is already set: $gmhline4"
-                            $gmhpa = "$gmhline4"
-                        }
-                    } 
-                }
-                #optionconf
-                $ghfile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
-                $ghurl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/gameHostOptions"
-                $indeedgo = $true
-                if(Test-Path $ghfile){
-                    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("健康ランド化を行うと、既存の部屋設定は全て上書きされます。続行しますか？")), "Among Us Mod Auto Deploy Tool",4) -ne "Yes"){
-                        $indeedgo = $false
-                    }
-                }
-
-                if($indeedgo){
-                    if(Test-Path $gmhconfig){
-                        Copy-Item $gmhconfig $gmhconfigtmp
-                        Remove-Item $gmhconfig -Force
-                    }
-                    if(Test-Path $ghfile){
-                        Remove-Item $ghfile -Force
-                    }
-                    curl.exe $ghurl -o "$env:APPDATA\..\LocalLow\Innersloth\Among Us\gameHostOptions"
-
-                    $gmhnewconfig = ""           
-                    $kenkoconf = (Get-Content -Encoding utf8 $kenkofile) -as [string[]]
-                    foreach ($gmhline3 in $kenkoconf) {
-                        if ($gmhline3.StartsWith("WebhookUrl")){
-                            if($null -ne $gmhwebhooktxt){
-                                $gmhnewconfig += "WebhookUrl = $gmhwebhooktxt `r`n"
-                            }elseif($null -ne $gmhwh){
-                                $gmhnewconfig += "$gmhwh `r`n"
-                            }elseif($gmhwebhooktxt -ne ""){
-                                $gmhnewconfig += "WebhookUrl = $gmhwebhooktxt `r`n"
-                            }elseif($gmhwh -ne ""){
-                                $gmhnewconfig += "$gmhwh `r`n"
-                            }else{
-                                $gmhnewconfig += "$gmhline3 `r`n"
-                            }
-                        }elseif ($gmhline3.StartsWith("ProcessorAffinity")){
-                            if($null -ne $gmhwebhooktxt){
-                                $gmhnewconfig += "ProcessorAffinity = $gmhwebhooktxt `r`n"
-                            }elseif($null -ne $gmhpa){
-                                $gmhnewconfig += "$gmhpa `r`n"
-                            }elseif($gmhwebhooktxt -ne ""){
-                                $gmhnewconfig += "ProcessorAffinity = $gmhwebhooktxt `r`n"
-                            }elseif($gmhpa -ne ""){
-                                $gmhnewconfig += "$gmhpa `r`n"
-                            }else{
-                                $gmhnewconfig += "$gmhline3 `r`n"
-                            }
-                        }else{
-                                $gmhnewconfig += "$gmhline3 `r`n"
-                        }
-                    }
-                    if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
-                        New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
-                    }
-                    Start-Sleep -Seconds 2
-                    $gmhnewconfig |Out-File $gmhconfig
-                    Remove-Item $kenkofile -Force
-                    Write-Log "健康ランド化完了:Config"
-                }
-#>
-                #regu
-                if(!(Test-Path "$aupathm\Presets")){
-                    New-Item $(Join-Path $aupathm "Presets") -Type Directory
-                }
-#                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/KenkoLand.json" -OutFile "$aupathm\Presets\KenkoLand.json" -UseBasicParsing
-#                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/Nakarita.json" -OutFile "$aupathm\Presets\Nakarita.json" -UseBasicParsing
-#                Write-Log $(Get-Translate("健康ランド化完了:Regulation"))
                 Write-Log "健康ランド化 ends"
                 $Bar.Value = "88"
-            }elseif($ckbci[$aa] -eq "NOS CPU Affinity"){
-                Write-Log "NOS CPU Affinity start"
-                if(($scid -eq "NOS") -or ($scid -eq "NOT")){
-                    if($gmhwebhooktxt -eq "None"){
-                        Write-Log "NOS CPU Affinity skipped."
-                    }else{
-                        $gmhconfig = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"
-                        if(!(Test-Path $gmhconfig)){
-                            Write-Log "Configが見つからないため、一時的なConfigとして健康ランドレギュレーションをロードします"
-                            $kenkoconf = $(invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/kenkoland.txt).Content
-                            if(!(Test-Path $(Join-Path $aupathm "\BepInEx\config\"))){
-                                New-Item $(Join-Path $aupathm "\BepInEx\config\") -Type Directory
-                            }
-                            $kenkoconf |Out-File $gmhconfig
-                        }
-                        $gmhconfigtmp = Join-Path $aupathm "\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg.beforewebhook.old"
-                        Copy-Item $gmhconfig $gmhconfigtmp
-                        $gmhfile = (Get-Content -Encoding utf8 $gmhconfig) -as [string[]]
-                        $gmhnewconfig = ""
-                        foreach ($gmhline in $gmhfile) {
-                            if ($gmhline.StartsWith("ProcessorAffinity")){
-                                if($gmhwebhooktxt -eq "None"){
-                                    $gmhnewconfig += "$gmhline `r`n"
-                                }else{
-                                    $gmhnewconfig += "ProcessorAffinity = $gmhwebhooktxt `r`n"                    
-                                    Write-Log "CPU Affinity : $gmhwebhooktxt"
-                                }
-                            }else{
-                                $gmhnewconfig += "$gmhline `r`n"
-                            }
-                        }
-                        Remove-Item $gmhconfig -Force
-                        $gmhnewconfig |Out-File $gmhconfig
-                    }   
-                }else{
-                    Write-Log "NOS CPU Affinity skipped."
-                }
-                Write-Log "NOS CPU Affinity ends"
-                $Bar.Value = "89"
-            }else{
-                Write-Log "健康ランド化を実行するにはNOS/NOTを選択してください。"
             }
         }elseif($ckbci[$aa] -eq "配信ソフト"){
             Write-Log "配信ソフトセットアップ"
