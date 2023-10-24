@@ -2764,7 +2764,7 @@ if($tio){
                 New-Item -Path "C:\Temp\ExtremeVisor" -ItemType Directory
                 Copy-Item "$aupathm\ExtremeVisor\*" -Recurse "C:\Temp\ExtremeVisor"
             }
-        }elseif($scid -eq "NOS"){
+        }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
             if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
                 Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
             }
@@ -2775,22 +2775,6 @@ if($tio){
             if(test-path "$aupathm\Addons"){
                 New-Item -Path "C:\Temp\Addons" -ItemType Directory
                 Copy-Item "$aupathm\Addons\*" -Recurse "C:\Temp\Addons"
-            }
-        }elseif($scid -eq "NOT"){
-            if(test-path "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg"){
-                Copy-Item "$aupathm\BepInEx\config\jp.dreamingpig.amongus.nebula.cfg" "C:\Temp\jp.dreamingpig.amongus.nebula.cfg" -Force               
-            }
-            if(test-path "$aupathm\MoreCosmic"){
-                New-Item -Path "C:\Temp\MoreCosmic" -ItemType Directory
-                Copy-Item "$aupathm\MoreCosmic\*" -Recurse "C:\Temp\MoreCosmic"
-            }
-            if(test-path "$aupathm\Presets"){
-                New-Item -Path "C:\Temp\Presets" -ItemType Directory
-                Copy-Item "$aupathm\Presets\*" -Recurse "C:\Temp\Presets"
-            }
-            if(test-path "$aupathm\TexturePack"){
-                New-Item -Path "C:\Temp\TexturePack" -ItemType Directory
-                Copy-Item "$aupathm\TexturePack\*" -Recurse "C:\Temp\TexturePack"
             }
         }elseif($scid -eq "LM"){
             if(test-path "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg"){
@@ -3428,7 +3412,7 @@ if($tio){
             aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUModS.dll" $amsdll
             Write-Log "Download $scid AUModS DLL 完了"    
         }
-    }elseif($scid -eq "NOS"){
+    }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
         if(test-path "$aupathm\Nebula"){
             robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
             Remove-Item "$aupathm\Nebula" -recurse
@@ -3456,62 +3440,6 @@ if($tio){
             Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
         }
         Write-Log "日本語 データ Download 完了"
-    }elseif($scid -eq "NOT"){
-        if(test-path "$aupathm\Nebula"){
-            robocopy "$aupathm\Nebula" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "$aupathm\Nebula" -recurse
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
-        }
-        if (!(Test-Path "$aupathm\Language\")) {
-            New-Item "$aupathm\Language\" -Type Directory
-        }
-        Write-Log "日本語 データ Download 開始"
-        Write-Log "日本語 データ $langdata"
-        if(Test-Path "$aupathm\Language\Japanese.dat"){
-            Copy-Item "$aupathm\Language\Japanese.dat" "$aupathm\Language\Japanese.dat.old"
-        }
-        $extens = $langdata.Substring($langdata.Length - 3, 3);
-        Write-Host $extens
-        if($extens -eq "dat"){
-            aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
-        }elseif ($extens -eq "zip") {
-            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.zip" $langdata
-            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.zip" -TargetPath "$aupathm\Language"
-        }elseif($extens -eq ".7z"){
-            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.7z" $langdata
-            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
-        }
-        if(test-path "$aupathm\Language\Language"){
-            robocopy "$aupathm\Language\Language" "$aupathm\Language" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "$aupathm\Language\Language" -recurse
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
-        }
-        Write-Log "日本語 データ Download 完了"        
-        if(!($nebubool) -and ($RadioButton115.Checked) ){
-            #Mod Original DLL削除
-            Remove-item -Path "$aupathm\BepInEx\plugins\Nebula.dll"
-            Write-Log 'Delete Original Mod DLL'
-            Write-Log $torgmdll
-            #TOR+ DLLをDLして配置
-            Write-Log "Download $scid DLL 開始"
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Nebula.dll" $torgmdll
-            Write-Log "Download $scid DLL 完了"
-        }
-        if(Test-Path "$aupathm\TexturePack"){
-        }else{
-            New-Item "$aupathm\TexturePack" -Type Directory
-        }
-        Write-Log "Download Small Tracker Arrow 開始"
-        if(!(Test-Path "$aupathm\TexturePack\MoreSmallTrackerArrow.zip")){
-            aria2c -x5 -V --dir "$aupathm\TexturePack" -o "MoreSmallTrackerArrow.zip" "https://cdn.discordapp.com/attachments/906766074131927071/1080729380667535390/MoreSmallTrackerArrow.zip"
-        }
-        Write-Log "Download Small Tracker Arrow 完了"
     }else{
     }
     $Bar.Value = "71"
