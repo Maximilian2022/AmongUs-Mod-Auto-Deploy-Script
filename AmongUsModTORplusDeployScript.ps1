@@ -2564,7 +2564,7 @@ if($tio){
             Pause
             exit
         }
-    }elseif(($scid -eq "NOS") -eq ($scid -eq "NOT")){
+    }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
         if($aucap[0].length -gt 1){
