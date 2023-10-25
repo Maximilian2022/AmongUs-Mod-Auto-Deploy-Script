@@ -19,7 +19,7 @@ $snrmin = "2.1.0.0"
 $lmmin = "NONE"
 $nosmin = "NONE"
 $notmin = "NONE"
-$toymin = "NONE"
+$toymin = "v511.18"
 $sramin = "NONE"
 
 ### minimum version for v2023.7.12
