@@ -10,17 +10,17 @@ $version = "1.9.8.6"
 #
 #################################################################################################
 ### minimum version for v2023.10.24
-$ermin = "v8.2.6.2"
-$esmin = "v8.2.6.2"
-$tormin = "v4.4.2"
-$tourmin = "v5.0.2"
-$tohmin = "v5.1.1"
-$snrmin = "NONE"
-$lmmin = "3.4.0"
-$nosmin = "100"
-$notmin = "100"
-$toymin = "v503.17"
-$sramin = "v2023.10.11"
+$ermin = "NONE"
+$esmin = "NONE"
+$tormin = "NONE"
+$tourmin = "NONE"
+$tohmin = "NONE"
+$snrmin = "2.1.0.0"
+$lmmin = "NONE"
+$nosmin = "NONE"
+$notmin = "NONE"
+$toymin = "NONE"
+$sramin = "NONE"
 
 ### minimum version for v2023.7.12
 $ermin1 = "v8.0.0.0"
