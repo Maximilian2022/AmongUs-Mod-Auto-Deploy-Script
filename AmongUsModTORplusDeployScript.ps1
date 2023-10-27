@@ -242,7 +242,7 @@ function IsZenkaku{
     }
 }
 
-$a = hostname
+$a = [Net.Dns]::GetHostName()
 $achk = $false
 for ($x=0; $x -lt $a.Length; $x++){
     if(IsZenkaku $($a.Split())[$x]){
