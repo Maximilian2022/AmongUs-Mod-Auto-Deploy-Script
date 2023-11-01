@@ -16,7 +16,7 @@ $tormin = "v4.4.3"
 $tourmin = "v5.0.3"
 $tohmin = "v5.1.2"
 $snrmin = "2.1.0.0"
-$lmmin = "3.4.1"
+$lmmin = "3.5.0"
 $nosmin = "101"
 $notmin = "101"
 $toymin = "v511.18"
@@ -128,9 +128,8 @@ $amsmin = "NONE"
 $amsmin1 = "v23.2.28.0"
 $amsmin2 = "v23.2.28.0"
 #>
+
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-
-
 $prever0 = "2023.7.12"
 $prevtargetid0 = "4593126137370998619"
 $prever1 = "2023.3.28"
