@@ -147,7 +147,7 @@ $prevtargetid1 = "2741278786821271696"
 
 $gmhbool = $true #flag for Test
 #Testdll: Snapshot 22.11.21c
-$torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
+#$torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
 $debugform = $false
 $icorenew = $false
 
