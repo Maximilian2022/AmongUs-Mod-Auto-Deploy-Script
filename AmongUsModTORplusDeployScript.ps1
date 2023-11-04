@@ -2602,6 +2602,16 @@ if($tio){
             $nebulangdata = $aucap
         }
         $langdata = $nebulangdata    
+        Add-Type -AssemblyName System.Web
+        $tempver = [System.Web.HttpUtility]::UrlEncode("$torv")
+        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+            if(($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0) -and ($($web2.assets.browser_download_url[$aii]).IndexOf("$tempver") -gt 0)){
+                $tordlp += $web2.assets.browser_download_url[$aii]
+            }
+        }
+        Write-Log $torv
+        Write-Log $tempver
+        Write-Log $tordlp
     }else{
         Write-Log "Critical Error 3"
         $Form2.Close()
