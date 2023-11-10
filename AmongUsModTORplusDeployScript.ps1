@@ -3402,14 +3402,9 @@ if($tio){
             Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
         }
         Write-Log "日本語 データ Download 完了"
-        $bld = $($torv.split(","))[3]       
-        if($bld -ge "1047"){
-            Write-Log "Ninja is capable."
-            $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172212317656723567/Ninja.zip"
-            aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
-        }else{
-            Write-Log "Ninja is not capable."
-        }
+        Write-Log "Ninja is capable."
+        $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172212317656723567/Ninja.zip"
+        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
     }else{
     }
     $Bar.Value = "71"
