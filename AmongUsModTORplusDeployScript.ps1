@@ -6,36 +6,49 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.8.9"
+$version = "1.9.9"
 #
 #################################################################################################
-### minimum version for v2023.10.24
-$ermin = "v9.0.0.0"
-$esmin = "v9.0.0.0"
+### minimum version for v2023.11.28
+$ermin = "v9.1.0.0"
+$esmin = "v9.1.0.0"
 $tormin = "v4.4.3"
 $tourmin = "v5.0.3"
 $tohmin = "v5.1.2"
-$snrmin = "2.1.0.0"
-$lmmin = "3.5.0"
-$nosmin = "101"
-$notmin = "101"
+$snrmin = "2.1.1.5"
+$lmmin = "3.5.2"
+$nosmin = "102"
+$notmin = "102"
 $toymin = "v511.18"
-$sramin = "v1.4.5"
+$sramin = "v2023.11.28"
+
+### minimum version for v2023.10.24
+$ermin1 = "v9.0.0.0"
+$esmin1 = "v9.0.0.0"
+$tormin1 = "v4.4.3"
+$tourmin1 = "v5.0.3"
+$tohmin1 = "v5.1.2"
+$snrmin1 = "2.1.0.0"
+$lmmin1 = "3.5.0"
+$nosmin1 = "101"
+$notmin1 = "101"
+$toymin1 = "v511.18"
+$sramin1 = "v2023.10.1"
 
 ### minimum version for v2023.7.12
-$ermin1 = "v8.0.0.0"
-$esmin1 = "v8.0.0.0"
-$tormin1 = "v4.3.3"
-$tourmin1 = "v5.0.0"
-$tohmin1 = "v5.0.1"
-$snrmin1 = "1.8.0.0"
-$lmmin1 = "3.2.0"
-$nosmin1 = "100"
-$notmin1 = "100"
-$toymin1 = "v503.14"
-$sramin1 = "v1.4.4"
+$ermin2 = "v8.0.0.0"
+$esmin2 = "v8.0.0.0"
+$tormin2 = "v4.3.3"
+$tourmin2 = "v5.0.0"
+$tohmin2 = "v5.0.1"
+$snrmin2 = "1.8.0.0"
+$lmmin2 = "3.2.0"
+$nosmin2 = "100"
+$notmin2 = "100"
+$toymin2 = "v503.14"
+$sramin2 = "v1.4.4"
 
-### minimum version for v2023.3.28
+<### minimum version for v2023.3.28
 $ermin2 = "v7.0.0.0"
 $esmin2 = "v7.0.0.0"
 $nosmin2 = "NONE"
@@ -130,10 +143,12 @@ $amsmin2 = "v23.2.28.0"
 #>
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-$prever0 = "2023.7.12"
-$prevtargetid0 = "4593126137370998619"
-$prever1 = "2023.3.28"
-$prevtargetid1 = "2741278786821271696"
+$prever0 = "2023.10.24"
+$prevtargetid0 = "531781757001821075"
+$prever1 = "2023.7.12"
+$prevtargetid1 = "4593126137370998619"
+#$prever1 = "2023.3.28"
+#$prevtargetid1 = "2741278786821271696"
 #$prever1 = "2023.2.28"
 #$prevtargetid1 = "1390179653173000898"
 #$prever1 = "2022.12.14"
