@@ -1685,6 +1685,7 @@ function Reload(){
         }elseif($epicbool){
             Write-Log "Epic Detected"
             #detect epic path
+            legendary.exe auth --import
             $epicinfo = legendary.exe info AmongUs
             $epicpath = $epicinfo | Select-String "Install path"
             $epicrow = $($epicpath.ToString()).Split(": ")
@@ -3558,6 +3559,7 @@ if($tio){
                 if(`$platform -eq `"Steam`"){
                     Start-Process `"`$aupathm\Among Us.exe`"
                 }elseif(`$platform -eq `"Epic`"){
+                    legendary.exe auth --import 
                     legendary.exe launch Among Us
                 }else{
                     Write-Output `"ERROR:Critical run apps`"
