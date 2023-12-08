@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.9.1"
+$version = "1.9.9.2"
 #
 #################################################################################################
 ### minimum version for v2023.11.28
@@ -700,6 +700,8 @@ function BackUpAU{
                 Write-Log "コピー: $epicmanifestfile"
 
                 #legendary でAmongusを落とす
+                legendary.exe auth --delete
+                Start-Sleep -Seconds 3
                 legendary.exe auth --import
                 legendary.exe -y import 'Among Us' "$aupatho"
                 legendary.exe uninstall "Among Us" --keep-files -y
