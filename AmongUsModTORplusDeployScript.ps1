@@ -3736,7 +3736,7 @@ if($ckbci.Count -gt 0){
                         Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
                     }
         
-                    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet -y" -Verb RunAs -Wait        
+                    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet-7.0-desktopruntime dotnet -y" -Verb RunAs -Wait        
                 }else{
                     Write-Log "AmongUsReplayInWindowの処理を中止します"
                     $qureq = $false
