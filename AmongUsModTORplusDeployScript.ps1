@@ -6,7 +6,7 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.9.2"
+$version = "1.9.9.3"
 #
 #################################################################################################
 ### minimum version for v2023.11.28
@@ -3618,7 +3618,11 @@ if($tio){
                     $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                     $batscript += "exit"
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
-                    $ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=1;}"
+                    #$ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=1;}"
+                    $ps1script = "if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`"Administrators`")) -or (`$($PSVersionTable.PSVersion.Major) -ne `"7`")) {"
+                    $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `'`$dsk\amongusrun_`$scid2.ps1`'`" -Verb RunAs -Wait"
+                    $ps1script += "exit}"
+                    $ps1script += "legendary auth --import; legendary -y uninstall Among Us --keep-files ; legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs SNR Mod' ; legendary -y egl-sync ; legendary launch Among Us ; Start-sleep -seconds 5 ; Get-Process -Name 'Among Us' | % { .ProcessorAffinity=1;}"
                     $ps1name = "$dsk\amongusrun_$scid2.ps1"
                     $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$ps1name" 
                     $sShortcut.Arguments = "-Command Start-Process '$dsk\startamongusrun_$scid2.bat'"
@@ -3628,7 +3632,11 @@ if($tio){
                     $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                     $batscript += "exit"
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
-                    $ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=3;}"
+                    #$ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=3;}"
+                    $ps1script = "if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`"Administrators`")) -or (`$($PSVersionTable.PSVersion.Major) -ne `"7`")) {"
+                    $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `'`$dsk\amongusrun_`$scid2.ps1`'`" -Verb RunAs -Wait"
+                    $ps1script += "exit}"
+                    $ps1script += "legendary auth --import; legendary -y uninstall Among Us --keep-files ; legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs SNR Mod' ; legendary -y egl-sync ; legendary launch Among Us ; Start-sleep -seconds 5 ; Get-Process -Name 'Among Us' | % { .ProcessorAffinity=3;}"
                     $ps1name = "$dsk\amongusrun_$scid2.ps1"
                     $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$ps1name" 
                     $sShortcut.Arguments = "-Command Start-Process '$dsk\startamongusrun_$scid2.bat'"
