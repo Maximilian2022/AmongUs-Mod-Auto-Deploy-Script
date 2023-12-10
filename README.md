@@ -3,7 +3,7 @@
 
 <p>■AmongUs Mod入れるのが面倒なので作った自動化Script</p>
 <p><a rel="noreferrer noopener" href="https://github-com.translate.goog/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp" target="_blank">Translate/翻訳</a></p>
-<p>MODとMODバージョン、本体バージョンをリストから選択するとあとは良しなにしてくれるScript です</p>
+<p>MODとMODバージョン、本体バージョンをリストから選択するとあとは良しなにしてくれるScript です<br>必要なFramework/ツールを一緒に導入することが可能です<br>初回起動時は平均20分ほどかかりますが、次回以降は3分程度でMod導入完了します</p>
 <br>
 <p>このScriptは 以下の環境用のものです<br>
  ・Nebula on the Ship (<a rel="noreferrer noopener" href="https://github.com/Dolly1016/Nebula" target="_blank">Dolly1016/Nebula</a>)<br>
