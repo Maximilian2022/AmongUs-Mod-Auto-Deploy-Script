@@ -332,6 +332,13 @@ function Write-Log($logstring){
     # echo させるために出力したログを戻す
     Return $(Get-Translate($Log))
 }
+
+trap [Exception] {
+    # イベント・ログに書き込む
+      Write-Log $error[0].exception
+      break
+}
+
 Write-Log "Running With Powershell Version $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)"
 Write-Log "                                                                 "
 Write-Log "-----------------------------------------------------------------"
