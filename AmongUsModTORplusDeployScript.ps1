@@ -7,6 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.0"
+$build = "20240306001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -345,6 +346,7 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "                                                                 "
 Write-Log "                    AmongUs Mod Deploy Script                    "
 Write-Log "                                                   Version: $version"
+Write-Log "                                                   Build  : $build"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
@@ -910,7 +912,7 @@ $form.MaximumSize = "815,850"
 $label8 = New-Object System.Windows.Forms.Label
 $label8.Location = New-Object System.Drawing.Point(15,15)
 $label8.Size = New-Object System.Drawing.Size(270,30)
-$label8.Text = "$version"
+$label8.Text = "$version - $build"
 $form.Controls.Add($label8)
 
 # ラベルを表示
