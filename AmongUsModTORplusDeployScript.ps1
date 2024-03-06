@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.0"
-$build = "20240306001"
+$build = "20240306002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -16,7 +16,7 @@ $esmin = "v9.2.3.5"
 $tormin = "v4.5.2"
 $tourmin = "v5.0.4"
 $tohmin = "v5.1.5"
-$snrmin = "2.1.3.1"
+$snrmin = "2.2.0.0"
 $lmmin = "3.7.2"
 $nosmin = "103"
 $notmin = "103"
@@ -157,8 +157,8 @@ $amsmin2 = "v23.2.28.0"
 #>
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-$prever = "2023.3.5"
-$prevtargetid = "2536144614134451205"
+#$prever = "2023.3.5"
+#$prevtargetid = "2536144614134451205"
 $prever0 = "2023.11.28"
 $prevtargetid0 = "6242713924243927822"
 $prever1 = "2023.10.24"
