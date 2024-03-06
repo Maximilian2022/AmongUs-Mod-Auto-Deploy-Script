@@ -6,36 +6,49 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "1.9.9.5"
+$version = "1.9.9.6"
 #
 #################################################################################################
-### minimum version for v2023.11.28
-$ermin = "v9.1.0.0"
-$esmin = "v9.1.0.0"
-$tormin = "v4.5.0"
-$tourmin = "v5.0.3"
-$tohmin = "v5.1.2"
-$snrmin = "2.1.1.5"
-$lmmin = "3.5.2"
-$nosmin = "102"
-$notmin = "102"
-$toymin = "v511.18"
-$sramin = "v2023.11.28"
+### minimum version for v2024.3.5
+$ermin = "v9.2.3.5"
+$esmin = "v9.2.3.5"
+$tormin = "v4.5.2"
+$tourmin = "v5.0.4"
+$tohmin = "v5.1.5"
+$snrmin = "2.1.3.1"
+$lmmin = "3.7.2"
+$nosmin = "103"
+$notmin = "103"
+$toymin = "v514.21.2"
+$sramin = "v2024.2.22"
 
-### minimum version for v2023.10.24
-$ermin1 = "v9.0.0.0"
-$esmin1 = "v9.0.0.0"
-$tormin1 = "v4.4.3"
+### minimum version for v2023.11.28
+$ermin1 = "v9.1.0.0"
+$esmin1 = "v9.1.0.0"
+$tormin1 = "v4.5.0"
 $tourmin1 = "v5.0.3"
 $tohmin1 = "v5.1.2"
-$snrmin1 = "2.1.0.0"
-$lmmin1 = "3.5.0"
-$nosmin1 = "101"
-$notmin1 = "101"
+$snrmin1 = "2.1.1.5"
+$lmmin1 = "3.5.2"
+$nosmin1 = "102"
+$notmin1 = "102"
 $toymin1 = "v511.18"
-$sramin1 = "v2023.10.1"
+$sramin1 = "v2023.11.28"
 
-### minimum version for v2023.7.12
+### minimum version for v2023.10.24
+$ermin2 = "v9.0.0.0"
+$esmin2 = "v9.0.0.0"
+$tormin2 = "v4.4.3"
+$tourmin2 = "v5.0.3"
+$tohmin2 = "v5.1.2"
+$snrmin2 = "2.1.0.0"
+$lmmin2 = "3.5.0"
+$nosmin2 = "101"
+$notmin2 = "101"
+$toymin2 = "v511.18"
+$sramin2 = "v2023.10.1"
+
+<### minimum version for v2023.7.12
 $ermin2 = "v8.0.0.0"
 $esmin2 = "v8.0.0.0"
 $tormin2 = "v4.3.3"
@@ -48,7 +61,7 @@ $notmin2 = "100"
 $toymin2 = "v503.14"
 $sramin2 = "v1.4.4"
 
-<### minimum version for v2023.3.28
+### minimum version for v2023.3.28
 $ermin2 = "v7.0.0.0"
 $esmin2 = "v7.0.0.0"
 $nosmin2 = "NONE"
@@ -143,10 +156,14 @@ $amsmin2 = "v23.2.28.0"
 #>
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-$prever0 = "2023.10.24"
-$prevtargetid0 = "531781757001821075"
-$prever1 = "2023.7.12"
-$prevtargetid1 = "4593126137370998619"
+$prever = "2023.3.5"
+$prevtargetid = "2536144614134451205"
+$prever0 = "2023.11.28"
+$prevtargetid0 = "6242713924243927822"
+$prever1 = "2023.10.24"
+$prevtargetid1 = "531781757001821075"
+#$prever1 = "2023.7.12"
+#$prevtargetid1 = "4593126137370998619"
 #$prever1 = "2023.3.28"
 #$prevtargetid1 = "2741278786821271696"
 #$prever1 = "2023.2.28"
