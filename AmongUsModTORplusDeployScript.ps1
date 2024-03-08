@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.0"
-$build = "20240308001"
+$build = "20240308002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -1591,6 +1591,7 @@ function Reload(){
                 }elseif($scid -eq "ER"){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         $temptag = $($web2.tag_name[$ai])
+                        $tempmin = $script:aumin
                         if($temptag.IndexOf("v1") -lt 0){
                             $temptag = $temptag.Replace("v","v0")
                         }
@@ -1604,6 +1605,7 @@ function Reload(){
                 }elseif($scid -eq "ER+ES"){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         $temptag = $($web2.tag_name[$ai])
+                        $tempmin = $script:aumin
                         if($temptag.IndexOf("v1") -lt 0){
                             $temptag = $temptag.Replace("v","v0")
                         }
