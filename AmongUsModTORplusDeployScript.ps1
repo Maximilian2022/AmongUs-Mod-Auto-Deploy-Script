@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.0"
-$build = "20240306003"
+$build = "20240308001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -1511,7 +1511,7 @@ function Reload(){
                 if($scid -eq "NOS"){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
-                        if($tmparr[2] -eq $script:aumin){
+                        if($tmparr[2] -eq $script:aumin){ 
                             if($tmparr[0] -eq "v"){
                                 $list2 += $tmparr[1]
                             }
@@ -1526,6 +1526,42 @@ function Reload(){
                             }
                         }
                     }            
+                }elseif($scid -eq "ER"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        $temptag = $($web2.tag_name[$ai])
+                        $tempmin = $script:aumin
+                        $tempmax = $script:aumax
+                        if($temptag.IndexOf("v1") -lt 0){
+                            $temptag = $temptag.Replace("v","v0")
+                        }
+                        if($tempmin.IndexOf("v1") -lt 0){
+                            $tempmin = $tempmin.Replace("v","v0")
+                        }
+                        if($tempmax.IndexOf("v1") -lt 0){
+                            $tempmax = $tempmax.Replace("v","v0")
+                        }
+                        if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
+                            $list2 += $temptag
+                        }
+                    }
+                }elseif($scid -eq "ER+ES"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        $temptag = $($web2.tag_name[$ai])
+                        $tempmin = $script:aumin
+                        $tempmax = $script:aumax
+                        if($temptag.IndexOf("v1") -lt 0){
+                            $temptag = $temptag.Replace("v","v0")
+                        }
+                        if($tempmin.IndexOf("v1") -lt 0){
+                            $tempmin = $tempmin.Replace("v","v0")
+                        }
+                        if($tempmax.IndexOf("v1") -lt 0){
+                            $tempmax = $tempmax.Replace("v","v0")
+                        }
+                        if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
+                            $list2 += $temptag
+                        }
+                    }
                 }else{            
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin) -and ($web2.tag_name[$ai] -lt $script:aumax)){
@@ -1552,6 +1588,32 @@ function Reload(){
                             }
                         }
                     }            
+                }elseif($scid -eq "ER"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        $temptag = $($web2.tag_name[$ai])
+                        if($temptag.IndexOf("v1") -lt 0){
+                            $temptag = $temptag.Replace("v","v0")
+                        }
+                        if($tempmin.IndexOf("v1") -lt 0){
+                            $tempmin = $tempmin.Replace("v","v0")
+                        }
+                        if($temptag -ge $tempmin){
+                            $list2 += $temptag
+                        }
+                    }
+                }elseif($scid -eq "ER+ES"){
+                    for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
+                        $temptag = $($web2.tag_name[$ai])
+                        if($temptag.IndexOf("v1") -lt 0){
+                            $temptag = $temptag.Replace("v","v0")
+                        }
+                        if($tempmin.IndexOf("v1") -lt 0){
+                            $tempmin = $tempmin.Replace("v","v0")
+                        }
+                        if($temptag -ge $tempmin){
+                            $list2 += $temptag
+                        }
+                    }
                 }else{            
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin)){
