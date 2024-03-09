@@ -6,8 +6,8 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.0.0"
-$build = "20240309003"
+$version = "2.0.1"
+$build = "20240310001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -2688,7 +2688,8 @@ if($tio){
             Pause
             exit
         }
-    }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
+    }
+    <#elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
         #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
         if($aucap[0].length -gt 1){
@@ -2720,7 +2721,8 @@ if($tio){
         Write-Log $torv
         Write-Log $tempver
         Write-Log $tordlp
-    }else{
+    }#>
+    else{
         Write-Log "Critical Error 3"
         $Form2.Close()
         pause
@@ -3519,23 +3521,17 @@ if($tio){
         }
         Write-Log "日本語 データ Download 開始"
         Write-Log "日本語 データ $langdata"
-        $extens = $langdata.Substring($langdata.Length - 3, 3);
-        Write-Host $extens
-        if($extens -eq "dat"){
-            aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese.dat" $langdata
-            aria2c -x5 -V --dir "$aupathm\Language" -o "Japanese_Color.dat" $nebulangdatajpc
-        }elseif ($extens -eq "zip") {
-            aria2c -x5 -V --dir "$aupathm\Addons" -o "Japanese.zip" $langdata --allow-overwrite=true 
-            $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip"
-            aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
-        }elseif($extens -eq ".7z"){
-            aria2c -x5 -V --dir "$aupathm\Language" -o "Language.7z" $langdata
-            Expand-7Zip -ArchiveFileName "$aupathm\Language\Language.7z" -TargetPath "$aupathm\Language"
-        }
+        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1214220992306745404/Localization_the_Nebula_v2.04.zip"
+        aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
+        $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip"
+        aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
-        Write-Log "Ninja is capable."
-        $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172212317656723567/Ninja.zip"
+        Write-Log "Ninja."
+        $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
+        Write-Log "SchrodingersCat."
+        $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip"
+        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $ninja --allow-overwrite=true 
     }else{
     }
     $Bar.Value = "71"
