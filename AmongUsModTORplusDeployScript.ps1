@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.0"
-$build = "20240309002"
+$build = "20240309003"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -3083,9 +3083,8 @@ if($tio){
     $Bar.Value = "60"
 
     #mini.regioninstall
-
     $miniri = "https://api.github.com/repos/miniduikboot/Mini.RegionInstall/releases"        
-    $web = Invoke-WebRequest $miniri -UseBasicParsing
+    $mweb = Invoke-WebRequest $miniri -UseBasicParsing
     $mweb2 = ConvertFrom-Json $mweb.Content   
     for($aii = 0;$aii -lt  $($mweb2.assets.browser_download_url).Length;$aii++){
         if($($mweb2.assets.browser_download_url[$aii]).IndexOf("Mini.RegionInstall.dll") -gt 0){
