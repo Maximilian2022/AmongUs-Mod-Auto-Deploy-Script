@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240310001"
+$build = "20240310002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -2689,8 +2689,8 @@ if($tio){
             exit
         }
     }
-    <#elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
-        #https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
+    elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
+        <#https://github.com/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest
         $aucap= (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/Umineko1993/Nebula-on-the-Ship-for-Japanese/releases/latest" -UseBasicParsing)).assets.browser_download_url
         if($aucap[0].length -gt 1){
             for($ii = 0;$ii -lt  $aucap.Length;$ii++){
@@ -2710,7 +2710,9 @@ if($tio){
         }else{
             $nebulangdata = $aucap
         }
-        $langdata = $nebulangdata    
+        $langdata = $nebulangdata
+        #>
+        
         Add-Type -AssemblyName System.Web
         $tempver = [System.Web.HttpUtility]::UrlEncode("$torv")
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
@@ -2721,7 +2723,7 @@ if($tio){
         Write-Log $torv
         Write-Log $tempver
         Write-Log $tordlp
-    }#>
+    }
     else{
         Write-Log "Critical Error 3"
         $Form2.Close()
