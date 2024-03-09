@@ -1541,7 +1541,7 @@ function Reload(){
                             $tempmax = $tempmax.Replace("v","v0")
                         }
                         if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
-                            $list2 += $temptag
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }elseif($scid -eq "ER+ES"){
@@ -1559,7 +1559,7 @@ function Reload(){
                             $tempmax = $tempmax.Replace("v","v0")
                         }
                         if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
-                            $list2 += $temptag
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }else{            
@@ -1599,7 +1599,7 @@ function Reload(){
                             $tempmin = $tempmin.Replace("v","v0")
                         }
                         if($temptag -ge $tempmin){
-                            $list2 += $temptag
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }elseif($scid -eq "ER+ES"){
@@ -1613,7 +1613,7 @@ function Reload(){
                             $tempmin = $tempmin.Replace("v","v0")
                         }
                         if($temptag -ge $tempmin){
-                            $list2 += $temptag
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }else{            
