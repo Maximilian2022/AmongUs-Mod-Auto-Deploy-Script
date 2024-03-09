@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.0"
-$build = "20240309001"
+$build = "20240309002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -3066,8 +3066,8 @@ if($tio){
         Expand-7zip -ArchiveFileName $aupathm\TheOtherRoles.zip -TargetPath $aupathm
         Write-Log "ZIP 解凍完了"
     }else{
-        if($scid -eq "SRA"){
-            #あーあーあーあー
+       if($scid -eq "SRA"){
+            #ZIPないパターンあり。誰も使ってないから適当でええやろ
         }else{
             Write-Log "ZIP Download NG $tordlp "
             Write-Log "何かがおかしい・・・。もう一度試してみてください。"
@@ -3081,6 +3081,30 @@ if($tio){
         Write-Log "ZIP 解凍OK"
     }
     $Bar.Value = "60"
+
+    #mini.regioninstall
+
+    $miniri = "https://api.github.com/repos/miniduikboot/Mini.RegionInstall/releases"        
+    $web = Invoke-WebRequest $miniri -UseBasicParsing
+    $mweb2 = ConvertFrom-Json $mweb.Content   
+    for($aii = 0;$aii -lt  $($mweb2.assets.browser_download_url).Length;$aii++){
+        if($($mweb2.assets.browser_download_url[$aii]).IndexOf("Mini.RegionInstall.dll") -gt 0){
+            $mdl = $mweb2.assets.browser_download_url[$aii]
+            break
+        }
+    }
+
+    if(Test-Path "$aupathm\BepInEx\plugins\Mini.RegionInstall.dll"){
+        Remove-item -Path "$aupathm\BepInEx\plugins\Mini.RegionInstall.dll"
+        Write-Log 'Delete Original Mini.RegionInstall DLL'
+    }
+
+    #LevelImposter DLLをDLして配置
+    Write-Log "Download $scid Mini.RegionInstall DLL 開始"
+    Write-Log $mdl
+    aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Mini.RegionInstall.dll" $mdl
+    Write-Log "Download $scid Mini.RegionInstall DLL 完了"             
+
 
     if($scid -eq "TOU-R"){
         if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
