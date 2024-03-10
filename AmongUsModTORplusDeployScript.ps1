@@ -3576,22 +3576,22 @@ if($tio){
                     }
                 }
                 if(test-path "C:\temp\gmhtechsupport.ps1"){
-                    Remove-Item "C:\temp\gmhtechsupport.ps1"
+                    Remove-Item "C:\temp\gmhtechsupport.ps1" -Force
                 }
                 if(test-path "C:\temp\amongusrun_$scid2.ps1"){
-                    Remove-Item "C:\temp\amongusrun_$scid2.ps1"
+                    Remove-Item "C:\temp\amongusrun_$scid2.ps1" -Force 
                 }
                 if(test-path "C:\temp\startamongusrun_$scid2.bat"){
-                    Remove-Item "C:\temp\startamongusrun_$scid2.bat"
+                    Remove-Item "C:\temp\startamongusrun_$scid2.bat" -Force
                 }
                 if(test-path "$dsk\gmhtechsupport.ps1"){
-                    Remove-Item "$dsk\gmhtechsupport.ps1"
+                    Remove-Item "$dsk\gmhtechsupport.ps1" -Force
                 }
                 if(test-path "$dsk\amongusrun_$scid2.ps1"){
-                    Remove-Item "$dsk\amongusrun_$scid2.ps1"
+                    Remove-Item "$dsk\amongusrun_$scid2.ps1" -Force
                 }
                 if(test-path "$dsk\startamongusrun_$scid2.bat"){
-                    Remove-Item "$dsk\startamongusrun_$scid2.bat"
+                    Remove-Item "$dsk\startamongusrun_$scid2.bat" -Force
                 }
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1" -OutFile "$dsk\gmhtechsupport.ps1" -UseBasicParsing
                 $batscript = "chcp 65001 `r`n"
