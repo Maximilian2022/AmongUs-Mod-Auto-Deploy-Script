@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240310006"
+$build = "20240310007"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -1716,7 +1716,7 @@ function Reload(){
                     pause
                     exit
                 }     
-                Remove-Item "$npl\AmongusCleanInstall_Steam.ps1"
+                Remove-Item "$npl\AmongusCleanInstall_Steam.ps1" -Force
             }
             $aupatho = $au_path_steam_org
             $aupathm = $au_path_steam_mod
@@ -1742,7 +1742,7 @@ function Reload(){
                     pause
                     exit
                 }     
-                Remove-Item "$npl\AmongusCleanInstall_Epic.ps1"
+                Remove-Item "$npl\AmongusCleanInstall_Epic.ps1" -Force
             }
             $aupatho = $au_path_epic_org
             $aupathm = $au_path_epic_mod
@@ -1768,7 +1768,7 @@ function Reload(){
                     pause
                     exit
                 }     
-                Remove-Item "$npl\AmongusCleanInstall_Steam.ps1"
+                Remove-Item "$npl\AmongusCleanInstall_Steam.ps1" -Force
             }
             $aupatho = $detected_path
             $aupathm = $detected_path_mod
@@ -1807,7 +1807,7 @@ function Reload(){
                 $spath3 = $spath2.split("_:_")
                 $spath = $spath3[0] 
                 $script:platform = $spath3[1]
-                Remove-Item $fileName
+                Remove-Item $fileName -Force
             }else{
                 $loadfail = $false
                 if($chkvdf){
@@ -1880,7 +1880,7 @@ function Reload(){
                             pause
                             exit
                         }     
-                        Remove-Item "$npl\AmongusCleanInstall_Steam.ps1"
+                        Remove-Item "$npl\AmongusCleanInstall_Steam.ps1" -Force
                     }elseif($script:platform -eq "Epic"){
                         if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("指定されたパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                             Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
@@ -1901,7 +1901,7 @@ function Reload(){
                             pause
                             exit
                         }     
-                        Remove-Item "$npl\AmongusCleanInstall_Epic.ps1"
+                        Remove-Item "$npl\AmongusCleanInstall_Epic.ps1" -Force
                     }else{
                         Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
                         Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
@@ -2940,25 +2940,25 @@ if($tio){
                 $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
                 if(Test-Path "$aupathm\depot_945361"){
                     robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\depot_945361" -recurse
+                    Remove-Item "$aupathm\depot_945361" -recurse -Force
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force        
                 }elseif(Test-Path "$aupathm\$filename"){
                     robocopy "$aupathm\$filename" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\$filename" -recurse
+                    Remove-Item "$aupathm\$filename" -recurse -Force
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force        
                 }elseif(Test-Path "$aupathm\Among Us"){
                     robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\Among Us" -recurse
+                    Remove-Item "$aupathm\Among Us" -recurse -Force
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force        
                 }elseif(Test-Path "$aupathm\AmongUs"){
                     robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\AmongUs" -recurse
+                    Remove-Item "$aupathm\AmongUs" -recurse -Force
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force        
@@ -2967,20 +2967,20 @@ if($tio){
                 Copy-Item $aupatho -destination $aupathm -recurse
                 if(Test-Path "$aupathm\Among Us\"){
                     robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\AmongUs" -recurse
+                    Remove-Item "$aupathm\AmongUs" -recurse -Force
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force                            
                 }
                 if(Test-Path "$aupathm\Among Us\"){
                     robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\Among Us\" -recurse
+                    Remove-Item "$aupathm\Among Us\" -recurse -Force
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force                            
                 }elseif(Test-Path "$aupathm\AmongUs\"){
                     robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\AmongUs\" -recurse
+                    Remove-Item "$aupathm\AmongUs\" -recurse -Force
                     $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
                     Remove-Item "C:\Temp\temp.log" -Force                            
@@ -3007,25 +3007,25 @@ if($tio){
             $filename = [IO.Path]::GetFileNameWithoutExtension($prefpth);
             if(Test-Path "$aupathm\depot_945361"){
                 robocopy "$aupathm\depot_945361" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\depot_945361" -recurse
+                Remove-Item "$aupathm\depot_945361" -recurse -Force
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force        
             }elseif(Test-Path "$aupathm\$filename"){
                 robocopy "$aupathm\$filename" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\$filename" -recurse
+                Remove-Item "$aupathm\$filename" -recurse -Force
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force        
             }elseif(Test-Path "$aupathm\Among Us"){
                 robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\Among Us" -recurse
+                Remove-Item "$aupathm\Among Us" -recurse -Force
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force        
             }elseif(Test-Path "$aupathm\AmongUs"){
                 robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\AmongUs" -recurse
+                Remove-Item "$aupathm\AmongUs" -recurse -Force
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force        
@@ -3034,13 +3034,13 @@ if($tio){
             Copy-Item $aupatho -destination $aupathm -recurse
             if(Test-Path "$aupathm\Among Us\"){
                 robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\Among Us\" -recurse
+                Remove-Item "$aupathm\Among Us\" -recurse -Force
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force                            
             }elseif(Test-Path "$aupathm\AmongUs\"){
                 robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\AmongUs\" -recurse
+                Remove-Item "$aupathm\AmongUs\" -recurse -Force
                 $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
                 Remove-Item "C:\Temp\temp.log" -Force                            
@@ -3098,7 +3098,7 @@ if($tio){
     }
 
     if(Test-Path "$aupathm\BepInEx\plugins\Mini.RegionInstall.dll"){
-        Remove-item -Path "$aupathm\BepInEx\plugins\Mini.RegionInstall.dll"
+        Remove-item -Path "$aupathm\BepInEx\plugins\Mini.RegionInstall.dll" -Force
         Write-Log 'Delete Original Mini.RegionInstall DLL'
     }
 
@@ -3835,7 +3835,7 @@ if($ckbci.Count -gt 0){
             Invoke-WebRequest $bcldlp -OutFile "$md\$bclfile" -UseBasicParsing
             Start-Process "$md\$bclfile" -wait
             Write-Log "BCL Install Done"
-            Remove-Item $md\$bclfile
+            Remove-Item $md\$bclfile -Force
             $Bar.Value = "83"
         }elseif($ckbci[$aa] -eq "AmongUsReplayInWindow"){
             $qureq = $true
@@ -3872,7 +3872,7 @@ if($ckbci.Count -gt 0){
                     aria2c -x5 -V --allow-overwrite=true --dir "$md" -o "$auriwfile" $auriw
                     #Invoke-WebRequest $auriw -OutFile "$md\$auriwfile" -UseBasicParsing
                     Expand-7zip -ArchiveFileName $md\$auriwfile -TargetPath $md\$auriwfn
-                    Remove-Item $md\$auriwfile
+                    Remove-Item $md\$auriwfile -Force
                     Set-Location -Path $md\$auriwfn
                     Invoke-Item .
                 }else{
@@ -3903,7 +3903,7 @@ if($ckbci.Count -gt 0){
                 #Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
                 aria2c -x5 -V --allow-overwrite=true --dir "$md" -o "$aucapfile" $aucap[0]                
                 Expand-7Zip -ArchiveFileName $md\$aucapfile -TargetPath $md\$aucapfn
-                Remove-Item $md\$aucapfile
+                Remove-Item $md\$aucapfile -Force
                 Set-Location -Path $md\$aucapfn
                 Invoke-Item .
             }else{
@@ -3950,7 +3950,7 @@ if($ckbci.Count -gt 0){
                 }
         
                 if(Test-Path "$aupathm\BepInEx\plugins\Reactor.dll"){
-                    Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll"
+                    Remove-item -Path "$aupathm\BepInEx\plugins\Reactor.dll" -Force
                     Write-Log 'Delete Original Reactor Mod DLL'
                 }
                 #Reactor DLLをDLして配置
@@ -3960,7 +3960,7 @@ if($ckbci.Count -gt 0){
                 Write-Log "Download $scid Reactor DLL 完了"         
         
                 if(Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll"){
-                    Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll"
+                    Remove-item -Path "$aupathm\BepInEx\plugins\LevelImposter.dll" -Force
                     Write-Log 'Delete Original LevelImposter Mod DLL'
                 }
                 #LevelImposter DLLをDLして配置
@@ -3991,7 +3991,7 @@ if($ckbci.Count -gt 0){
                 }
                 
                 if(Test-Path "$aupathm\BepInEx\plugins\Submerged.dll"){
-                    Remove-item -Path "$aupathm\BepInEx\plugins\Submerged.dll"
+                    Remove-item -Path "$aupathm\BepInEx\plugins\Submerged.dll" -Force
                     Write-Log 'Delete Original Submerged Mod DLL'
                 }
                 #Submerged DLLをDLして配置
@@ -4119,7 +4119,7 @@ if($ckbci.Count -gt 0){
             if(Test-Path "$env:APPDATA\..\LocalLow\Innersloth"){
                 $aurifile = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\regionInfo.json"
                 if(Test-Path $aurifile){
-                    Remove-Item $aurifile
+                    Remove-Item $aurifile -Force
                 }
                 $defjson = '{"CurrentRegionIdx":3,"Regions":[{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"North America","PingServer":"matchmaker.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker.among.us","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TargetServer":null,"TranslateName":289},{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Europe","PingServer":"matchmaker-eu.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-eu.among.us","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TargetServer":null,"TranslateName":290},{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Asia","PingServer":"matchmaker-as.among.us","Servers":[{"Name":"Http-1","Ip":"https://matchmaker-as.among.us","Port":443,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TargetServer":null,"TranslateName":291},{"$type":"DnsRegionInfo, Assembly-CSharp","Fqdn":"imposter.kenko.land","DefaultIp":"imposter.kenko.land","Port":443,"UseDtls":false,"Name":"Custom","TranslateName":1003,"TargetServer":null}]}'
                 $aurijson = ConvertFrom-Json $defjson
@@ -4288,7 +4288,7 @@ $ps1script += "del /F /Q .\gmhtechsupport.ps1 `r`n"
 $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScript_$scid.bat" 
 
 if(Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk"){
-    Remove-Item "$scpath\StartAmongUsModTORplusDeployScript.lnk"    
+    Remove-Item "$scpath\StartAmongUsModTORplusDeployScript.lnk" -Force
 }
 $sShortcut = $WsShell.CreateShortcut("$scpath\StartAmongUsModTORplusDeployScript.lnk")
 $sShortcut.TargetPath = "$dsk\StartAmongUsModTORplusDeployScript.bat"
