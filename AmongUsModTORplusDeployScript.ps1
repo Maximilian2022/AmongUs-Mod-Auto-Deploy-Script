@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240310004"
+$build = "20240310005"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -3596,7 +3596,7 @@ if($tio){
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1" -OutFile "$dsk\gmhtechsupport.ps1" -UseBasicParsing
                 $batscript = "chcp 65001 `r`n"
                 $batscript += "@echo off `r`n"
-                $batscript += "powershell -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
+                $batscript += "powershell -NoProfile -ExecutionPolicy Unrestricted -File `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                 $batscript += "exit"
                 $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                 $ps1script = '$platform="'
@@ -3727,28 +3727,28 @@ if($tio){
                 if($cpun -eq 1){
                     $batscript = "chcp 65001 `r`n"
                     $batscript += "@echo off `r`n"
-                    $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
+                    $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted -File `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                     $batscript += "exit"
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                     #$ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=1;}"
                     $ps1script = "if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`"Administrators`")) -or (`$(`$PSVersionTable.PSVersion.Major) -ne `"7`")) {`r`n"
                     $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `'$dsk\amongusrun_$scid2.ps1`'`" -Verb RunAs -Wait`r`n"
                     $ps1script += "exit`r`n}`r`n"
-                    $ps1script += "legendary auth --import; legendary -y uninstall Among Us --keep-files ; legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs SNR Mod' ; legendary -y egl-sync ; legendary launch Among Us ; Start-sleep -seconds 30 ; Get-Process -Name 'Among Us' | % { .ProcessorAffinity=1;}`r`n"
+                    $ps1script += "legendary auth --import;`r`n legendary -y uninstall Among Us --keep-files;`r`n legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs $scid2 Mod';`r`n legendary -y egl-sync;`r`n legendary launch Among Us;`r`n Start-sleep -seconds 30;`r`n Get-Process -Name 'Among Us' | % { .ProcessorAffinity=1;}`r`n"
                     $ps1name = "$dsk\amongusrun_$scid2.ps1"
                     $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$ps1name" 
                     $sShortcut.Arguments = "-Command Start-Process '$dsk\startamongusrun_$scid2.bat'"
                 }elseif($cpun -eq 3){
                     $batscript = "chcp 65001 `r`n"
                     $batscript += "@echo off `r`n"
-                    $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted `"$dsk\amongusrun_$scid2.ps1`" `r`n"
+                    $batscript += "powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Unrestricted -File `"$dsk\amongusrun_$scid2.ps1`" `r`n"
                     $batscript += "exit"
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                     #$ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=3;}"
                     $ps1script = "if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`"Administrators`")) -or (`$(`$PSVersionTable.PSVersion.Major) -ne `"7`")) {`r`n"
                     $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `'$dsk\amongusrun_$scid2.ps1`'`" -Verb RunAs -Wait`r`n"
                     $ps1script += "exit`r`n}`r`n"
-                    $ps1script += "legendary auth --import; legendary -y uninstall Among Us --keep-files ; legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs SNR Mod' ; legendary -y egl-sync ; legendary launch Among Us ; Start-sleep -seconds 30 ; Get-Process -Name 'Among Us' | % { .ProcessorAffinity=3;}`r`n"
+                    $ps1script += "legendary auth --import;`r`n legendary -y uninstall Among Us --keep-files ;`r`n legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs $scid2 Mod' ;`r`n legendary -y egl-sync ;`r`n legendary launch Among Us ;`r`n Start-sleep -seconds 30 ;`r`n Get-Process -Name 'Among Us' | % { .ProcessorAffinity=3;}`r`n"
                     $ps1name = "$dsk\amongusrun_$scid2.ps1"
                     $ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$ps1name" 
                     $sShortcut.Arguments = "-Command Start-Process '$dsk\startamongusrun_$scid2.bat'"
