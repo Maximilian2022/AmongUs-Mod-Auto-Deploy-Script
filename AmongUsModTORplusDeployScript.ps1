@@ -2933,7 +2933,7 @@ if($tio){
 
         if ($retry -eq $true){
             Write-Log "既存のフォルダを中身を含めて削除します"
-            Remove-Item $aupathm -Recurse
+            Remove-Item $aupathm -Recurse -Force
             # フォルダを中身を含めてコピーする
             if($prebool){
                 Expand-7Zip -ArchiveFileName "$aupathb\$prefpth" -TargetPath $aupathm
@@ -3523,17 +3523,18 @@ if($tio){
         }
         Write-Log "日本語 データ Download 開始"
         Write-Log "日本語 データ $langdata"
-        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1214220992306745404/Localization_the_Nebula_v2.04.zip"
+        
+        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1214220992306745404/Localization_the_Nebula_v2.04.zip?ex=65f8526b&is=65e5dd6b&hm=1f2a90c6ecac63ee0b496708952c816850217bdfc5a6e98daeabbf3daf9dcbe4&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
-        $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip"
+        $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=65f6b9cc&is=65e444cc&hm=4219d4c5faafc74d7735751f1f62c917a7a38e69906beb6fc4b6ea519ea7d617&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
         Write-Log "Ninja."
-        $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip"
+        $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=65fecb1b&is=65ec561b&hm=14e00fdd8f2d72c4fa16bbf02b977f179b9cdde92b155cadbe7b0b8218aa0a1d&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
         Write-Log "SchrodingersCat."
-        $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip"
-        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $ninja --allow-overwrite=true 
+        $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=65fb0b2b&is=65e8962b&hm=b170197e8ed4480becc24479355bac1bdcca9b0fb9ede2090fecee082eccc9a4&"
+        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
     }else{
     }
     $Bar.Value = "71"
