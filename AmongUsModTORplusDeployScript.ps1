@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240310007"
+$build = "20240311001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -586,13 +586,11 @@ function BackUpAU{
             $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
             $proclist = get-process
             $procnum
-            for($i=0;$i -lt $proclist.count;$i++){
-            
+            for($i=0;$i -lt $proclist.count;$i++){           
                 if($proclist.ProcessName[$i] -eq "steam"){
                     write-log $i
                     $procnum = $i
                 }
-            
             }           
             if (Test-Path $steampth){
                 Write-Log "Steam アプリは以下で見つかりました。 $steampth"
@@ -2890,7 +2888,7 @@ if($tio){
             
             if($stm -and $epc){
                 Write-Log $(Get-Translate("Both Steam and Epic is detected. Ask User."))
-                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Clean Install Tool",4) -eq "Yes"){
+                if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     $rn = "steam"
                 }else{
                     $rn = "epic"
@@ -3529,12 +3527,15 @@ if($tio){
         $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=65f6b9cc&is=65e444cc&hm=4219d4c5faafc74d7735751f1f62c917a7a38e69906beb6fc4b6ea519ea7d617&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
-        Write-Log "Ninja."
-        $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=65fecb1b&is=65ec561b&hm=14e00fdd8f2d72c4fa16bbf02b977f179b9cdde92b155cadbe7b0b8218aa0a1d&"
-        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
-        Write-Log "SchrodingersCat."
-        $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=65fb0b2b&is=65e8962b&hm=b170197e8ed4480becc24479355bac1bdcca9b0fb9ede2090fecee082eccc9a4&"
-        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+
+        if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("追加役職のアドオンをインストールしますか？`n他のプレーヤーが全員導入していないと遊べません。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            Write-Log "Ninja."
+            $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=65fecb1b&is=65ec561b&hm=14e00fdd8f2d72c4fa16bbf02b977f179b9cdde92b155cadbe7b0b8218aa0a1d&"
+            aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
+            Write-Log "SchrodingersCat."
+            $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=65fb0b2b&is=65e8962b&hm=b170197e8ed4480becc24479355bac1bdcca9b0fb9ede2090fecee082eccc9a4&"
+            aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+        }           
     }else{
     }
     $Bar.Value = "71"
