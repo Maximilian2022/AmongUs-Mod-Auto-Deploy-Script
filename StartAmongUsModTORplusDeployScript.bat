@@ -12,8 +12,6 @@ curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-A
 
 echo %date% %time%   Running Powershell Script
 
-powershell -NoProfile -WindowStyle Minimized -ExecutionPolicy Unrestricted -Command Unblock-File .\AmongUsModTORplusDeployScript.ps1
-
 powershell -NoProfile -WindowStyle Minimized -ExecutionPolicy Unrestricted -File .\AmongUsModTORplusDeployScript.ps1
 
 echo %date% %time%   Delete Powershell Script
