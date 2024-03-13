@@ -3104,7 +3104,13 @@ if($tio){
     Write-Log "Download $scid Mini.RegionInstall DLL 開始"
     Write-Log $mdl
     aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Mini.RegionInstall.dll" $mdl
-    Write-Log "Download $scid Mini.RegionInstall DLL 完了"             
+    Write-Log "Download $scid Mini.RegionInstall DLL 完了"
+    $regioninstalltxt ="[General]`r`nRegions = "
+    #region check
+    if(Test-Path "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg"){
+        Copy-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg.old" -Force
+        Remove-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" -Force
+    }
 
 
     if($scid -eq "TOU-R"){
@@ -3115,6 +3121,10 @@ if($tio){
             Copy-Item "C:\Temp\com.slushiegoose.townofus.cfg" "$aupathm\BepInEx\config\com.slushiegoose.townofus.cfg" -Force
             Remove-Item "C:\Temp\com.slushiegoose.townofus.cfg" -Force    
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded NA (MNA)","PingServer": "https://www.aumods.us","Servers": [{"Name": "Http-1","Ip": "https://www.aumods.us","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003},{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded EU (MEU)","PingServer": "https://au-eu.duikbo.at","Servers": [{"Name": "Http-1","Ip": "https://au-eu.duikbo.at","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003},{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded Asia (MAS)","PingServer": "https://au-as.duikbo.at","Servers": [{"Name": "Http-1","Ip": "https://au-as.duikbo.at","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003}]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
+        $regioninstalltxt += "`r`n"
     }elseif($scid -eq "SRA"){
         if(test-path "C:\Temp\me.fluff.stellarroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3139,6 +3149,10 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"        
     }elseif($scid -eq "ER"){
         if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3147,6 +3161,10 @@ if($tio){
             Copy-Item "C:\Temp\me.yukieiji.extremeroles.cfg" "$aupathm\BepInEx\config\me.yukieiji.extremeroles.cfg" -Force
             Remove-Item "C:\Temp\me.yukieiji.extremeroles.cfg" -Force    
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"
     }elseif($scid -eq "ER+ES"){
         if(test-path "C:\Temp\me.yukieiji.extremeroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3183,6 +3201,10 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"        
     }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
         if(test-path "C:\Temp\jp.dreamingpig.amongus.nebula.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3213,6 +3235,11 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Nebula","PingServer":"cs.supernewroles.com","Servers":[{"Name":"http-1","Ip":"http://168.138.44.249","Port":22023,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TargetServer":null,"TranslateName":1003}]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"
+        
     }elseif($scid -eq "LM"){
         if(test-path "C:\Temp\me.allul.lasmonjas.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3221,6 +3248,10 @@ if($tio){
             Copy-Item "C:\Temp\me.allul.lasmonjas.cfg" "$aupathm\BepInEx\config\me.allul.lasmonjas.cfg" -Force
             Remove-Item "C:\Temp\me.allul.lasmonjas.cfg" -Force    
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"        
     }elseif($scid -eq "TOH"){
         if(test-path "C:\Temp\com.emptybottle.townofhost.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3236,6 +3267,10 @@ if($tio){
             Copy-Item "C:\Temp\TOH_DATA\*" "$aupathm\TOH_DATA" -Force               
             Remove-Item "C:\Temp\TOH_DATA" -Recurse -Force    
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"        
     }elseif($scid -eq "TOY"){
         if(test-path "C:\Temp\com.emptybottle.townofhost.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3244,14 +3279,10 @@ if($tio){
             Copy-Item "C:\Temp\com.emptybottle.townofhost.cfg" "$aupathm\BepInEx\config\com.emptybottle.townofhost.cfg" -Force
             Remove-Item "C:\Temp\com.emptybottle.townofhost.cfg" -Force    
         }
-    }elseif($scid -eq "AMS"){
-        if(test-path "C:\Temp\me.tomarai.aumod.cfg"){
-            if(!(test-path "$aupathm\BepInEx\config")){
-                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
-            }
-            Copy-Item "C:\Temp\me.tomarai.aumod.cfg" "$aupathm\BepInEx\config\me.tomarai.aumod.cfg" -Force
-            Remove-Item "C:\Temp\me.tomarai.aumod.cfg" -Force    
-        }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"        
     }elseif($scid -eq "SNR"){
         if(test-path "C:\Temp\jp.ykundesu.supernewroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3271,33 +3302,10 @@ if($tio){
                 Remove-Item "C:\Temp\temp.log" -Force
             }
         }
-    }elseif($scid -eq "TOR MR"){
-        if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
-            if(!(test-path "$aupathm\BepInEx\config")){
-                New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
-            }
-            Copy-Item "C:\Temp\me.eisbison.theotherroles.cfg" "$aupathm\BepInEx\config\me.eisbison.theotherroles.cfg" -Force
-            Remove-Item "C:\Temp\me.eisbison.theotherroles.cfg" -Force    
-            if(!(Test-Path "$aupathm\TheOtherHats")){
-                New-Item -Path "$aupathm\TheOtherHats" -ItemType Directory
-            }
-            if(test-path "C:\Temp\TheOtherHats"){
-                robocopy "C:\Temp\TheOtherHats" "$aupathm\TheOtherHats" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "C:\Temp\TheOtherHats" -Recurse
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force
-            }
-        }
-        if(test-path "C:\Temp\CustomPreset"){
-            robocopy "C:\Temp\CustomPreset" "$aupathm\CustomPreset" /unilog:C:\Temp\temp.log /E >nul 2>&1
-            Remove-Item "C:\Temp\CustomPreset" -Recurse -Force
-            $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-
-            Write-Log "`r`n $content"
-            Remove-Item "C:\Temp\temp.log" -Force
-        }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += "`r`n"        
     }else{
         if(test-path "C:\Temp\me.eisbison.theotherroles.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3317,9 +3325,14 @@ if($tio){
             Write-Log "`r`n $content"
             Remove-Item "C:\Temp\temp.log" -Force
         }
+        $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
+        $regioninstalltxt += "`r`nRemoveRegions = "
+        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
+        $regioninstalltxt += "`r`n"        
     }
     $Bar.Value = "64"
-    $Bar.Value = "68"    
+    #regioninstall config make
+    $regioninstalltxt | Out-File -Encoding "UTF8" -FilePath "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" 
     $Bar.Value = "69"
 
     if($scid -eq "TOR GMH"){
