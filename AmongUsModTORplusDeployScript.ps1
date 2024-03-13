@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240313002"
+$build = "20240313003"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -3327,11 +3327,12 @@ if($tio){
     }
     $Bar.Value = "64"
     #regioninstall config make
-    if(Test-Path "$aupathm\BepInEx\config\"){
-        if(Test-Path "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg"){
-            Copy-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg.old" -Force
+    if(Test-Path "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg"){
+        Copy-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg.old" -Force
         Remove-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" -Force
-        }
+    }
+    if(!(test-path "$aupathm\BepInEx\config")){
+        New-Item -Path "$aupathm\BepInEx\config" -ItemType Directory
     }
     $regioninstalltxt | Out-File -Encoding "UTF8" -FilePath "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" 
     
