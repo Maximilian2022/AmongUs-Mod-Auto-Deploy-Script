@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240313001"
+$build = "20240313002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -3107,11 +3107,6 @@ if($tio){
     Write-Log "Download $scid Mini.RegionInstall DLL 完了"
     $regioninstalltxt ="[General]`r`nRegions = "
     #region check
-    if(Test-Path "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg"){
-        Copy-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg.old" -Force
-        Remove-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" -Force
-    }
-
 
     if($scid -eq "TOU-R"){
         if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
@@ -3332,7 +3327,14 @@ if($tio){
     }
     $Bar.Value = "64"
     #regioninstall config make
+    if(Test-Path "$aupathm\BepInEx\config\"){
+        if(Test-Path "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg"){
+            Copy-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg.old" -Force
+        Remove-Item "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" -Force
+        }
+    }
     $regioninstalltxt | Out-File -Encoding "UTF8" -FilePath "$aupathm\BepInEx\config\at.duikbo.regioninstall.cfg" 
+    
     $Bar.Value = "69"
 
     if($scid -eq "TOR GMH"){
