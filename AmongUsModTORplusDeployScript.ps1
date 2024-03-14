@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240314001"
+$build = "20240314002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -2269,7 +2269,7 @@ if($RadioButton114.Checked){
 }
 
 Write-Log "$mod が選択されました"
-if($null -eq $torpv){
+if($torpv.Length -le 0){
     Write-Log "この本体バージョンでインストール可能なModバージョンが存在しません。"
     Write-Log "処理を中止します。"
     exit
