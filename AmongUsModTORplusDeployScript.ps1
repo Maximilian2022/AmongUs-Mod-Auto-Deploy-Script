@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240314002"
+$build = "20240314003"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -191,13 +191,18 @@ $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 # Translate Function
 #################################################################################################
 $Cult  = Get-Culture
+$transenabled = $true
 #$Cult  = "en-US"
 function Get-Translate($transtext){
     if($Cult -ne "ja-JP"){
-        $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
-        $Response = (Invoke-WebRequest -Uri $Uri -Method Get).Content
-        $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
-        return $Resulttxt[0]
+        if($transenabled){
+            $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
+            $Response = (Invoke-WebRequest -Uri $Uri -Method Get).Content
+            $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
+            return $Resulttxt[0]    
+        }else{
+            return $transtext
+        }
     }else{
         return $transtext
     }
@@ -205,6 +210,14 @@ function Get-Translate($transtext){
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 Write-Output "$Log Loading Done."
+
+if($Cult -ne "ja-JP"){
+    if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("出力されるログもOS言語に翻訳しますか？`r`n有効にすると動作がとても遅くなります。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+        $transenabled = $true
+    }else{
+        $transenabled = $false
+    }
+}
 
 #################################################################################################
 # 権限チェック
