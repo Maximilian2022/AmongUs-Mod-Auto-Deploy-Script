@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240314003"
+$build = "20240315001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -1110,7 +1110,7 @@ $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "330,185"
 
 # 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",,"NOS CPU Affinity"
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","LevelImposter","Submerged","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS/NOT 追加役職","LevelImposter","Submerged","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
@@ -3568,21 +3568,13 @@ if($tio){
             Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
         }
 
-        #v2.06
-        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1217387098626195477/Localization_the_Nebula_v2.06.zip?ex=6603d716&is=65f16216&hm=93060334c060dff2541e909df7d0866260495b4a35712195f946c5e4c8a677d3&"
+        #v2.06.1
+        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1217860192172249169/Localization_the_Nebula_v2.06.1.zip?ex=66058fb0&is=65f31ab0&hm=ea67af4909a8beabc904c5383f6e3f9417109a9347184601052082ab6cf0e705&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
         $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=65f6b9cc&is=65e444cc&hm=4219d4c5faafc74d7735751f1f62c917a7a38e69906beb6fc4b6ea519ea7d617&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
 
-        if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("追加役職のアドオンをインストールしますか？`n他のプレーヤーが全員導入していないと遊べません。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-            Write-Log "Ninja." #v2
-            $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=65fecb1b&is=65ec561b&hm=14e00fdd8f2d72c4fa16bbf02b977f179b9cdde92b155cadbe7b0b8218aa0a1d&"
-            aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
-            Write-Log "SchrodingersCat." #v1.0.0
-            $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=65fb0b2b&is=65e8962b&hm=b170197e8ed4480becc24479355bac1bdcca9b0fb9ede2090fecee082eccc9a4&"
-            aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
-        }           
     }else{
     }
     $Bar.Value = "71"
@@ -4203,6 +4195,26 @@ if($ckbci.Count -gt 0){
                 Write-Log "カスタムサーバー情報を追加しました。"
             }else{
                 Write-Log "AmongUsが一度も起動されていないようです。一度起動してから再度Scriptを動作させてください。"
+            }
+            $Bar.Value = "89"
+        }elseif($ckbci[$aa] -eq "NOS/NOT 追加役職"){
+            if(($scid -eq "NOS") -or ($scid -eq "NOT")){
+                Write-Log "NOS/NOTに追加役職Addonを追加します"
+                if (Test-Path "$aupathm\Addons\Ninja.zip") {
+                    Remove-Item "$aupathm\Addons\Ninja.zip" -Force
+                }
+                if (Test-Path "$aupathm\Addons\SchrodingersCat.zip") {
+                    Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
+                }
+                Write-Log "Ninja." #v2
+                $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=65fecb1b&is=65ec561b&hm=14e00fdd8f2d72c4fa16bbf02b977f179b9cdde92b155cadbe7b0b8218aa0a1d&"
+                aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
+                Write-Log "SchrodingersCat." #v1.0.0
+                $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=65fb0b2b&is=65e8962b&hm=b170197e8ed4480becc24479355bac1bdcca9b0fb9ede2090fecee082eccc9a4&"
+                aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+                Write-Log "NOS/NOTに追加役職Addonを追加しました。"
+            }else{
+                Write-Log "追加役職AddonはNOS/NOTにだけ適用可能です。"
             }
             $Bar.Value = "89"
         }elseif($ckbci[$aa] -eq "健康ランド"){
