@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240316001"
+$build = "20240316002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -2894,18 +2894,18 @@ if($tio){
         if($clean -eq $true){
             if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
                 $rn = "steam"
-                Write-Log "Assume $rn is used."
+                Write-Log "$rn が検知されました。"
                 $stm = $true
             }
 
             if (Test-Path "C:\Program Files (x86)\Epic Games"){
                 $rn = "epic"
-                Write-Log "Assume $rn is used."
+                Write-Log "$rn が検知されました。"
                 $epc = $true
             }
             
             if($stm -and $epc){
-                Write-Log $(Get-Translate("Both Steam and Epic is detected. Ask User."))
+                Write-Log $(Get-Translate("SteamとEpic両方のインストールが確認されました。ユーザーに確認します。"))
                 if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                     $rn = "steam"
                 }else{

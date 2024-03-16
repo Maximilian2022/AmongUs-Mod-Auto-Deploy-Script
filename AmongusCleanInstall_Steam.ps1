@@ -3,7 +3,7 @@
 #
 # Among Us Clean Install Script Steam
 #
-$version = "1.0.1"
+$version = "1.0.2"
 #
 #################################################################################################
 # Translate Function
@@ -117,47 +117,68 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "Clean Installation Starts"
 Write-Log "-----------------------------------------------------------------"
 
+#Steam起動チェック
 $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
 $proclist = get-process
 $procnum
-
-for($i=0;$i -lt $proclist.count;$i++){
-
-    if($test.ProcessName[$i] -eq "steam"){
+for($i=0;$i -lt $proclist.count;$i++){           
+    if($proclist.ProcessName[$i] -eq "steam"){
         write-log $i
         $procnum = $i
     }
-
-}
+}           
 if (Test-Path $steampth){
-    Write-Log "Steam Application is found on $steampth"
+    Write-Log "Steam アプリは以下で見つかりました。 $steampth"
 }elseif(Test-Path $($proclist[$procnum].path)){
     $steampth = $($proclist[$procnum].path)
     Write-Log "Steam アプリは以下で見つかりました。 $steampth"
 }else{
-    Write-Log "Steam Application is not on default location"
+    Write-Log "Steam アプリがデフォルトの場所に見つかりませんでした。"
     Param(
         [Parameter()]
         [String] $FilePath
-      )     
-      # $FilePath が設定されていない、又はファイルが存在しない
-      if([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
-          [void][System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")    
-          $dialog = New-Object System.Windows.Forms.OpenFileDialog
-          $dialog.Filter = $(Get-Translate("EXE ファイル(*.EXE)|*.EXE"))
-          $dialog.InitialDirectory = "C:\"
-          $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
-      
-          # キャンセルを押された時は処理を止める
-          if($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG){
-              exit 1
-          }
-      
-          # 選択したファイルパスを $FilePath に設定
-          $steampth = $dialog.FileName
-      }
+    )     
+    # $FilePath が設定されていない、又はファイルが存在しない
+    if([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
+        [void][System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")    
+        $dialog = New-Object System.Windows.Forms.OpenFileDialog
+        $dialog.Filter = $(Get-Translate("EXE ファイル(*.EXE)|*.EXE"))
+        $dialog.InitialDirectory = "C:\"
+        $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
+    
+        # キャンセルを押された時は処理を止める
+        if($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG){
+            exit 1
+        }
+    
+        # 選択したファイルパスを $FilePath に設定
+        $steampth = $dialog.FileName
+    }
 }
 
+#操作したいウィンドウのタイトル
+$MAIN_WINDOW_TITLE="Steam"
+#Get-Processで取得できた1つ目のハンドルを対象とする。
+$steamruncheck = $true
+$steamrunner = $true
+
+while($steamruncheck){
+    try{
+        $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
+    }catch{
+        Write-Log "Steam.exe 起動チェック。ログインできていない場合はログインしてください。"       
+    }
+    if($null -eq $hwnd){
+        if($steamrunner){
+            Start-Process $steampth 
+            $steamrunner = $false
+        }
+    }else{
+        $steamruncheck = $false
+    }
+    Start-Sleep -Seconds 5
+}
+Start-Sleep -Seconds 20
 
 #################################################################################################
 #AutoDetect
