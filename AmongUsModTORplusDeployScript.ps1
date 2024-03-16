@@ -1667,7 +1667,7 @@ function Reload(){
   
         #detect running detect path
         $proclist = Get-Process
-        $procnum = -1
+        $procnum
         $epicbool = $false
         for($i=0;$i -lt $proclist.count;$i++){
             if($proclist.ProcessName[$i] -eq "steam"){
