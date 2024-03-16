@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240315001"
+$build = "20240316001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -3568,8 +3568,8 @@ if($tio){
             Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
         }
 
-        #v2.06.1
-        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1217860192172249169/Localization_the_Nebula_v2.06.1.zip?ex=66058fb0&is=65f31ab0&hm=ea67af4909a8beabc904c5383f6e3f9417109a9347184601052082ab6cf0e705&"
+        #v2.06.2
+        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1218238998300987402/Localization_the_Nebula_v2.06.2.zip?ex=6606f07a&is=65f47b7a&hm=2b43a4454c9758fa00b5aefa808635b0bd2bd8d19eb19398025b1bece7fb1d5d&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
         $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=65f6b9cc&is=65e444cc&hm=4219d4c5faafc74d7735751f1f62c917a7a38e69906beb6fc4b6ea519ea7d617&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
