@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240316002"
+$build = "20240316003"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -1667,7 +1667,7 @@ function Reload(){
   
         #detect running detect path
         $proclist = Get-Process
-        $procnum
+        $procnum = -1
         $epicbool = $false
         for($i=0;$i -lt $proclist.count;$i++){
             if($proclist.ProcessName[$i] -eq "steam"){
@@ -1685,6 +1685,8 @@ function Reload(){
             $detected_path = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us"
             $detected_path_mod = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us $scid Mod"
             $detected_path_back = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us Backup"
+        }else{
+
         }
         if(!(Test-Path $detected_path)){
             #detector
