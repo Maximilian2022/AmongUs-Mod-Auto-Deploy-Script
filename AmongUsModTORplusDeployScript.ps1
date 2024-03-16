@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240316003"
+$build = "20240316004"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -1685,20 +1685,18 @@ function Reload(){
             $detected_path = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us"
             $detected_path_mod = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us $scid Mod"
             $detected_path_back = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us Backup"
-        }else{
-
-        }
-        if(!(Test-Path $detected_path)){
-            #detector
-            #E:\SteamLibrary\steamapps\common
-            foreach ($num in 65..90) {                                     
-                if(Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us"){
-                    $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
-                    $detected_path_mod = "$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
-                    $detected_path_back = "$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
-                    break
-                }     
-            }
+            if(!(Test-Path $detected_path)){
+                #detector
+                #E:\SteamLibrary\steamapps\common
+                foreach ($num in 65..90) {                                     
+                    if(Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us"){
+                        $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
+                        $detected_path_mod = "$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
+                        $detected_path_back = "$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
+                        break
+                    }     
+                }
+            } 
         }
         
         if(Test-path "$au_path_steam_org\Among Us.exe"){
