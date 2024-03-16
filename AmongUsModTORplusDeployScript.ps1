@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240316004"
+$build = "20240316005"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -2914,6 +2914,7 @@ if($tio){
                 Write-Log "$rn が選択されました。"
             }
 
+            Write-Log "クリーンインストールプロセス開始"
             if($rn -eq "steam"){
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
@@ -2922,6 +2923,7 @@ if($tio){
                 }else{
                     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 }
+                Write-Log "クリーンインストールプロセス終了"
                 Start-Sleep -Seconds 10
                 while (!(test-path "$aupatho\Among Us.exe")){
                     Start-Sleep -Seconds 10
@@ -2939,6 +2941,7 @@ if($tio){
                 }else{
                     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 }
+                Write-Log "クリーンインストールプロセス終了"
                 Remove-Item $fpth2 -Force
             }else{
                 Write-Log "Critical Platform Selection"
