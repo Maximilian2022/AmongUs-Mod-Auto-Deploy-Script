@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.1"
-$build = "20240316005"
+$build = "20240316006"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -2918,11 +2918,8 @@ if($tio){
             if($rn -eq "steam"){
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
-                if(test-path "$env:ProgramFiles\PowerShell\7"){
-                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-                }else{
-                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-                }
+                Unblock-File $fpth2
+                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 Write-Log "クリーンインストールプロセス終了"
                 Start-Sleep -Seconds 10
                 while (!(test-path "$aupatho\Among Us.exe")){
@@ -2936,11 +2933,8 @@ if($tio){
             }elseif($rn -eq "epic"){
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
-                if(test-path "$env:ProgramFiles\PowerShell\7"){
-                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-                }else{
-                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-                }
+                Unblock-File $fpth2
+                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 Write-Log "クリーンインストールプロセス終了"
                 Remove-Item $fpth2 -Force
             }else{
