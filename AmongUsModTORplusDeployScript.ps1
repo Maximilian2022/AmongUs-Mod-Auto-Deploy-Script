@@ -2911,6 +2911,7 @@ if($tio){
                 }else{
                     $rn = "epic"
                 }                
+                Write-Log "$rn が選択されました。"
             }
 
             if($rn -eq "steam"){
