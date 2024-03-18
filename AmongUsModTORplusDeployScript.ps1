@@ -2934,7 +2934,7 @@ if($tio){
                 Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
                 Unblock-File $fpth2
-                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
+                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
                 Write-Log "クリーンインストールプロセス終了"
                 Remove-Item $fpth2 -Force
             }else{
@@ -3660,7 +3660,7 @@ if($tio){
                     }else{
                         $v5run = $true
                         if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-                            Start-Process powershell.exe -ArgumentList "-NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File `'
+                            Start-Process powershell.exe -ArgumentList "-NoProfile -WindowStyle Minimized -ExecutionPolicy Unrestricted -File `'
                 $ps1script += "$ps1name"
                 $ps1script += '`"" -Verb RunAs -Wait
                             exit
@@ -3669,7 +3669,7 @@ if($tio){
                 }elseif($PSVersionTable.PSVersion.major -gt 5){
                     $v5run = $true
                     if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-                        Start-Process pwsh.exe -ArgumentList "-NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File `'
+                        Start-Process pwsh.exe -ArgumentList "-NoProfile -WindowStyle Minimized -ExecutionPolicy Unrestricted -File `'
                 $ps1script += "$ps1name"
                 $ps1script += '`"" -Verb RunAs -Wait
                         exit
@@ -3770,7 +3770,7 @@ if($tio){
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                     #$ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=1;}"
                     $ps1script = "if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`"Administrators`")) -or (`$(`$PSVersionTable.PSVersion.Major) -ne `"7`")) {`r`n"
-                    $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File ```"$dsk\amongusrun_$scid2.ps1```"`" -Verb RunAs -Wait`r`n"
+                    $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File ```"$dsk\amongusrun_$scid2.ps1```"`" -Verb RunAs -Wait`r`n"
                     $ps1script += "exit`r`n}`r`n"
                     $ps1script += "legendary auth --import;`r`n legendary -y uninstall Among Us --keep-files;`r`n legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs $scid2 Mod';`r`n legendary -y egl-sync;`r`n legendary launch Among Us;`r`n Start-sleep -seconds 30;`r`n Get-Process -Name 'Among Us' | % {`$_.ProcessorAffinity=1;}`r`n"
                     $ps1name = "$dsk\amongusrun_$scid2.ps1"
@@ -3784,7 +3784,7 @@ if($tio){
                     $batscript | Out-File -Encoding default -FilePath "$dsk\startamongusrun_$scid2.bat" 
                     #$ps1script = "legendary auth --import && legendary -y uninstall Among Us --keep-files  && legendary -y import 'Among Us' '$aupathm' && legendary -y egl-sync && legendary launch Among Us && Start-sleep -seconds 5 && Get-Process -Name 'Among Us' | % { $_.ProcessorAffinity=3;}"
                     $ps1script = "if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`"Administrators`")) -or (`$(`$PSVersionTable.PSVersion.Major) -ne `"7`")) {`r`n"
-                    $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File ```"$dsk\amongusrun_$scid2.ps1```"`" -Verb RunAs -Wait`r`n"
+                    $ps1script += "Start-Process pwsh.exe -ArgumentList `"-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File ```"$dsk\amongusrun_$scid2.ps1```"`" -Verb RunAs -Wait`r`n"
                     $ps1script += "exit`r`n}`r`n"
                     $ps1script += "legendary auth --import;`r`n legendary -y uninstall Among Us --keep-files ;`r`n legendary -y import 'Among Us' 'C:\Program Files\Epic Games\AmongUs $scid2 Mod' ;`r`n legendary -y egl-sync ;`r`n legendary launch Among Us ;`r`n Start-sleep -seconds 30 ;`r`n Get-Process -Name 'Among Us' | % {`$_.ProcessorAffinity=3;}`r`n"
                     $ps1name = "$dsk\amongusrun_$scid2.ps1"
