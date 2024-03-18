@@ -157,26 +157,27 @@ $amsmin2 = "v23.2.28.0"
 #>
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-#$prever = "2023.3.5"
-#$prevtargetid = "2536144614134451205"
-$prever0 = "2023.11.28"
-$prevtargetid0 = "6242713924243927822"
-$prever1 = "2023.10.24"
-$prevtargetid1 = "531781757001821075"
-#$prever1 = "2023.7.12"
-#$prevtargetid1 = "4593126137370998619"
-#$prever1 = "2023.3.28"
-#$prevtargetid1 = "2741278786821271696"
-#$prever1 = "2023.2.28"
-#$prevtargetid1 = "1390179653173000898"
-#$prever1 = "2022.12.14"
-#$prevtargetid1 = "3833836818403923932"
-#$prever1 = "2022.10.25"
-#$prevtargetid1 = "4338750749031095433"
-#$prever1 = "2022.10.19"
-#$prevtargetid1 = "4338750749031095433"
 #$prever1 = "2022.9.20"
 #$prevtargetid1 = "2481435393334839152"
+#$prever1 = "2022.10.19"
+#$prevtargetid1 = "4338750749031095433"
+#$prever1 = "2022.10.25"
+#$prevtargetid1 = "4338750749031095433"
+#$prever1 = "2022.12.14"
+#$prevtargetid1 = "3833836818403923932"
+#$prever1 = "2023.2.28"
+#$prevtargetid1 = "1390179653173000898"
+#$prever1 = "2023.3.5"
+#$prevtargetid1 = "2536144614134451205"
+#$prever1 = "2023.3.28"
+#$prevtargetid1 = "2741278786821271696"
+#$prever1 = "2023.7.12"
+#$prevtargetid1 = "4593126137370998619"
+$prever1 = "2023.10.24"
+$prevtargetid1 = "531781757001821075"
+$prever0 = "2023.11.28"
+$prevtargetid0 = "6242713924243927822"
+
 
 $gmhbool = $true #flag for Test
 #Testdll: Snapshot 22.11.21c
@@ -349,8 +350,8 @@ function Write-Log($logstring){
 
 trap [Exception] {
     # イベント・ログに書き込む
-      Write-Log $error[0].exception
-      break
+    Write-Log $error[0].exception
+    break
 }
 
 Write-Log "Running With Powershell Version $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)"
