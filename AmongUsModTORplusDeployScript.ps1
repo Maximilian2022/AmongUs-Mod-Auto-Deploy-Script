@@ -1133,11 +1133,11 @@ $form.Icon = "$dsk\AUMADS.ico"
 #[void] $Combo.Items.Add("AMS :AUModS/AUModS")
 #[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 #[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
-[void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
-[void] $Combo.Items.Add("NOS :Dolly1016/Nebula on the Ship")
 if($gmhbool){
     [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
 }
+[void] $Combo.Items.Add("NOS :Dolly1016/Nebula on the Ship")
+[void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
