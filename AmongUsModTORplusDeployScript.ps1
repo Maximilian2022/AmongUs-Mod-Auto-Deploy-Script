@@ -483,40 +483,38 @@ if(Test-Path "C:\Program Files\Epic Games\AmongUs"){
 }
 
 function BackupMod{
-    if($scid -ne "NOT"){
-        #Backup Mod
-        if(!(Test-Path $aupathb)){
-            New-Item $aupathb -ItemType Directory
-        }
-        if(!(Test-Path $aupathb\$scid)){
-            New-Item $aupathb\$scid -ItemType Directory
-        }
-        Write-Log $(Get-Translate("Mod Backup Feature Start"))
-        if($scid -ne "AMS"){
-            if(Test-Path "$aupathb\$scid\$scid-$torv.zip"){
-                $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.zip").Length
-                $dlfsize = (Get-Item "$aupathm\TheOtherRoles.zip").Length
-        
-                if($orgsize -lt $dlfsize){
-                    Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip" -Force
-                }
-            }else{
-                Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip"
-            }    
-        }else{
-            if(Test-Path "$aupathb\$scid\$scid-$torv.dll"){
-                $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.dll").Length
-                $dlfsize = (Get-Item "$aupathm\BepInEx\plugins\AUModS.dll").Length
-        
-                if($orgsize -lt $dlfsize){
-                    Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
-                }
-            }else{
-                Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
-            }    
-        }
-        Write-Log "Mod Backup Feature End"
+    #Backup Mod
+    if(!(Test-Path $aupathb)){
+        New-Item $aupathb -ItemType Directory
     }
+    if(!(Test-Path $aupathb\$scid)){
+        New-Item $aupathb\$scid -ItemType Directory
+    }
+    Write-Log $(Get-Translate("Mod Backup Feature Start"))
+    if($scid -ne "AMS"){
+        if(Test-Path "$aupathb\$scid\$scid-$torv.zip"){
+            $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.zip").Length
+            $dlfsize = (Get-Item "$aupathm\TheOtherRoles.zip").Length
+    
+            if($orgsize -lt $dlfsize){
+                Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip" -Force
+            }
+        }else{
+            Copy-Item "$aupathm\TheOtherRoles.zip" "$aupathb\$scid\$scid-$torv.zip"
+        }    
+    }else{
+        if(Test-Path "$aupathb\$scid\$scid-$torv.dll"){
+            $orgsize = (Get-Item "$aupathb\$scid\$scid-$torv.dll").Length
+            $dlfsize = (Get-Item "$aupathm\BepInEx\plugins\AUModS.dll").Length
+    
+            if($orgsize -lt $dlfsize){
+                Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
+            }
+        }else{
+            Copy-Item "$aupathm\BepInEx\plugins\AUModS.dll" "$aupathb\$scid\$scid-$torv.dll" -Force
+        }    
+    }
+    Write-Log "Mod Backup Feature End"
 }
 
 function BackUpAU{
