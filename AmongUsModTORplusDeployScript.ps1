@@ -2282,9 +2282,13 @@ if($RadioButton114.Checked){
 
 Write-Log "$mod が選択されました"
 if($torpv.Length -le 0){
-    Write-Log "この本体バージョンでインストール可能なModバージョンが存在しません。"
-    Write-Log "処理を中止します。"
-    exit
+    if($scid -eq "TIO"){
+    }elseif($scid -eq "IUS"){
+    }else{
+        Write-Log "この本体バージョンでインストール可能なModバージョンが存在しません。"
+        Write-Log "処理を中止します。"
+        exit    
+    }
 }
 Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
