@@ -6,8 +6,8 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.0.1"
-$build = "20240318001"
+$version = "2.0.2"
+$build = "20240325001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -1131,10 +1131,10 @@ $form.Icon = "$dsk\AUMADS.ico"
 #[void] $Combo.Items.Add("AMS :AUModS/AUModS")
 #[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 #[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
+[void] $Combo.Items.Add("NOS :Dolly1016/Nebula on the Ship")
 if($gmhbool){
     [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
 }
-[void] $Combo.Items.Add("NOS :Dolly1016/Nebula on the Ship")
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
@@ -3569,10 +3569,10 @@ if($tio){
             Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
         }
 
-        #v2.06.2
-        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1218238998300987402/Localization_the_Nebula_v2.06.2.zip?ex=6606f07a&is=65f47b7a&hm=2b43a4454c9758fa00b5aefa808635b0bd2bd8d19eb19398025b1bece7fb1d5d&"
+        #v2.10
+        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1221395975625510993/Localization_the_Nebula_v2.10.zip?ex=66126ca5&is=65fff7a5&hm=f5211ed55f6540e5f09f9a4f8617314e2c4f9828f6b52d0aa74a768cd0c88462&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
-        $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=65f6b9cc&is=65e444cc&hm=4219d4c5faafc74d7735751f1f62c917a7a38e69906beb6fc4b6ea519ea7d617&"
+        $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=6612694c&is=65fff44c&hm=3e4293dfc18c3b1e186a0e8d919e0b5a5bc0d3e0a14c7924f31c1d516d96e5bb&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
 
@@ -4208,10 +4208,10 @@ if($ckbci.Count -gt 0){
                     Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
                 }
                 Write-Log "Ninja." #v2
-                $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=65fecb1b&is=65ec561b&hm=14e00fdd8f2d72c4fa16bbf02b977f179b9cdde92b155cadbe7b0b8218aa0a1d&"
+                $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=6611401b&is=65fecb1b&hm=35e608a994326a4f6dab967763ded197a0780343a93261f287667eb41d978a36&"
                 aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
                 Write-Log "SchrodingersCat." #v1.0.0
-                $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=65fb0b2b&is=65e8962b&hm=b170197e8ed4480becc24479355bac1bdcca9b0fb9ede2090fecee082eccc9a4&"
+                $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=660d802b&is=65fb0b2b&hm=d653c043e6c436820ba32e98d76ab24b105653aaa716acea1d78de9ced108e2c&"
                 aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
                 Write-Log "NOS/NOTに追加役職Addonを追加しました。"
             }else{
