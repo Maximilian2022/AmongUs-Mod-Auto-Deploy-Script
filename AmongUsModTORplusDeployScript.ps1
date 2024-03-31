@@ -2028,6 +2028,12 @@ $RadioButton116.Add_CheckedChanged({
 
 $sttime = Get-Date
 
+#統計情報
+$jsondata = "{`"date`":`"$Log`", `"mod`":`"$scid`" }"
+curl -X POST -H "Content-Type: application/json" -d $jsondata -L https://script.google.com/macros/s/AKfycbyh4xjJ7amj1ZHuoMVFPfL7GI3M74GunSqbKF2M-rCEILhR4z7z9UPNC6XvKE0funro/exec
+
+
+
 # フォームにコンボボックスを追加
 $form.Controls.Add($Combo)
 $form.Controls.Add($Combo2)
@@ -3087,7 +3093,7 @@ if($tio){
         Expand-7zip -ArchiveFileName $aupathm\TheOtherRoles.zip -TargetPath $aupathm
         Write-Log "ZIP 解凍完了"
     }else{
-       if($scid -eq "SRA"){
+        if($scid -eq "SRA"){
             #ZIPないパターンあり。誰も使ってないから適当でええやろ
         }else{
             Write-Log "ZIP Download NG $tordlp "
