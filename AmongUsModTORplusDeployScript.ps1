@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.3"
-$build = "20240331001"
+$build = "20240331002"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
@@ -2028,11 +2028,6 @@ $RadioButton116.Add_CheckedChanged({
 
 $sttime = Get-Date
 
-#統計情報
-$jsondata = "{`"date`":`"$Log`", `"mod`":`"$scid`" }"
-curl -X POST -H "Content-Type: application/json" -d $jsondata -L https://script.google.com/macros/s/AKfycbyh4xjJ7amj1ZHuoMVFPfL7GI3M74GunSqbKF2M-rCEILhR4z7z9UPNC6XvKE0funro/exec
-
-
 
 # フォームにコンボボックスを追加
 $form.Controls.Add($Combo)
@@ -2298,6 +2293,9 @@ if($torpv.Length -le 0){
 }
 Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
+#統計情報
+$jsondata = "{`"date`":`"$Log`", `"mod`":`"$scid`", `"version`":`"$torpv`", `"main`":`"$amver`"}"
+curl -X POST -H "Content-Type: application/json" -d $jsondata -L https://script.google.com/macros/s/AKfycbyr8P-sfWEgG9IdYNeillASu7dtnnnhV607XimGh3NXJY8OiWm51_LvP6VPU79zfvx0/exec
 
 if($RadioButton29.Checked){
     $cpun = 1
