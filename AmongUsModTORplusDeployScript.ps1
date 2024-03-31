@@ -3573,8 +3573,8 @@ if($tio){
             Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
         }
 
-        #v2.10
-        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1221395975625510993/Localization_the_Nebula_v2.10.zip?ex=66126ca5&is=65fff7a5&hm=f5211ed55f6540e5f09f9a4f8617314e2c4f9828f6b52d0aa74a768cd0c88462&"
+        #v2.11
+        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1222204619850252318/Localization_the_Nebula_v2.11.zip?ex=66155dc0&is=6602e8c0&hm=c2e72b7e44e7a3240f6c4facf45351d767859a092fde282cb5b0ffec66edb49f&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
         $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=6612694c&is=65fff44c&hm=3e4293dfc18c3b1e186a0e8d919e0b5a5bc0d3e0a14c7924f31c1d516d96e5bb&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
