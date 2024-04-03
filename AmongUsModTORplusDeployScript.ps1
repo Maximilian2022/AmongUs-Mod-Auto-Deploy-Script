@@ -3576,7 +3576,7 @@ if($tio){
         #v2.11
         $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1222204619850252318/Localization_the_Nebula_v2.11.zip?ex=66155dc0&is=6602e8c0&hm=c2e72b7e44e7a3240f6c4facf45351d767859a092fde282cb5b0ffec66edb49f&"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
-        $cfsnr = "https://cdn.discordapp.com/attachments/1052827766795534396/1155437790876684359/Colors_from_SNR.zip?ex=6612694c&is=65fff44c&hm=3e4293dfc18c3b1e186a0e8d919e0b5a5bc0d3e0a14c7924f31c1d516d96e5bb&"
+        $cfsnr = "https://github.com/Maximilian2022/Nebula-in-the-library/raw/main/Colors_from_SNR.zip"
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
 
@@ -4212,10 +4212,10 @@ if($ckbci.Count -gt 0){
                     Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
                 }
                 Write-Log "Ninja." #v2
-                $ninja = "https://cdn.discordapp.com/attachments/1172212317463789708/1172875690778046525/Ninja.zip?ex=6611401b&is=65fecb1b&hm=35e608a994326a4f6dab967763ded197a0780343a93261f287667eb41d978a36&"
+                $ninja = "https://github.com/Maximilian2022/Nebula-in-the-library/raw/main/Ninja_102.zip"
                 aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
                 Write-Log "SchrodingersCat." #v1.0.0
-                $scat = "https://cdn.discordapp.com/attachments/1197212113383473183/1197212113568026665/SchrodingersCat_1.0.0.zip?ex=660d802b&is=65fb0b2b&hm=d653c043e6c436820ba32e98d76ab24b105653aaa716acea1d78de9ced108e2c&"
+                $scat = "https://github.com/Maximilian2022/Nebula-in-the-library/raw/main/SchrodingersCat_1.0.0_102.zip"
                 aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
                 Write-Log "NOS/NOTに追加役職Addonを追加しました。"
             }else{
