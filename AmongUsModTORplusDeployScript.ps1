@@ -3131,6 +3131,7 @@ if($tio){
     $regioninstalltxt ="[General]`r`nRegions = "
     #region check
 
+    $addon2 = ""
     if($scid -eq "TOU-R"){
         if(test-path "C:\Temp\com.slushiegoose.townofus.cfg"){
             if(!(test-path "$aupathm\BepInEx\config")){
@@ -3573,10 +3574,13 @@ if($tio){
             Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
         }
 
+        $addonpage = "https://api.github.com/repos/Maximilian2022/Nebula-in-the-library/releases/latest"
+        $addon = Invoke-WebRequest $addonpage -UseBasicParsing
+        $addon2 = ConvertFrom-Json $addon.Content
         #v2.11
-        $langdata = "https://cdn.discordapp.com/attachments/1179802471179235399/1222204619850252318/Localization_the_Nebula_v2.11.zip?ex=66155dc0&is=6602e8c0&hm=c2e72b7e44e7a3240f6c4facf45351d767859a092fde282cb5b0ffec66edb49f&"
+        $langdata = ($addon2.assets.browser_download_url | Select-String "Localization_the_Nebula").ToString()
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
-        $cfsnr = "https://github.com/Maximilian2022/Nebula-in-the-library/raw/main/Colors_from_SNR.zip"
+        $cfsnr = ($addon2.assets.browser_download_url | Select-String "Colors_from_SNR").ToString()
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
 
@@ -4212,11 +4216,40 @@ if($ckbci.Count -gt 0){
                     Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
                 }
                 Write-Log "Ninja." #v2
-                $ninja = "https://github.com/Maximilian2022/Nebula-in-the-library/raw/main/Ninja_102.zip"
-                aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
                 Write-Log "SchrodingersCat." #v1.0.0
-                $scat = "https://github.com/Maximilian2022/Nebula-in-the-library/raw/main/SchrodingersCat_1.0.0_102.zip"
-                aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+                $ninja = ($addon2.assets.browser_download_url | Select-String "Ninja").ToString()
+                $scat = ($addon2.assets.browser_download_url | Select-String "SchrodingersCat").ToString()
+
+                if($RadioButton115.Checked){ #prev1
+                    if($ninja.Contains("__"+ $nosmin1)){
+                        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true                         
+                    }
+                    if($scat.Contains("__"+ $nosmin1)){
+                        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true                         
+                    }
+                }elseif($RadioButton116.Checked){ #prev2
+                    if($ninja.Contains("__"+ $nosmin2)){
+                        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
+                    }
+                    if($scat.Contains("__"+ $nosmin2)){
+                        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+                    }
+                }else{#latest
+                    if($ninja.Contains("__"+ $nosmin1)){
+                        Write-Log "Ninja  は互換性の問題でインストールされませんでした"
+                    }elseif($ninja.Contains("__"+ $nosmin2)){
+                        Write-Log "Ninja  は互換性の問題でインストールされませんでした"
+                    }else{
+                        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
+                    }
+                    if($scat.Contains("__"+ $nosmin1)){
+                        Write-Log "SchrodingersCat  は互換性の問題でインストールされませんでした"
+                    }elseif($scat.Contains("__"+ $nosmin2)){
+                        Write-Log "SchrodingersCat は互換性の問題でインストールされませんでした"
+                    }else{
+                        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+                    }
+                }
                 Write-Log "NOS/NOTに追加役職Addonを追加しました。"
             }else{
                 Write-Log "追加役職AddonはNOS/NOTにだけ適用可能です。"
