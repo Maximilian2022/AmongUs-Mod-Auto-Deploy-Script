@@ -6,8 +6,8 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.0.3"
-$build = "20240331002"
+$version = "2.0.4"
+$build = "20240404001"
 #
 #################################################################################################
 ### minimum version for v2024.3.5
