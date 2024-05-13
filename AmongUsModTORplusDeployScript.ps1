@@ -1108,8 +1108,8 @@ $CheckedBox = New-Object System.Windows.Forms.CheckedListBox
 $CheckedBox.Location = "55,270"
 $CheckedBox.Size = "330,185"
 
-# 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",,"NOS CPU Affinity"
-$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","NOS/NOT 追加役職","LevelImposter","Submerged","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
+# 配列を作成 ,"OBS","Streamlabs OBS""GMH Webhook",,"NOS CPU Affinity""NOS/NOT 追加役職",
+$RETU = ("AmongUsCapture","VC Redist","BetterCrewLink","PowerShell 7","dotNetFramework","LevelImposter","Submerged","VOICEVOX","カスタムサーバー情報追加","サーバー情報初期化","配信ソフト","健康ランド")
 # チェックボックスに10項目を追加
 $CheckedBox.Items.AddRange($RETU)
 
