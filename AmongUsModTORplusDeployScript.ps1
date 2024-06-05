@@ -10,7 +10,7 @@ $version = "2.0.4"
 $build = "20240404001"
 #
 #################################################################################################
-### minimum version for v2024.3.5
+### minimum version for v2024.5.6
 $ermin = "v10.0.0.0"
 $esmin = "v10.0.0.0"
 $tormin = "v4.5.2"
@@ -23,20 +23,33 @@ $notmin = "103"
 $toymin = "v514.21.2"
 $sramin = "v2024.2.22"
 
-### minimum version for v2023.11.28
-$ermin1 = "v9.1.0.0"
-$esmin1 = "v9.1.0.0"
-$tormin1 = "v4.5.0"
-$tourmin1 = "v5.0.3"
-$tohmin1 = "v5.1.2"
-$snrmin1 = "2.1.1.5"
-$lmmin1 = "3.5.2"
-$nosmin1 = "102"
-$notmin1 = "102"
-$toymin1 = "v511.18"
-$sramin1 = "v2023.11.28"
+### minimum version for v2024.3.5
+$ermin1 = "v10.0.0.0"
+$esmin1 = "v10.0.0.0"
+$tormin1 = "v4.5.2"
+$tourmin1 = "v5.0.4"
+$tohmin1 = "v5.1.5"
+$snrmin1 = "2.2.0.0"
+$lmmin1 = "3.7.2"
+$nosmin1 = "103"
+$notmin1 = "103"
+$toymin1 = "v514.21.2"
+$sramin1 = "v2024.2.22"
 
-### minimum version for v2023.10.24
+### minimum version for v2023.11.28
+$ermin2 = "v9.1.0.0"
+$esmin2 = "v9.1.0.0"
+$tormin2 = "v4.5.0"
+$tourmin2 = "v5.0.3"
+$tohmin2 = "v5.1.2"
+$snrmin2 = "2.1.1.5"
+$lmmin2 = "3.5.2"
+$nosmin2 = "102"
+$notmin2 = "102"
+$toymin2 = "v511.18"
+$sramin2 = "v2023.11.28"
+
+<### minimum version for v2023.10.24
 $ermin2 = "v9.0.0.0"
 $esmin2 = "v9.0.0.0"
 $tormin2 = "v4.4.3"
@@ -173,10 +186,12 @@ $amsmin2 = "v23.2.28.0"
 #$prevtargetid1 = "2741278786821271696"
 #$prever1 = "2023.7.12"
 #$prevtargetid1 = "4593126137370998619"
-$prever1 = "2023.10.24"
-$prevtargetid1 = "531781757001821075"
-$prever0 = "2023.11.28"
-$prevtargetid0 = "6242713924243927822"
+#$prever1 = "2023.10.24"
+#$prevtargetid1 = "531781757001821075"
+$prever1 = "2023.11.28"
+$prevtargetid1 = "6242713924243927822"
+$prever0 = "2024.03.05"
+$prevtargetid0 = "2536144614134451205"
 
 
 $gmhbool = $true #flag for Test
