@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.5"
-$build = "20240605001"
+$build = "20240619001"
 #
 #################################################################################################
 ### minimum version for v2024.5.6
@@ -188,11 +188,14 @@ $amsmin2 = "v23.2.28.0"
 #$prevtargetid1 = "4593126137370998619"
 #$prever1 = "2023.10.24"
 #$prevtargetid1 = "531781757001821075"
-$prever1 = "2023.11.28"
-$prevtargetid1 = "6242713924243927822"
-$prever0 = "2024.03.05"
-$prevtargetid0 = "2536144614134451205"
+#$prever1 = "2023.11.28"
+#$prevtargetid1 = "6242713924243927822"
+$prever1 = "2024.03.05"
+$prevtargetid1 = "2536144614134451205"
+$prever0 = "2024.06.04"
+$prevtargetid0 = "2079074638300197600"
 
+#2024.06.18 5073468987524498627
 
 $gmhbool = $true #flag for Test
 #Testdll: Snapshot 22.11.21c
