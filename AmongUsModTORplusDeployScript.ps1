@@ -10,7 +10,20 @@ $version = "2.0.5"
 $build = "20240619001"
 #
 #################################################################################################
-### minimum version for v2024.5.6
+### minimum version for v2024.6.18
+$ermin = "v10.1.1.2"
+$esmin = "v10.1.1.2"
+$tormin = "v4.5.4"
+$tourmin = "v5.0.5"
+$tohmin = "v5.1.7"
+$snrmin = "2.2.3.2"
+$lmmin = "3.7.4"
+$nosmin = "104"
+$notmin = "104"
+$toymin = "v516.23"
+$sramin = "v2024.6.18"
+
+### minimum version for v2024.6.4
 $ermin = "v10.0.0.0"
 $esmin = "v10.0.0.0"
 $tormin = "v4.5.2"
@@ -36,7 +49,7 @@ $notmin1 = "103"
 $toymin1 = "v514.21.2"
 $sramin1 = "v2024.2.22"
 
-### minimum version for v2023.11.28
+<### minimum version for v2023.11.28
 $ermin2 = "v9.1.0.0"
 $esmin2 = "v9.1.0.0"
 $tormin2 = "v4.5.0"
