@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.5"
-$build = "20240619003"
+$build = "20240619004"
 #
 #################################################################################################
 ### minimum version for v2024.6.18
@@ -19,7 +19,7 @@ $tohmin = "v5.1.7"
 $snrmin = "2.2.3.2"
 $lmmin = "3.7.4"
 $nosmin = "104"
-$notmin = "104"
+#$notmin = "104"
 $toymin = "v516.23"
 $sramin = "v2024.6.18"
 
@@ -32,7 +32,7 @@ $tohmin1 = "v5.1.5"
 $snrmin1 = "2.2.0.0"
 $lmmin1 = "3.7.2"
 $nosmin1 = "103"
-$notmin1 = "103"
+#$notmin1 = "103"
 $toymin1 = "v514.21.2"
 $sramin1 = "v2024.2.22"
 
@@ -45,7 +45,7 @@ $tohmin2 = "v5.1.5"
 $snrmin2 = "2.2.0.0"
 $lmmin2 = "3.7.2"
 $nosmin2 = "103"
-$notmin2 = "103"
+#$notmin2 = "103"
 $toymin2 = "v514.21.2"
 $sramin2 = "v2024.2.22"
 
@@ -210,7 +210,7 @@ $prevtargetid0 = "2079074638300197600"
 
 #2024.06.18 5073468987524498627
 
-$gmhbool = $true #flag for Test
+$gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
 #$torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
 $debugform = $false
@@ -2588,6 +2588,7 @@ $Form2.Controls.Add($Bar)
 $checkgm = $true
 $torgmdll
 $Bar.Value = "0"
+$nosdll = $false
 
 if($tio){
 
@@ -2772,7 +2773,11 @@ if($tio){
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
             if(($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0) -and ($($web2.assets.browser_download_url[$aii]).IndexOf("$tempver") -gt 0)){
                 $tordlp += $web2.assets.browser_download_url[$aii]
+                $nosdll = $true
             }
+        }
+        if(!$nosdll){
+            $tordlp += "https://github.com/Dolly1016/Nebula/releases/download/s%2CSnapshot_24.06.19a%2C104%2C1140/Nebula.zip"
         }
         Write-Log $torv
         Write-Log $tempver
