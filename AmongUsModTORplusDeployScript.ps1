@@ -7,7 +7,7 @@ Write-Output "$Log PS1 Loading Start"
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.5"
-$build = "20240619002"
+$build = "20240619003"
 #
 #################################################################################################
 ### minimum version for v2024.6.18
@@ -24,19 +24,6 @@ $toymin = "v516.23"
 $sramin = "v2024.6.18"
 
 ### minimum version for v2024.6.4
-$ermin = "v10.0.0.0"
-$esmin = "v10.0.0.0"
-$tormin = "v4.5.2"
-$tourmin = "v5.0.4"
-$tohmin = "v5.1.5"
-$snrmin = "2.2.0.0"
-$lmmin = "3.7.2"
-$nosmin = "103"
-$notmin = "103"
-$toymin = "v514.21.2"
-$sramin = "v2024.2.22"
-
-### minimum version for v2024.3.5
 $ermin1 = "v10.0.0.0"
 $esmin1 = "v10.0.0.0"
 $tormin1 = "v4.5.2"
@@ -48,6 +35,19 @@ $nosmin1 = "103"
 $notmin1 = "103"
 $toymin1 = "v514.21.2"
 $sramin1 = "v2024.2.22"
+
+### minimum version for v2024.3.5
+$ermin2 = "v10.0.0.0"
+$esmin2 = "v10.0.0.0"
+$tormin2 = "v4.5.2"
+$tourmin2 = "v5.0.4"
+$tohmin2 = "v5.1.5"
+$snrmin2 = "2.2.0.0"
+$lmmin2 = "3.7.2"
+$nosmin2 = "103"
+$notmin2 = "103"
+$toymin2 = "v514.21.2"
+$sramin2 = "v2024.2.22"
 
 <### minimum version for v2023.11.28
 $ermin2 = "v9.1.0.0"
