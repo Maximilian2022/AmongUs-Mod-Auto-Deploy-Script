@@ -3609,6 +3609,12 @@ if($tio){
         if (Test-Path "$aupathm\Addons\SchrodingersCat.zip") {
             Remove-Item "$aupathm\Addons\SchrodingersCat.zip" -Force
         }
+        if (Test-Path "$aupathm\Addons\mdngus01.zip") {
+            Remove-Item "$aupathm\Addons\mdngus01.zip" -Force
+        }
+
+
+
 
         $addonpage = "https://api.github.com/repos/Maximilian2022/Nebula-in-the-library/releases/latest"
         $addon = Invoke-WebRequest $addonpage -UseBasicParsing
@@ -3619,6 +3625,13 @@ if($tio){
         $cfsnr = ($addon2.assets.browser_download_url | Select-String "Colors_from_SNR").ToString()
         aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
+
+        $mdnpage = "https://api.github.com/repos/Mido-otosae/Midohat-For-Nos/releases/latest"
+        $mdn = Invoke-WebRequest $mdnpage -UseBasicParsing
+        $mdn2 = ConvertFrom-Json $mdn.Content
+        $mdnr = ($mdn2.assets.browser_download_url | Select-String ".zip").ToString()
+        aria2c -x5 -V --dir "$aupathm\Addons" -o "mdngus01.zip" $mdnr --allow-overwrite=true 
+        Write-Log "Midohat Download 完了"
 
     }else{
     }
