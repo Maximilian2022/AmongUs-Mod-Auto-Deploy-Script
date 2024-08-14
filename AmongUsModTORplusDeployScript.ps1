@@ -6,18 +6,31 @@ Write-Output "$Log PS1 Loading Start"
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.0.5"
-$build = "20240619004"
+$version = "2.0.6"
+$build = "20240815001"
 #
 #################################################################################################
+### minimum version for v2024.8.13
+$ermin = "v12.0.0.0"
+$esmin = "v12.0.0.0"
+$tormin = "v4.6.1"
+$tourmin = "v5.0.5"
+$tohmin = "v5.1.8"
+$snrmin = "2.4.0.0"
+$lmmin = "3.8.1"
+$nosmin = "105"
+#$notmin = "104"
+$toymin = "v517.24"
+$sramin = "v2024.8.13"
+
 ### minimum version for v2024.6.18
 $ermin = "v11.0.0.0"
 $esmin = "v11.0.0.0"
-$tormin = "v4.5.4"
+$tormin = "v4.6.0"
 $tourmin = "v5.0.5"
 $tohmin = "v5.1.7"
 $snrmin = "2.3.0.0"
-$lmmin = "3.7.4"
+$lmmin = "3.8.0"
 $nosmin = "104"
 #$notmin = "104"
 $toymin = "v516.23"
@@ -36,7 +49,7 @@ $nosmin1 = "103"
 $toymin1 = "v514.21.2"
 $sramin1 = "v2024.2.22"
 
-### minimum version for v2024.3.5
+<### minimum version for v2024.3.5
 $ermin2 = "v10.0.0.0"
 $esmin2 = "v10.0.0.0"
 $tormin2 = "v4.5.2"
@@ -203,12 +216,14 @@ $amsmin2 = "v23.2.28.0"
 #$prevtargetid1 = "531781757001821075"
 #$prever1 = "2023.11.28"
 #$prevtargetid1 = "6242713924243927822"
-$prever1 = "2024.03.05"
-$prevtargetid1 = "2536144614134451205"
-$prever0 = "2024.06.04"
-$prevtargetid0 = "2079074638300197600"
+#$prever1 = "2024.03.05"
+#$prevtargetid1 = "2536144614134451205"
+$prever1 = "2024.06.04"
+$prevtargetid1 = "2079074638300197600"
+prever0 = "2024.06.18"
+$prevtargetid0 = "5073468987524498627"
 
-#2024.06.18 5073468987524498627
+#2024.08.13 8923786788062189854
 
 $gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
