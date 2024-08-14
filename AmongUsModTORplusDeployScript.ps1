@@ -1,15 +1,15 @@
 ﻿Param($Args1) #skipconfirmation
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
-Write-Output "$Log PS1 Loading Start"
 ################################################################################################
 #
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.6"
-$build = "20240815002"
+$build = "20240815003"
 #
 #################################################################################################
+Write-Output "$Log PS1 Loading Start $version -$build"
 ### minimum version for v2024.8.13
 $ermin = "v12.0.0.0"
 $esmin = "v12.0.0.0"
