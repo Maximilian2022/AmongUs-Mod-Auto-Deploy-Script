@@ -13,7 +13,7 @@ Write-Output "$Log PS1 Loading Start $version -$build"
 ### minimum version for v2024.8.13
 $ermin = "v12.0.0.0"
 $esmin = "v12.0.0.0"
-$tormin = "v4.6.1"
+$tormin = "v4.7.0"
 $tourmin = "v5.0.5"
 $tohmin = "v5.1.8"
 $snrmin = "2.4.0.0"
