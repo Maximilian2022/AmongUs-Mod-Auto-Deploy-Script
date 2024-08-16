@@ -1570,6 +1570,8 @@ function Reload(){
                         if($tmparr[2] -eq $script:aumin){ 
                             if($tmparr[0] -eq "v"){
                                 $list2 += $tmparr[1]
+                                Write-Log $tmparr[1]
+                                Write-Log $tmparr[2]
                             }
                         }
                     }
