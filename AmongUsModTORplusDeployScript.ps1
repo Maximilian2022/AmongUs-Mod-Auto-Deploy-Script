@@ -1567,6 +1567,9 @@ function Reload(){
                 if($scid -eq "NOS"){
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
+                        Write-Log $tmparr
+                        Write-Log $script:aumin
+                        Write-Log ($tmparr[2] -eq $script:aumin)
                         if($tmparr[2] -eq $script:aumin){ 
                             if($tmparr[0] -eq "v"){
                                 $list2 += $tmparr[1]
