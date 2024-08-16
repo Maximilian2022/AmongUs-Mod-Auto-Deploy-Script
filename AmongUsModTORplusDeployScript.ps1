@@ -1679,6 +1679,7 @@ function Reload(){
                         }
                     }
                 }    
+            Write-Log "Version List"
             Write-Log $list2
             }
         }else{
