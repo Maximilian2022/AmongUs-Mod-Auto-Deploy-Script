@@ -5,36 +5,48 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.0.6"
-$build = "20240818002"
+$version = "2.0.7"
+$build = "20241023001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
+### minimum version for v2024.10.29
+$ermin = "v13.0.0.0"
+$esmin = "v13.0.0.0"
+$tormin = "v4.8.0"
+$tourmin = "v5.0.6"
+$tohmin = "v5.1.9"
+$snrmin = "2.5.0.0"
+$lmmin = "3.8.2"
+$nosmin = "106"
+$toymin = "v518.00"
+$sramin = "v2024.10.00"
+
 ### minimum version for v2024.8.13
-$ermin = "v12.0.0.0"
-$esmin = "v12.0.0.0"
-$tormin = "v4.7.0"
-$tourmin = "v5.0.5"
-$tohmin = "v5.1.8"
-$snrmin = "2.4.0.0"
-$lmmin = "3.8.1"
-$nosmin = "105"
-$toymin = "v517.24"
-$sramin = "v2024.8.13"
+$ermin1 = "v12.0.0.0"
+$esmin1 = "v12.0.0.0"
+$tormin1 = "v4.7.0"
+$tourmin1 = "v5.0.5"
+$tohmin1 = "v5.1.8"
+$snrmin1 = "2.4.0.0"
+$lmmin1 = "3.8.1"
+$nosmin1 = "105"
+$toymin1 = "v517.24"
+$sramin1 = "v2024.8.13"
 
 ### minimum version for v2024.6.18
-$ermin1 = "v11.0.0.0"
-$esmin1 = "v11.0.0.0"
-$tormin1 = "v4.6.0"
-$tourmin1 = "v5.0.5"
-$tohmin1 = "v5.1.7"
-$snrmin1 = "2.3.0.0"
-$lmmin1 = "3.8.0"
-$nosmin1 = "104"
-$toymin1 = "v516.23"
-$sramin1 = "v2024.6.18"
+$ermin2 = "v11.0.0.0"
+$esmin2 = "v11.0.0.0"
+$tormin2 = "v4.6.0"
+$tourmin2 = "v5.0.5"
+$tohmin2 = "v5.1.7"
+$snrmin2 = "2.3.0.0"
+$lmmin2 = "3.8.0"
+$nosmin2 = "104"
+$toymin2 = "v516.23"
+$sramin2 = "v2024.6.18"
 
-### minimum version for v2024.6.4
+<### minimum version for v2024.6.4
 $ermin2 = "v10.0.0.0"
 $esmin2 = "v10.0.0.0"
 $tormin2 = "v4.5.2"
@@ -218,12 +230,14 @@ $amsmin2 = "v23.2.28.0"
 #$prevtargetid1 = "6242713924243927822"
 #$prever1 = "2024.03.05"
 #$prevtargetid1 = "2536144614134451205"
-$prever1 = "2024.6.4"
-$prevtargetid1 = "2079074638300197600"
-$prever0 = "2024.6.18"
-$prevtargetid0 = "5073468987524498627"
+#$prever1 = "2024.6.4"
+#$prevtargetid1 = "2079074638300197600"
+$prever1 = "2024.6.18"
+$prevtargetid1 = "5073468987524498627"
+$prever0 = "2024.8.13"
+$prevtargetid0 = "8923786788062189854"
 
-#2024.08.13 8923786788062189854
+#2024.10.29  2752830256762071212
 
 $gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
