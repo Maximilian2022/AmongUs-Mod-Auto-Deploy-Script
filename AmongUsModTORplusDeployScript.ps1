@@ -1270,6 +1270,7 @@ $ovwrite = $false
 $amver = ""
 $prebool = $false
 $latestflag = 0
+$indeedcleaninstall = $false
 
 function VerMinMax($ver0, $ver1, $ver2){
     if($RadioButton114.Checked){
@@ -2058,6 +2059,20 @@ function Reload(){
     $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
     $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
     $script:amver = $tt3[0].Value
+    $ver1st = $($script:amver).split('.')
+    $ver2nd = $($script:prever0).split('.')
+    if([int]$ver1st[0] -lt [int]$ver2nd[0]){
+        $indeedcleaninstall = $true
+    }elseif ([int]$ver1st[0] -eq [int]$ver2nd[0]){
+        if([int]$ver1st1[1] -lt [int]$ver2nd[1]){
+            $indeedcleaninstall = $true
+        }elseif ([int]$ver1st[1] -eq [int]$ver2nd[1]){
+            if([int]$ver1st1[2] -le [int]$ver2nd[2]){
+                $indeedcleaninstall = $true
+            }
+        }    
+    }
+
     Write-Log "$script:amver が検出されました"
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
     $RadioButton115.Text = $(Get-Translate("$script:prever0"))        
@@ -2070,20 +2085,6 @@ function Reload(){
         Write-Log "本体バージョン v$($RadioButton116.Text) が選択されています"
     }else{
         Write-Log "Unknown ERROR:本体バージョン"
-    }
-    $indeedcleaninstall = $false
-    $ver1st = $($RadioButton114.Text).split('.')
-    $ver2nd = $($RadioButton115.Text).split('.')
-    if([int]$ver1st[0] -lt [int]$ver2nd[0]){
-        $indeedcleaninstall = $true
-    }elseif ([int]$ver1st[0] -eq [int]$ver2nd[0]){
-        if([int]$ver1st1[1] -lt [int]$ver2nd[1]){
-            $indeedcleaninstall = $true
-        }elseif ([int]$ver1st[1] -eq [int]$ver2nd[1]){
-            if([int]$ver1st1[2] -le [int]$ver2nd[2]){
-                $indeedcleaninstall = $true
-            }
-        }    
     }
     if($indeedcleaninstall){
         Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
