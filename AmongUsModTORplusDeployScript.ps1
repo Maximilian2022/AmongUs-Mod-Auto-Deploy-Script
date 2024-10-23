@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.7"
-$build = "20241023003"
+$build = "20241023004"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -447,6 +447,7 @@ if(!(Test-Path "$dsk\AUMADS.ico")){
     magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16,48,256 -compress zip "$dsk\AUMADS.ico"    
     Remove-Item "$dsk\icon.png" -Force 
 }
+
 #################################################################################################
 # Folder用Function
 #################################################################################################
@@ -2072,7 +2073,57 @@ function Reload(){
     }
     if($RadioButton114.Text -le $RadioButton115.Text){
         Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
-        $RadioButton17.Checked = $true
+        if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
+            $rn = "steam"
+            Write-Log "$rn が検知されました。"
+            $stm = $true
+        }
+
+        if (Test-Path "C:\Program Files (x86)\Epic Games"){
+            $rn = "epic"
+            Write-Log "$rn が検知されました。"
+            $epc = $true
+        }
+        
+        if($stm -and $epc){
+            Write-Log $(Get-Translate("SteamとEpic両方のインストールが確認されました。ユーザーに確認します。"))
+            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+                $rn = "steam"
+            }else{
+                $rn = "epic"
+            }                
+            Write-Log "$rn が選択されました。"
+        }
+
+        Write-Log "クリーンインストールプロセス開始"
+        if($rn -eq "steam"){
+            Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
+            $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
+            Unblock-File $fpth2
+            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
+            Write-Log "クリーンインストールプロセス終了"
+            Start-Sleep -Seconds 10
+            while (!(test-path "$aupatho\Among Us.exe")){
+                Start-Sleep -Seconds 10
+                Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
+                write-log (test-path "$aupatho\Among Us.exe")
+                write-log "$aupathm\Among Us.exe"                  
+                Pause
+            }
+            Remove-Item $fpth2 -Force
+        }elseif($rn -eq "epic"){
+            Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
+            $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
+            Unblock-File $fpth2
+            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
+            Write-Log "クリーンインストールプロセス終了"
+            Remove-Item $fpth2 -Force
+        }else{
+            Write-Log "Critical Platform Selection"
+            Pause
+            Exit
+        }
+        Start-Sleep -Seconds 10
     }
 }
 
