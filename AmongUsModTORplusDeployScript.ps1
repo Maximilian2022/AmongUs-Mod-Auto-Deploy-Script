@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.7"
-$build = "20241023008"
+$build = "20241023009"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -2088,7 +2088,7 @@ function Reload(){
     }else{
         Write-Log "Unknown ERROR:本体バージョン"
     }
-    <#if($indeedcleaninstall){
+    if($indeedcleaninstall){
         Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
         if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
             $rn = "steam"
@@ -2104,7 +2104,7 @@ function Reload(){
         
         if($stm -and $epc){
             Write-Log $(Get-Translate("SteamとEpic両方のインストールが確認されました。ユーザーに確認します。"))
-            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("最新のAmongUsがインストールされていません。クリーンインストールが実行されます。`nSteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("最新のAmongUsがインストールされていません。クリーンインストールが実行されます。`nSteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。`n$version $build")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                 $rn = "steam"
             }else{
                 $rn = "epic"
