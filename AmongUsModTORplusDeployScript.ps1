@@ -2087,7 +2087,7 @@ function Reload(){
         
         if($stm -and $epc){
             Write-Log $(Get-Translate("SteamとEpic両方のインストールが確認されました。ユーザーに確認します。"))
-            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("最新のAmongUsがインストールされていません。クリーンインストールが実行されます。`nSteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
                 $rn = "steam"
             }else{
                 $rn = "epic"
