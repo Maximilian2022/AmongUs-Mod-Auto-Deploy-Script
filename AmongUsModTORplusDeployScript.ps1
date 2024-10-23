@@ -1271,6 +1271,8 @@ $amver = ""
 $prebool = $false
 $latestflag = 0
 $indeedcleaninstall = $false
+$ver1st = @()
+$ver2nd = @()
 
 function VerMinMax($ver0, $ver1, $ver2){
     if($RadioButton114.Checked){
