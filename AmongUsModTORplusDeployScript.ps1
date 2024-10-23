@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.7"
-$build = "20241023005"
+$build = "20241023006"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -2071,7 +2071,21 @@ function Reload(){
     }else{
         Write-Log "Unknown ERROR:本体バージョン"
     }
-    if($RadioButton114.Text -le $RadioButton115.Text){
+    $indeedcleaninstall = $false
+    $ver1st = $($RadioButton114.Text).split('.')
+    $ver2nd = $($RadioButton115.Text).split('.')
+    if([int]$ver1st[0] -lt [int]$ver2nd[0]){
+        $indeedcleaninstall = $true
+    }elseif ([int]$ver1st[0] -eq [int]$ver2nd[0]){
+        if([int]$ver1st1[1] -lt [int]$ver2nd[1]){
+            $indeedcleaninstall = $true
+        }elseif ([int]$ver1st[1] -eq [int]$ver2nd[1]){
+            if([int]$ver1st1[2] -le [int]$ver2nd[2]){
+                $indeedcleaninstall = $true
+            }
+        }    
+    }
+    if($indeedcleaninstall){
         Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
         if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
             $rn = "steam"
