@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.7"
-$build = "20241023007"
+$build = "20241023008"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -2088,7 +2088,7 @@ function Reload(){
     }else{
         Write-Log "Unknown ERROR:本体バージョン"
     }
-    if($indeedcleaninstall){
+    <#if($indeedcleaninstall){
         Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
         if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
             $rn = "steam"
@@ -2147,7 +2147,7 @@ function Reload(){
         $script:amver = $tt3[0].Value
         $RadioButton114.Text = $(Get-Translate("$script:amver"))
         Start-Sleep -Seconds 10
-    }
+    }#>
 }
 
 $Combo_SelectedIndexChanged= {
