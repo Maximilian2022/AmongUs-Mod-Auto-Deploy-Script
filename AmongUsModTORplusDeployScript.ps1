@@ -2061,7 +2061,7 @@ function Reload(){
     $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
     $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
     $script:amver = $tt3[0].Value
-    $ver1st = $($script:amver).split('.')
+    <#$ver1st = $($script:amver).split('.')
     $ver2nd = $($script:prever0).split('.')
     if([int]$ver1st[0] -lt [int]$ver2nd[0]){
         $indeedcleaninstall = $true
@@ -2073,7 +2073,7 @@ function Reload(){
                 $indeedcleaninstall = $true
             }
         }    
-    }
+    }#>
 
     Write-Log "$script:amver が検出されました"
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
@@ -2088,7 +2088,7 @@ function Reload(){
     }else{
         Write-Log "Unknown ERROR:本体バージョン"
     }
-    if($indeedcleaninstall){
+    <#if($indeedcleaninstall){
         Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
         if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
             $rn = "steam"
