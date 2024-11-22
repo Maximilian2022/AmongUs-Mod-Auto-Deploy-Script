@@ -5,36 +5,48 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.0.8"
-$build = "20241115001"
+$version = "2.0.9"
+$build = "20241122001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
-### minimum version for v2024.10.29
+### minimum version for v2024.11.26
 $ermin = "v12.0.0.0"
 $esmin = "v12.0.0.0"
 $tormin = "v4.7.0"
 $tourmin = "v5.0.6"
-$tohmin = "v5.1.8"
-$snrmin = "2.5.0.0"
+$tohmin = "v5.2.0"
+$snrmin = "2.5.0.1"
 $lmmin = "3.8.1"
 $nosmin = "105"
 $toymin = "v517.24"
 $sramin = "v2024.8.13"
 
-### minimum version for v2024.9.4
+### minimum version for v2024.10.29
 $ermin1 = "v12.0.0.0"
 $esmin1 = "v12.0.0.0"
 $tormin1 = "v4.7.0"
-$tourmin1 = "v5.0.5"
+$tourmin1 = "v5.0.6"
 $tohmin1 = "v5.1.8"
-$snrmin1 = "2.4.0.0"
+$snrmin1 = "2.5.0.0"
 $lmmin1 = "3.8.1"
 $nosmin1 = "105"
 $toymin1 = "v517.24"
 $sramin1 = "v2024.8.13"
 
-### minimum version for v2024.6.18
+### minimum version for v2024.9.4
+$ermin2 = "v12.0.0.0"
+$esmin2 = "v12.0.0.0"
+$tormin2 = "v4.7.0"
+$tourmin2 = "v5.0.5"
+$tohmin2 = "v5.1.8"
+$snrmin2 = "2.4.0.0"
+$lmmin2 = "3.8.1"
+$nosmin2 = "105"
+$toymin2 = "v517.24"
+$sramin2 = "v2024.8.13"
+
+<### minimum version for v2024.6.18
 $ermin2 = "v11.0.0.0"
 $esmin2 = "v11.0.0.0"
 $tormin2 = "v4.6.0"
