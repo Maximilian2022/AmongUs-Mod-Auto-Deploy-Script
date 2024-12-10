@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.0.9"
-$build = "20241122001"
+$build = "20241210001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -2896,7 +2896,7 @@ if($tio){
             }
         }
         if(!$nosdll){
-            $tordlp += "https://github.com/Dolly1016/Nebula/releases/download/s%2CSnapshot_24.06.19a%2C104%2C1140/Nebula.zip"
+            $tordlp += "https://github.com/Dolly1016/Nebula/releases/latest/download/Nebula.zip"
         }
         Write-Log $torv
         Write-Log $tempver
