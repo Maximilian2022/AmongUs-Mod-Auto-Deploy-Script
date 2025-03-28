@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.0"
-$build = "20250328001"
+$build = "20250328002"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -248,10 +248,10 @@ $amsmin2 = "v23.2.28.0"
 #$prevtargetid1 = "5073468987524498627"
 $prever1 = "2024.9.4"
 $prevtargetid1 = "4298030817201447257"
-$prever0 = "2024.10.29"
-$prevtargetid0 = "2752830256762071212"
+$prever0 = "2024.11.26"
+$prevtargetid0 = "5207443046106116882"
 
-#v16.0.0 1602714909229311555  
+#2025.3.25 1602714909229311555  
 
 $gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
