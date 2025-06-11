@@ -5,36 +5,48 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.1.1"
-$build = "20250517001"
+$version = "2.1.2"
+$build = "20250612001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
-### minimum version for v2024.11.26
-$ermin = "v12.0.0.0"
-$esmin = "v12.0.0.0"
-$tormin = "v4.7.0"
+### minimum version for v2025.6.10 16.1.0
+$ermin = "v14.0.0.0"
+$esmin = "v14.0.0.0"
+$tormin = "v4.8.0"
 $tourmin = "v5.0.6"
-$tohmin = "v5.2.0"
-$snrmin = "2.5.0.1"
-$lmmin = "3.8.1"
-$nosmin = "106"
-$toymin = "v517.24"
-$sramin = "v2024.8.13"
+$tohmin = "v5.1.13"
+$snrmin = "3.0.0.0"
+$lmmin = "3.8.8"
+$nosmin = "107"
+$toymin = "v519.27"
+$sramin = "v2025.5.12"
 
-### minimum version for v2024.10.29
+### minimum version for v2024.11.26
 $ermin1 = "v12.0.0.0"
 $esmin1 = "v12.0.0.0"
-$tormin1 = "v4.7.0"
+$tormin1 = "v4.8.0"
 $tourmin1 = "v5.0.6"
-$tohmin1 = "v5.1.8"
-$snrmin1 = "2.5.0.0"
-$lmmin1 = "3.8.1"
-$nosmin1 = "105"
-$toymin1 = "v517.24"
-$sramin1 = "v2024.8.13"
+$tohmin1 = "v5.1.13"
+$snrmin1 = "2.5.0.1"
+$lmmin1 = "3.8.7"
+$nosmin1 = "106"
+$toymin1 = "v519.27"
+$sramin1 = "v2025.5.12"
 
-### minimum version for v2024.9.4
+### minimum version for v2024.10.29
+$ermin2 = "v12.0.0.0"
+$esmin2 = "v12.0.0.0"
+$tormin2 = "v4.7.0"
+$tourmin2 = "v5.0.6"
+$tohmin2 = "v5.1.8"
+$snrmin2 = "2.5.0.0"
+$lmmin2 = "3.8.1"
+$nosmin2 = "105"
+$toymin2 = "v517.24"
+$sramin2 = "v2024.8.13"
+
+<### minimum version for v2024.9.4
 $ermin2 = "v12.0.0.0"
 $esmin2 = "v12.0.0.0"
 $tormin2 = "v4.7.0"
@@ -246,12 +258,14 @@ $amsmin2 = "v23.2.28.0"
 #$prevtargetid1 = "2079074638300197600"
 #$prever1 = "2024.6.18"
 #$prevtargetid1 = "5073468987524498627"
-$prever1 = "2024.9.4"
-$prevtargetid1 = "4298030817201447257"
-$prever0 = "2024.11.26"
-$prevtargetid0 = "5207443046106116882"
+#$prever1 = "2024.9.4"
+#$prevtargetid1 = "4298030817201447257"
+$prever1 = "2024.11.26"
+$prevtargetid1 = "5207443046106116882"
+$prever0 = "2025.3.25"
+$prevtargetid0 = "1602714909229311555"
 
-#2025.3.25 1602714909229311555  
+#2025.6.10 1298083356997541927
 
 $gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
@@ -829,7 +843,11 @@ function BackUpAU{
                 $ptt = (Format-Hex -Path "$aupathb\AmongUs\Among Us_Data\globalgamemanagers").Bytes
                 $ptt2 = [System.Text.Encoding]::UTF8.GetString($ptt)
                 $ptt3 = [regex]::Matches($ptt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
-                $pmver = $ptt3[1].Value
+                if($null -eq $ptt3[1]){
+                    $pmver = $ptt3[0].Value
+                }else{
+                    $pmver = $ptt3[1].Value
+                }
                 
                 if($pmver -eq $prever){
                     #success
