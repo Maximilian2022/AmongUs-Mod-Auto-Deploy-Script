@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.3"
-$build = "20250613001"
+$build = "20250613002"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1742,11 +1742,11 @@ function Reload(){
             $OKButton.Enabled=$false
         }
         #sort version $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[2])} -Descending
-        if($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "ER") -or ($scid -eq "ER+ES"){
+        if(($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "ER") -or ($scid -eq "ER+ES")){
             $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[3])} -Descending
         }elseif($scid -eq "SNR"){
             $list2 = $list2 | Sort-Object -Property {$($_.split('.')[3])} -Descending
-        }elseif($scid -eq "TOR") -or ($scid -eq "TOU-R") -or ($scid -eq "SRA") -or ($scid -eq "LM") -or ($scid -eq "TOH"){
+        }elseif(($scid -eq "TOR") -or ($scid -eq "TOU-R") -or ($scid -eq "SRA") -or ($scid -eq "LM") -or ($scid -eq "TOH")){
             $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[2])} -Descending            
         }else{}
         #>
