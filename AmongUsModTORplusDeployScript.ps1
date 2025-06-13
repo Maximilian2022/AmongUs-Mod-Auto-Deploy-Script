@@ -1749,7 +1749,7 @@ function Reload(){
         }elseif($scid -eq "TOR") -or ($scid -eq "TOU-R") -or ($scid -eq "SRA") -or ($scid -eq "LM") -or ($scid -eq "TOH"){
             $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[2])} -Descending            
         }else{}
-
+        #>
         $combo2.DataSource = $list2
         if($list2.Length -gt 0){
             $Combo2.SelectedIndex = 0            
