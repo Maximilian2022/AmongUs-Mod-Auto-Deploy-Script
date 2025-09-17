@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.3"
-$build = "20250917001"
+$build = "20250917002"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -2949,13 +2949,13 @@ if($tio){
             $tordlp = "https://github.com/Dolly1016/Nebula/releases/latest/download/Nebula.zip"
         }
         if($platform -eq "Steam"){
-            for($aa=0;$aa<$tordlptmp.length;$aa++){
+            for($aa=0;$aa -lt $tordlptmp.length;$aa++){
                 if($tordlptmp[$aa].IndexOf("Steam") -gt 0){
                     $tordlp = $tordlptmp[$aa]
                 }
             }
         }else{
-            for($aa=0;$aa<$tordlptmp.length;$aa++){
+            for($aa=0;$aa -lt $tordlptmp.length;$aa++){
                 if($tordlptmp[$aa].IndexOf("Epic") -gt 0){
                     $tordlp = $tordlptmp[$aa]
                 }
