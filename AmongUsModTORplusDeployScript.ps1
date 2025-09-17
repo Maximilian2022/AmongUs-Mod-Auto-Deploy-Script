@@ -2941,12 +2941,25 @@ if($tio){
         $tempver = [System.Web.HttpUtility]::UrlEncode("$torv")
         for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
             if(($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0) -and ($($web2.assets.browser_download_url[$aii]).IndexOf("$tempver") -gt 0)){
-                $tordlp += $web2.assets.browser_download_url[$aii]
+                $tordlptmp += $web2.assets.browser_download_url[$aii]
                 $nosdll = $true
             }
         }
         if(!$nosdll){
-            $tordlp += "https://github.com/Dolly1016/Nebula/releases/latest/download/Nebula.zip"
+            $tordlp = "https://github.com/Dolly1016/Nebula/releases/latest/download/Nebula.zip"
+        }
+        if($platform -eq "Steam"){
+            for($aa=0;$aa<$tordlptmp.length;$aa++){
+                if($tordlptmp[$aa].IndexOf("Steam") -gt 0){
+                    $tordlp = $tordlptmp[$aa]
+                }
+            }
+        }else{
+            for($aa=0;$aa<$tordlptmp.length;$aa++){
+                if($tordlptmp[$aa].IndexOf("Epic") -gt 0){
+                    $tordlp = $tordlptmp[$aa]
+                }
+            }
         }
         Write-Log $torv
         Write-Log $tempver
