@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260311002"
+$build = "20260311003"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1649,7 +1649,7 @@ function Reload(){
                         #Write-Log ($tmparr[2] -eq $script:aumin)
                         if($tmparr[2] -eq $script:aumin){ 
                             if($tmparr[0] -eq "v"){
-                                $list2 += $tmparr[1]
+                                $list2 += $tmparr[1].Replace("v","")
                             }
                         }
                     }
@@ -1658,7 +1658,7 @@ function Reload(){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
                         if($tmparr[2] -eq $script:aumin){
                             if($tmparr[0] -ne "v"){
-                                $list2 += $tmparr[1]
+                                $list2 += $tmparr[1].Replace("v","")
                             }
                         }
                     }            
@@ -1677,7 +1677,7 @@ function Reload(){
                             $tempmax = $tempmax.Replace("v","v0")
                         }
                         if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
-                            $list2 += $($web2.tag_name[$ai])
+                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
                         }
                     }
                 }elseif($scid -eq "ER+ES"){
@@ -1695,13 +1695,13 @@ function Reload(){
                             $tempmax = $tempmax.Replace("v","v0")
                         }
                         if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
-                            $list2 += $($web2.tag_name[$ai])
+                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
                         }
                     }
                 }else{            
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin) -and ($web2.tag_name[$ai] -lt $script:aumax)){
-                            $list2 += $($web2.tag_name[$ai])
+                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
                         }
                     }
                 }    
@@ -1711,7 +1711,7 @@ function Reload(){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
                         if($tmparr[2] -eq $script:aumin){
                             if($tmparr[0] -eq "v"){
-                                $list2 += $tmparr[1]
+                                $list2 += $tmparr[1].Replace("v","")
                             }
                         }
                     }            
@@ -1720,7 +1720,7 @@ function Reload(){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
                         if($tmparr[2] -eq $script:aumin){
                             if($tmparr[0] -ne "v"){
-                                $list2 += $tmparr[1]
+                                $list2 += $tmparr[1].Replace("v","")
                             }
                         }
                     }            
@@ -1735,7 +1735,7 @@ function Reload(){
                             $tempmin = $tempmin.Replace("v","v0")
                         }
                         if($temptag -ge $tempmin){
-                            $list2 += $($web2.tag_name[$ai])
+                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
                         }
                     }
                 }elseif($scid -eq "ER+ES"){
@@ -1749,13 +1749,13 @@ function Reload(){
                             $tempmin = $tempmin.Replace("v","v0")
                         }
                         if($temptag -ge $tempmin){
-                            $list2 += $($web2.tag_name[$ai])
+                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
                         }
                     }
                 }else{            
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin)){
-                            $list2 += $($web2.tag_name[$ai])
+                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
                         }
                     }
                 }    
