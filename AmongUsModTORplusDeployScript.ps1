@@ -1767,7 +1767,7 @@ function Reload(){
                 if($list2[0].StartsWith("v")){
                     $venable=$true
                     for($aa = 0; $aa -lt $list2.length;$aa++){
-                        $templist2 += $list[$aa].replace("v","")
+                        $templist2 += $list[$aa].TrimStart("v") 
                     }
                     $list2 = $templist2| Sort-Object { $_ -as [version]  } -Descending
                 }
