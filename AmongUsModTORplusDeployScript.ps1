@@ -5,12 +5,12 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.1.4"
-$build = "20251116001"
+$version = "2.1.5"
+$build = "20260218001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
-### minimum version for v2025.6.10 16.1.0
+### minimum version for v2026.2.17
 $ermin = "v2025.9.10.0"
 $esmin = "v2025.9.10.0"
 $tormin = "v4.8.1"
@@ -22,19 +22,31 @@ $nosmin = "108"
 $toymin = "v519.27"
 $sramin = "v2025.5.12"
 
-### minimum version for v2025.6.10 16.1.0
-$ermin1 = "v14.0.0.0"
-$esmin1 = "v14.0.0.0"
-$tormin1 = "v4.8.0"
-$tourmin1 = "v5.0.6"
-$tohmin1 = "v5.1.13"
-$snrmin1 = "3.0.0.0"
-$lmmin1 = "3.8.8"
-$nosmin1 = "107"
+### minimum version for v2025.9.9 
+$ermin1 = "v2025.9.10.0"
+$esmin1 = "v2025.9.10.0"
+$tormin1 = "v4.8.1"
+$tourmin1 = "v5.3.1"
+$tohmin1 = "v5.1.14"
+$snrmin1 = "3.1.0.0"
+$lmmin1 = "3.9.0"
+$nosmin1 = "108"
 $toymin1 = "v519.27"
 $sramin1 = "v2025.5.12"
 
-### minimum version for v2024.11.26
+### minimum version for v2025.6.10 16.1.0
+$ermin2 = "v14.0.0.0"
+$esmin2 = "v14.0.0.0"
+$tormin2 = "v4.8.0"
+$tourmin2 = "v5.0.6"
+$tohmin2 = "v5.1.13"
+$snrmin2 = "3.0.0.0"
+$lmmin2 = "3.8.8"
+$nosmin2 = "107"
+$toymin2 = "v519.27"
+$sramin2 = "v2025.5.12"
+
+<### minimum version for v2024.11.26
 $ermin2 = "v12.0.0.0"
 $esmin2 = "v12.0.0.0"
 $tormin2 = "v4.8.0"
@@ -274,13 +286,14 @@ $amsmin2 = "v23.2.28.0"
 #$prevtargetid1 = "4298030817201447257"
 #$prever1 = "2024.11.26"
 #$prevtargetid1 = "5207443046106116882"
-$prever1 = "2025.3.25"
-$prevtargetid1 = "1602714909229311555"
-$prever0 = "2025.6.10"
-$prevtargetid0 = "1298083356997541927"
+#$prever1 = "2025.3.25"
+#$prevtargetid1 = "1602714909229311555"
+$prever1 = "2025.6.10"
+$prevtargetid1 = "1298083356997541927"
+$prever0 = "2025.9.9"
+$prevtargetid0 = "4146372421172743268"
 
-#2025.9.9 4146372421172743268
-
+#2026.2.17 8416065559776121687
 $gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
 #$torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
@@ -467,7 +480,7 @@ Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
 if($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip4Powershell).count -eq 0){
-    Install-Module -Name 7Zip4Powershell -Force
+    Install-Module -Name 7Zip4Powershell -Force -Scope CurrentUser
 }
 #################################################################################################
 # Icon and AUMADS Folder on Desktop
