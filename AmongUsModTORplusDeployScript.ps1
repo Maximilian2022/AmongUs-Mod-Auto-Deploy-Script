@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260311001"
+$build = "20260311002"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1541,93 +1541,93 @@ function Reload(){
         if(($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT")){
             if($null -eq $script:gmhweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:gmhweb = $web | Sort-Object { $_ -as [version]  }
+                $script:gmhweb = $web 
             }else{
-                $web = $script:gmhweb | Sort-Object { $_ -as [version]  }
+                $web = $script:gmhweb 
             }
         }elseif($scid -eq "TOR MR"){
             if($null -eq $script:mrweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:mrweb = $web | Sort-Object { $_ -as [version]  }
+                $script:mrweb = $web 
             }else{
-                $web = $script:mrweb | Sort-Object { $_ -as [version]  }
+                $web = $script:mrweb 
             }
         }elseif($scid -eq "TOR"){
             if($null -eq $script:torweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:torweb = $web | Sort-Object { $_ -as [version]  }
+                $script:torweb = $web 
             }else{
-                $web = $script:torweb | Sort-Object { $_ -as [version]  }
+                $web = $script:torweb 
             }
         }elseif($scid -eq "TOU-R"){
             if($null -eq $script:tourweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:tourweb = $web | Sort-Object { $_ -as [version]  }
+                $script:tourweb = $web 
             }else{
-                $web = $script:tourweb | Sort-Object { $_ -as [version]  }
+                $web = $script:tourweb 
             }
         }elseif($scid -eq "SRA"){
             if($null -eq $script:sraweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:sraweb = $web | Sort-Object { $_ -as [version]  }
+                $script:sraweb = $web 
             }else{
-                $web = $script:sraweb | Sort-Object { $_ -as [version]  }
+                $web = $script:sraweb 
             }
         }elseif(($scid -eq "ER") -or ($scid -eq "ER+ES")){
             if($null -eq $script:erweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:erweb = $web | Sort-Object { $_ -as [version]  }
+                $script:erweb = $web 
             }else{
-                $web = $script:erweb | Sort-Object { $_ -as [version]  }
+                $web = $script:erweb 
             }
         }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
             if($null -eq $script:nosweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:nosweb = $web | Sort-Object { $_ -as [version]  }
+                $script:nosweb = $web 
             }else{
-                $web = $script:nosweb | Sort-Object { $_ -as [version]  }
+                $web = $script:nosweb 
             }
         }elseif($scid -eq "LM"){
             if($null -eq $script:lmweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:lmweb = $web | Sort-Object { $_ -as [version]  }
+                $script:lmweb = $web 
             }else{
-                $web = $script:lmweb | Sort-Object { $_ -as [version]  }
+                $web = $script:lmweb 
             }
         }elseif($scid -eq "SNR"){
             if($null -eq $script:snrweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:snrweb = $web | Sort-Object { $_ -as [version]  }
+                $script:snrweb = $web 
             }else{
-                $web = $script:snrweb | Sort-Object { $_ -as [version]  }
+                $web = $script:snrweb 
             }
         }elseif($scid -eq "TOH"){
             if($null -eq $script:tohweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:tohweb = $web | Sort-Object { $_ -as [version]  }
+                $script:tohweb = $web 
             }else{
-                $web = $script:tohweb | Sort-Object { $_ -as [version]  }
+                $web = $script:tohweb 
             }
         }elseif($scid -eq "TOY"){
             if($null -eq $script:toyweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:toyweb = $web | Sort-Object { $_ -as [version]  }
+                $script:toyweb = $web 
             }else{
-                $web = $script:toyweb | Sort-Object { $_ -as [version]  }
+                $web = $script:toyweb 
             }
         }elseif($scid -eq "RHR"){
             if($null -eq $script:toyweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:rhrweb = $web | Sort-Object { $_ -as [version]  }
+                $script:rhrweb = $web 
             }else{
-                $web = $script:rhrweb | Sort-Object { $_ -as [version]  }
+                $web = $script:rhrweb 
             }
         }elseif($scid -eq "AMS"){
             if($null -eq $script:amsweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:amsweb = $web | Sort-Object { $_ -as [version]  }
+                $script:amsweb = $web 
             }else{
-                $web = $script:amsweb | Sort-Object { $_ -as [version]  }
+                $web = $script:amsweb 
             }
         }else{
             $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
@@ -1761,6 +1761,7 @@ function Reload(){
                 }    
             #Write-Log "Version List"
             #Write-Log $list2
+            $list2 = $list2 | Sort-Object { $_ -as [version]  }
             }
         }else{
             $OKButton.Enabled=$false
