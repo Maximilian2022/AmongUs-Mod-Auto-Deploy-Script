@@ -1766,7 +1766,7 @@ function Reload(){
                 $venable = $false
                 if($($list2[0]).StartsWith("v")){
                     $venable = $true
-                    for($aa = 0; $aa -lt $list2.length ;$aa++){
+                    for($aa = 0; $aa -lt $list2.length; $aa++){
                         #Write-Log $list2[$aa] 
                         #Write-Log $list2[$aa].TrimStart("v") 
                         $templist2 += $($list2[$aa]).TrimStart("v") 
@@ -1775,13 +1775,12 @@ function Reload(){
                     #Write-Log $list2
                 }
                 if($venable){
-                    for($aa = 0; $aa -lt $list2.length;$aa++){
+                    for($aa = 0; $aa -lt $list2.length; $aa++){
                         $templist3 += "v$list2[$aa]" 
                     }
                     $list2 = $templist3
                 }else{
                     $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
-                    
                 }
                 #Write-Log $list2
         }
