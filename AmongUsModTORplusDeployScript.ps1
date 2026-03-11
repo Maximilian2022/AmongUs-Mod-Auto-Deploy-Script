@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260311006"
+$build = "20260311007"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1776,7 +1776,7 @@ function Reload(){
                 }
                 if($venable){
                     for($aa = 0; $aa -lt $list2.length; $aa++){
-                        $templist3 += "v$list2[$aa]" 
+                        $templist3 += "v$($list2[$aa])" 
                     }
                     $list2 = $templist3
                 }else{
