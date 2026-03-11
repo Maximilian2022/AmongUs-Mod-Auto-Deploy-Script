@@ -5,8 +5,8 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.1.5"
-$build = "20260218001"
+$version = "2.1.6"
+$build = "20260311001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1541,93 +1541,93 @@ function Reload(){
         if(($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT")){
             if($null -eq $script:gmhweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:gmhweb = $web
+                $script:gmhweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:gmhweb
+                $web = $script:gmhweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "TOR MR"){
             if($null -eq $script:mrweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:mrweb = $web
+                $script:mrweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:mrweb
+                $web = $script:mrweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "TOR"){
             if($null -eq $script:torweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:torweb = $web
+                $script:torweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:torweb
+                $web = $script:torweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "TOU-R"){
             if($null -eq $script:tourweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:tourweb = $web
+                $script:tourweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:tourweb
+                $web = $script:tourweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "SRA"){
             if($null -eq $script:sraweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:sraweb = $web
+                $script:sraweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:sraweb
+                $web = $script:sraweb | Sort-Object { $_ -as [version]  }
             }
         }elseif(($scid -eq "ER") -or ($scid -eq "ER+ES")){
             if($null -eq $script:erweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:erweb = $web
+                $script:erweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:erweb
+                $web = $script:erweb | Sort-Object { $_ -as [version]  }
             }
         }elseif(($scid -eq "NOS") -or ($scid -eq "NOT")){
             if($null -eq $script:nosweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:nosweb = $web
+                $script:nosweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:nosweb
+                $web = $script:nosweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "LM"){
             if($null -eq $script:lmweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:lmweb = $web
+                $script:lmweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:lmweb
+                $web = $script:lmweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "SNR"){
             if($null -eq $script:snrweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:snrweb = $web
+                $script:snrweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:snrweb
+                $web = $script:snrweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "TOH"){
             if($null -eq $script:tohweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:tohweb = $web
+                $script:tohweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:tohweb
+                $web = $script:tohweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "TOY"){
             if($null -eq $script:toyweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:toyweb = $web
+                $script:toyweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:toyweb
+                $web = $script:toyweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "RHR"){
             if($null -eq $script:toyweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:rhrweb = $web
+                $script:rhrweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:rhrweb
+                $web = $script:rhrweb | Sort-Object { $_ -as [version]  }
             }
         }elseif($scid -eq "AMS"){
             if($null -eq $script:amsweb){
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:amsweb = $web
+                $script:amsweb = $web | Sort-Object { $_ -as [version]  }
             }else{
-                $web = $script:amsweb
+                $web = $script:amsweb | Sort-Object { $_ -as [version]  }
             }
         }else{
             $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
