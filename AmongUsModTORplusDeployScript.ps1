@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260311005"
+$build = "20260311006"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1764,23 +1764,27 @@ function Reload(){
                 $templist2 = @()
                 $templist3 = @()
                 $venable = $false
-                if($list2[0].StartsWith("v")){
-                    $venable=$true
-                    for($aa = 0; $aa -lt $list2.length;$aa++){
-                        $templist2 += $list[$aa].TrimStart("v") 
+                if($($list2[0]).StartsWith("v")){
+                    $venable = $true
+                    for($aa = 0; $aa -lt $list2.length ;$aa++){
+                        #Write-Log $list2[$aa] 
+                        #Write-Log $list2[$aa].TrimStart("v") 
+                        $templist2 += $($list2[$aa]).TrimStart("v") 
                     }
                     $list2 = $templist2| Sort-Object { $_ -as [version]  } -Descending
+                    #Write-Log $list2
                 }
                 if($venable){
                     for($aa = 0; $aa -lt $list2.length;$aa++){
-                        $templist3 += "v$list[$aa]" 
+                        $templist3 += "v$list2[$aa]" 
                     }
                     $list2 = $templist3
                 }else{
                     $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
                     
                 }
-            }
+                #Write-Log $list2
+        }
         }else{
             $OKButton.Enabled=$false
         }
