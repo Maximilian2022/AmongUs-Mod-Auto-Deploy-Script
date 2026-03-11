@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260311003"
+$build = "20260311004"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1761,7 +1761,7 @@ function Reload(){
                 }    
             #Write-Log "Version List"
             #Write-Log $list2
-            $list2 = $list2 | Sort-Object { $_ -as [version]  }
+            $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
             }
         }else{
             $OKButton.Enabled=$false
@@ -1777,10 +1777,10 @@ function Reload(){
         }elseif(($scid -eq "TOR") -or ($scid -eq "TOU-R") -or ($scid -eq "SRA") -or ($scid -eq "LM") -or ($scid -eq "TOH")){
             $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[2])} -Descending            
         }else{}
-        #>
         if(($scid -eq "NOS") -or ($scid -eq "NOT")){
-            $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[3])} -Descending
+            $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
         }else{}
+        #>
         $combo2.DataSource = $list2
         if($list2.Length -gt 0){
             $Combo2.SelectedIndex = 0            
