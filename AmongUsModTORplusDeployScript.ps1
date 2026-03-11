@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260311004"
+$build = "20260311005"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1329,9 +1329,9 @@ $ovwrite = $false
 $amver = ""
 $prebool = $false
 $latestflag = 0
-$indeedcleaninstall = $false
-$ver1st = @()
-$ver2nd = @()
+#$indeedcleaninstall = $false
+#$ver1st = @()
+#$ver2nd = @()
 
 function VerMinMax($ver0, $ver1, $ver2){
     if($RadioButton114.Checked){
@@ -1649,7 +1649,7 @@ function Reload(){
                         #Write-Log ($tmparr[2] -eq $script:aumin)
                         if($tmparr[2] -eq $script:aumin){ 
                             if($tmparr[0] -eq "v"){
-                                $list2 += $tmparr[1].Replace("v","")
+                                $list2 += $tmparr[1]
                             }
                         }
                     }
@@ -1658,7 +1658,7 @@ function Reload(){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
                         if($tmparr[2] -eq $script:aumin){
                             if($tmparr[0] -ne "v"){
-                                $list2 += $tmparr[1].Replace("v","")
+                                $list2 += $tmparr[1]
                             }
                         }
                     }            
@@ -1677,7 +1677,7 @@ function Reload(){
                             $tempmax = $tempmax.Replace("v","v0")
                         }
                         if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
-                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }elseif($scid -eq "ER+ES"){
@@ -1695,13 +1695,13 @@ function Reload(){
                             $tempmax = $tempmax.Replace("v","v0")
                         }
                         if(($temptag -ge $tempmin) -and ($temptag -lt $tempmax)){
-                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }else{            
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin) -and ($web2.tag_name[$ai] -lt $script:aumax)){
-                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }    
@@ -1711,7 +1711,7 @@ function Reload(){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
                         if($tmparr[2] -eq $script:aumin){
                             if($tmparr[0] -eq "v"){
-                                $list2 += $tmparr[1].Replace("v","")
+                                $list2 += $tmparr[1]
                             }
                         }
                     }            
@@ -1720,7 +1720,7 @@ function Reload(){
                         $tmparr = $($web2.tag_name[$ai]).split(",")
                         if($tmparr[2] -eq $script:aumin){
                             if($tmparr[0] -ne "v"){
-                                $list2 += $tmparr[1].Replace("v","")
+                                $list2 += $tmparr[1]
                             }
                         }
                     }            
@@ -1735,7 +1735,7 @@ function Reload(){
                             $tempmin = $tempmin.Replace("v","v0")
                         }
                         if($temptag -ge $tempmin){
-                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }elseif($scid -eq "ER+ES"){
@@ -1749,19 +1749,37 @@ function Reload(){
                             $tempmin = $tempmin.Replace("v","v0")
                         }
                         if($temptag -ge $tempmin){
-                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }else{            
                     for($ai = 0;$ai -lt $web2.tag_name.Length;$ai++){
                         if(($web2.tag_name[$ai] -ge $script:aumin)){
-                            $list2 += $($web2.tag_name[$ai]).Replace("v","")
+                            $list2 += $($web2.tag_name[$ai])
                         }
                     }
                 }    
-            #Write-Log "Version List"
-            #Write-Log $list2
-            $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
+                #Write-Log "Version List"
+                #Write-Log $list2
+                $templist2 = @()
+                $templist3 = @()
+                $venable = $false
+                if($list2[0].StartsWith("v")){
+                    $venable=$true
+                    for($aa = 0; $aa -lt $list2.length;$aa++){
+                        $templist2 += $list[$aa].replace("v","")
+                    }
+                    $list2 = $templist2| Sort-Object { $_ -as [version]  } -Descending
+                }
+                if($venable){
+                    for($aa = 0; $aa -lt $list2.length;$aa++){
+                        $templist3 += "v$list[$aa]" 
+                    }
+                    $list2 = $templist3
+                }else{
+                    $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
+                    
+                }
             }
         }else{
             $OKButton.Enabled=$false
