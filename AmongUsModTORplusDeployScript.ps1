@@ -6,14 +6,14 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260317001"
+$build = "20260317002"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
 ### minimum version for v2026.2.17
 $ermin = "v2025.9.10.0"
 $esmin = "v2025.9.10.0"
-$tormin = "v4.8.1"
+$tormin = "v4.8.0"
 $tourmin = "v5.3.1"
 $tohmin = "v5.1.14"
 $snrmin = "3.1.0.0"
@@ -25,7 +25,7 @@ $sramin = "v2025.5.12"
 ### minimum version for v2025.9.9 
 $ermin1 = "v2025.9.10.0"
 $esmin1 = "v2025.9.10.0"
-$tormin1 = "v4.8.1"
+$tormin1 = "v4.8.0"
 $tourmin1 = "v5.3.1"
 $tohmin1 = "v5.1.14"
 $snrmin1 = "3.1.0.0"
