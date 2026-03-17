@@ -6,7 +6,7 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.6"
-$build = "20260311007"
+$build = "20260317001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -2925,8 +2925,12 @@ if($tio){
     }elseif($scid -eq "LM"){
         $tordlp = "https://github.com/KiraYamato94/LasMonjas/releases/download/${torv}/Las.Monjas.${torv}.zip"
     }elseif($scid -eq "SNR"){
-        $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}.zip"
-        $Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
+        if($platform -eq "Steam"){
+            $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}_Steam.zip"
+        }else{
+            $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}_Epic.zip"
+        }
+        #$Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
 
 
     }elseif($scid -eq "AMS"){
@@ -3782,9 +3786,9 @@ if($tio){
             Write-Log 'Delete Original Agartha Mod DLL'
         }
         #Agartha DLLをDLして配置
-        Write-Log "Download $scid Agartha DLL 開始"
-        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
-        Write-Log "Download $scid Agartha DLL 完了"         
+        #Write-Log "Download $scid Agartha DLL 開始"
+        #aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
+        #Write-Log "Download $scid Agartha DLL 完了"         
 
     }elseif($scid -eq "AMS"){
         if(test-path "$aupathm\BepInEx"){
