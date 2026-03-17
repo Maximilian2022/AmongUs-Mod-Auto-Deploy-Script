@@ -1764,7 +1764,7 @@ function Reload(){
                 $templist2 = @()
                 $templist3 = @()
                 $venable = $false
-                if($($list2[0]).StartsWith("v")){
+                if(($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "ER") -or ($scid -eq "ER+ES") -or ($scid -eq "SRA") -or ($scid -eq "TOH") -or ($scid -eq "TOY")){
                     $venable = $true
                     for($aa = 0; $aa -lt $list2.length; $aa++){
                         #Write-Log $list2[$aa] 
