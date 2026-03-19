@@ -5,8 +5,8 @@ $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.1.6"
-$build = "20260317002"
+$version = "2.1.7"
+$build = "20260319001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1780,7 +1780,9 @@ function Reload(){
                     }
                     $list2 = $templist3
                 }else{
-                    $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
+                    if($list2.Length -gt 1){
+                        $list2 = $list2 | Sort-Object { $_ -as [version]  } -Descending
+                    }
                 }
                 #Write-Log $list2
         }
