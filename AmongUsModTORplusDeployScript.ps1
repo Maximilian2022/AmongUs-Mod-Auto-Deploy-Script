@@ -6,7 +6,7 @@ $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.7"
-$build = "20260319001"
+$build = "20260324001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
