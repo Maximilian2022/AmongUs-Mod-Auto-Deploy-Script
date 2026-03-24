@@ -1,6 +1,6 @@
 ﻿Param($Args1) #skipconfirmation
-$Now = Get-Date
-$Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+$ScriptStartTime = Get-Date
+$Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 ################################################################################################
 #
 # Among Us Mod Auto Deploy Script
@@ -10,7 +10,7 @@ $build = "20260319001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
-### minimum version for v2026.2.17
+### Minimum versions (currently active)
 $ermin = "v2025.9.10.0"
 $esmin = "v2025.9.10.0"
 $tormin = "v4.8.0"
@@ -256,38 +256,7 @@ $amsmin2 = "v23.2.28.0"
 #>
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
-#$prever1 = "2022.9.20"
-#$prevtargetid1 = "2481435393334839152"
-#$prever1 = "2022.10.19"
-#$prevtargetid1 = "4338750749031095433"
-#$prever1 = "2022.10.25"
-#$prevtargetid1 = "4338750749031095433"
-#$prever1 = "2022.12.14"
-#$prevtargetid1 = "3833836818403923932"
-#$prever1 = "2023.2.28"
-#$prevtargetid1 = "1390179653173000898"
-#$prever1 = "2023.3.5"
-#$prevtargetid1 = "2536144614134451205"
-#$prever1 = "2023.3.28"
-#$prevtargetid1 = "2741278786821271696"
-#$prever1 = "2023.7.12"
-#$prevtargetid1 = "4593126137370998619"
-#$prever1 = "2023.10.24"
-#$prevtargetid1 = "531781757001821075"
-#$prever1 = "2023.11.28"
-#$prevtargetid1 = "6242713924243927822"
-#$prever1 = "2024.03.05"
-#$prevtargetid1 = "2536144614134451205"
-#$prever1 = "2024.6.4"
-#$prevtargetid1 = "2079074638300197600"
-#$prever1 = "2024.6.18"
-#$prevtargetid1 = "5073468987524498627"
-#$prever1 = "2024.9.4"
-#$prevtargetid1 = "4298030817201447257"
-#$prever1 = "2024.11.26"
-#$prevtargetid1 = "5207443046106116882"
-#$prever1 = "2025.3.25"
-#$prevtargetid1 = "1602714909229311555"
+# Current versions:
 $prever1 = "2025.6.10"
 $prevtargetid1 = "1298083356997541927"
 $prever0 = "2025.9.9"
@@ -304,18 +273,32 @@ $icorenew = $false
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
 #################################################################################################
-# Translate Function
+# Translate Function with Caching
 #################################################################################################
 $Cult  = Get-Culture
+$TranslationCache = @{}
 $transenabled = $true
 #$Cult  = "en-US"
 function Get-Translate($transtext){
     if($Cult -ne "ja-JP"){
         if($transenabled){
-            $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
-            $Response = (Invoke-WebRequest -Uri $Uri -Method Get).Content
-            $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
-            return $Resulttxt[0]    
+            # キャッシュから返す
+            if($TranslationCache.ContainsKey($transtext)){
+                return $TranslationCache[$transtext]
+            }
+            try{
+                $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
+                $Response = (Invoke-WebRequest -Uri $Uri -Method Get -TimeoutSec 5).Content
+                $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
+                $result = $Resulttxt[0]
+                # キャッシュに保存
+                $TranslationCache[$transtext] = $result
+                return $result    
+            }catch{
+                # エラー時はキャッシュに保存して返す
+                $TranslationCache[$transtext] = $transtext
+                return $transtext
+            }
         }else{
             return $transtext
         }

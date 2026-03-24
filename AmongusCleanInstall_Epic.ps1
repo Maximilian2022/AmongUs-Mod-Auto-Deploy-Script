@@ -6,17 +6,31 @@
 $version = "1.0.1"
 #
 #################################################################################################
-# Translate Function
+# Translate Function with Caching
 #################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $Cult  = Get-Culture
+$TranslationCache = @{}
 #$Cult  = "en-US"
 function Get-Translate($transtext){
     if($Cult -ne "ja-JP"){
-        $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
-        $Response = (Invoke-WebRequest -Uri $Uri -Method Get).Content
-        $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
-        return $Resulttxt[0]
+        # キャッシュから返す
+        if($TranslationCache.ContainsKey($transtext)){
+            return $TranslationCache[$transtext]
+        }
+        try{
+            $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
+            $Response = (Invoke-WebRequest -Uri $Uri -Method Get -TimeoutSec 5).Content
+            $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
+            $result = $Resulttxt[0]
+            # キャッシュに保存
+            $TranslationCache[$transtext] = $result
+            return $result
+        }catch{
+            # エラー時はキャッシュに保存して返す
+            $TranslationCache[$transtext] = $transtext
+            return $transtext
+        }
     }else{
         return $transtext
     }
