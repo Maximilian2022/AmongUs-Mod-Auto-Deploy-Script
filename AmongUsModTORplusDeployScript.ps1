@@ -2878,18 +2878,34 @@ if($tio){
     }elseif($scid -eq "TOH"){
         $tohver = $torv.Substring(1)
         Write-Log $tohver
-        for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
-            if($($web2.assets.browser_download_url[$aii]).IndexOf("${tohver}.zip") -gt 0){
-                $langd += $web2.assets.browser_download_url[$aii]
+        if($platform -eq "Steam"){
+            for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+                if($($web2.assets.browser_download_url[$aii]).IndexOf("${tohver}_Steam.zip") -gt 0){
+                    $langd += $web2.assets.browser_download_url[$aii]
+                }
             }
-        }
-        for($aii = 0;$aii -lt $langd.Length;$aii++){
-            if($($langd[$aii]).IndexOf("${tohver}") -gt 0){
-                $tordlp = $langd[$aii]
+            for($aii = 0;$aii -lt $langd.Length;$aii++){
+                if($($langd[$aii]).IndexOf("${tohver}") -gt 0){
+                    $tordlp = $langd[$aii]
+                }
             }
-        }
-        if($tordlp.Indexof(${torv}.zip) -gt 0){
-            $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}.zip"
+            if($tordlp.Indexof(${torv}_Steam.zip) -gt 0){
+                $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}_Steam.zip"
+            }
+        }else{
+            for($aii = 0;$aii -lt  $($web2.assets.browser_download_url).Length;$aii++){
+                if($($web2.assets.browser_download_url[$aii]).IndexOf("${tohver}_Epic.zip") -gt 0){
+                    $langd += $web2.assets.browser_download_url[$aii]
+                }
+            }
+            for($aii = 0;$aii -lt $langd.Length;$aii++){
+                if($($langd[$aii]).IndexOf("${tohver}") -gt 0){
+                    $tordlp = $langd[$aii]
+                }
+            }
+            if($tordlp.Indexof(${torv}_Epic.zip) -gt 0){
+                $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}_Epic.zip"
+            }
         }
         Write-Log $tordlp
         $exfoldn = [IO.Path]::GetFileNameWithoutExtension($(Split-Path $tordlp -Leaf));
