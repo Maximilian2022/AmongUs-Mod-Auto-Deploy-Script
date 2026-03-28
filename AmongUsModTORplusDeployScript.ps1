@@ -6,7 +6,7 @@ $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.7"
-$build = "20260324001"
+$build = "20260328001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -2889,7 +2889,7 @@ if($tio){
                     $tordlp = $langd[$aii]
                 }
             }
-            if($tordlp.Indexof(${torv}_Steam.zip) -gt 0){
+            if($tordlp.Indexof("${torv}_Steam.zip") -gt 0){
                 $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}_Steam.zip"
             }
         }else{
@@ -2903,7 +2903,7 @@ if($tio){
                     $tordlp = $langd[$aii]
                 }
             }
-            if($tordlp.Indexof(${torv}_Epic.zip) -gt 0){
+            if($tordlp.Indexof("${torv}_Epic.zip") -gt 0){
                 $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}_Epic.zip"
             }
         }
