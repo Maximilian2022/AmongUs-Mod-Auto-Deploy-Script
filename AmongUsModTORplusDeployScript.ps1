@@ -46,215 +46,6 @@ $nosmin2 = "107"
 $toymin2 = "v519.27"
 $sramin2 = "v2025.5.12"
 
-<### minimum version for v2024.11.26
-$ermin2 = "v12.0.0.0"
-$esmin2 = "v12.0.0.0"
-$tormin2 = "v4.8.0"
-$tourmin2 = "v5.0.6"
-$tohmin2 = "v5.1.13"
-$snrmin2 = "2.5.0.1"
-$lmmin2 = "3.8.7"
-$nosmin2 = "106"
-$toymin2 = "v519.27"
-$sramin2 = "v2025.5.12"
-
-<### minimum version for v2024.10.29
-$ermin2 = "v12.0.0.0"
-$esmin2 = "v12.0.0.0"
-$tormin2 = "v4.7.0"
-$tourmin2 = "v5.0.6"
-$tohmin2 = "v5.1.8"
-$snrmin2 = "2.5.0.0"
-$lmmin2 = "3.8.1"
-$nosmin2 = "105"
-$toymin2 = "v517.24"
-$sramin2 = "v2024.8.13"
-
-<### minimum version for v2024.9.4
-$ermin2 = "v12.0.0.0"
-$esmin2 = "v12.0.0.0"
-$tormin2 = "v4.7.0"
-$tourmin2 = "v5.0.5"
-$tohmin2 = "v5.1.8"
-$snrmin2 = "2.4.0.0"
-$lmmin2 = "3.8.1"
-$nosmin2 = "105"
-$toymin2 = "v517.24"
-$sramin2 = "v2024.8.13"
-
-<### minimum version for v2024.6.18
-$ermin2 = "v11.0.0.0"
-$esmin2 = "v11.0.0.0"
-$tormin2 = "v4.6.0"
-$tourmin2 = "v5.0.5"
-$tohmin2 = "v5.1.7"
-$snrmin2 = "2.3.0.0"
-$lmmin2 = "3.8.0"
-$nosmin2 = "104"
-$toymin2 = "v516.23"
-$sramin2 = "v2024.6.18"
-
-<### minimum version for v2024.6.4
-$ermin2 = "v10.0.0.0"
-$esmin2 = "v10.0.0.0"
-$tormin2 = "v4.5.2"
-$tourmin2 = "v5.0.4"
-$tohmin2 = "v5.1.5"
-$snrmin2 = "2.2.0.0"
-$lmmin2 = "3.7.2"
-$nosmin2 = "103"
-$toymin2 = "v514.21.2"
-$sramin2 = "v2024.2.22"
-
-# $notmin = "105"
-# $notmin1 = "104"
-# $notmin2 = "103"
-<### minimum version for v2024.3.5
-$ermin2 = "v10.0.0.0"
-$esmin2 = "v10.0.0.0"
-$tormin2 = "v4.5.2"
-$tourmin2 = "v5.0.4"
-$tohmin2 = "v5.1.5"
-$snrmin2 = "2.2.0.0"
-$lmmin2 = "3.7.2"
-$nosmin2 = "103"
-#$notmin2 = "103"
-$toymin2 = "v514.21.2"
-$sramin2 = "v2024.2.22"
-
-<### minimum version for v2023.11.28
-$ermin2 = "v9.1.0.0"
-$esmin2 = "v9.1.0.0"
-$tormin2 = "v4.5.0"
-$tourmin2 = "v5.0.3"
-$tohmin2 = "v5.1.2"
-$snrmin2 = "2.1.1.5"
-$lmmin2 = "3.5.2"
-$nosmin2 = "102"
-$notmin2 = "102"
-$toymin2 = "v511.18"
-$sramin2 = "v2023.11.28"
-
-<### minimum version for v2023.10.24
-$ermin2 = "v9.0.0.0"
-$esmin2 = "v9.0.0.0"
-$tormin2 = "v4.4.3"
-$tourmin2 = "v5.0.3"
-$tohmin2 = "v5.1.2"
-$snrmin2 = "2.1.0.0"
-$lmmin2 = "3.5.0"
-$nosmin2 = "101"
-$notmin2 = "101"
-$toymin2 = "v511.18"
-$sramin2 = "v2023.10.1"
-
-<### minimum version for v2023.7.12
-$ermin2 = "v8.0.0.0"
-$esmin2 = "v8.0.0.0"
-$tormin2 = "v4.3.3"
-$tourmin2 = "v5.0.0"
-$tohmin2 = "v5.0.1"
-$snrmin2 = "1.8.0.0"
-$lmmin2 = "3.2.0"
-$nosmin2 = "100"
-$notmin2 = "100"
-$toymin2 = "v503.14"
-$sramin2 = "v1.4.4"
-
-### minimum version for v2023.3.28
-$ermin2 = "v7.0.0.0"
-$esmin2 = "v7.0.0.0"
-$nosmin2 = "NONE"
-$notmin2 = "NONE"
-$tormin2 = "v4.3.1"
-$tourmin2 = "v4.0.4"
-$tohmin2 = "v4.1.2"
-$snrmin2 = "1.7.0.0"
-$lmmin2 = "3.1.6"
-$toymin2 = "v412.8"
-$sramin2 = "v1.3.0"
-
-<### minimum version for v2023.2.28
-$ermin2 = "v6.0.0.0"
-$esmin2 = "v6.0.0.0"
-$nosmin2 = "NONE"
-$notmin2 = "NONE"
-$tormin2 = "v4.3.0"
-$tourmin2 = "v4.0.3"
-$tohmin2 = "v4.1.1"
-$snrmin2 = "1.6.0.0"
-$lmmin2 = "3.1.2"
-$toymin2 = "v411.7"
-$sramin2 = "v1.2.4"
-
-<### minimum version for v2022.12.16
-$ermin2 = "v5.0.0.0"
-$esmin2 = "v5.0.0.0"
-$nosmin2 = "2.0.1,2022.12.8"
-$notmin2 = "2.0.1,2022.12.8"
-$tormin2 = "v4.2.1"
-$tourmin2 = "v4.0.0"
-$tohmin2 = "v4.0.1"
-$snrmin2 = "1.5.0.0"
-$tormmin2 = "NONE"
-$lmmin2 = "3.0.4"
-$amsmin2 = "v22.12.14.0"
-$toymin2 = "v402.3.9"
-$rhrmin2 = "NONE"
-
-### minimum version for v2022.10.25
-$ermin2 = "v4.0.0.0"
-$esmin2 = "v4.0.0.0"
-$nosmin2 = "1.16,2022.10.25"
-$notmin2 = "1.16,2022.10.25"
-$tormin2 = "v4.2.0"
-$tourmin2 = "v3.4.0"
-$tohmin2 = "v3.0.2"
-$snrmin2 = "1.4.2.4"
-$tormmin2 = "MR_v2.5.0"
-$lmmin2 = "3.0.0"
-$amsmin2 = "v0.0.1"
-$toymin2 = "v3.0.2.2"
-
-### minimum version for v2022.10.18
-$ermin2 = "v3.3.0.3"
-$esmin2 = "v3.3.0.3"
-$nosmin2 = "NONE"
-$notmin2 = "NONE"
-$tormin2 = "NONE"
-$tourmin2 = "NONE"
-$tohmin2 = "NONE"
-$snrmin2 = "1.4.2.3"
-$tormmin2 = "NONE"
-$lmmin2 = "NONE"
-$amsmin2 = "NONE"
-$toymin2 = "NONE"
-
-### minimum version for v2022.9.20(8.24)
-$ermin2 = "v3.2.2.0"
-$esmin2 = "v3.2.2.0"
-$nosmin2 = "1.12.11,2022.8.24"
-$tormin2 = "v4.1.7"
-$tourmin2 = "v3.3.0"
-$tohmin2 = "v2.2.2"
-$snrmin2 = "1.4.2.0"
-$tormmin2 = "MR_v2.3.0"
-$lmmin2 = "2.1.3"
-$amsmin2 = "NONE"
-$toymin2 = "NONE"
-
-###Depricated Mod Ver.
-$tormmin = "NONE"
-$tormmin1 = "NONE"
-$tormmin2 = "NONE"
-$rhrmin = "NONE"
-$rhrmin1 = "release1"
-$rhrmin2 = "NONE"
-$amsmin = "NONE"
-$amsmin1 = "v23.2.28.0"
-$amsmin2 = "v23.2.28.0"
-#>
-
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 # Current versions:
 $prever1 = "2025.6.10"
@@ -330,15 +121,9 @@ if(!(((net localgroup Administrators) -contains $env:username ) -or ((net localg
     $Now = Get-Date
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
     Write-Host $(Get-Translate("$Log このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
-    $Now = Get-Date
-    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
     Write-Host $(Get-Translate("$Log あなたのユーザー名($env:username)は管理者権限グループに属していません"))
-    $Now = Get-Date
-    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
     Write-Host $(Get-Translate("$Log 管理者権限グループに属しているユーザーは以下の通りです"))
     $nn = net localgroup Administrators
-    $Now = Get-Date
-    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
     Write-Host $nn
     pause
     Exit
@@ -438,8 +223,7 @@ if(!(Test-Path $dsk)){
 function Write-Log($logstring){
     $Now = Get-Date
     # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
-    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + "  "
-    $Log += $LogString
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + "  " + $LogString
     # ログ出力
     Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding utf8 -Append
     # echo させるために出力したログを戻す
