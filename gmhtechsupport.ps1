@@ -1,131 +1,412 @@
-﻿# =========================================================================================
-# Among Us Mod Tech Support Script (Optimized - V1.1.0)
-# =========================================================================================
-Param($Arg1, $Arg2, $Arg3) # modid, modpath, platform
-
-$version = "1.1.0"
+﻿Param($Arg1,$Arg2,$Arg3) #modid,modpath,platform
+#################################################################################################
+#
+# Among Us Mod Tech Support Script
+#
+$version = "1.0.4"
+#
+#################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+#################################################################################################
+# 権限チェック
+#################################################################################################
+if((net localgroup Administrators) -contains $env:username -or (net localgroup Administrators) -contains "$env:userdomain\$env:username"){
+}else{
+    write-host "このユーザアカウントでは本Scriptは動作しません。"
+    pause
+    exit
+}
 
-# 1. 共通モジュールの読み込み試行 (メインスクリプトと同じディレクトリにある場合)
 $npl = Get-Location
-$utilsPath = Join-Path $npl "Utils.psm1"
-if (Test-Path $utilsPath) {
-    Import-Module $utilsPath -Force
-} else {
-    # 単体動作時のための最低限のログ関数
-    function Write-Log($logstring, $path) {
-        $msg = "$(Get-Date -Format 'yyyy/MM/dd HH:mm:ss.fff') $logstring"
-        Write-Output $msg | Out-File -FilePath $path -Append
-        return $msg
+Unblock-File "$npl\gmhtechsupport.ps1"
+
+#################################################################################################
+# Translate Function with Caching
+#################################################################################################
+$Cult  = Get-Culture
+$TranslationCache = @{}
+#$Cult  = "en-US"
+function Get-Translate($transtext){
+    if($Cult -ne "ja-JP"){
+        # キャッシュから返す
+        if($TranslationCache.ContainsKey($transtext)){
+            return $TranslationCache[$transtext]
+        }
+        try{
+            $Uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$($Cult)&dt=t&q=$transtext"
+            $Response = (Invoke-WebRequest -Uri $Uri -Method Get -TimeoutSec 5).Content
+            $Resulttxt = $Response -split '\\r\\n' -replace '^(","?)|(null.*?\[")|\[{3}"' -split '","'
+            $result = $Resulttxt[0]
+            # キャッシュに保存
+            $TranslationCache[$transtext] = $result
+            return $result
+        }catch{
+            # エラー時はキャッシュに保存して返す
+            $TranslationCache[$transtext] = $transtext
+            return $transtext
+        }
+    }else{
+        return $transtext
     }
 }
 
-# 2. 権限チェック
-if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-    Write-Host "管理者権限が必要です。終了します。"
-    Pause; Exit
+#################################################################################################
+# Folder用Function
+#################################################################################################
+#Special Thanks
+#https://qiita.com/Kosen-amai/items/7b2339d7de8223ab77c4
+Add-Type -AssemblyName System.Windows.Forms
+function Get-FolderPathG{
+    param(
+        [Parameter(ValueFromPipeline=$true)]
+        [string]$Description = $(Get-Translate("フォルダを選択してください")),
+        [boolean]$CurrentDefault = $false
+    )
+    # メインウィンドウ取得
+    $process = [Diagnostics.Process]::GetCurrentProcess()
+    $window = New-Object Windows.Forms.NativeWindow
+    $window.AssignHandle($process.MainWindowHandle)
+
+    $fd = New-Object System.Windows.Forms.FolderBrowserDialog
+    $fd.Description = $Description
+
+    if($CurrentDefault -eq $true){
+        # カレントディレクトリを初期フォルダとする
+        $fd.SelectedPath = (Get-Item $PWD).FullName
+    }
+
+    # フォルダ選択ダイアログ表示
+    $ret = $fd.ShowDialog($window)
+
+    if($ret -eq [System.Windows.Forms.DialogResult]::OK){
+        return $fd.SelectedPath
+    }
+    else{
+        return $null
+    }
+}
+#################################################################################################
+#Mod Selecter
+#################################################################################################
+
+if($null -ne $Arg1){
+    $scid = $Arg1
+}else{
+    $scid = "NOS"
 }
 
-# 3. パラメータ初期化
-$scid = if ($Arg1) { $Arg1 } else { "NOS" }
-$aupathm = if ($Arg2) { $Arg2 } else { "C:\Program Files (x86)\Steam\steamapps\common\Among Us $scid Mod" }
-$platform = if ($Arg3) { $Arg3 } else { "Steam" }
-
-# ログ出力先の設定
+#################################################################################################
+# Log用Function
+#################################################################################################
+# ログの出力先
 $LogPath = "C:\Temp\AUM_Tech"
-if (-not (Test-Path $LogPath)) { New-Item $LogPath -Type Directory -Force | Out-Null }
-$LogFileName = Join-Path $LogPath "AmongUs_$($scid)_TechSupportLog_$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+# ログファイル名
+$LogName = "AmongUs_$($scid)_TechSupportLog"
+$Now = Get-Date
+# ログファイル名(XXXX_YYYY-MM-DD.log)
+$LogFile = $LogName + "_" +$Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".log"
+# ログフォルダーがなかったら作成
+if( -not (Test-Path $LogPath) ) {
+    New-Item $LogPath -Type Directory
+}
+# ログファイル名
+$LogFileName = Join-Path $LogPath $LogFile
+function Write-Log($logstring){
+    $Now = Get-Date
+    # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
+    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
+    $Log += $LogString
+        # ログ出力
+    Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding utf8 -Append
+    # echo させるために出力したログを戻す
+    Return $(Get-Translate($Log))
+}
 
-Write-Log "Gathering Tech Support Info Starts - v$version" $LogFileName
-Write-Log "ModID: $scid / Platform: $platform / Path: $aupathm" $LogFileName
+#################################################################################################
+#AutoDetect用Static
+#################################################################################################
+Write-Log "Running With Powershell Version $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)"
+Write-Log "                                                                 "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "                                                                 "
+Write-Log "              Among Us Mod Tech Support Script                   "
+Write-Log "                                                   Version: $version"
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Gathering Tech Support Information Starts"
+Write-Log "-----------------------------------------------------------------"
+Write-Log "$Arg1"
+Write-Log "$Arg2"
+Write-Log "$Arg3"
 
-# 4. ログ収集フェーズ
-$logFiles = @(
-    @{ Name = "Nebula Log"; Path = Join-Path $aupathm "NebulaLog.txt" },
-    @{ Name = "BepInEx Log"; Path = Join-Path $aupathm "BepInEx\LogOutput.log" },
-    @{ Name = "persLog"; Path = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\persLog.log" },
-    @{ Name = "Player.log"; Path = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\Player.log" },
-    @{ Name = "Player-prev.log"; Path = "$env:APPDATA\..\LocalLow\Innersloth\Among Us\Player-prev.log" }
-)
+#Among Us Modded Path ：Steam Mod用フォルダ
+$au_path_steam_mod = "C:\Program Files (x86)\Steam\steamapps\common\Among Us $scid Mod"
+#Among Us Modded Path ：Steam Mod用フォルダ
+$au_path_epic_mod = "C:\Program Files\Epic Games\AmongUs $scid Mod"
 
-foreach ($log in $logFiles) {
-    Write-Log "------------------- $($log.Name) -------------------" $LogFileName
-    if (Test-Path $log.Path) {
-        Get-Content $log.Path -Raw -ErrorAction SilentlyContinue | Out-File -FilePath $LogFileName -Append
-    } else {
-        Write-Log "File not found: $($log.Path)" $LogFileName
+if($null -ne $Arg2){
+    $aupathm = $Arg2   
+    if($null -ne $Arg3){
+        $platform = $Arg3
+    }else{
+        if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("PlatformはSteamですか?")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            $platform = "Steam"
+        }else{
+            $platform = "Epic"
+        }
+    }
+}elseif(Test-path "$au_path_steam_mod\Among Us.exe"){
+    $aupathm = $au_path_steam_mod
+    $platform = "steam"
+}elseif(Test-path "$au_path_epic_mod\Among Us.exe"){
+    $aupathm = $au_path_epic_mod
+    $platform = "epic"
+}else{
+    $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
+    ### Load
+    if(test-path "$fileName"){
+        $spath = Get-content "$fileName"
+        Remove-Item $fileName
+    }else{
+        #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
+        Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"
+        Write-Log "フォルダをユーザーに選択するようダイアログを出します"
+        [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っているAmongUsがインストールされているフォルダを選択してください")), "Among Us Mod Auto Deploy Tool")
+        $spath = Get-FolderPathG
+    }
+    if($null -eq $spath){
+        Write-Log "Failed $spath"
+        pause
+        Exit
+    }
+    if(test-path "$spath\Among Us.exe"){
+        Write-Log "$spath にAmongUs Modのインストールパスを確認しました"
+        if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("PlatformはSteamですか？")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
+            $platform = "Steam"
+        }else{
+            $platform = "Epic"
+        }
+    }else{
+        Write-Log "$spath にAmongUsのインストールが確認できませんでした"
+        pause
+        Exit
+    }
+    if(test-path $spath){
+        $aupathm = $spath
+        Write-Log $aupathm
+    }else{
+        Write-Log "選択されたフォルダにAmongUsを見つけることに失敗しました"      
+        Write-Log "処理を中止します"      
+        pause
+        exit
+    }
+}
+Write-Log "Platform:$platform"
+
+if(($scid -eq "NOS")-or($scid -eq "NOT")){
+    Write-Log "`r`n`r`n "
+    Write-Log "-----------------------------------------------------------------"
+    Write-Log "Nebula Log"
+    Write-Log "-----------------------------------------------------------------"
+    
+    #BepinEx稼働/BepinExLogチェック
+    if(!(Test-Path "$aupathm\NebulaLog.txt")){
+        Write-Log "There is no NebulaLog.txt"
+    }else{
+        $content = Get-content "$aupathm\NebulaLog.txt" -Raw
+        Write-Log "`r`n $content"
     }
 }
 
-# 5. 構成ツリー取得
-Write-Log "------------------- Directory Tree -------------------" $LogFileName
-if (Test-Path $aupathm) {
-    cmd /c "tree `"$aupathm`" /F" | Out-File -FilePath $LogFileName -Append
-}
 
-# 6. システム・ネットワーク診断
-Write-Log "------------------- DXDiag (System Info) -------------------" $LogFileName
-$diagPath = Join-Path $LogPath "dxdiag_temp.txt"
-Start-Process dxdiag.exe -ArgumentList "/t $diagPath" -Wait
-if (Test-Path $diagPath) {
-    Get-Content $diagPath -Encoding Shift_JIS | Out-File -FilePath $LogFileName -Append
-    Remove-Item $diagPath -Force
-}
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Bepin Log"
+Write-Log "-----------------------------------------------------------------"
 
-Write-Log "------------------- Network Diagnostic -------------------" $LogFileName
-"1.1.1.1", "8.8.8.8" | ForEach-Object {
-    Write-Log "Pinging $_ ..." $LogFileName
-    ping.exe $_ -n 4 | Out-File -FilePath $LogFileName -Append
+#BepinEx稼働/BepinExLogチェック
+if(!(Test-Path "$aupathm\BepInEx\LogOutput.log")){
+    Write-Log "There is no Logoutput.log"
+}else{
+    $content = Get-content "$aupathm\BepInEx\LogOutput.log" -Raw
+    Write-Log "`r`n $content"
 }
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Check Tree"
+Write-Log "-----------------------------------------------------------------"
+Write-Log "$aupathm"
 
-# 7. スピードテスト (1-③ 一括インストールの思想を適用)
-if (-not (Get-Command speedtest -ErrorAction SilentlyContinue)) {
-    Write-Log "Installing Speedtest CLI..." $LogFileName
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade speedtest -y" -Verb RunAs -Wait
+#フォルダ/ファイル構成チェック
+Set-Location $aupathm
+tree /F | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
+
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "AmongUs AppData tree"
+Write-Log "-----------------------------------------------------------------"
+#\AppData\LocalLow\Innersloth\Among Us log
+Set-Location "$env:APPDATA\..\LocalLow\Innersloth\Among Us"
+tree /F | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
+
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "persLog"
+Write-Log "-----------------------------------------------------------------"
+$content = Get-content "$env:APPDATA\..\LocalLow\Innersloth\Among Us\persLog.log" -Raw
+Write-Log "`r`n $content"
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Player"
+Write-Log "-----------------------------------------------------------------"
+$content = Get-content "$env:APPDATA\..\LocalLow\Innersloth\Among Us\Player.log" -Raw
+Write-Log "`r`n $content"
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Player-prev"
+Write-Log "-----------------------------------------------------------------"
+$content = Get-content "$env:APPDATA\..\LocalLow\Innersloth\Among Us\Player-prev.log" -Raw
+Write-Log "`r`n $content"
+Write-Log "`r`n`r`n "
+
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Dxdiag"
+Write-Log "-----------------------------------------------------------------"
+$diag = "$LogPath\dxdiag.txt"
+dxdiag.exe /t $diag
+$nid = (get-process dxdiag).id
+wait-process -id $nid
+$content = Get-content "$diag" -Encoding Shift_JIS -Raw
+Write-Log "`r`n $content"
+Write-Log "`r`n`r`n "
+Remove-Item $diag -Force
+
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Ping/Tracert check"
+Write-Log "-----------------------------------------------------------------"
+ping.exe 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
+Write-Log "`r`n $content"
+ping.exe 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
+Write-Log "`r`n $content"
+tracert.exe -d 1.1.1.1 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
+Write-Log "`r`n $content"
+tracert.exe -d 8.8.8.8 | Select-String -Pattern "\S"  | Select-String -Pattern "\S" | Tee-Object ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
+Write-Log "`r`n $content"
+
+Write-Log "`r`n`r`n "
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Speedtest"
+Write-Log "-----------------------------------------------------------------"
+
+try{
+    choco -v
+}catch{
+    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
 }
-if (Get-Command speedtest -ErrorAction SilentlyContinue) {
-    Write-Log "Running Speedtest..." $LogFileName
-    speedtest --accept-license --accept-gdpr | Out-File -FilePath $LogFileName -Append
-}
+Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade speedtest -y" -Verb RunAs -Wait   
 
-# 8. Discord送信フェーズ (V3.3.0以降の Invoke-RestMethod 版)
-$chkenabled = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/enabledebug.txt" -UseBasicParsing
-if ($chkenabled -match "true" -and (Get-Culture).Name -eq "ja-JP") {
-    
-    $agreementPath = "C:\Temp\agreement.txt"
-    $agree = Test-Path $agreementPath
-    $usnm = if ($agree) { Get-Content $agreementPath -Raw } else { "" }
+speedtest --accept-license | Tee-Object ping.log
+$content = get-content "ping.log" -raw
+Remove-Item "ping.log"
+Write-Log "`r`n $content"
 
-    if (-not $agree) {
-        $result = [System.Windows.Forms.MessageBox]::Show("結果を診断サーバーに送信しますか？`n(個人情報が含まれる可能性があります)", "Debug Bot", 4)
-        if ($result -eq "Yes") {
-            Add-Type -AssemblyName Microsoft.VisualBasic
-            $usnm = [Microsoft.VisualBasic.Interaction]::InputBox("プレイヤー名を入力してください", "Debug Bot")
-            if ($usnm) {
-                $usnm | Out-File $agreementPath -Encoding UTF8
+
+if($Cult -eq "ja-JP"){
+    #post API(Discord or Git issue)
+    $chkenabled = ""
+    $chkenabled = invoke-webrequest https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/enabledebug.txt
+    if($($chkenabled.Content).LastIndexOf("true") -gt 0){
+        $dispost = $true
+        If(Test-Path "C:\Temp\agreement.txt"){
+            $agree = $true
+            $usnm = Get-content "C:\Temp\agreement.txt" -Raw
+            $usnm = $usnm.Replace("`r`n","")
+        }
+        Write-Log "Posting Debug Info is enabled globaly."
+    }else{
+        $dispost = $false
+        Write-Log "Posting Debug Info is not enabled globaly.."
+    }
+
+    if($dispost){
+        Write-Log "-----------------------------------------------------------------"
+        Write-Log "Posting Data"
+        Write-Log "-----------------------------------------------------------------"
+        
+        if(!($agree)){
+            if([System.Windows.Forms.MessageBox]::Show("結果を健康ランドにPostしますか？`r`n`r`n投稿される情報は個人情報を含む場合がありますが、`r`n当方では何かあった場合の責任について一切感知しません。`r`nここで押した選択は記録され、今後同じ質問はされません。", "Among Us Mod Debug Bot",4) -eq "Yes"){
                 $agree = $true
+                #　インプットボックスの表示
+                $usnm = [Microsoft.VisualBasic.Interaction]::InputBox("プレイヤー名を記載してください`r`nプレイヤー名が記載されていない場合は投稿をキャンセルします`r`nここで記載した名前は記録され、今後同じ質問はされません。", "Among Us Mod Debug Bot")
+                if($usnm -eq ""){
+                    return $LogFileName
+                }    
+                $usnm | Out-File -FilePath "C:\Temp\agreement.txt" -Encoding UTF8 -Append
             }
         }
-    }
 
-    if ($agree -and $usnm) {
-        Write-Log "Sending data to Discord..." $LogFileName
-        $dishook = "https://discord.com/api/webhooks/978249789361754172/Ae0qSR5YmfrtjLU44oTol_p70ciE1agNsg7-__rV_-K4wZHfKWc-cZN5a-9BdMmY7tig"
-        
-        # PowerShellネイティブなマルチパートフォームデータ送信
-        $Form = @{
-            content = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $usnm がデバッグ情報を送信しました。"
-            file    = Get-Item $LogFileName
-        }
-        try {
-            Invoke-RestMethod -Uri $dishook -Method Post -Form $Form
-            Write-Log "送信完了。" $LogFileName
-        } catch {
-            Write-Log "Discord送信エラー: $($_.Exception.Message)" $LogFileName
+        if($agree){
+            $dishook = "https://discord.com/api/webhooks/978249789361754172/Ae0qSR5YmfrtjLU44oTol_p70ciE1agNsg7-__rV_-K4wZHfKWc-cZN5a-9BdMmY7tig"
+
+            #　アセンブリの読み込み
+            [void][System.Reflection.Assembly]::Load("Microsoft.VisualBasic, Version=8.0.0.0, Culture=Neutral, PublicKeyToken=b03f5f7f11d50a3a")
+
+
+            $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+            $headers.Add("content-type", "multipart/form-data")
+            $headers.Add("Cookie", "__cfruid=6db5c6ada0d4c320afee521f14a55d58b856331f-1652577557; __dcfduid=0bf11ba09d7011ec8c31dac48d8e8976; __sdcfduid=0bf11ba09d7011ec8c31dac48d8e89764d55a8c8ef95cdfce9060d40f6b7bcde5325c65b689704f560aaa40f23128113")
+            
+            $multipartContent = [System.Net.Http.MultipartFormDataContent]::new()
+            $multipartFile = $LogFileName
+            $FileStream = [System.IO.FileStream]::new($multipartFile, [System.IO.FileMode]::Open)
+            $fileHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
+            $fileHeader.Name = "file"
+            $fileHeader.FileName = "$LogFileName"
+            $fileContent = [System.Net.Http.StreamContent]::new($FileStream)
+            $fileContent.Headers.ContentDisposition = $fileHeader
+            $multipartContent.Add($fileContent)
+            $Now = Get-Date
+            $stringHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new("form-data")
+            $stringHeader.Name = "payload_json"
+            $stringContent = [System.Net.Http.StringContent]::new("{`"content`":`"$($Now.ToString("yyyy-MM-dd-HH-mm-ss")): $usnm posts info from debug mode.`"}")
+            $stringContent.Headers.ContentDisposition = $stringHeader
+            $multipartContent.Add($stringContent)
+            
+            $body = $multipartContent
+            
+            $response = (Invoke-RestMethod $dishook -Method 'POST' -Headers $headers -Body $body) | ConvertTo-Json  
+            Write-Log $response 
         }
     }
 }
 
-Write-Log "Tech Support Script Ends." $LogFileName
+
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Tech Support Error check"
+Write-Log "-----------------------------------------------------------------"
+Write-Log $error.length
+
+if($error.length -eq 0){
+    Write-Log $(Get-Translate("Script 実行時のScriptエラーはなさそうです"))
+}else{
+    for($abc=0;$abc -le $error.Length;$abc++){
+        $($error[$abc]) | Out-string | Write-Log 
+    }    
+}
+Write-Log "-----------------------------------------------------------------"
+Write-Log "Script Ends"
+Write-Log "-----------------------------------------------------------------"
+
 Invoke-Item $LogPath
+
 return $LogFileName
+
