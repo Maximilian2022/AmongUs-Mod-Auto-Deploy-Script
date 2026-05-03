@@ -1,0 +1,32 @@
+{
+  "GameVersions": {
+    "Latest": {
+      "Label": "最新版",
+      "SteamDepotId": ""
+    },
+    "Previous": {
+      "Label": "v2025.9.9",
+      "Version": "2025.9.9",
+      "SteamDepotId": "4146372421172743268"
+    },
+    "Legacy": {
+      "Label": "v2025.6.10",
+      "Version": "2025.6.10",
+      "SteamDepotId": "1298083356997541927"
+    }
+  },
+  "ModCompatibility": {
+    "NOS":   { "MinVerLatest": "108",         "MinVerPrev": "108",         "MinVerLegacy": "107" },
+    "NOT":   { "MinVerLatest": "108",         "MinVerPrev": "108",         "MinVerLegacy": "107" },
+    "ER":    { "MinVerLatest": "v2025.9.10.0","MinVerPrev": "v2025.9.10.0","MinVerLegacy": "v14.0.0.0" },
+    "ER+ES": { "MinVerLatest": "v2025.9.10.0","MinVerPrev": "v2025.9.10.0","MinVerLegacy": "v14.0.0.0" },
+    "TOR":   { "MinVerLatest": "v4.8.0",       "MinVerPrev": "v4.8.0",       "MinVerLegacy": "v4.8.0" },
+    "TOR GMH": { "MinVerLatest": "v5.1.14",    "MinVerPrev": "v5.1.14",    "MinVerLegacy": "v5.1.13" },
+    "TOU-R": { "MinVerLatest": "v5.3.1",       "MinVerPrev": "v5.3.1",       "MinVerLegacy": "v5.0.6" },
+    "SRA":   { "MinVerLatest": "v2025.5.12",   "MinVerPrev": "v2025.5.12",   "MinVerLegacy": "v2025.5.12" },
+    "LM":    { "MinVerLatest": "3.9.0",       "MinVerPrev": "3.9.0",       "MinVerLegacy": "3.8.8" },
+    "TOH":   { "MinVerLatest": "v5.1.14",      "MinVerPrev": "v5.1.14",      "MinVerLegacy": "v5.1.13" },
+    "TOY":   { "MinVerLatest": "v519.27",      "MinVerPrev": "v519.27",      "MinVerLegacy": "v519.27" },
+    "SNR":   { "MinVerLatest": "3.1.0.0",     "MinVerPrev": "3.1.0.0",     "MinVerLegacy": "3.0.0.0" }
+  }
+}
