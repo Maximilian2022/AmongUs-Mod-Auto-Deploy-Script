@@ -5,8 +5,8 @@ $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.1.7"
-$build = "20260328001"
+$version = "2.1.8"
+$build = "20260609001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -741,11 +741,13 @@ Function ConvertFrom-VDF {
         $element = $null
         ForEach ($line in $InputObject) {
             $quotedElements = (Select-String -Pattern '(?<=")([^\"\t\s]+\s?)+(?=")' -InputObject $line -AllMatches).Matches
-            if ($quotedElements.Count -eq 1) { # Create a new (sub) object
+            if ($quotedElements.Count -eq 1) {
+                # Create a new (sub) object
                 $element = New-Object -TypeName PSObject
                 Add-Member -InputObject $parent -MemberType NoteProperty -Name $quotedElements[0].Value -Value $element
             }
-            elseif ($quotedElements.Count -eq 2) { # Create a new String hash
+            elseif ($quotedElements.Count -eq 2) {
+                # Create a new String hash
                 Add-Member -InputObject $element -MemberType NoteProperty -Name $quotedElements[0].Value -Value $quotedElements[1].Value
             }
             elseif ($line -match "{") {
@@ -759,7 +761,8 @@ Function ConvertFrom-VDF {
                 $element = $parent
                 $chain.Remove($depth)
             }
-            else { # Comments etc
+            else {
+                # Comments etc
             }
         }
         return $root
@@ -1854,7 +1857,8 @@ function Reload() {
         $aupathm = Join-Path $parentPath "Among Us $scid Mod"
         if ($platform -eq "epic") {
             $aupathb = Join-Path $parentPath "AmongUsBackup"
-        } else {
+        }
+        else {
             $aupathb = Join-Path $parentPath "Among Us Backup"
         }
         
