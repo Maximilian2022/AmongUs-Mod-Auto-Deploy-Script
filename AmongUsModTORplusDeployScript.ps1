@@ -1,4 +1,7 @@
-Param($Args1) #skipconfirmation
+Param(
+    $Args1, #skipconfirmation
+    [switch]$DebugMode
+)
 $ScriptStartTime = Get-Date
 $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 ################################################################################################
@@ -6,7 +9,7 @@ $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "2.1.8"
-$build = "20260609002"
+$build = "20260609003"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -214,7 +217,9 @@ $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 Write-Output $(Get-Translate("$Log 実行前チェック完了"))
 
-if ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($($PSVersionTable.PSVersion.Major) -ne "7")) {
+$isDebugger = ($env:TERM_PROGRAM -eq "vscode") -or ($null -ne $psISE) -or $DebugMode
+
+if (!$isDebugger -and ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($($PSVersionTable.PSVersion.Major) -ne "7"))) {
     Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     exit
 }
@@ -277,11 +282,11 @@ if ($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zi
 # Icon and AUMADS Folder on Desktop
 #################################################################################################
 if (!(Test-Path "$dsk\AUMADS.ico")) {
-    aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
+    aria2c -x16 -s16 -j16 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
 }
 if ($icorenew) {
     Remove-Item "$dsk\AUMADS.ico" -Force 
-    aria2c -x5 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
+    aria2c -x16 -s16 -j16 -V --dir "$dsk" -o "AUMADS.ico" "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/optional/AUMADS.ico" --disable-ipv6
 }
 if (!(Test-Path "$dsk\AUMADS.ico")) {
     try {
@@ -290,7 +295,7 @@ if (!(Test-Path "$dsk\AUMADS.ico")) {
     catch {
         Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco install -y imagemagick.app -PackageParameters "InstallDevelopmentHeaders=true LegacySupport=true"' -Verb RunAs -Wait
     }
-    aria2c -x5 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png" --disable-ipv6
+    aria2c -x16 -s16 -j16 -V --dir "$dsk" -o "icon.png" "https://3dicons.sgp1.cdn.digitaloceanspaces.com/v1/dynamic/premium/rocket-dynamic-premium.png" --disable-ipv6
     magick.exe convert "$dsk\icon.png" -define icon:auto-resize=16, 48, 256 -compress zip "$dsk\AUMADS.ico"    
     Remove-Item "$dsk\icon.png" -Force 
 }
@@ -362,7 +367,7 @@ if (Test-Path "C:\Program Files\Epic Games\AmongUs") {
         }
         for ($aaai = 0; $aaai -lt $aus.Length; $aaai++) {
             if ($($aus[$aaai]).IndexOf(".exe") -gt 0) {
-                aria2c -x5 -V --allow-overwrite=true --dir "$Env:ALLUSERSPROFILE\chocolatey\bin" -o "legendary.exe" $($aus[$aaai])
+                aria2c -x16 -s16 -j16 -V --allow-overwrite=true --dir "$Env:ALLUSERSPROFILE\chocolatey\bin" -o "legendary.exe" $($aus[$aaai])
                 Write-Log "$($aus[$aaai])"
                 Write-Log "Legendaryのバージョンが古いため、最新に更新しました。"
             }
@@ -462,19 +467,52 @@ function BackUpAU {
         if (Test-Path $backtracktxt) {
             $e = Get-Content $backtracktxt -Raw
         }
-
-        Write-Log $(Get-Content $backuptxt)
-        Write-Log $(Get-Content $backuptxt).IndexOf($amver)
         
-        if ($(Get-Content $backuptxt).IndexOf($amver) -lt 0) {
+        if ($null -ne $filen -and $filen.Trim().IndexOf($amver) -lt 0) {
             $e = "retake"
         }
 
-        if ($r -eq $e) {
+        if ($r.Trim() -eq $e.Trim()) {
             Write-Log "古い同一Backupが見つかったのでSkipします"
         }
         else {
             Write-Log "新しいBackupが見つかったので生成します"
+            # 差分ファイルの特定とログ出力
+            if ($e -ne "" -and $e -ne "retake") {
+                $eFiles = @{}
+                foreach ($item in $e.Split('|')) {
+                    if ($item -match '^(.+?):(\d+?):(\d+)$') {
+                        $eFiles[$Matches[1]] = @{ Length = $Matches[2]; Ticks = $Matches[3] }
+                    }
+                }
+                $rFiles = @{}
+                foreach ($item in $r.Split('|')) {
+                    if ($item -match '^(.+?):(\d+?):(\d+)$') {
+                        $rFiles[$Matches[1]] = @{ Length = $Matches[2]; Ticks = $Matches[3] }
+                    }
+                }
+                
+                # 差分チェック
+                foreach ($name in $rFiles.Keys) {
+                    if (!$eFiles.ContainsKey($name)) {
+                        Write-Log "差分検出: 新規ファイル -> $name"
+                    }
+                    else {
+                        $eLen = [long]$eFiles[$name].Length
+                        $rLen = [long]$rFiles[$name].Length
+                        $eTicks = [long]$eFiles[$name].Ticks
+                        $rTicks = [long]$rFiles[$name].Ticks
+                        if ($eLen -ne $rLen -or $eTicks -ne $rTicks) {
+                            Write-Log "差分検出: 変更あり -> $name (サイズ: $eLen -> $rLen, 更新日時Ticks: $eTicks -> $rTicks)"
+                        }
+                    }
+                }
+                foreach ($name in $eFiles.Keys) {
+                    if (!$rFiles.ContainsKey($name)) {
+                        Write-Log "差分検出: 削除されたファイル -> $name"
+                    }
+                }
+            }
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
             Compress-7Zip -Path $aupatho -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$amver.zip")
             if (Test-Path $backtracktxt) { Remove-Item -Path $backtracktxt -Force }
@@ -1035,6 +1073,34 @@ function Initialize-GameEnvironment {
 
 # 起動時の初期検出を実行
 Initialize-GameEnvironment
+
+# GitHub API の非同期プレフェッチ (NOS, SNR, ER用)
+Write-Log "GitHub API Async Prefetching started..."
+$script:prefetchJobs = @{}
+$prefetchUrls = @{
+    "NOS" = "https://api.github.com/repos/Dolly1016/Nebula/releases"
+    "SNR" = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
+    "ER"  = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
+}
+
+foreach ($key in $prefetchUrls.Keys) {
+    $url = $prefetchUrls[$key]
+    $ps = [powershell]::Create().AddScript({
+        param($targetUrl)
+        try {
+            $response = Invoke-WebRequest $targetUrl -UseBasicParsing -TimeoutSec 10
+            return $response
+        } catch {
+            return $null
+        }
+    }).AddArgument($url)
+    
+    $asyncResult = $ps.BeginInvoke()
+    $script:prefetchJobs[$key] = @{
+        PowerShell = $ps
+        AsyncResult = $asyncResult
+    }
+}
 
 #################################################################################################
 ### Mod 選択メニュー表示
@@ -1600,8 +1666,19 @@ function Reload() {
         }
         elseif (($scid -eq "ER") -or ($scid -eq "ER+ES")) {
             if ($null -eq $script:erweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:erweb = $web 
+                if ($null -ne $script:prefetchJobs["ER"]) {
+                    $job = $script:prefetchJobs["ER"]
+                    $web = $job.PowerShell.EndInvoke($job.AsyncResult)
+                    $job.PowerShell.Dispose()
+                    $script:prefetchJobs.Remove("ER")
+                    if ($null -ne $web) {
+                        $script:erweb = $web
+                    }
+                }
+                if ($null -eq $script:erweb) {
+                    $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                    $script:erweb = $web 
+                }
             }
             else {
                 $web = $script:erweb 
@@ -1609,8 +1686,19 @@ function Reload() {
         }
         elseif (($scid -eq "NOS") -or ($scid -eq "NOT")) {
             if ($null -eq $script:nosweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:nosweb = $web 
+                if ($null -ne $script:prefetchJobs["NOS"]) {
+                    $job = $script:prefetchJobs["NOS"]
+                    $web = $job.PowerShell.EndInvoke($job.AsyncResult)
+                    $job.PowerShell.Dispose()
+                    $script:prefetchJobs.Remove("NOS")
+                    if ($null -ne $web) {
+                        $script:nosweb = $web
+                    }
+                }
+                if ($null -eq $script:nosweb) {
+                    $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                    $script:nosweb = $web 
+                }
             }
             else {
                 $web = $script:nosweb 
@@ -1627,8 +1715,19 @@ function Reload() {
         }
         elseif ($scid -eq "SNR") {
             if ($null -eq $script:snrweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:snrweb = $web 
+                if ($null -ne $script:prefetchJobs["SNR"]) {
+                    $job = $script:prefetchJobs["SNR"]
+                    $web = $job.PowerShell.EndInvoke($job.AsyncResult)
+                    $job.PowerShell.Dispose()
+                    $script:prefetchJobs.Remove("SNR")
+                    if ($null -ne $web) {
+                        $script:snrweb = $web
+                    }
+                }
+                if ($null -eq $script:snrweb) {
+                    $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+                    $script:snrweb = $web 
+                }
             }
             else {
                 $web = $script:snrweb 
@@ -3192,7 +3291,7 @@ if ($tio) {
     Write-Log $tordlp
     #Invoke-WebRequest $tordlp -OutFile "$aupathm\TheOtherRoles.zip" -UseBasicParsing
     #curl.exe -L $tordlp -o "$aupathm\TheOtherRoles.zip"
-    aria2c -x5 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
+    aria2c -x16 -s16 -j16 -V --dir "$aupathm" -o "TheOtherRoles.zip" $tordlp
 
     Write-Log "Download ZIP 完了"
     $Bar.Value = "57"
@@ -3241,7 +3340,7 @@ if ($tio) {
     #LevelImposter DLLをDLして配置
     Write-Log "Download $scid Mini.RegionInstall DLL 開始"
     Write-Log $mdl
-    aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Mini.RegionInstall.dll" $mdl
+    aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "Mini.RegionInstall.dll" $mdl
     Write-Log "Download $scid Mini.RegionInstall DLL 完了"
     $regioninstalltxt = "[General]`r`nRegions = "
     #region check
@@ -3502,7 +3601,7 @@ if ($tio) {
             Write-Log $torgmdll
             #TOR+ DLLをDLして配置
             Write-Log "Download $scid DLL 開始"
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
+            aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
             Write-Log "Download $scid DLL 完了"
         }
     }
@@ -3521,7 +3620,7 @@ if ($tio) {
         Write-Log $torgmdll
         #TOR+ DLLをDLして配置
         Write-Log "Download $scid DLL 開始"
-        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
+        aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "TheOtherRolesGM.dll" $torgmdll
         Write-Log "Download $scid DLL 完了"
     }
     elseif ($scid -eq "TOU-R") {
@@ -3551,7 +3650,7 @@ if ($tio) {
             Write-Log $torgmdll
             #TOR+ DLLをDLして配置
             Write-Log "Download $scid DLL 開始"
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "StellarRoles.dll" $sradll
+            aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "StellarRoles.dll" $sradll
             Write-Log "Download $scid DLL 完了"
         }
     }
@@ -3597,7 +3696,7 @@ if ($tio) {
         }
         #ExVE DLLをDLして配置
         Write-Log "Download $scid Extreme Voice Engine DLL 開始"
-        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
+        aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
         Write-Log "Download $scid Extreme Voice Engine DLL 完了"                 
     }
     elseif ($scid -eq "ER+ES") {
@@ -3611,7 +3710,7 @@ if ($tio) {
         }
         #ExVE DLLをDLして配置
         Write-Log "Download $scid Extreme Voice Engine DLL 開始"
-        aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
+        aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "ExtremeVoiceEngine.dll" $exve
         Write-Log "Download $scid Extreme Voice Engine DLL 完了"                 
     }
     elseif ($scid -eq "LM") {
@@ -3667,7 +3766,7 @@ if ($tio) {
         }
         #Agartha DLLをDLして配置
         #Write-Log "Download $scid Agartha DLL 開始"
-        #aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
+        #aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "Agartha.dll" $Agartha
         #Write-Log "Download $scid Agartha DLL 完了"         
 
     }
@@ -3683,7 +3782,7 @@ if ($tio) {
             }
             Write-Log $amsdll
             Write-Log "Download $scid AUModS DLL 開始"
-            aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "AUModS.dll" $amsdll
+            aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "AUModS.dll" $amsdll
             Write-Log "Download $scid AUModS DLL 完了"    
         }
     }
@@ -3725,16 +3824,16 @@ if ($tio) {
         $addon2 = ConvertFrom-Json $addon.Content
         #v2.11
         $langdata = ($addon2.assets.browser_download_url | Select-String "Localization_the_Nebula").ToString()
-        aria2c -x5 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
+        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
         $cfsnr = ($addon2.assets.browser_download_url | Select-String "Colors_from_SNR").ToString()
-        aria2c -x5 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
+        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
 
         $mdnpage = "https://api.github.com/repos/Mido-otosae/Midohat-For-Nos/releases/latest"
         $mdn = Invoke-WebRequest $mdnpage -UseBasicParsing
         $mdn2 = ConvertFrom-Json $mdn.Content
         $mdnr = ($mdn2.assets.browser_download_url | Select-String ".zip").ToString()
-        aria2c -x5 -V --dir "$aupathm\Addons" -o "mdngus01.zip" $mdnr --allow-overwrite=true 
+        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "mdngus01.zip" $mdnr --allow-overwrite=true 
         Write-Log "Midohat Download 完了"
 
     }
@@ -4092,7 +4191,7 @@ if ($ckbci.Count -gt 0) {
                     }
                 }
                 if ($aurcheck) {
-                    aria2c -x5 -V --allow-overwrite=true --dir "$md" -o "$auriwfile" $auriw
+                    aria2c -x16 -s16 -j16 -V --allow-overwrite=true --dir "$md" -o "$auriwfile" $auriw
                     #Invoke-WebRequest $auriw -OutFile "$md\$auriwfile" -UseBasicParsing
                     Expand-7zip -ArchiveFileName $md\$auriwfile -TargetPath $md\$auriwfn
                     Remove-Item $md\$auriwfile -Force
@@ -4128,7 +4227,7 @@ if ($ckbci.Count -gt 0) {
             }
             if ($aucapcheck) {
                 #Invoke-WebRequest $aucap[0] -OutFile "$md\$aucapfile" -UseBasicParsing
-                aria2c -x5 -V --allow-overwrite=true --dir "$md" -o "$aucapfile" $aucap[0]                
+                aria2c -x16 -s16 -j16 -V --allow-overwrite=true --dir "$md" -o "$aucapfile" $aucap[0]                
                 Expand-7Zip -ArchiveFileName $md\$aucapfile -TargetPath $md\$aucapfn
                 Remove-Item $md\$aucapfile -Force
                 Set-Location -Path $md\$aucapfn
@@ -4187,7 +4286,7 @@ if ($ckbci.Count -gt 0) {
                 #Reactor DLLをDLして配置
                 Write-Log "Download $scid Reactor DLL 開始"
                 Write-Log $snreactor
-                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
+                aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "Reactor.dll" $snreactor
                 Write-Log "Download $scid Reactor DLL 完了"         
         
                 if (Test-Path "$aupathm\BepInEx\plugins\LevelImposter.dll") {
@@ -4197,7 +4296,7 @@ if ($ckbci.Count -gt 0) {
                 #LevelImposter DLLをDLして配置
                 Write-Log "Download $scid LevelImposter DLL 開始"
                 Write-Log $snLevel
-                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
+                aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "LevelImposter.dll" $snLevel
                 Write-Log "Download $scid LevelImposter DLL 完了"             
             }
         }
@@ -4231,7 +4330,7 @@ if ($ckbci.Count -gt 0) {
                 #Submerged DLLをDLして配置
                 Write-Log "Download $scid Submerged DLL 開始"
                 Write-Log $snLevel
-                aria2c -x5 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $snLevel
+                aria2c -x16 -s16 -j16 -V --dir "$aupathm\BepInEx\plugins" -o "Submerged.dll" $snLevel
                 Write-Log "Download $scid Submerged DLL 完了"             
             }
         }
@@ -4273,7 +4372,7 @@ if ($ckbci.Count -gt 0) {
                 }    
             }
             Write-Log $vvexe          
-            aria2c -x5 -V --allow-overwrite=true --dir "$dsk" -o "VOICEVOX.Web.Setup.exe" $vvexe                
+            aria2c -x16 -s16 -j16 -V --allow-overwrite=true --dir "$dsk" -o "VOICEVOX.Web.Setup.exe" $vvexe                
             Start-process "$dsk\VOICEVOX.Web.Setup.exe" -Verb RunAs -Wait
             Remove-Item "$dsk\VOICEVOX*" -Force
             $Bar.Value = "85"
@@ -4430,19 +4529,19 @@ if ($ckbci.Count -gt 0) {
                 if ($RadioButton115.Checked) {
                     #prev1
                     if ($ninja.Contains("__" + $nosmin1)) {
-                        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true                         
+                        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true                         
                     }
                     if ($scat.Contains("__" + $nosmin1)) {
-                        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true                         
+                        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true                         
                     }
                 }
                 elseif ($RadioButton116.Checked) {
                     #prev2
                     if ($ninja.Contains("__" + $nosmin2)) {
-                        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
+                        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
                     }
                     if ($scat.Contains("__" + $nosmin2)) {
-                        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+                        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
                     }
                 }
                 else {
@@ -4454,7 +4553,7 @@ if ($ckbci.Count -gt 0) {
                         Write-Log "Ninja  は互換性の問題でインストールされませんでした"
                     }
                     else {
-                        aria2c -x5 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
+                        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "Ninja.zip" $ninja --allow-overwrite=true 
                     }
                     if ($scat.Contains("__" + $nosmin1)) {
                         Write-Log "SchrodingersCat  は互換性の問題でインストールされませんでした"
@@ -4463,7 +4562,7 @@ if ($ckbci.Count -gt 0) {
                         Write-Log "SchrodingersCat は互換性の問題でインストールされませんでした"
                     }
                     else {
-                        aria2c -x5 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
+                        aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "SchrodingersCat.zip" $scat --allow-overwrite=true 
                     }
                 }
                 Write-Log "NOS/NOTに追加役職Addonを追加しました。"
@@ -4630,11 +4729,13 @@ else {
     Write-Log $dsk
     Write-Log $($npl2.Path).length
     Write-Log $dsk.length
-    if (Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat") {
-        Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
-    }
-    if (Test-Path "$npl2\StartAmongUsGetLogScript_$scid.bat") {
-        Remove-Item "$npl2\StartAmongUsGetLogScript_$scid.bat" -Force
+    if (!$isDebugger) {
+        if (Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat") {
+            Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
+        }
+        if (Test-Path "$npl2\StartAmongUsGetLogScript_$scid.bat") {
+            Remove-Item "$npl2\StartAmongUsGetLogScript_$scid.bat" -Force
+        }
     }
     #   if(Test-Path "$npl2\AmongUsModTORplusDeployScript.ps1"){
     #       Remove-Item "$npl2\AmongUsModTORplusDeployScript.ps1" -Force

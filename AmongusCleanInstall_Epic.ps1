@@ -1,4 +1,7 @@
-﻿Param($Args1) #modnum
+Param(
+    $Args1, #modnum
+    [switch]$DebugMode
+)
 #################################################################################################
 #
 # Among Us Clean Install Script Epic
@@ -39,33 +42,30 @@ function Get-Translate($transtext){
 # Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
-$v5run = $false
+$isDebugger = ($env:TERM_PROGRAM -eq "vscode") -or ($null -ne $psISE) -or $DebugMode
 
-if($PSVersionTable.PSVersion.major -eq 5){
-    if(test-path "$env:ProgramFiles\PowerShell\7"){
-        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Epic.ps1"
-    }else{
-        $v5run = $true
-        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-            ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")
-            Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Epic.ps1`"" -Verb RunAs -Wait
+$v5run = $false
+if ($PSVersionTable.PSVersion.major -eq 5) {
+    if (test-path "$env:ProgramFiles\PowerShell\7") {
+        if (!$isDebugger) {
+            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Epic.ps1`"" -Verb RunAs -Wait
             exit
         }
-        
+    } else {
+        $v5run = $true
     }
-}elseif($PSVersionTable.PSVersion.major -gt 5){
+} elseif ($PSVersionTable.PSVersion.major -gt 5) {
     $v5run = $true
-    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-        ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")
-        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Epic.ps1`"" -Verb RunAs -Wait
-        exit
-    }
-    
-}else{
+} else {
     write-host "ERROR - PowerShell Version : not supported."
 }
 
-if(!($v5run)){
+if ($v5run -and !$isDebugger -and !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+    if ($PSVersionTable.PSVersion.major -eq 5) {
+        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Epic.ps1`"" -Verb RunAs -Wait
+    } else {
+        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Epic.ps1`"" -Verb RunAs -Wait
+    }
     exit
 }
 
@@ -152,13 +152,10 @@ $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
 $au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
 $spath = ""
 
-$proclist = Get-Process
-$epicbool = $false
-for($i=0;$i -lt $proclist.count;$i++){
-    if($proclist.ProcessName[$i] -eq "EpicGamesLauncher"){
-        write-log "$i EGL"
-        $epicbool = $true
-    }
+$epicProc = Get-Process -Name "EpicGamesLauncher" -ErrorAction SilentlyContinue | Select-Object -First 1
+$epicbool = $null -ne $epicProc
+if ($epicbool) {
+    Write-Log "EGL detected"
 }
 
 if(Test-path "$au_path_epic_org\Among Us.exe"){
@@ -169,7 +166,7 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
     $epicinfo = legendary.exe info AmongUs
     $epicpath = $epicinfo | Select-String "Install path"
     $epicrow = $($epicpath.ToString()).Split(": ")
-    $epicreal = Split-Path -Path "$epicrow[1]"
+    $epicreal = Split-Path -Path "$($epicrow[1])"
     $epicreal = "$epicreal/AmongUs"
     if(Test-Path $epicreal){
         $spath = $epicreal        

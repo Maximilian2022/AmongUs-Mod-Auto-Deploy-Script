@@ -1,4 +1,7 @@
-﻿Param($Args1) #skipconfirmation
+Param(
+    $Args1, #skipconfirmation
+    [switch]$DebugMode
+)
 #################################################################################################
 #
 # Among Us Clean Install Script Steam
@@ -40,20 +43,26 @@ function Get-Translate($transtext){
 # Run w/ Powershell v7 if available.
 #################################################################################################
 $npl = Get-Location
+$isDebugger = ($env:TERM_PROGRAM -eq "vscode") -or ($null -ne $psISE) -or $DebugMode
+
 $v5run = $false
-if($PSVersionTable.PSVersion.major -eq 5){
-    if(test-path "$env:ProgramFiles\PowerShell\7"){
-        pwsh.exe -NoProfile -ExecutionPolicy Unrestricted "$npl\AmongusCleanInstall_Steam.ps1"
-    }else{
+if ($PSVersionTable.PSVersion.major -eq 5) {
+    if (test-path "$env:ProgramFiles\PowerShell\7") {
+        if (!$isDebugger) {
+            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Steam.ps1`"" -Verb RunAs -Wait
+            exit
+        }
+    } else {
         $v5run = $true
     }
-}elseif($PSVersionTable.PSVersion.major -gt 5){
+} elseif ($PSVersionTable.PSVersion.major -gt 5) {
     $v5run = $true
-}else{
+} else {
     write-host "ERROR - PowerShell Version : not supported."
 }
 
-if(!($v5run)){
+if ($v5run -and !$isDebugger -and !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Steam.ps1`"" -Verb RunAs -Wait
     exit
 }
 #>
@@ -133,27 +142,28 @@ Write-Log "-----------------------------------------------------------------"
 
 #Steam起動チェック
 $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
-$proclist = get-process
-$procnum
-for($i=0;$i -lt $proclist.count;$i++){           
-    if($proclist.ProcessName[$i] -eq "steam"){
-        write-log $i
-        $procnum = $i
+$steamProc = Get-Process -Name "steam" -ErrorAction SilentlyContinue | Select-Object -First 1
+$procPath = $null
+if ($null -ne $steamProc) {
+    try {
+        $procPath = $steamProc.Path
+        if ([string]::IsNullOrEmpty($procPath)) {
+            $procPath = $steamProc.MainModule.FileName
+        }
+    } catch {
+        Write-Log "Warning: Steam process path access failed: $_"
     }
-}           
-if (Test-Path $steampth){
+}
+
+if (Test-Path $steampth) {
     Write-Log "Steam アプリは以下で見つかりました。 $steampth"
-}elseif(Test-Path $($proclist[$procnum].path)){
-    $steampth = $($proclist[$procnum].path)
+} elseif ($null -ne $procPath -and (Test-Path $procPath)) {
+    $steampth = $procPath
     Write-Log "Steam アプリは以下で見つかりました。 $steampth"
-}else{
+} else {
     Write-Log "Steam アプリがデフォルトの場所に見つかりませんでした。"
-    Param(
-        [Parameter()]
-        [String] $FilePath
-    )     
     # $FilePath が設定されていない、又はファイルが存在しない
-    if([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
+    if ([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
         [void][System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")    
         $dialog = New-Object System.Windows.Forms.OpenFileDialog
         $dialog.Filter = $(Get-Translate("EXE ファイル(*.EXE)|*.EXE"))
@@ -161,7 +171,7 @@ if (Test-Path $steampth){
         $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
     
         # キャンセルを押された時は処理を止める
-        if($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG){
+        if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG) {
             exit 1
         }
     
@@ -192,7 +202,7 @@ while($steamruncheck){
     }
     Start-Sleep -Seconds 5
 }
-Start-Sleep -Seconds 20
+Start-Sleep -Seconds 3
 
 #################################################################################################
 #AutoDetect
