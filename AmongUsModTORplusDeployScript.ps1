@@ -800,6 +800,23 @@ else {
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs      
 }
 
+$platform = ""
+$scid = "TOR GMH"
+$tio = $true
+$aumin = ""
+$aumax = "NONE"
+$aupatho = ""
+$aupathm = ""
+$aupathb = ""
+$releasepage = ""
+$ovwrite = $false
+$amver = ""
+$prebool = $false
+$latestflag = 0
+$isall = $false
+$opflag = $false
+$ym = Get-Date -Format yyyyMM
+
 #################################################################################################
 # ゲーム環境・バージョンの初期検出（起動時1回のみ実行）
 #################################################################################################
@@ -830,14 +847,30 @@ function Initialize-GameEnvironment {
     $detected_path = $null
     $procpath = $null
     if ($null -ne $procnum) {
-        $procpath = Split-Path $proclist[$procnum].path -Parent
-        $detected_path = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us"
-        if (!(Test-Path $detected_path)) {
-            foreach ($num in 65..90) {                                     
-                if (Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us") {
-                    $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
-                    break
-                }     
+        try {
+            $pPath = $null
+            # pathプロパティへのアクセスはアクセス権がないと例外になるため保護
+            $pPath = $proclist[$procnum].Path
+            if ($null -eq $pPath -or $pPath -eq "") {
+                $pPath = $proclist[$procnum].MainModule.FileName
+            }
+            if ($null -ne $pPath -and $pPath -ne "") {
+                $procpath = Split-Path $pPath -Parent
+                $detected_path = Join-Path $procpath "steamapps\common\Among Us"
+            }
+        }
+        catch {
+            Write-Log "Warning: Process path access failed: $_"
+        }
+        
+        if ($null -ne $detected_path -and $detected_path -ne "") {
+            if (!(Test-Path $detected_path)) {
+                foreach ($num in 65..90) {                                     
+                    if (Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us") {
+                        $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
+                        break
+                    }     
+                }
             }
         } 
     }
@@ -1015,7 +1048,6 @@ Initialize-GameEnvironment
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
-$platform = ""
 
 # フォントの指定
 $Font = New-Object System.Drawing.Font("メイリオ", 12)
@@ -1259,10 +1291,6 @@ if ($gmhbool) {
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
 
-$isall = $false
-$opflag = $false
-$ym = Get-Date -Format yyyyMM
-
 ##############################################
 
 # ラベルを表示
@@ -1307,19 +1335,6 @@ $label6.Location = New-Object System.Drawing.Point(20, 550)
 $label6.Size = New-Object System.Drawing.Size(770, 40)
 $label6.Text = ""
 $form.Controls.Add($label6)
-
-$scid = "TOR GMH"
-$tio = $true
-$aumin = ""
-$aumax = "NONE"
-$aupatho = ""
-$aupathm = ""
-$aupathb = ""
-$releasepage = ""
-$ovwrite = $false
-$amver = ""
-$prebool = $false
-$latestflag = 0
 #$indeedcleaninstall = $false
 #$ver1st = @()
 #$ver2nd = @()
@@ -1852,6 +1867,11 @@ function Reload() {
         $aupatho = $script:aupatho
         $platform = $script:platform
         
+        if ([string]::IsNullOrEmpty($aupatho)) {
+            Write-Log "Error: $scid のパス構築をスキップします。Among Usのインストールパスが設定されていません。"
+            return
+        }
+        
         # 選択された Mod ($scid) に応じて、パスを自動構成する（I/Oアクセスを伴わず一瞬で完了）
         $parentPath = Split-Path $aupatho -Parent
         $aupathm = Join-Path $parentPath "Among Us $scid Mod"
@@ -1872,8 +1892,8 @@ function Reload() {
         $script:aumin = $aumin
         $script:tio = $script:tio
         $script:CheckedBox.ClearSelected()
-        for ($cbc = 0; $cbc -lt $script:ChekedListBox.Items.Count; $cbc++) {
-            $script:ChekedListBox.SetItemChecked($cbc, $false)
+        for ($cbc = 0; $cbc -lt $script:CheckedBox.Items.Count; $cbc++) {
+            $script:CheckedBox.SetItemChecked($cbc, $false)
         }
         if (($script:scid -eq "ER") -or ($script:scid -eq "ER+ES")) {
             if (!$script:hasVoicevox) {
