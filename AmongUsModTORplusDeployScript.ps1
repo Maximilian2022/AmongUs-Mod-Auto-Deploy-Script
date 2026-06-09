@@ -1,4 +1,4 @@
-﻿Param($Args1) #skipconfirmation
+Param($Args1) #skipconfirmation
 $ScriptStartTime = Get-Date
 $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 ################################################################################################
@@ -70,6 +70,19 @@ $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 #################################################################################################
 $Cult = Get-Culture
 $TranslationCache = @{}
+$gmhweb = $null
+$mrweb = $null
+$torweb = $null
+$tourweb = $null
+$sraweb = $null
+$erweb = $null
+$nosweb = $null
+$lmweb = $null
+$snrweb = $null
+$tohweb = $null
+$toyweb = $null
+$rhrweb = $null
+$amsweb = $null
 $transenabled = $true
 #$Cult  = "en-US"
 function Get-Translate($transtext) {
@@ -121,20 +134,25 @@ if ($Cult -ne "ja-JP") {
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 Write-Output $(Get-Translate("$Log 実行前権限チェック開始"))
-$TempMyOutputEncode = [System.Console]::OutputEncoding
-[System.Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding('shift_jis')
-if (!(((net localgroup Administrators) -contains $env:username ) -or ((net localgroup Administrators) -contains "$env:userdomain\$env:username"))) {
-    $Now = Get-Date
-    $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
-    Write-Host $(Get-Translate("$Log このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
-    Write-Host $(Get-Translate("$Log あなたのユーザー名($env:username)は管理者権限グループに属していません"))
-    Write-Host $(Get-Translate("$Log 管理者権限グループに属しているユーザーは以下の通りです"))
-    $nn = net localgroup Administrators
-    Write-Host $nn
-    pause
-    Exit
+$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = New-Object Security.Principal.WindowsPrincipal($identity)
+$isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if (!$isAdmin) {
+    $TempMyOutputEncode = [System.Console]::OutputEncoding
+    [System.Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding('shift_jis')
+    if (!(((net localgroup Administrators) -contains $env:username ) -or ((net localgroup Administrators) -contains "$env:userdomain\$env:username"))) {
+        $Now = Get-Date
+        $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
+        Write-Host $(Get-Translate("$Log このWindowsユーザーアカウントでは本Scriptは動作しません。管理者権限が必要です。"))
+        Write-Host $(Get-Translate("$Log あなたのユーザー名($env:username)は管理者権限グループに属していません"))
+        Write-Host $(Get-Translate("$Log 管理者権限グループに属しているユーザーは以下の通りです"))
+        $nn = net localgroup Administrators
+        Write-Host $nn
+        pause
+        Exit
+    }
+    [System.Console]::OutputEncoding = $TempMyOutputEncode
 }
-[System.Console]::OutputEncoding = $TempMyOutputEncode
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 Write-Output $(Get-Translate("$Log 実行前権限チェック終了"))
@@ -321,25 +339,7 @@ function ToHex([byte[]] $hashBytes) {
     $builder.ToString()
 }
 
-# 指定したフォルダ以下の全てのファイルを取得する.
-# (ファイルが指定された場合はファイル自身を返す)
-function GetFilesRecurse([string] $path) {
-    Get-ChildItem $path -Recurse |
-    Where-Object -FilterScript {
-        # ディレクトリ以外のみ (ディレクトリのビットマスク値は16)
-        ($_.Attributes -band 16) -eq 0
-    }
-}
 
-function MakeEntry {
-    process {
-        New-Object PSObject -Property @{
-            LastWriteTime = $_.LastWriteTime;
-            Length        = $_.Length;
-            FullName      = $_.FullName;
-        }
-    }
-}
 #func backup
 Add-Type -AssemblyName UIAutomationClient
 $oldtype = $true
@@ -424,20 +424,44 @@ function BackUpAU {
     #Current Ver check
     $datest = Get-Date -Format "yyyyMMdd-hhmmss"
     $backhashtxt = "$aupathb\backuphash.txt"
+    $backtracktxt = "$aupathb\backuptrack.txt"
     $backuptxt = "$aupathb\backupfn.txt"
+    
+    # 既存ユーザーの互換性処理: 古いハッシュファイルがあれば削除し、新しいトラック処理に移行
+    if (Test-Path $backhashtxt) {
+        Remove-Item $backhashtxt -Force
+        # backupfn.txt が存在する場合、バックアップZIPが存在しているはずなので、
+        # トラックファイルだけを現状のAmongUsフォルダから作成して次回以降のチェックに備える
+        if (Test-Path $backuptxt) {
+            $files = Get-ChildItem $aupatho -Recurse | Where-Object { !$_.PSIsContainer }
+            $trackData = ""
+            foreach ($file in $files) {
+                $trackData += "$($file.Name):$($file.Length):$($file.LastWriteTime.Ticks)|"
+            }
+            $trackData | Out-File $backtracktxt -Encoding utf8
+        }
+    }
+
+    # トラック情報の構築関数（高速）
+    function Get-FolderTrackInfo($folderPath) {
+        $files = Get-ChildItem $folderPath -Recurse | Where-Object { !$_.PSIsContainer }
+        $trackBuilder = New-Object System.Text.StringBuilder
+        foreach ($file in $files) {
+            [void]$trackBuilder.Append("$($file.Name):$($file.Length):$($file.LastWriteTime.Ticks)|")
+        }
+        return $trackBuilder.ToString()
+    }
+
     if (test-path "$backuptxt") {
         $f = (Get-Content $backuptxt) -as [string[]]
         $filen = $f[0]
         Write-Log $filen
-        $t = ""
-        $r = ""
-        $e = ""
         
-        $t = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-        foreach ($l in $t) {
-            $r += " $l"
+        $r = Get-FolderTrackInfo $aupatho
+        $e = ""
+        if (Test-Path $backtracktxt) {
+            $e = Get-Content $backtracktxt -Raw
         }
-        $e = (Get-Content $backhashtxt) -as [string[]]
 
         Write-Log $(Get-Content $backuptxt)
         Write-Log $(Get-Content $backuptxt).IndexOf($amver)
@@ -452,20 +476,17 @@ function BackUpAU {
         else {
             Write-Log "新しいBackupが見つかったので生成します"
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
-            write-log $e
-            Write-log $r
             Compress-7Zip -Path $aupatho -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$amver.zip")
-            Remove-Item -Path $backhashtxt -Force
-            Remove-Item -Path $backuptxt -Force
-            $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-            Write-Output " $thash"> $backhashtxt
+            if (Test-Path $backtracktxt) { Remove-Item -Path $backtracktxt -Force }
+            if (Test-Path $backuptxt) { Remove-Item -Path $backuptxt -Force }
+            $r | Out-File $backtracktxt -Encoding utf8
             Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
         }
     }
     else {
         Write-Log "Backupが見つかりません。生成します。"
-        $thash = (GetFilesRecurse $aupatho | MakeEntry | MakeHashInfo "SHA1" ).SHA1
-        Write-Output " $thash"> $backhashtxt
+        $r = Get-FolderTrackInfo $aupatho
+        $r | Out-File $backtracktxt -Encoding utf8
         Write-Output $(Join-path $aupathb "Among Us-$datest-v$amver.zip") > $backuptxt
         Compress-7Zip -Path $aupatho -ArchiveFileName $(Join-path $aupathb "Among Us-$datest-v$amver.zip")
     }
@@ -700,34 +721,7 @@ function BackUpAU {
     Write-Log "Backup Feature Ends"
 }
 
-# パイプラインからのファイルのハッシュ情報を取得する.
-#https://gist.github.com/seraphy/4674696
-function MakeHashInfo([string] $algoName = $(throw "MD5, SHA1, SHA512などを指定します.")) {
-    begin {
-        $algo = [System.Security.Cryptography.HashAlgorithm]::Create($algoName)
 
-        # ファイルのハッシュ値を計算するスクリプトブロック(Closure)
-        function CalcurateHash([string] $path) {
-            $inputStream = New-Object IO.StreamReader $path
-            try {
-                $algo.ComputeHash($inputStream.BaseStream)
-         
-            }
-            finally {
-                $inputStream.Close()
-            }
-        }
-    }
-    process {
-        # パイプライン処理
-        $hashVal = ToHex(CalcurateHash $_.FullName)
-        $_ | Add-Member -MemberType NoteProperty -Name $algoName -Value $hashVal
-        return $_
-    }
-    end {
-        [void] $algo.Dispose # voidを指定しないと後続パイプラインにnullが渡される
-    }
-}
 #################################################################################################
 ### Convertfrom-vdf
 ### Ref. from https://github.com/ChiefIntegrator/Steam-GetOnTop
@@ -802,6 +796,209 @@ if ($l.contains("0x80070426")) {
 else {
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs      
 }
+
+#################################################################################################
+# ゲーム環境・バージョンの初期検出（起動時1回のみ実行）
+#################################################################################################
+function Initialize-GameEnvironment {
+    # 既存のオートセーブ設定ファイルを読み込むためのローカル変数定義
+    $npl = $script:npl
+    $dsk = $script:dsk
+    $fileName2 = Join-path $npl "\AmongUsModDeployScript.conf"
+    $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"
+
+    $au_path_steam_org = "C:\Program Files (x86)\Steam\steamapps\common\Among Us"
+    $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
+
+    # プロセスからの検出
+    $proclist = Get-Process
+    $procnum = $null
+    $epicbool = $false
+    for ($i = 0; $i -lt $proclist.count; $i++) {
+        if ($proclist.ProcessName[$i] -eq "steam") {
+            $procnum = $i
+        }
+        if ($proclist.ProcessName[$i] -eq "EpicGamesLauncher") {
+            $procnum = $i
+            $epicbool = $true
+        }
+    }
+    
+    $detected_path = $null
+    $procpath = $null
+    if ($null -ne $procnum) {
+        $procpath = Split-Path $proclist[$procnum].path -Parent
+        $detected_path = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us"
+        if (!(Test-Path $detected_path)) {
+            foreach ($num in 65..90) {                                     
+                if (Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us") {
+                    $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
+                    break
+                }     
+            }
+        } 
+    }
+
+    $spath = $null
+    if (Test-path "$au_path_steam_org\Among Us.exe") {
+        Write-Log "Steam Original Detected"
+        $spath = $au_path_steam_org
+        $script:platform = "steam"
+    }
+    elseif (Test-path "$au_path_epic_org\Among Us.exe") {
+        Write-Log "Epic Original Detected"
+        $spath = $au_path_epic_org
+        $script:platform = "epic"
+    }
+    elseif ($null -ne $detected_path -and (Test-Path "$detected_path\Among Us.exe")) {
+        Write-Log "Detected via Process Path"
+        $spath = $detected_path
+        $script:platform = "steam"
+    }
+    elseif ($epicbool) {
+        Write-Log "Epic Detected via Legendary"
+        legendary.exe auth --import
+        $epicinfo = legendary.exe info AmongUs
+        $epicpath = $epicinfo | Select-String "Install path"
+        $epicrow = $($epicpath.ToString()).Split(": ")
+        $epicreal = Split-Path -Path "$epicrow[1]"
+        $epicreal = "$epicreal/AmongUs"
+        if (Test-Path $epicreal) {
+            $spath = $epicreal
+            $script:platform = "epic"
+        }
+    }
+    else {
+        Write-Log "Failed to Detect automatically. Trying to load config or ask user."
+        if (test-path "$fileName2") {
+            Move-Item -Path $fileName2 -Destination $fileName
+        }
+        $chkvdf = $false
+        if ($null -ne $procpath -and (Test-Path "$procpath\steamapps\libraryfolders.vdf")) {
+            $stvdf = Get-Content "$procpath\steamapps\libraryfolders.vdf"
+            $chkvdf = $true
+        }
+        
+        if (test-path "$fileName") {
+            $spath2 = Get-content "$fileName"
+            $spath3 = $spath2.split("_:_")
+            $spath = $spath3[0] 
+            $script:platform = $spath3[1]
+            Remove-Item $fileName -Force
+        }
+        else {
+            $loadfail = $false
+            if ($chkvdf) {
+                $cfvdf = ConvertFrom-VDF $stvdf
+                foreach ( $property in $cfvdf.libraryfolders.psobject.properties.name ) {
+                    if (([string]$($cfvdf.libraryfolders."$property".apps)).contains("945360")) {
+                        $cfpth = Join-Path $cfvdf.libraryfolders."$property".path "\steamapps\common\Among Us"
+                    }
+                }
+                if (Test-Path $cfpth) {
+                    Write-Log "detected from VDF."
+                    $spath = $cfpth
+                    $script:platform = "steam"
+                    $loadfail = $false
+                }
+                else {
+                    Write-Log "Among Us may not installed with Steam."
+                    $loadfail = $true
+                }
+            }
+            else {
+                $loadfail = $true
+            }
+
+            if ($loadfail) {
+                Write-Log "AmongUs detection failed. Showing folder browser dialog."
+                [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Mod Auto Deploy Tool")
+                $spath = Get-FolderPathG
+            }
+        }
+        
+        if ($null -eq $spath) {
+            Write-Log "Scriptを再実行してAmong Usが含まれるフォルダを指定してください。$spath"
+            pause
+            Exit
+        }
+        if (test-path "$spath\Among Us.exe") {
+            Write-Log "$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"
+            if (($script:platform -ne "Steam") -and ($script:platform -ne "Epic")) {
+                if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("PlatformはSteamですか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
+                    $script:platform = "Steam"
+                }
+                else {
+                    $script:platform = "Epic"
+                }
+            }
+        }
+        else {
+            Write-Log "$spath にAmongUsのインストールが確認できませんでした"
+            pause
+            Exit
+        }
+    }
+
+    # クリーンインストール判定用の重複コードを避けるため、オリジナルフォルダ内のBepInEx存在チェック
+    if (test-path $spath) {
+        if (Test-path "$spath\BepInEx") {
+            Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
+            if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("指定されたパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
+                $cleanScript = if ($script:platform -eq "Epic") { "AmongusCleanInstall_Epic.ps1" } else { "AmongusCleanInstall_Steam.ps1" }
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/$cleanScript" -OutFile "$npl\$cleanScript" -UseBasicParsing
+                $fpth2 = "$npl\$cleanScript"
+                if (test-path "$env:ProgramFiles\PowerShell\7") {
+                    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$fpth2`"" -Verb RunAs -Wait
+                }
+                else {
+                    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$fpth2`"" -Verb RunAs -Wait
+                }
+                Remove-Item $fpth2 -Force
+                Write-Log "クリーンインストールが行われたため、処理を中止します。再度起動してください。"
+                pause
+                exit
+            }
+            else {
+                Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください。処理を中止します。"
+                pause
+                exit
+            }
+        }
+
+        $script:aupatho = $spath
+        
+        # オートセーブ
+        $confcont = $spath + "_:_" + $script:platform
+        Write-Output "$confcont" > $fileName
+    }
+
+    # バージョン検出 (globalgamemanagers)
+    if (Test-Path "$script:aupatho\Among Us_Data\globalgamemanagers") {
+        $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
+        $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
+        $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
+        if ($null -eq $tt3[1]) {
+            $script:amver = $tt3[0].Value
+        }
+        else {
+            $script:amver = $tt3[1].Value
+        }
+        Write-Log "$script:amver が検出されました（キャッシュ保存）"
+    }
+
+    # VOICEVOX のインストール有無を一度だけスキャンし、結果をグローバル変数にキャッシュ
+    Write-Log "VOICEVOX installation check started..."
+    $script:hasVoicevox = $false
+    $vv = Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') -ErrorAction SilentlyContinue | ForEach-Object { Get-ItemProperty $_.PsPath -ErrorAction SilentlyContinue | Select-Object DisplayName } | select-string "VOICEVOX"
+    if ($null -ne $vv) {
+        $script:hasVoicevox = $true
+    }
+    Write-Log "VOICEVOX installation check finished. Installed: $script:hasVoicevox"
+}
+
+# 起動時の初期検出を実行
+Initialize-GameEnvironment
 
 #################################################################################################
 ### Mod 選択メニュー表示
@@ -1266,8 +1463,7 @@ function Reload() {
             Write-Log "ER Selected"
             $script:isall = $false
             $RadioButton28.Checked = $True
-            $vv = Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | ForEach-Object { Get-ItemProperty $_.PsPath | Select-Object DisplayName } | select-string "VOICEVOX"
-            if ($null -eq $vv) {
+            if (!$script:hasVoicevox) {
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
             }
         }"ER+ES :yukieiji/ExtremeRoles" {
@@ -1439,7 +1635,7 @@ function Reload() {
             }
         }
         elseif ($scid -eq "RHR") {
-            if ($null -eq $script:toyweb) {
+            if ($null -eq $script:rhrweb) {
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
                 $script:rhrweb = $web 
             }
@@ -1648,328 +1844,20 @@ function Reload() {
         }
 
         #################################################################################################
-        #AutoDetect用Static
+        # 起動時に Initialize-GameEnvironment でスキャンした結果をキャッシュから取得
         #################################################################################################
-
-        #Among Us Original Steam Path
-        $au_path_steam_org = "C:\Program Files (x86)\Steam\steamapps\common\Among Us"
-        #Among Us Modded Path ：Steam Mod用フォルダ
-        $au_path_steam_mod = "C:\Program Files (x86)\Steam\steamapps\common\Among Us $scid Mod"
-        #Among Us Backup ：Backup用フォルダ
-        $au_path_steam_back = "C:\Program Files (x86)\Steam\steamapps\common\Among Us Backup"
-        #Among Us Original Epic Path
-        $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
-        #Among Us Modded Path ：Steam Mod用フォルダ
-        $au_path_epic_mod = "C:\Program Files\Epic Games\AmongUs $scid Mod"
-        #Among Us Backup ：Backup用フォルダ
-        $au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
-  
-        #detect running detect path
-        $proclist = Get-Process
-        $procnum
-        $epicbool = $false
-        for ($i = 0; $i -lt $proclist.count; $i++) {
-            if ($proclist.ProcessName[$i] -eq "steam") {
-                write-log "$i Steam"
-                $procnum = $i
-            }
-            if ($proclist.ProcessName[$i] -eq "EpicGamesLauncher") {
-                write-log "$i EGL"
-                $procnum = $i
-                $epicbool = $true
-            }
-        }
-        if ($null -ne $procnum) {
-            $procpath = Split-Path $proclist[$procnum].path -Parent
-            $detected_path = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us"
-            $detected_path_mod = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us $scid Mod"
-            $detected_path_back = Join-Path $procpath "\SteamLibrary\steamapps\common\Among Us Backup"
-            if (!(Test-Path $detected_path)) {
-                #detector
-                #E:\SteamLibrary\steamapps\common
-                foreach ($num in 65..90) {                                     
-                    if (Test-Path "$([char]$num):\SteamLibrary\steamapps\common\Among Us") {
-                        $detected_path = "$([char]$num):\SteamLibrary\steamapps\common\Among Us"
-                        $detected_path_mod = "$([char]$num):\SteamLibrary\steamapps\common\Among Us $scid Mod"
-                        $detected_path_back = "$([char]$num):\SteamLibrary\steamapps\common\Among Us Backup"
-                        break
-                    }     
-                }
-            } 
+        $aupatho = $script:aupatho
+        $platform = $script:platform
+        
+        # 選択された Mod ($scid) に応じて、パスを自動構成する（I/Oアクセスを伴わず一瞬で完了）
+        $parentPath = Split-Path $aupatho -Parent
+        $aupathm = Join-Path $parentPath "Among Us $scid Mod"
+        if ($platform -eq "epic") {
+            $aupathb = Join-Path $parentPath "AmongUsBackup"
+        } else {
+            $aupathb = Join-Path $parentPath "Among Us Backup"
         }
         
-        if (Test-path "$au_path_steam_org\Among Us.exe") {
-            Write-Log "Steam Original"
-            #original check Steamのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
-            if (Test-path "$au_path_steam_org\BepInEx") {
-                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
-                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
-                    $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
-                    if (test-path "$env:ProgramFiles\PowerShell\7") {
-                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" " -Verb RunAs -Wait
-                    }
-                    else {
-                        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                    }
-                    Start-Sleep -Seconds 10
-                    $fichk = Test-Path "$aupatho\Among Us.exe"
-                    while ($fichk) {
-                        Start-Sleep -Seconds 10
-                        Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
-                        Pause
-                        $fichk = Test-Path "$aupatho\Among Us.exe"
-                    }
-                    Remove-Item $fpth2 -Force
-                }
-                else {
-                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
-                    Write-Log "処理を中止します"
-                    pause
-                    exit
-                }     
-                Remove-Item "$npl\AmongusCleanInstall_Steam.ps1" -Force
-            }
-            $aupatho = $au_path_steam_org
-            $aupathm = $au_path_steam_mod
-            $aupathb = $au_path_steam_back
-            $script:platform = "steam"
-        }
-        elseif (Test-path "$au_path_epic_org\Among Us.exe") {
-            Write-Log "Epic Original"
-            #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
-            if (Test-path "$au_path_epic_org\BepInEx") {
-                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
-                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
-                    $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
-                    if (test-path "$env:ProgramFiles\PowerShell\7") {
-                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                    }
-                    else {
-                        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                    }
-                    Remove-Item $fpth2 -Force
-                }
-                else {
-                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
-                    Write-Log "処理を中止します"
-                    pause
-                    exit
-                }     
-                Remove-Item "$npl\AmongusCleanInstall_Epic.ps1" -Force
-            }
-            $aupatho = $au_path_epic_org
-            $aupathm = $au_path_epic_mod
-            $aupathb = $au_path_epic_back
-            $script:platform = "epic"
-        }
-        elseif (Test-Path "$detected_path\Among Us.exe") {
-            Write-Log "Detected"
-            #original check Epicのデフォルトインストールパスが存在するかチェック。存在したらModが入ってないか簡易チェック
-            if (Test-path "$detected_path\BepInEx") {
-                Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("オリジナルパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
-                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
-                    $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
-                    if (test-path "$env:ProgramFiles\PowerShell\7") {
-                        Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                    }
-                    else {
-                        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                    }
-                    Remove-Item $fpth2 -Force
-                }
-                else {
-                    Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
-                    Write-Log "処理を中止します"
-                    pause
-                    exit
-                }     
-                Remove-Item "$npl\AmongusCleanInstall_Steam.ps1" -Force
-            }
-            $aupatho = $detected_path
-            $aupathm = $detected_path_mod
-            $aupathb = $detected_path_back
-            $script:platform = "steam"
-        }
-        elseif ($epicbool) {
-            Write-Log "Epic Detected"
-            #detect epic path
-            legendary.exe auth --import
-            $epicinfo = legendary.exe info AmongUs
-            $epicpath = $epicinfo | Select-String "Install path"
-            $epicrow = $($epicpath.ToString()).Split(": ")
-            $epicreal = Split-Path -Path "$epicrow[1]"
-            $epicreal = "$epicreal/AmongUs"
-            if (Test-Path $epicreal) {
-                $aupatho = $epicreal
-                $aupathm = "$epicreal $scid Mod"
-                $aupathb = "$($epicreal)Backup"                
-                $script:platform = "epic"
-            }
-        }
-        else {
-            Write-Log "Failed to Detected"
-            $fileName2 = Join-path $npl "\AmongUsModDeployScript.conf"
-            $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"
-            if (test-path "$fileName2") {
-                Move-Item -Path $fileName2 -Destination $fileName
-            }
-            $chkvdf = $false
-            if (Test-Path "$procpath\steamapps\libraryfolders.vdf") {
-                $stvdf = Get-Content "$procpath\steamapps\libraryfolders.vdf"
-                $chkvdf = $true
-            }
-            ### Load
-            if (test-path "$fileName") {
-                $spath2 = Get-content "$fileName"
-                $spath3 = $spath2.split("_:_")
-                $spath = $spath3[0] 
-                $script:platform = $spath3[1]
-                Remove-Item $fileName -Force
-            }
-            else {
-                $loadfail = $false
-                if ($chkvdf) {
-                    $cfvdf = ConvertFrom-VDF $stvdf
-                    foreach ( $property in $cfvdf.libraryfolders.psobject.properties.name ) {
-                        if (([string]$($cfvdf.libraryfolders."$property".apps)).contains("945360")) {
-                            $cfpth = Join-Path $cfvdf.libraryfolders."$property".path "\steamapps\common\Among Us"
-                        }
-                    }
-                    if (Test-Path $cfpth) {
-                        Write-Log "detected from VDF."
-                        $spath = $cfpth
-                        $script:platform = "steam"
-                        $loadfail = $false
-                    }
-                    else {
-                        Write-Log "Among Us may not installed with Steam."
-                        $loadfail = $true
-                    }
-                }
-                else {
-                    $loadfail = $true
-                }
-
-                if ($loadfail) {
-                    #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
-                    Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"
-                    Write-Log "フォルダをユーザーに選択するようダイアログを出します"
-                    [System.Windows.Forms.MessageBox]::Show($(Get-Translate("Modが入っていないAmongUsがインストールされているフォルダを選択してください")), "Among Us Mod Auto Deploy Tool")
-                    $spath = Get-FolderPathG
-                }
-            }
-            if ($null -eq $spath) {
-                Write-Log "Scriptを再実行してAmong Usが含まれるフォルダを指定してください。$spath"
-                pause
-                Exit
-            }
-            if (test-path "$spath\Among Us.exe") {
-                Write-Log "$spath にAmongUsのインストールパスを確認しました Platform:$script:platform"
-                if (($script:platform -ne "Steam") -and ($script:platform -ne "Epic")) {
-                    if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("PlatformはSteamですか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
-                        $script:platform = "Steam"
-                    }
-                    else {
-                        $script:platform = "Epic"
-                    }
-                }
-            }
-            else {
-                Write-Log "$spath にAmongUsのインストールが確認できませんでした"
-                pause
-                Exit
-            }
-            if (test-path $spath) {
-                if (Test-path "$spath\BepInEx") {
-                    Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                    if ($script:platform -eq "Steam") {
-                        if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("指定されたパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
-                            Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
-                            $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
-                            if (test-path "$env:ProgramFiles\PowerShell\7") {
-                                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                            }
-                            else {
-                                Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                            }
-                            Remove-Item $fpth2 -Force
-                            Write-Log "クリーンインストールが行われたため、処理を中止します"
-                            Write-Log "Scriptを再度実行してください。"
-                            pause
-                            exit
-                        }
-                        else {
-                            Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
-                            Write-Log "処理を中止します"
-                            pause
-                            exit
-                        }     
-                        Remove-Item "$npl\AmongusCleanInstall_Steam.ps1" -Force
-                    }
-                    elseif ($script:platform -eq "Epic") {
-                        if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("指定されたパスにMod入りAmong Usが検出されました。クリーンインストールしますか？")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
-                            Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
-                            $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
-                            if (test-path "$env:ProgramFiles\PowerShell\7") {
-                                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                            }
-                            else {
-                                Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2""" -Verb RunAs -Wait
-                            }
-                            Remove-Item $fpth2 -Force
-                            Write-Log "クリーンインストールが行われたため、処理を中止します"
-                            Write-Log "Scriptを再度実行してください。"
-                            pause
-                            exit
-                        }
-                        else {
-                            Write-Log "フォルダ指定が正しい場合は、手動でクリーンインストールを試してみてください"
-                            Write-Log "処理を中止します"
-                            pause
-                            exit
-                        }     
-                        Remove-Item "$npl\AmongusCleanInstall_Epic.ps1" -Force
-                    }
-                    else {
-                        Write-Log "オリジナルのAmong Usではないフォルダが指定されている可能性があります"
-                        Write-Log "フォルダ指定が正しい場合は、クリーンインストールを試してみてください"
-                        Write-Log "処理を中止します"
-                        pause
-                        exit
-                    }
-
-
-                }
-    
- 
-                $aupatho = $spath
-                Set-Location $spath
-                Set-Location ..
-                $str_path = (Convert-Path .)
-                Write-Log $str_path
-                $aupathm = "$str_path\Among Us $scid Mod"
-                $aupathb = "$str_path\Among Us Backup"
-                Write-Log "Mod入りAmongUsは以下のフォルダにDeployされます"
-                Write-Log $aupathm
-                Write-Log $aupathb
-                ### Auto Save
-                $confcont = $aupatho
-                $confcont += "_:_"
-                $confcont += $script:platform
-                Write-Output "$confcont"> $fileName
-                Write-Log "Amongus ModDeployScript Autosave function"
-
-            }
-            else {
-                Write-Log "選択されたフォルダにAmongUsを見つけることに失敗しました"
-                Write-Log "処理を中止します"
-                pause
-                exit
-            }
-        }
         $label4.Text = $aupatho
         $label6.Text = $aupathm
         $script:aupatho = $aupatho
@@ -1978,14 +1866,13 @@ function Reload() {
         $script:releasepage = $releasepage2
         $script:scid = $scid
         $script:aumin = $aumin
-        $script:tio = $tio
+        $script:tio = $script:tio
         $script:CheckedBox.ClearSelected()
         for ($cbc = 0; $cbc -lt $script:ChekedListBox.Items.Count; $cbc++) {
             $script:ChekedListBox.SetItemChecked($cbc, $false)
         }
         if (($script:scid -eq "ER") -or ($script:scid -eq "ER+ES")) {
-            $vv = Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') | ForEach-Object { Get-ItemProperty $_.PsPath | Select-Object DisplayName } | select-string "VOICEVOX"
-            if ($null -eq $vv) {
+            if (!$script:hasVoicevox) {
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VOICEVOX"), $true)
             }
         }
@@ -2003,38 +1890,15 @@ function Reload() {
         if (!(Test-Path "$aupathb\chk$ym.txt")) {
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("VC Redist"), $true)
             $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("dotNetFramework"), $true)                         
-            $pwshv = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/PowerShell/PowerShell/releases/latest" -UseBasicParsing)).tag_name
-            if ("v$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor).$($PSVersionTable.PSVersion.Patch)" -ne "$pwshv") {
+            if ($PSVersionTable.PSVersion.Major -lt 7) {
                 $script:CheckedBox.SetItemChecked($script:CheckedBox.items.IndexOf("PowerShell 7"), $true)
             }
             $script:opflag = $true
         }
     }
     $script:tio = $tio
-    #version detect
-    $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
-    $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
-    $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
-    if ($null -eq $tt3[1]) {
-        $script:amver = $tt3[0].Value
-    }
-    else {
-        $script:amver = $tt3[1].Value
-    }
-    #$script:amver = $tt3[0].Value
-    <#$ver1st = $($script:amver).split('.')
-    $ver2nd = $($script:prever0).split('.')
-    if([int]$ver1st[0] -lt [int]$ver2nd[0]){
-        $indeedcleaninstall = $true
-    }elseif ([int]$ver1st[0] -eq [int]$ver2nd[0]){
-        if([int]$ver1st1[1] -lt [int]$ver2nd[1]){
-            $indeedcleaninstall = $true
-        }elseif ([int]$ver1st[1] -eq [int]$ver2nd[1]){
-            if([int]$ver1st1[2] -le [int]$ver2nd[2]){
-                $indeedcleaninstall = $true
-            }
-        }    
-    }#>
+    # version detect (using cached value)
+
 
     Write-Log "$script:amver が検出されました"
     $RadioButton114.Text = $(Get-Translate("$script:amver"))
