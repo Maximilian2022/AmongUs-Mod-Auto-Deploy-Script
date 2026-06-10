@@ -449,10 +449,17 @@ function BackUpAU {
 
     # トラック情報の構築関数（高速）
     function Get-FolderTrackInfo($folderPath) {
-        $files = Get-ChildItem $folderPath -Recurse | Where-Object { !$_.PSIsContainer }
+        if (!(Test-Path $folderPath)) { return "" }
         $trackBuilder = New-Object System.Text.StringBuilder
-        foreach ($file in $files) {
-            [void]$trackBuilder.Append("$($file.Name):$($file.Length):$($file.LastWriteTime.Ticks)|")
+        try {
+            $dirInfo = New-Object System.IO.DirectoryInfo($folderPath)
+            $files = $dirInfo.EnumerateFiles("*", [System.IO.SearchOption]::AllDirectories)
+            foreach ($file in $files) {
+                [void]$trackBuilder.Append("$($file.Name):$($file.Length):$($file.LastWriteTime.Ticks)|")
+            }
+        }
+        catch {
+            Write-Log "Warning: Folder track info extraction failed: $_"
         }
         return $trackBuilder.ToString()
     }
@@ -827,16 +834,24 @@ catch {
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 legendary microsoft-windows-terminal -y" -Verb RunAs -Wait   
 }
 #################################################################################################
-# Clock Sync
+# Clock Sync (Async)
 #################################################################################################
 
-$l = w32tm /query /status #-ArgumentList "
-if ($l.contains("0x80070426")) {
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'net start `"windows time`" ;start-sleep -Seconds 5; w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs
-}
-else {
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs      
-}
+$w32tmJob = [powershell]::Create().AddScript({
+    try {
+        $l = w32tm /query /status
+        if ($l.contains("0x80070426")) {
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'net start `"windows time`" ;start-sleep -Seconds 5; w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs
+        }
+        else {
+            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs      
+        }
+    }
+    catch {
+        # Ignore errors quietly in the background
+    }
+})
+$w32tmAsync = $w32tmJob.BeginInvoke()
 
 $platform = ""
 $scid = "TOR GMH"
@@ -1061,14 +1076,19 @@ function Initialize-GameEnvironment {
         Write-Log "$script:amver が検出されました（キャッシュ保存）"
     }
 
-    # VOICEVOX のインストール有無を一度だけスキャンし、結果をグローバル変数にキャッシュ
-    Write-Log "VOICEVOX installation check started..."
-    $script:hasVoicevox = $false
-    $vv = Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') -ErrorAction SilentlyContinue | ForEach-Object { Get-ItemProperty $_.PsPath -ErrorAction SilentlyContinue | Select-Object DisplayName } | select-string "VOICEVOX"
-    if ($null -ne $vv) {
-        $script:hasVoicevox = $true
-    }
-    Write-Log "VOICEVOX installation check finished. Installed: $script:hasVoicevox"
+    # VOICEVOX のインストール有無を非同期でスキャン開始
+    Write-Log "VOICEVOX installation check started asynchronously..."
+    $script:hasVoicevox = $null
+    $script:vvJob = [powershell]::Create().AddScript({
+        try {
+            $vv = Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') -ErrorAction SilentlyContinue | ForEach-Object { Get-ItemProperty $_.PsPath -ErrorAction SilentlyContinue | Select-Object DisplayName } | select-string "VOICEVOX"
+            return ($null -ne $vv)
+        }
+        catch {
+            return $false
+        }
+    })
+    $script:vvAsync = $script:vvJob.BeginInvoke()
 }
 
 # 起動時の初期検出を実行
@@ -1477,6 +1497,18 @@ function Reload() {
         Write-Output $Log | Out-File -FilePath $script:LogFileName -Encoding Default -Append
         # echo させるために出力したログを戻す
         Write-Host $Log
+    }
+    if ($null -eq $script:hasVoicevox) {
+        if ($null -ne $script:vvJob -and $null -ne $script:vvAsync) {
+            $script:hasVoicevox = $script:vvJob.EndInvoke($script:vvAsync)
+            $script:vvJob.Dispose()
+            $script:vvJob = $null
+            $script:vvAsync = $null
+            Write-Log "VOICEVOX check resolved. Installed: $script:hasVoicevox"
+        }
+        else {
+            $script:hasVoicevox = $false
+        }
     }
     $CheckedBox.ClearSelected()
     $combo2.Text = ""
