@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     $Args1, #skipconfirmation
     [switch]$DebugMode
 )
