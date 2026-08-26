@@ -8,8 +8,8 @@ $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.1.8"
-$build = "20260609003"
+$version = "2.1.9"
+$build = "20260826001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -53,12 +53,13 @@ $sramin2 = "v2025.5.12"
 # Current versions:
 #$prever1 = "2025.6.10"
 #$prevtargetid1 = "1298083356997541927"
-$prever1 = "2025.9.9"
-$prevtargetid1 = "4146372421172743268"
-$prever0 = "2026.2.17"
-$prevtargetid0 = "8416065559776121687"
-#2026.6.5 7623608153396667062
-
+#$prever1 = "2025.9.9"
+#$prevtargetid1 = "4146372421172743268"
+$prever1 = "2026.2.17"
+$prevtargetid1 = "8416065559776121687"
+$prever0 = "2026.6.5"
+$prevtargetid0 = "7623608153396667062"
+#2026.8.18 1397756378225229500
 $gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
 #$torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
@@ -838,19 +839,19 @@ catch {
 #################################################################################################
 
 $w32tmJob = [powershell]::Create().AddScript({
-    try {
-        $l = w32tm /query /status
-        if ($l.contains("0x80070426")) {
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'net start `"windows time`" ;start-sleep -Seconds 5; w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs
+        try {
+            $l = w32tm /query /status
+            if ($l.contains("0x80070426")) {
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'net start `"windows time`" ;start-sleep -Seconds 5; w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs
+            }
+            else {
+                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs      
+            }
         }
-        else {
-            Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command 'w32tm /monitor /computers:time.google.com;w32tm /config /syncfromflags:manual /manualpeerlist:`"time.google.com,0x8 time.aws.com,0x8 time.cloudflare.com,0x8`" /reliable:yes /update;w32tm /resync;w32tm /query /status'" -Verb RunAs      
+        catch {
+            # Ignore errors quietly in the background
         }
-    }
-    catch {
-        # Ignore errors quietly in the background
-    }
-})
+    })
 $w32tmAsync = $w32tmJob.BeginInvoke()
 
 $platform = ""
@@ -1080,14 +1081,14 @@ function Initialize-GameEnvironment {
     Write-Log "VOICEVOX installation check started asynchronously..."
     $script:hasVoicevox = $null
     $script:vvJob = [powershell]::Create().AddScript({
-        try {
-            $vv = Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') -ErrorAction SilentlyContinue | ForEach-Object { Get-ItemProperty $_.PsPath -ErrorAction SilentlyContinue | Select-Object DisplayName } | select-string "VOICEVOX"
-            return ($null -ne $vv)
-        }
-        catch {
-            return $false
-        }
-    })
+            try {
+                $vv = Get-ChildItem -Path('HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall') -ErrorAction SilentlyContinue | ForEach-Object { Get-ItemProperty $_.PsPath -ErrorAction SilentlyContinue | Select-Object DisplayName } | select-string "VOICEVOX"
+                return ($null -ne $vv)
+            }
+            catch {
+                return $false
+            }
+        })
     $script:vvAsync = $script:vvJob.BeginInvoke()
 }
 
@@ -1106,18 +1107,19 @@ $prefetchUrls = @{
 foreach ($key in $prefetchUrls.Keys) {
     $url = $prefetchUrls[$key]
     $ps = [powershell]::Create().AddScript({
-        param($targetUrl)
-        try {
-            $response = Invoke-WebRequest $targetUrl -UseBasicParsing -TimeoutSec 10
-            return $response
-        } catch {
-            return $null
-        }
-    }).AddArgument($url)
+            param($targetUrl)
+            try {
+                $response = Invoke-WebRequest $targetUrl -UseBasicParsing -TimeoutSec 10
+                return $response
+            }
+            catch {
+                return $null
+            }
+        }).AddArgument($url)
     
     $asyncResult = $ps.BeginInvoke()
     $script:prefetchJobs[$key] = @{
-        PowerShell = $ps
+        PowerShell  = $ps
         AsyncResult = $asyncResult
     }
 }
