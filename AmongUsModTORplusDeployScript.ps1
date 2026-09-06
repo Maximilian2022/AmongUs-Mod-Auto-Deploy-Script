@@ -1,4 +1,4 @@
-﻿Param(
+Param(
     $Args1, #skipconfirmation
     [switch]$DebugMode
 )
@@ -186,27 +186,8 @@ catch {
 }
 
 Unblock-File "$npl\AmongUsModTORplusDeployScript.ps1"
-function IsZenkaku {
-    param(
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidateLength(1, 1)]
-        [string]
-        $Text
-    )
-    process {
-        $shiftJis = [System.Text.Encoding]::GetEncoding("Shift_JIS")
-        $shiftJis.GetByteCount($Text) -eq 2
-    }
-}
-
 $a = [Net.Dns]::GetHostName()
-$achk = $false
-for ($x = 0; $x -lt $a.Length; $x++) {
-    if (IsZenkaku $($a.Split())[$x]) {
-        $achk = $true
-        break;
-    }
-}
+$achk = ($a -match '[^\x00-\x7F]')
 if ($achk) {
     $Now = Get-Date
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
@@ -276,7 +257,7 @@ Write-Log "                                                   Build  : $build"
 Write-Log "-----------------------------------------------------------------"
 Write-Log "MOD Installation Starts"
 Write-Log "-----------------------------------------------------------------"
-if ($((Get-Module -Name 7Zip4Powershell -ListAvailable).Name | select-string 7Zip4Powershell).count -eq 0) {
+if (!(Get-Module -Name 7Zip4Powershell -ListAvailable)) {
     Install-Module -Name 7Zip4Powershell -Force -Scope CurrentUser
 }
 #################################################################################################
@@ -561,27 +542,16 @@ function BackUpAU {
     if ($prevchk) {
         if ($platform -eq "steam") {
             $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
-            $proclist = get-process
-            $procnum
-            for ($i = 0; $i -lt $proclist.count; $i++) {           
-                if ($proclist.ProcessName[$i] -eq "steam") {
-                    write-log $i
-                    $procnum = $i
-                }
-            }           
+            $steamProc = Get-Process -Name "steam" -ErrorAction SilentlyContinue | Select-Object -First 1
             if (Test-Path $steampth) {
                 Write-Log "Steam アプリは以下で見つかりました。 $steampth"
             }
-            elseif (Test-Path $($proclist[$procnum].path)) {
-                $steampth = $($proclist[$procnum].path)
+            elseif ($null -ne $steamProc -and (Test-Path $($steamProc.Path))) {
+                $steampth = $($steamProc.Path)
                 Write-Log "Steam アプリは以下で見つかりました。 $steampth"
             }
             else {
                 Write-Log "Steam アプリがデフォルトの場所に見つかりませんでした。"
-                Param(
-                    [Parameter()]
-                    [String] $FilePath
-                )     
                 # $FilePath が設定されていない、又はファイルが存在しない
                 if ([string]::IsNullOrEmpty($steampth) -Or (Test-Path -LiteralPath $steampth -PathType Leaf) -eq $false) {
                     [void][System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")    
@@ -591,7 +561,7 @@ function BackUpAU {
                     $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
                 
                     # キャンセルを押された時は処理を止める
-                    if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG) {
+                    if ($dialog.ShowDialog() -ne [System.Windows.Forms.DialogResult]::OK) {
                         exit 1
                     }
                 
@@ -725,7 +695,7 @@ function BackUpAU {
                     Write-Log "何かがおかしい・・・"
                 }
 
-                $ptt = (Format-Hex -Path "$aupathb\AmongUs\Among Us_Data\globalgamemanagers").Bytes
+                $ptt = [System.IO.File]::ReadAllBytes("$aupathb\AmongUs\Among Us_Data\globalgamemanagers")
                 $ptt2 = [System.Text.Encoding]::UTF8.GetString($ptt)
                 $ptt3 = [regex]::Matches($ptt2, "(19|20)[0-9]{2}[- /.]([1-9]|0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])")
                 if ($null -eq $ptt3[1]) {
@@ -885,28 +855,20 @@ function Initialize-GameEnvironment {
     $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
 
     # プロセスからの検出
-    $proclist = Get-Process
-    $procnum = $null
-    $epicbool = $false
-    for ($i = 0; $i -lt $proclist.count; $i++) {
-        if ($proclist.ProcessName[$i] -eq "steam") {
-            $procnum = $i
-        }
-        if ($proclist.ProcessName[$i] -eq "EpicGamesLauncher") {
-            $procnum = $i
-            $epicbool = $true
-        }
-    }
+    $steamProc = Get-Process -Name "steam" -ErrorAction SilentlyContinue | Select-Object -First 1
+    $epicProc = Get-Process -Name "EpicGamesLauncher" -ErrorAction SilentlyContinue | Select-Object -First 1
+    $targetProc = if ($null -ne $epicProc) { $epicProc } else { $steamProc }
+    $epicbool = ($null -ne $epicProc)
     
     $detected_path = $null
     $procpath = $null
-    if ($null -ne $procnum) {
+    if ($null -ne $targetProc) {
         try {
             $pPath = $null
             # pathプロパティへのアクセスはアクセス権がないと例外になるため保護
-            $pPath = $proclist[$procnum].Path
+            $pPath = $targetProc.Path
             if ($null -eq $pPath -or $pPath -eq "") {
-                $pPath = $proclist[$procnum].MainModule.FileName
+                $pPath = $targetProc.MainModule.FileName
             }
             if ($null -ne $pPath -and $pPath -ne "") {
                 $procpath = Split-Path $pPath -Parent
@@ -974,7 +936,6 @@ function Initialize-GameEnvironment {
             $spath3 = $spath2.split("_:_")
             $spath = $spath3[0] 
             $script:platform = $spath3[1]
-            Remove-Item $fileName -Force
         }
         else {
             $loadfail = $false
@@ -1065,7 +1026,7 @@ function Initialize-GameEnvironment {
 
     # バージョン検出 (globalgamemanagers)
     if (Test-Path "$script:aupatho\Among Us_Data\globalgamemanagers") {
-        $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
+        $tt = [System.IO.File]::ReadAllBytes("$script:aupatho\Among Us_Data\globalgamemanagers")
         $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
         $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
         if ($null -eq $tt3[1]) {
@@ -1490,16 +1451,6 @@ function VerMinMax($ver0, $ver1, $ver2) {
 }
 
 function Reload() {
-    function Write-Log($LogString) {
-        $Now = Get-Date
-        # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
-        $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
-        $Log += $LogString
-        # ログ出力
-        Write-Output $Log | Out-File -FilePath $script:LogFileName -Encoding Default -Append
-        # echo させるために出力したログを戻す
-        Write-Host $Log
-    }
     if ($null -eq $script:hasVoicevox) {
         if ($null -ne $script:vvJob -and $null -ne $script:vvAsync) {
             $script:hasVoicevox = $script:vvJob.EndInvoke($script:vvAsync)
@@ -2436,7 +2387,12 @@ Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
 #統計情報
 $jsondata = "{`"date`":`"$Log`", `"mod`":`"$scid`", `"version`":`"$torpv`", `"main`":`"$amver`"}"
-curl -X POST -H "Content-Type: application/json" -d $jsondata -L https://script.google.com/macros/s/AKfycbyr8P-sfWEgG9IdYNeillASu7dtnnnhV607XimGh3NXJY8OiWm51_LvP6VPU79zfvx0/exec
+try {
+    curl.exe -s -X POST -H "Content-Type: application/json" -d $jsondata -L https://script.google.com/macros/s/AKfycbyr8P-sfWEgG9IdYNeillASu7dtnnnhV607XimGh3NXJY8OiWm51_LvP6VPU79zfvx0/exec | Out-Null
+}
+catch {
+    # 統計送信エラーは無視
+}
 
 if ($RadioButton29.Checked) {
     $cpun = 1
@@ -2789,19 +2745,26 @@ if ($tio) {
         elseif ($sradllc) {
             $detzip = $true
             $temptorv = $torv
-            while ($detzip) {
-                if ($($temptorv.Substring($temptorv.Length - 1, 1)) -eq 0) {
-                    $temptorv = "$($temptorv.Substring(0, 2))$($temptorv.Substring(2, 1)-1).9"
+            $retryCount = 0
+            while ($detzip -and ($retryCount -lt 20)) {
+                $retryCount++
+                if ($temptorv.Length -ge 5) {
+                    if ($($temptorv.Substring($temptorv.Length - 1, 1)) -eq 0) {
+                        $temptorv = "$($temptorv.Substring(0, 2))$($temptorv.Substring(2, 1)-1).9"
+                    }
+                    else {
+                        $temptorv = "$($temptorv.Substring(0, 4))$($temptorv.Substring(4, 1)-1)"
+                    }
+                    for ($aiiii = 0; $aiiii -lt $langz.Length; $aiiii++) {
+                        if ($($web2.tag_name[$aiiii]) -eq "$temptorv") {
+                            $srazip = $($langz[$aiiii])
+                            $detzip = $false
+                        }
+                    }
                 }
                 else {
-                    $temptorv = "$($temptorv.Substring(0, 4))$($temptorv.Substring(4, 1)-1)"
+                    break
                 }
-                for ($aiiii = 0; $aiiii -lt $langz.Length; $aiiii++) {
-                    if ($($web2.tag_name[$aiiii]) -eq "$temptorv") {
-                        $srazip = $($langz[$aiiii])
-                        $detzip = $false
-                    }
-                }        
             }
             $tordlp = $srazip
             $sradll
@@ -3222,28 +3185,7 @@ if ($tio) {
                 }
             }
             else {
-                Copy-Item $aupatho -destination $aupathm -recurse
-                if (Test-Path "$aupathm\Among Us\") {
-                    robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\AmongUs" -recurse -Force
-                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                    Write-Log "`r`n $content"
-                    Remove-Item "C:\Temp\temp.log" -Force                            
-                }
-                if (Test-Path "$aupathm\Among Us\") {
-                    robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\Among Us\" -recurse -Force
-                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                    Write-Log "`r`n $content"
-                    Remove-Item "C:\Temp\temp.log" -Force                            
-                }
-                elseif (Test-Path "$aupathm\AmongUs\") {
-                    robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\AmongUs\" -recurse -Force
-                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                    Write-Log "`r`n $content"
-                    Remove-Item "C:\Temp\temp.log" -Force                            
-                }    
+                robocopy "$aupatho" "$aupathm" /E /MT:8 /R:1 /W:1 /NP /NFL /NDL >$null 2>&1
                 Write-Log "$aupatho を $aupathm にコピーしました"
             }
         }
@@ -3297,22 +3239,7 @@ if ($tio) {
             }
         }
         else {
-            Copy-Item $aupatho -destination $aupathm -recurse
-            if (Test-Path "$aupathm\Among Us\") {
-                robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\Among Us\" -recurse -Force
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force                            
-            }
-            elseif (Test-Path "$aupathm\AmongUs\") {
-                robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\AmongUs\" -recurse -Force
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force                            
-            }
-
+            robocopy "$aupatho" "$aupathm" /E /MT:8 /R:1 /W:1 /NP /NFL /NDL >$null 2>&1
             Write-Log "$aupatho を $aupathm にコピーしました"
         }
     }    
@@ -3390,7 +3317,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded NA (MNA)","PingServer": "https://www.aumods.us","Servers": [{"Name": "Http-1","Ip": "https://www.aumods.us","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003},{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded EU (MEU)","PingServer": "https://au-eu.duikbo.at","Servers": [{"Name": "Http-1","Ip": "https://au-eu.duikbo.at","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003},{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded Asia (MAS)","PingServer": "https://au-as.duikbo.at","Servers": [{"Name": "Http-1","Ip": "https://au-as.duikbo.at","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003}]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
         $regioninstalltxt += "`r`n"
     }
     elseif ($scid -eq "SRA") {
@@ -3419,7 +3346,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "ER") {
@@ -3432,7 +3359,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"
     }
     elseif ($scid -eq "ER+ES") {
@@ -3473,7 +3400,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif (($scid -eq "NOS") -or ($scid -eq "NOT")) {
@@ -3508,7 +3435,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Nebula","PingServer":"cs.supernewroles.com","Servers":[{"Name":"http-1","Ip":"http://168.138.44.249","Port":22023,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TargetServer":null,"TranslateName":1003}]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"
         
     }
@@ -3522,7 +3449,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "TOH") {
@@ -3542,7 +3469,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "TOY") {
@@ -3555,7 +3482,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "SNR") {
@@ -3579,7 +3506,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     else {
@@ -3603,7 +3530,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
         $regioninstalltxt += "`r`n"        
     }
     $Bar.Value = "64"
@@ -3905,7 +3832,7 @@ if ($tio) {
 
         if ($debugc) {
             if (Test-Path $aupathb) {
-                if (($platform -ne "Steam") -and ($platform -eq "Steam")) {
+                if (($platform -ne "Steam") -and ($platform -ne "Epic")) {
                     if ([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか?", "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
                         $platform = "Steam"
                     }
@@ -4140,39 +4067,48 @@ if ($tio -eq $false) {
 $Bar.Value = "82"
 
 #reorder checkeditems
-$ckbci = @()
-$tempoitems = @()
 $kenkoitems = @()
-$ckbci2 = @()
-$tempoitems2 = @()
-$kenkoitems2 = @()
-for ($aa = 0; $aa -le $CheckedBox.CheckedItems.Count; $aa++) {
-    if ($CheckedBox.CheckedItems[$aa] -eq "健康ランド") {
-        $kenkoitems2 += $CheckedBox.CheckedItems[$aa]
+$serveritems = @()
+$otheritems = @()
+foreach ($item in $CheckedBox.CheckedItems) {
+    if ($item -eq "サーバー情報初期化") {
+        $serveritems += $item
+    }
+    elseif ($item -eq "健康ランド") {
+        $kenkoitems += $item
     }
     else {
-        $tempoitems2 += $CheckedBox.CheckedItems[$aa]
+        $otheritems += $item
     }
 }
-$ckbci2 = $kenkoitems2 + $tempoitems2
-for ($aa = 0; $aa -le $ckbci2.Count; $aa++) {
-    if ($ckbci2[$aa] -eq "サーバー情報初期化") {
-        $kenkoitems += $ckbci2[$aa]
-    }
-    else {
-        $tempoitems += $ckbci2[$aa]
-    }
-}
-$ckbci = $kenkoitems + $tempoitems
+$ckbci = $serveritems + $kenkoitems + $otheritems
 
 Write-Log $ckbci
 
 if ($ckbci.Count -gt 0) {
-    for ($aa = 0; $aa -le $ckbci.Count; $aa++) {
+    # .NET ランタイムを要求するツールが含まれている場合、事前に1回だけまとめてインストール
+    $needDotnet = $false
+    foreach ($tool in $ckbci) {
+        if ($tool -in @("AmongUsReplayInWindow", "AmongUsCapture", "LevelImposter", "Submerged", "dotNetFramework")) {
+            $needDotnet = $true
+            break
+        }
+    }
+    if ($needDotnet) {
+        try {
+            choco -v | Out-Null
+        }
+        catch {
+            Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+        }
+        Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet-7.0-desktopruntime dotnet-8.0-desktopruntime dotnet-9.0-desktopruntime dotnet -y" -Verb RunAs -Wait
+    }
+
+    for ($aa = 0; $aa -lt $ckbci.Count; $aa++) {
         if ($ckbci[$aa] -eq "BetterCrewLink") {
             Write-Log "BCL Install Start"
             $bcl = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/OhMyGuus/BetterCrewLink/releases/latest" -UseBasicParsing)).assets.browser_download_url
-            for ($ab = 0; $ab -le $bcl.Length; $ab++) {
+            for ($ab = 0; $ab -lt $bcl.Length; $ab++) {
                 if ($bcl[$ab] -match ".exe") {
                     if ($bcl[$ab] -match ".exe.") {
                     }
@@ -4901,7 +4837,7 @@ if ($error.length -eq 0) {
 }
 else {
     Write-Log $error
-    for ($abc = 0; $abc -le $error.Length; $abc++) {
+    for ($abc = 0; $abc -lt $error.Length; $abc++) {
         $($error[$abc]) | Out-string | Write-Log 
     }    
 }
