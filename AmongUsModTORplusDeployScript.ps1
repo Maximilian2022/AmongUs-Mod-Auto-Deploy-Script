@@ -70,6 +70,7 @@ $icorenew = $false
 
 #TOR plus, TOR GM, TOR GMH, AUM is depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+$ProgressPreference = 'SilentlyContinue'
 
 #################################################################################################
 # Translate Function with Caching
@@ -171,10 +172,8 @@ $npl2 = Get-Location
 $Now = Get-Date
 $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
 Write-Output $(Get-Translate("$Log 実行前チェック開始"))
-try {
-    pwsh -Command '$PSVersionTable.PSVersion.major'
-}
-catch {
+$hasPwsh = $null -ne (Get-Command pwsh -ErrorAction SilentlyContinue) -or (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe")
+if (!$hasPwsh) {
     $Now = Get-Date
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
     Write-Output $(Get-Translate("$Log 初起動時のみ: Powershell 7を導入中・・・。"))
@@ -182,7 +181,10 @@ catch {
     Write-Output "`r`n"
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
-    Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+    # PATHを再読み込み
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    $pwshExe = if (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe") { "$env:ProgramFiles\PowerShell\7\pwsh.exe" } else { "pwsh.exe" }
+    Start-Process $pwshExe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     Write-Output "`r`n"
     Exit
 }
@@ -203,8 +205,9 @@ Write-Output $(Get-Translate("$Log 実行前チェック完了"))
 
 $isDebugger = ($env:TERM_PROGRAM -eq "vscode") -or ($null -ne $psISE) -or $DebugMode
 
-if (!$isDebugger -and ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($($PSVersionTable.PSVersion.Major) -ne "7"))) {
-    Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+if (!$isDebugger -and ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($PSVersionTable.PSVersion.Major -lt 7))) {
+    $pwshExe = if (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe") { "$env:ProgramFiles\PowerShell\7\pwsh.exe" } else { "pwsh.exe" }
+    Start-Process $pwshExe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
     exit
 }
 
@@ -854,6 +857,18 @@ function Initialize-GameEnvironment {
     $fileName = Join-path $dsk "\AmongUsModDeployScript.conf"
 
     $au_path_steam_org = "C:\Program Files (x86)\Steam\steamapps\common\Among Us"
+    # Steamのレジストリからの検出（別ドライブインストール対応）
+    $steamRegPath = (Get-ItemProperty -Path "HKCU:\Software\Valve\Steam" -Name "SteamPath" -ErrorAction SilentlyContinue).SteamPath
+    if ([string]::IsNullOrEmpty($steamRegPath)) {
+        $steamRegPath = (Get-ItemProperty -Path "HKLM:\SOFTWARE\WOW6432Node\Valve\Steam" -Name "InstallPath" -ErrorAction SilentlyContinue).InstallPath
+    }
+    if (![string]::IsNullOrEmpty($steamRegPath)) {
+        $steamRegNormalized = $steamRegPath.Replace('/', '\')
+        $steamRegAmongUs = Join-Path $steamRegNormalized "steamapps\common\Among Us"
+        if (Test-Path "$steamRegAmongUs\Among Us.exe") {
+            $au_path_steam_org = $steamRegAmongUs
+        }
+    }
     $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
 
     # プロセスからの検出
@@ -2387,10 +2402,15 @@ if ($torpv.Length -le 0) {
 }
 Write-Log "Version $torpv が選択されました"
 Write-Log $releasepage
-#統計情報
+#統計情報（非同期送信）
 $jsondata = "{`"date`":`"$Log`", `"mod`":`"$scid`", `"version`":`"$torpv`", `"main`":`"$amver`"}"
 try {
-    curl.exe -s -X POST -H "Content-Type: application/json" -d $jsondata -L https://script.google.com/macros/s/AKfycbyr8P-sfWEgG9IdYNeillASu7dtnnnhV607XimGh3NXJY8OiWm51_LvP6VPU79zfvx0/exec | Out-Null
+    [powershell]::Create().AddScript({
+        param($payload)
+        try {
+            curl.exe -s --max-time 3 -X POST -H "Content-Type: application/json" -d $payload -L "https://script.google.com/macros/s/AKfycbyr8P-sfWEgG9IdYNeillASu7dtnnnhV607XimGh3NXJY8OiWm51_LvP6VPU79zfvx0/exec" | Out-Null
+        } catch {}
+    }).AddArgument($jsondata).BeginInvoke() | Out-Null
 }
 catch {
     # 統計送信エラーは無視
@@ -3187,28 +3207,12 @@ if ($tio) {
                 }
             }
             else {
-                Copy-Item $aupatho -destination $aupathm -recurse
-                if (Test-Path "$aupathm\Among Us\") {
-                    robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\AmongUs" -recurse -Force
-                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+                robocopy "$aupatho" "$aupathm" /E /MT:8 /R:1 /W:1 /NP /unilog:C:\Temp\temp.log >nul 2>&1
+                if (Test-Path "C:\Temp\temp.log") {
+                    $content = Get-Content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
-                    Remove-Item "C:\Temp\temp.log" -Force                            
+                    Remove-Item "C:\Temp\temp.log" -Force
                 }
-                if (Test-Path "$aupathm\Among Us\") {
-                    robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\Among Us\" -recurse -Force
-                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                    Write-Log "`r`n $content"
-                    Remove-Item "C:\Temp\temp.log" -Force                            
-                }
-                elseif (Test-Path "$aupathm\AmongUs\") {
-                    robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                    Remove-Item "$aupathm\AmongUs\" -recurse -Force
-                    $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                    Write-Log "`r`n $content"
-                    Remove-Item "C:\Temp\temp.log" -Force                            
-                }    
                 Write-Log "$aupatho を $aupathm にコピーしました"
             }
         }
@@ -3262,22 +3266,12 @@ if ($tio) {
             }
         }
         else {
-            Copy-Item $aupatho -destination $aupathm -recurse
-            if (Test-Path "$aupathm\Among Us\") {
-                robocopy "$aupathm\Among Us" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\Among Us\" -recurse -Force
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
+            robocopy "$aupatho" "$aupathm" /E /MT:8 /R:1 /W:1 /NP /unilog:C:\Temp\temp.log >nul 2>&1
+            if (Test-Path "C:\Temp\temp.log") {
+                $content = Get-Content "C:\Temp\temp.log" -Raw -Encoding Unicode
                 Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force                            
+                Remove-Item "C:\Temp\temp.log" -Force
             }
-            elseif (Test-Path "$aupathm\AmongUs\") {
-                robocopy "$aupathm\AmongUs" "$aupathm" /unilog:C:\Temp\temp.log /E >nul 2>&1
-                Remove-Item "$aupathm\AmongUs\" -recurse -Force
-                $content = Get-content "C:\Temp\temp.log" -Raw -Encoding Unicode
-                Write-Log "`r`n $content"
-                Remove-Item "C:\Temp\temp.log" -Force                            
-            }
-
             Write-Log "$aupatho を $aupathm にコピーしました"
         }
     }    
@@ -3355,7 +3349,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded NA (MNA)","PingServer": "https://www.aumods.us","Servers": [{"Name": "Http-1","Ip": "https://www.aumods.us","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003},{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded EU (MEU)","PingServer": "https://au-eu.duikbo.at","Servers": [{"Name": "Http-1","Ip": "https://au-eu.duikbo.at","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003},{"$type": "StaticHttpRegionInfo, Assembly-CSharp","Name": "Modded Asia (MAS)","PingServer": "https://au-as.duikbo.at","Servers": [{"Name": "Http-1","Ip": "https://au-as.duikbo.at","Port": 443,"UseDtls": false,"Players": 0,"ConnectionFailures": 0}],"TargetServer": null,"TranslateName": 1003}]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
         $regioninstalltxt += "`r`n"
     }
     elseif ($scid -eq "SRA") {
@@ -3384,7 +3378,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "ER") {
@@ -3397,7 +3391,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"
     }
     elseif ($scid -eq "ER+ES") {
@@ -3438,7 +3432,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif (($scid -eq "NOS") -or ($scid -eq "NOT")) {
@@ -3473,7 +3467,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[{"$type":"StaticHttpRegionInfo, Assembly-CSharp","Name":"Nebula","PingServer":"cs.supernewroles.com","Servers":[{"Name":"http-1","Ip":"http://168.138.44.249","Port":22023,"UseDtls":false,"Players":0,"ConnectionFailures":0}],"TargetServer":null,"TranslateName":1003}]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"
         
     }
@@ -3487,7 +3481,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "TOH") {
@@ -3507,7 +3501,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "TOY") {
@@ -3520,7 +3514,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     elseif ($scid -eq "SNR") {
@@ -3544,7 +3538,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,Modded NA (MNA),Modded EU (MEU),Modded Asia (MAS)'
         $regioninstalltxt += "`r`n"        
     }
     else {
@@ -3568,7 +3562,7 @@ if ($tio) {
         }
         $regioninstalltxt += '{\"CurrentRegionIdx\":0,\"Regions\":[]}'
         $regioninstalltxt += "`r`nRemoveRegions = "
-        $regioninstalltxt += ’haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
+        $regioninstalltxt += 'haoming-server,Nebula,ExROfficialTokyo,<size=150%><color=#ffa500>Super</color><color=#ff0000>New</color><color=#00ff00>Roles</color></size>\n<align=\"center\">Tokyo</align>'
         $regioninstalltxt += "`r`n"        
     }
     $Bar.Value = "64"
@@ -3870,7 +3864,7 @@ if ($tio) {
 
         if ($debugc) {
             if (Test-Path $aupathb) {
-                if (($platform -ne "Steam") -and ($platform -eq "Steam")) {
+                if (($platform -ne "Steam") -and ($platform -ne "Epic")) {
                     if ([System.Windows.Forms.MessageBox]::Show("PlatformはSteamですか?", "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
                         $platform = "Steam"
                     }
@@ -4111,7 +4105,7 @@ $kenkoitems = @()
 $ckbci2 = @()
 $tempoitems2 = @()
 $kenkoitems2 = @()
-for ($aa = 0; $aa -le $CheckedBox.CheckedItems.Count; $aa++) {
+for ($aa = 0; $aa -lt $CheckedBox.CheckedItems.Count; $aa++) {
     if ($CheckedBox.CheckedItems[$aa] -eq "健康ランド") {
         $kenkoitems2 += $CheckedBox.CheckedItems[$aa]
     }
@@ -4120,7 +4114,7 @@ for ($aa = 0; $aa -le $CheckedBox.CheckedItems.Count; $aa++) {
     }
 }
 $ckbci2 = $kenkoitems2 + $tempoitems2
-for ($aa = 0; $aa -le $ckbci2.Count; $aa++) {
+for ($aa = 0; $aa -lt $ckbci2.Count; $aa++) {
     if ($ckbci2[$aa] -eq "サーバー情報初期化") {
         $kenkoitems += $ckbci2[$aa]
     }
@@ -4133,11 +4127,11 @@ $ckbci = $kenkoitems + $tempoitems
 Write-Log $ckbci
 
 if ($ckbci.Count -gt 0) {
-    for ($aa = 0; $aa -le $ckbci.Count; $aa++) {
+    for ($aa = 0; $aa -lt $ckbci.Count; $aa++) {
         if ($ckbci[$aa] -eq "BetterCrewLink") {
             Write-Log "BCL Install Start"
             $bcl = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/OhMyGuus/BetterCrewLink/releases/latest" -UseBasicParsing)).assets.browser_download_url
-            for ($ab = 0; $ab -le $bcl.Length; $ab++) {
+            for ($ab = 0; $ab -lt $bcl.Length; $ab++) {
                 if ($bcl[$ab] -match ".exe") {
                     if ($bcl[$ab] -match ".exe.") {
                     }
@@ -4700,14 +4694,48 @@ try {
 catch {
     Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
 }
-Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat" -OutFile "$dsk\StartAmongUsModTORplusDeployScript.bat" -UseBasicParsing
-$ps1script += "chcp 65001 `r`n"
-$ps1script += "@echo off `r`n"
-$ps1script += "curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1 `r`n"
-$ps1script += "pwsh -NoProfile -ExecutionPolicy Unrestricted .\gmhtechsupport.ps1"
-$ps1script += " `"$scid`" `"$aupathm`" `"$platform`" `r`n" 
-$ps1script += "del /F /Q .\gmhtechsupport.ps1 `r`n"
-$ps1script | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScript_$scid.bat" 
+# 最新の BAT ファイルを一時ファイル (.bat.new) としてダウンロード
+$batUrl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat"
+$newBatDsk = Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat.new"
+Invoke-WebRequest $batUrl -OutFile $newBatDsk -UseBasicParsing
+
+# 実行中 BAT への直接上書きを避け、cmd.exe 終了後に安全に置換するコマンド群を構築
+$delayedCmds = @()
+
+if (Test-Path (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat")) {
+    # 既に存在する場合は cmd.exe 終了後に遅延置換
+    $delayedCmds += "move /y `"$newBatDsk`" `"$dsk\StartAmongUsModTORplusDeployScript.bat`" >nul"
+} else {
+    # 初回実行で未存在の場合は直ちに配置
+    Move-Item -Path $newBatDsk -Destination (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat") -Force
+}
+
+# ユーザーが別の場所 ($npl2) で古い BAT を実行していた場合、元の場所の BAT も最新に遅延更新
+if ($npl2.Path -ne $dsk -and (Test-Path "$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat")) {
+    $newBatNpl = Join-Path $npl2.Path "StartAmongUsModTORplusDeployScript.bat.new"
+    Copy-Item -Path (if (Test-Path $newBatDsk) { $newBatDsk } else { "$dsk\StartAmongUsModTORplusDeployScript.bat" }) -Destination $newBatNpl -Force
+    $delayedCmds += "move /y `"$newBatNpl`" `"$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat`" >nul"
+}
+
+# 万が一 BAT 側での削除がスキップされた場合のセーフティネット（PS1 の遅延クリーンアップ）
+$delayedCmds += "del /f /q `"$dsk\AmongUsModTORplusDeployScript.ps1`" >nul 2>&1"
+if ($npl2.Path -ne $dsk) {
+    $delayedCmds += "del /f /q `"$($npl2.Path)\AmongUsModTORplusDeployScript.ps1`" >nul 2>&1"
+}
+
+# 親の cmd.exe が正常終了（del 等完了）した2秒後に、安全に move とクリーンアップを実行するバックグラウンドタスク
+if ($delayedCmds.Count -gt 0) {
+    $delayedScript = "ping 127.0.0.1 -n 3 >nul & " + ($delayedCmds -join " & ")
+    Start-Process cmd.exe -ArgumentList "/c $delayedScript" -WindowStyle Hidden
+}
+
+# ログ取得用バッチの生成（変数汚染を防止し、初期化して出力）
+$logBatContent = "chcp 65001 >nul`r`n@echo off`r`nsetlocal`r`npushd `"%~dp0`"`r`n"
+$logBatContent += "curl.exe -k -s -S -L --retry 2 -o `"%~dp0gmhtechsupport.ps1`" https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/gmhtechsupport.ps1`r`n"
+$logBatContent += "set `"PS_EXE=powershell.exe`"`r`nwhere pwsh.exe >nul 2>&1 && set `"PS_EXE=pwsh.exe`"`r`n"
+$logBatContent += "`"%PS_EXE%`" -NoProfile -ExecutionPolicy Bypass -File `"%~dp0gmhtechsupport.ps1`" `"$scid`" `"$aupathm`" `"$platform`"`r`n"
+$logBatContent += "del /F /Q `"%~dp0gmhtechsupport.ps1`"`r`npopd`r`n"
+$logBatContent | Out-File -Encoding "UTF8BOM" -FilePath "$dsk\StartAmongUsGetLogScript_$scid.bat"
 
 if (Test-Path "$scpath\StartAmongUsModTORplusDeployScript.lnk") {
     Remove-Item "$scpath\StartAmongUsModTORplusDeployScript.lnk" -Force
@@ -4726,19 +4754,6 @@ else {
     Write-Log "Current location is not Working Directory"
     Write-Log $npl2.Path
     Write-Log $dsk
-    Write-Log $($npl2.Path).length
-    Write-Log $dsk.length
-    if (!$isDebugger) {
-        if (Test-Path "$npl2\StartAmongUsModTORplusDeployScript.bat") {
-            Remove-Item "$npl2\StartAmongUsModTORplusDeployScript.bat" -Force
-        }
-        if (Test-Path "$npl2\StartAmongUsGetLogScript_$scid.bat") {
-            Remove-Item "$npl2\StartAmongUsGetLogScript_$scid.bat" -Force
-        }
-    }
-    #   if(Test-Path "$npl2\AmongUsModTORplusDeployScript.ps1"){
-    #       Remove-Item "$npl2\AmongUsModTORplusDeployScript.ps1" -Force
-    #   }
 }
 
 ####################
@@ -4866,7 +4881,7 @@ if ($error.length -eq 0) {
 }
 else {
     Write-Log $error
-    for ($abc = 0; $abc -le $error.Length; $abc++) {
+    for ($abc = 0; $abc -lt $error.Length; $abc++) {
         $($error[$abc]) | Out-string | Write-Log 
     }    
 }

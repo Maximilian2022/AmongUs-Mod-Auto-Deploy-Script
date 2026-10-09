@@ -8,7 +8,7 @@ echo %date% %time%   Loading...
 
 echo %date% %time%   Downloading Latest Powershell Script
 
-curl.exe -k -O -L https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongUsModTORplusDeployScript.ps1
+curl.exe -k -s -S -L --retry 2 -o "%~dp0AmongUsModTORplusDeployScript.ps1" https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongUsModTORplusDeployScript.ps1
 
 if not exist "%~dp0AmongUsModTORplusDeployScript.ps1" (
     echo [ERROR] Failed to download AmongUsModTORplusDeployScript.ps1
@@ -17,9 +17,21 @@ if not exist "%~dp0AmongUsModTORplusDeployScript.ps1" (
     exit /b 1
 )
 
-echo %date% %time%   Running Powershell Script
+echo %date% %time%   Detecting PowerShell Version
 
-powershell -NoProfile -WindowStyle Minimized -ExecutionPolicy Unrestricted -File "%~dp0AmongUsModTORplusDeployScript.ps1"
+set "PS_EXE=powershell.exe"
+where pwsh.exe >nul 2>&1
+if %errorlevel% equ 0 (
+    set "PS_EXE=pwsh.exe"
+) else (
+    if exist "%ProgramFiles%\PowerShell\7\pwsh.exe" (
+        set "PS_EXE=%ProgramFiles%\PowerShell\7\pwsh.exe"
+    )
+)
+
+echo %date% %time%   Running Script with %PS_EXE%
+
+"%PS_EXE%" -NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File "%~dp0AmongUsModTORplusDeployScript.ps1"
 
 echo %date% %time%   Delete Powershell Script
 

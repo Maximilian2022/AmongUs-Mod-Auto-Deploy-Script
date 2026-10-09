@@ -12,6 +12,7 @@ $version = "1.0.2"
 # Translate Function with Caching
 #################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+$ProgressPreference = 'SilentlyContinue'
 $Cult  = Get-Culture
 $TranslationCache = @{}
 #$Cult  = "en-US"
@@ -63,9 +64,7 @@ if ($PSVersionTable.PSVersion.major -eq 5) {
 
 if ($v5run -and !$isDebugger -and !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Steam.ps1`"" -Verb RunAs -Wait
-    exit
 }
-#>
 #################################################################################################
 # Folder用Function
 #################################################################################################
@@ -142,6 +141,10 @@ Write-Log "-----------------------------------------------------------------"
 
 #Steam起動チェック
 $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
+$steamReg = (Get-ItemProperty -Path "HKCU:\Software\Valve\Steam" -Name "SteamExe" -ErrorAction SilentlyContinue).SteamExe
+if (![string]::IsNullOrEmpty($steamReg) -and (Test-Path $steamReg)) {
+    $steampth = $steamReg.Replace('/', '\')
+}
 $steamProc = Get-Process -Name "steam" -ErrorAction SilentlyContinue | Select-Object -First 1
 $procPath = $null
 if ($null -ne $steamProc) {
@@ -171,7 +174,7 @@ if (Test-Path $steampth) {
         $dialog.Title = $(Get-Translate("Steam.exe ファイルを選択してください"))
     
         # キャンセルを押された時は処理を止める
-        if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::NG) {
+        if ($dialog.ShowDialog() -ne [System.Windows.Forms.DialogResult]::OK) {
             exit 1
         }
     

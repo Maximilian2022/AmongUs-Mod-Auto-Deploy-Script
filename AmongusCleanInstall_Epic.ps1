@@ -12,6 +12,7 @@ $version = "1.0.1"
 # Translate Function with Caching
 #################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+$ProgressPreference = 'SilentlyContinue'
 $Cult  = Get-Culture
 $TranslationCache = @{}
 #$Cult  = "en-US"
@@ -68,10 +69,6 @@ if ($v5run -and !$isDebugger -and !([Security.Principal.WindowsPrincipal][Securi
     }
     exit
 }
-
-
-
-#>
 #################################################################################################
 # Folder用Function
 #################################################################################################

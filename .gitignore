@@ -1,0 +1,56 @@
+# ==============================================================================
+# Among Us Mod Auto Deploy Script - .gitignore
+# ==============================================================================
+
+# --- スクリプト実行ログ・ランタイム生成物 ---
+lastruntime.txt
+*.log
+*.log.*
+logs/
+*.transcript.txt
+
+# --- ダウンロード・アーカイブ・一時展開キャッシュ ---
+*.zip
+*.7z
+*.rar
+*.tar.gz
+*.aria2
+temp/
+tmp/
+*.tmp
+*.temp
+
+# --- バックアップ・エディタ退避ファイル ---
+*.bak
+*~
+*.swp
+*.swo
+
+# --- Windows システム・OS固有ファイル ---
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# --- エディタ & IDE 設定 ---
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# JetBrains
+.idea/
+
+# Visual Studio
+.vs/
+
+# --- AI エージェント・スキル関連 ---
+.gemini/
+.claude/
+.cursor/
+.agents/
+skills-lock.json
+

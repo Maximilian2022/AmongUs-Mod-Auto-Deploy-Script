@@ -7,6 +7,7 @@ $version = "1.0.4"
 #
 #################################################################################################
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+$ProgressPreference = 'SilentlyContinue'
 #################################################################################################
 # 権限チェック
 #################################################################################################
@@ -398,7 +399,7 @@ Write-Log $error.length
 if($error.length -eq 0){
     Write-Log $(Get-Translate("Script 実行時のScriptエラーはなさそうです"))
 }else{
-    for($abc=0;$abc -le $error.Length;$abc++){
+    for($abc=0;$abc -lt $error.Length;$abc++){
         $($error[$abc]) | Out-string | Write-Log 
     }    
 }
