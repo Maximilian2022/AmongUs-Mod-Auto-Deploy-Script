@@ -184,7 +184,9 @@ if (!$hasPwsh) {
     # PATHを再読み込み
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
     $pwshExe = if (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe") { "$env:ProgramFiles\PowerShell\7\pwsh.exe" } else { "pwsh.exe" }
-    Start-Process $pwshExe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+    $pwshArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`""
+    if ($null -ne $Args1) { $pwshArgs += " $Args1" }
+    Start-Process $pwshExe -ArgumentList $pwshArgs -Verb RunAs -Wait
     Write-Output "`r`n"
     Exit
 }
@@ -207,7 +209,9 @@ $isDebugger = ($env:TERM_PROGRAM -eq "vscode") -or ($null -ne $psISE) -or $Debug
 
 if (!$isDebugger -and ((!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) -or ($PSVersionTable.PSVersion.Major -lt 7))) {
     $pwshExe = if (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe") { "$env:ProgramFiles\PowerShell\7\pwsh.exe" } else { "pwsh.exe" }
-    Start-Process $pwshExe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`"" -Verb RunAs -Wait
+    $pwshArgs = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`""
+    if ($null -ne $Args1) { $pwshArgs += " $Args1" }
+    Start-Process $pwshExe -ArgumentList $pwshArgs -Verb RunAs -Wait
     exit
 }
 
@@ -2953,32 +2957,33 @@ if ($tio) {
         Add-Type -AssemblyName System.Web
         $tordlptmp = @()
         $tempver = [System.Web.HttpUtility]::UrlEncode("$torv")
-        for ($aii = 0; $aii -lt $($web2.assets.browser_download_url).Length; $aii++) {
-            if (($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0) -and ($($web2.assets.browser_download_url[$aii]).IndexOf("$tempver") -gt 0)) {
-                $tordlptmp += $web2.assets.browser_download_url[$aii]
+        $allUrls = @($web2 | ForEach-Object { $_.assets } | ForEach-Object { $_.browser_download_url })
+        if ($allUrls.Count -eq 0 -and $web2.assets) {
+            $allUrls = @($web2.assets.browser_download_url)
+        }
+        for ($aii = 0; $aii -lt $allUrls.Length; $aii++) {
+            $u = $allUrls[$aii]
+            if ($u -like "*.zip" -and ($u.IndexOf("$tempver") -gt 0 -or $u.IndexOf("$torv") -gt 0)) {
+                $tordlptmp += $u
                 $nosdll = $true
             }
         }
-        if (!$nosdll) {
+        if (!$nosdll -or $tordlptmp.Count -eq 0) {
+            $tordlp = "https://github.com/Dolly1016/Nebula/releases/latest/download/Nebula.zip"
+        } else {
+            $targetKeyword = if ($platform -eq "Steam") { "Steam" } else { "Epic" }
+            $matched = $tordlptmp | Where-Object { $_.IndexOf($targetKeyword, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 } | Select-Object -First 1
+            if ($matched) {
+                $tordlp = $matched
+            } else {
+                $tordlp = $tordlptmp[0]
+            }
+        }
+        if ([string]::IsNullOrWhiteSpace($tordlp)) {
             $tordlp = "https://github.com/Dolly1016/Nebula/releases/latest/download/Nebula.zip"
         }
-        if ($platform -eq "Steam") {
-            for ($aa = 0; $aa -lt $tordlptmp.length; $aa++) {
-                if ($tordlptmp[$aa].IndexOf("Steam") -gt 0) {
-                    $tordlp = $tordlptmp[$aa]
-                }
-            }
-        }
-        else {
-            for ($aa = 0; $aa -lt $tordlptmp.length; $aa++) {
-                if ($tordlptmp[$aa].IndexOf("Epic") -gt 0) {
-                    $tordlp = $tordlptmp[$aa]
-                }
-            }
-        }
-        Write-Log $torv
-        Write-Log $tempver
-        Write-Log $tordlp
+        Write-Log "NOS Selected Version: $torv"
+        Write-Log "NOS Download URL: $tordlp"
     }
     else {
         Write-Log "Critical Error 3"
@@ -4766,7 +4771,8 @@ if (Test-Path (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat")) {
 # ユーザーが別の場所 ($npl2) で古い BAT を実行していた場合、元の場所の BAT も最新に遅延更新
 if ($npl2.Path -ne $dsk -and (Test-Path "$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat")) {
     $newBatNpl = Join-Path $npl2.Path "StartAmongUsModTORplusDeployScript.bat.new"
-    Copy-Item -Path (if (Test-Path $newBatDsk) { $newBatDsk } else { "$dsk\StartAmongUsModTORplusDeployScript.bat" }) -Destination $newBatNpl -Force
+    $sourceBat = if (Test-Path $newBatDsk) { $newBatDsk } else { "$dsk\StartAmongUsModTORplusDeployScript.bat" }
+    Copy-Item -Path $sourceBat -Destination $newBatNpl -Force
     $delayedCmds += "move /y `"$newBatNpl`" `"$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat`" >nul"
 }
 
@@ -4927,14 +4933,14 @@ if ($debugc) {
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Install Error check"
 Write-Log "-----------------------------------------------------------------"
-Write-Log $error.length
+Write-Log $error.Count
 
-if ($error.length -eq 0) {
+if ($error.Count -eq 0) {
     Write-Log "Script実行時のエラーはなさそうです"
 }
 else {
     Write-Log $error
-    for ($abc = 0; $abc -lt $error.Length; $abc++) {
+    for ($abc = 0; $abc -lt $error.Count; $abc++) {
         $($error[$abc]) | Out-string | Write-Log 
     }    
 }
