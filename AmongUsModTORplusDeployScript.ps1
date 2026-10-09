@@ -909,12 +909,35 @@ function Initialize-GameEnvironment {
     }
 
     $spath = $null
-    if (Test-path "$au_path_steam_org\Among Us.exe") {
+    $hasSteam = (Test-Path "$au_path_steam_org\Among Us.exe")
+    $hasEpic  = (Test-Path "$au_path_epic_org\Among Us.exe")
+
+    if ($hasSteam -and $hasEpic) {
+        Write-Log "Both Steam and Epic installations of Among Us were detected."
+        $selectedIsSteam = $true
+        if ($null -eq $Args1) {
+            $msg = $(Get-Translate("Steam版とEpic版の両方のAmong Usが検出されました。`nSteam版を使用しますか？`n（「はい」=Steam版 / 「いいえ」=Epic版）"))
+            $selectedIsSteam = ([System.Windows.Forms.MessageBox]::Show($msg, "Among Us Mod Auto Deploy Tool", 4) -eq "Yes")
+        } elseif ($env:TARGET_PLATFORM -eq "Epic") {
+            $selectedIsSteam = $false
+        }
+
+        if ($selectedIsSteam) {
+            Write-Log "User/Config selected Steam"
+            $spath = $au_path_steam_org
+            $script:platform = "steam"
+        } else {
+            Write-Log "User/Config selected Epic"
+            $spath = $au_path_epic_org
+            $script:platform = "epic"
+        }
+    }
+    elseif ($hasSteam) {
         Write-Log "Steam Original Detected"
         $spath = $au_path_steam_org
         $script:platform = "steam"
     }
-    elseif (Test-path "$au_path_epic_org\Among Us.exe") {
+    elseif ($hasEpic) {
         Write-Log "Epic Original Detected"
         $spath = $au_path_epic_org
         $script:platform = "epic"
@@ -2065,6 +2088,21 @@ function Reload() {
             Write-Log "$rn が選択されました。"
         }
 
+        # 選択されたプラットフォームに合わせてパスとプラットフォーム変数を同期
+        if ($rn -eq "epic") {
+            $script:platform = "epic"
+            $platform = "epic"
+            $aupatho = $au_path_epic_org
+            $script:aupatho = $au_path_epic_org
+            Write-Log "プラットフォームを Epic に切り替えました: $aupatho"
+        } else {
+            $script:platform = "steam"
+            $platform = "steam"
+            $aupatho = $au_path_steam_org
+            $script:aupatho = $au_path_steam_org
+            Write-Log "プラットフォームを Steam に切り替えました: $aupatho"
+        }
+
         Write-Log "クリーンインストールプロセス開始"
         if($rn -eq "steam"){
             Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
@@ -3135,6 +3173,21 @@ if ($tio) {
                     $rn = "epic"
                 }                
                 Write-Log "$rn が選択されました。"
+            }
+
+            # 選択されたプラットフォームに合わせてパスとプラットフォーム変数を同期
+            if ($rn -eq "epic") {
+                $script:platform = "epic"
+                $platform = "epic"
+                $aupatho = $au_path_epic_org
+                $script:aupatho = $au_path_epic_org
+                Write-Log "プラットフォームを Epic に切り替えました: $aupatho"
+            } else {
+                $script:platform = "steam"
+                $platform = "steam"
+                $aupatho = $au_path_steam_org
+                $script:aupatho = $au_path_steam_org
+                Write-Log "プラットフォームを Steam に切り替えました: $aupatho"
             }
 
             Write-Log "クリーンインストールプロセス開始"

@@ -54,3 +54,7 @@ $RECYCLE.BIN/
 .agents/
 skills-lock.json
 
+# --- 自動テスト環境 ---
+AutoDeployTestEnv/
+
+
