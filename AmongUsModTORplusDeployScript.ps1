@@ -8,8 +8,8 @@ $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 #
 # Among Us Mod Auto Deploy Script
 #
-$version = "2.2.0"
-$build = "20260907001"
+$version = "3.0.0"
+$build = "2026101004"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -1268,14 +1268,22 @@ try {
             </Setter>
         </Style>
 
-        <!-- ComboBox Dark Style -->
+                <!-- ComboBox Style -->
         <Style TargetType="ComboBox">
-            <Setter Property="Background" Value="{DynamicResource InputBg}"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="#111827"/>
             <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8,6"/>
             <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- ComboBoxItem Style (リスト内の文字色を黒に指定) -->
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
         </Style>
 
         <Style TargetType="CheckBox">
@@ -1725,7 +1733,7 @@ $RETU = ("AmongUsCapture", "VC Redist", "BetterCrewLink", "PowerShell 7", "dotNe
 $CheckedBox.Items.AddRange($RETU)
 $CheckedBox.ClearSelected()
 
-$Combo = New-Object System.Windows.Forms.ComboBox
+$Combo = New-Object System.Windows.Forms.ComboBox; $Combo.BindingContext = New-Object System.Windows.Forms.BindingContext
 if ($gmhbool) { [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test") }
 [void] $Combo.Items.Add("NOS :Dolly1016/Nebula on the Ship")
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
@@ -1738,7 +1746,7 @@ if ($gmhbool) { [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test") }
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
 
-$Combo2 = New-Object System.Windows.Forms.ComboBox
+$Combo2 = New-Object System.Windows.Forms.ComboBox; $Combo2.BindingContext = New-Object System.Windows.Forms.BindingContext
 $label4 = New-Object System.Windows.Forms.Label
 $label6 = New-Object System.Windows.Forms.Label
 
@@ -2556,7 +2564,16 @@ if ($null -eq $Args1) {
     $CmbMod.SelectedIndex = 0
     Reload
 
-    # ボタンイベントハンドラ
+    # ボタンイベントハンドラ & ウィンドウ閉じる制御 (案A: デプロイ進行中の誤終了防止)
+    $script:isDeploying = $false
+    $window.Add_Closing({
+        param($s, $e)
+        if ($script:isDeploying) {
+            $e.Cancel = $true
+            [System.Windows.MessageBox]::Show("MOD デプロイ処理を実行中です。完了するまでウィンドウを閉じることはできません。", "Among Us Mod Auto Deploy Tool", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Warning) | Out-Null
+        }
+    })
+
     $script:actionToTake = $null
     $BtnStartDeploy.Add_Click({
         $script:actionToTake = "Deploy"
@@ -2627,7 +2644,13 @@ if ($null -eq $Args1) {
     $mod = $Combo.Text
     $torpv = if ($CmbVersion.SelectedItem) { $CmbVersion.SelectedItem.ToString() } else { $Combo2.Text }
 
-    # ViewConfig -> ViewProgress へ遷移
+    # ViewConfig -> ViewProgress へ遷移 (案A: 進行中はキャンセル無効化)
+    $script:isDeploying = $true
+    if ($BtnCancel) {
+        $BtnCancel.IsEnabled = $false
+        $BtnCancel.Content = "処理中..."
+        $BtnCancel.ToolTip = "デプロイ処理中はキャンセルできません"
+    }
     $ViewConfig.Visibility = [System.Windows.Visibility]::Collapsed
     $ViewProgress.Visibility = [System.Windows.Visibility]::Visible
     $TxtProgressStatus.Text = "Among Us Mod $scid のデプロイを準備中..."
@@ -3186,16 +3209,20 @@ $nosdll = $false
 
     # Modern GUI とのプログレス同期
     if ($null -ne $script:mainWindow -and $null -eq $Args1) {
-        $Bar.Add_ValueChanged({
+        $Bar | Add-Member -MemberType ScriptProperty -Name 'Value' -Value {
+            $this.GetType().GetProperty('Value').GetValue($this)
+        } -SecondValue {
+            param($val)
+            $this.GetType().GetProperty('Value').SetValue($this, [int]$val)
             if ($null -ne $script:ProgBar) {
                 try {
-                    $val = [int]$Bar.Value
-                    $script:ProgBar.Value = $val
-                    if ($script:TxtPercent) { $script:TxtPercent.Text = "$val%" }
+                    $intVal = [int]$val
+                    $script:ProgBar.Value = $intVal
+                    if ($script:TxtPercent) { $script:TxtPercent.Text = "$intVal%" }
                     [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
                 } catch {}
             }
-        })
+        } -Force
     }
 
 if ($tio) {
@@ -5433,6 +5460,7 @@ Start-Sleep -Seconds 1
 $Bar.Value = "100"
 if ($null -ne $script:mainWindow -and $null -eq $Args1) {
     # WPF シングルウィンドウ内の完了画面 (ViewComplete) に遷移
+    $script:isDeploying = $false
     $script:ProgBar.Value = 100
     $script:TxtPercent.Text = "100%"
     $script:ViewProgress.Visibility = [System.Windows.Visibility]::Collapsed
