@@ -3,7 +3,8 @@
     [switch]$DebugMode,
     [string]$DeployPlatform,
     [switch]$BatchChild,
-    [string]$ProgressSyncFile
+    [string]$ProgressSyncFile,
+    [string]$ChildLogPath
 )
 $ScriptStartTime = Get-Date
 $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
@@ -237,6 +238,9 @@ if ( -not (Test-Path $LogPath) ) {
 }
 # ログファイル名
 $LogFileName = Join-Path $LogPath $LogFile
+if ($ChildLogPath) {
+    $LogFileName = $ChildLogPath
+}
 
 $scpath = [System.Environment]::GetFolderPath("Desktop")
 $WsShell = New-Object -ComObject WScript.Shell
@@ -2980,6 +2984,9 @@ if ($isall) {
         if ($AAA2.contains($currentModName) -or $AAA2.contains("ALL")) {
             $currentphase++
 
+            # 親プロセスのコンソールログ状態をスナップショット保存
+            $parentLogSnapshot = if ($script:guiTxtLog) { $script:guiTxtLog.Text } else { "" }
+
             # Modern GUI (WPF) プログレス表示をリアルタイム更新
             if ($null -ne $script:mainWindow) {
                 if ($script:PnlSubProgress) { $script:PnlSubProgress.Visibility = [System.Windows.Visibility]::Visible }
@@ -2992,6 +2999,13 @@ if ($isall) {
                 $overallPercent = [math]::Round(((($currentphase - 1) * 100) / [math]::Max($modsel * 100, 1)) * 100)
                 if ($script:ProgBar) { $script:ProgBar.Value = $overallPercent }
                 if ($script:TxtPercent) { $script:TxtPercent.Text = "$overallPercent%" }
+
+                # コンソールログを現在処理中の子プロセス MOD ログ表示に切り替え
+                if ($script:guiTxtLog) {
+                    $script:guiTxtLog.Text = "=== [$currentphase/$modsel] $currentModName デプロイ実行中 ===`r`n"
+                    if ($script:guiScrollLog) { $script:guiScrollLog.ScrollToEnd() }
+                }
+
                 [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
             }
 
@@ -2999,15 +3013,20 @@ if ($isall) {
             
             if ($deployScriptPath) {
                 $syncFile = Join-Path $env:TEMP "aumads_progress_$iall.json"
+                $childLogFile = Join-Path $env:TEMP "aumads_childlog_$iall.log"
                 if (Test-Path $syncFile) { Remove-Item $syncFile -Force -ErrorAction SilentlyContinue }
+                if (Test-Path $childLogFile) { Remove-Item $childLogFile -Force -ErrorAction SilentlyContinue }
 
                 $platArg = if ($script:platform) { "-DeployPlatform `"$($script:platform)`"" } else { "" }
-                $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" -Args1 `"$iall`" $platArg -BatchChild -ProgressSyncFile `"$syncFile`""
+                $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" -Args1 `"$iall`" $platArg -BatchChild -ProgressSyncFile `"$syncFile`" -ChildLogPath `"$childLogFile`""
 
                 $proc = Start-Process $psExe -ArgumentList $childArgs -Verb RunAs -PassThru
 
-                # 子プロセスの完了まで進捗同期ファイルを監視
+                $lastLogLength = 0
+
+                # 子プロセスの完了まで進捗同期ファイル & 子ログファイルを監視
                 while ($proc -and (-not $proc.HasExited)) {
+                    # 1. 進捗率 (JSON) の同期
                     if (Test-Path $syncFile) {
                         try {
                             $rawJson = [System.IO.File]::ReadAllText($syncFile, [System.Text.Encoding]::UTF8)
@@ -3031,16 +3050,59 @@ if ($isall) {
                             }
                         } catch {}
                     }
+
+                    # 2. 子プロセスのコンソールログをリアルタイムに反映
+                    if (Test-Path $childLogFile) {
+                        try {
+                            $fs = [System.IO.FileStream]::new($childLogFile, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite)
+                            $sr = [System.IO.StreamReader]::new($fs, [System.Text.Encoding]::UTF8)
+                            $childContent = $sr.ReadToEnd()
+                            $sr.Close()
+                            $fs.Close()
+
+                            if ($childContent.Length -gt $lastLogLength) {
+                                $lastLogLength = $childContent.Length
+                                if ($script:guiTxtLog) {
+                                    $script:guiTxtLog.Text = "=== [$currentphase/$modsel] $currentModName デプロイ実行中 ===`r`n" + $childContent
+                                    if ($script:guiScrollLog) { $script:guiScrollLog.ScrollToEnd() }
+                                }
+                            }
+                        } catch {}
+                    }
+
                     if ($null -ne $script:mainWindow) {
                         [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Background)
                     }
                     Start-Sleep -Milliseconds 80
                 }
 
+                # 子プロセス終了直後の最終ログ反映
+                if (Test-Path $childLogFile) {
+                    try {
+                        $fs = [System.IO.FileStream]::new($childLogFile, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite)
+                        $sr = [System.IO.StreamReader]::new($fs, [System.Text.Encoding]::UTF8)
+                        $childContent = $sr.ReadToEnd()
+                        $sr.Close()
+                        $fs.Close()
+                        if ($script:guiTxtLog -and $childContent) {
+                            $script:guiTxtLog.Text = "=== [$currentphase/$modsel] $currentModName デプロイ実行中 ===`r`n" + $childContent
+                            if ($script:guiScrollLog) { $script:guiScrollLog.ScrollToEnd() }
+                        }
+                    } catch {}
+                    Remove-Item $childLogFile -Force -ErrorAction SilentlyContinue
+                }
+
                 if (Test-Path $syncFile) { Remove-Item $syncFile -Force -ErrorAction SilentlyContinue }
             }
             else {
                 Write-Log "[ERROR] デプロイスクリプトが見つかりません: AmongUsModTORplusDeployScript.ps1"
+            }
+
+            # 子プロセス完了時: 元の親コンソールログ表示に復帰し、完了メッセージを追記
+            if ($script:guiTxtLog) {
+                $timeNow = (Get-Date).ToString("yyyy/MM/dd HH:mm:ss.fff")
+                $script:guiTxtLog.Text = $parentLogSnapshot + "`r`n$timeNow  [$currentphase/$modsel] $currentModName のインストールが完了しました。"
+                if ($script:guiScrollLog) { $script:guiScrollLog.ScrollToEnd() }
             }
 
             # MOD完了後の表示同期
