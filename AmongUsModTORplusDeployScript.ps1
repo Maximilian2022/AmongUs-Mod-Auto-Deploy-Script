@@ -356,7 +356,7 @@ function ToHex([byte[]] $hashBytes) {
 Add-Type -AssemblyName UIAutomationClient
 $oldtype = $true
 
-if (Test-Path "C:\Program Files\Epic Games\AmongUs") {
+if ((Test-Path "C:\Program Files\Epic Games\AmongUs") -or (Test-Path "C:\Program Files\Epic Games\Among Us")) {
     $legver = legendary.exe -V            
     if ($legver -ge 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"') {
     }
@@ -890,6 +890,9 @@ function Initialize-GameEnvironment {
         }
     }
     $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
+    if (!(Test-Path "$au_path_epic_org\Among Us.exe") -and (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe")) {
+        $au_path_epic_org = "C:\Program Files\Epic Games\Among Us"
+    }
 
     # プロセスからの検出
     $steamProc = Get-Process -Name "steam" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -931,6 +934,14 @@ function Initialize-GameEnvironment {
     $spath = $null
     $hasSteam = (Test-Path "$au_path_steam_org\Among Us.exe")
     $hasEpic = (Test-Path "$au_path_epic_org\Among Us.exe")
+    if (!$hasEpic -and (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe")) {
+        $au_path_epic_org = "C:\Program Files\Epic Games\Among Us"
+        $hasEpic = $true
+    }
+    elseif (!$hasEpic -and (Test-Path "C:\Program Files\Epic Games\AmongUs\Among Us.exe")) {
+        $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
+        $hasEpic = $true
+    }
     $script:hasSteam = $hasSteam
     $script:hasEpic = $hasEpic
     $script:bothPlatformsDetected = ($hasSteam -and $hasEpic)
@@ -976,9 +987,20 @@ function Initialize-GameEnvironment {
         $epicpath = $epicinfo | Select-String "Install path"
         $epicrow = $($epicpath.ToString()).Split(": ")
         $epicreal = Split-Path -Path "$epicrow[1]"
-        $epicreal = "$epicreal/AmongUs"
-        if (Test-Path $epicreal) {
-            $spath = $epicreal
+        if (Test-Path "$epicreal/Among Us/Among Us.exe") {
+            $spath = "$epicreal/Among Us"
+            $script:platform = "epic"
+        }
+        elseif (Test-Path "$epicreal/AmongUs/Among Us.exe") {
+            $spath = "$epicreal/AmongUs"
+            $script:platform = "epic"
+        }
+        elseif (Test-Path "$epicreal/Among Us") {
+            $spath = "$epicreal/Among Us"
+            $script:platform = "epic"
+        }
+        elseif (Test-Path "$epicreal/AmongUs") {
+            $spath = "$epicreal/AmongUs"
             $script:platform = "epic"
         }
     }
@@ -1750,6 +1772,17 @@ $Combo2 = New-Object System.Windows.Forms.ComboBox; $Combo2.BindingContext = New
 $label4 = New-Object System.Windows.Forms.Label
 $label6 = New-Object System.Windows.Forms.Label
 
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Enabled = $true
+$script:OKButton = $OKButton
+$script:Combo = $Combo
+$script:Combo2 = $Combo2
+$script:combo = $Combo
+$script:combo2 = $Combo2
+$script:CheckedBox = $CheckedBox
+$script:label4 = $label4
+$script:label6 = $label6
+
 function VerMinMax($ver0, $ver1, $ver2) {
     if ($RadioButton114.Checked) {
         if ($ver0 -eq "NONE") {
@@ -1828,7 +1861,7 @@ function Reload() {
     $CheckedBox.ClearSelected()
     $combo2.Text = ""
     $combo2.DataSource = @()
-    $combo2.Enabled = $true
+    if ($null -ne $combo2) { $combo2.Enabled = $true }; if ($null -ne $script:combo2) { $script:combo2.Enabled = $true }
     $tio = $true
     Switch ($combo.text) {
         default {
@@ -1952,14 +1985,14 @@ function Reload() {
             $script:tio = $false
             $tio = $false
             Write-Log "SAL Selected"
-            $script:combo2.Enabled = $false
+            if ($null -ne $script:combo2) { $script:combo2.Enabled = $false }; if ($null -ne $combo2) { $combo2.Enabled = $false }
             $script:isall = $true
         }"Tool Install Only" {
             $script:scid = "TIO"
             $script:tio = $false
             $tio = $false
             Write-Log "TIO Selected"
-            $script:combo2.Enabled = $false
+            if ($null -ne $script:combo2) { $script:combo2.Enabled = $false }; if ($null -ne $combo2) { $combo2.Enabled = $false }
             $script:isall = $false
         }
     }
@@ -2015,11 +2048,12 @@ function Reload() {
             if ($null -eq $script:erweb) {
                 if ($null -ne $script:prefetchJobs["ER"]) {
                     $job = $script:prefetchJobs["ER"]
-                    $web = $job.PowerShell.EndInvoke($job.AsyncResult)
+                    $webResult = $job.PowerShell.EndInvoke($job.AsyncResult)
                     $job.PowerShell.Dispose()
                     $script:prefetchJobs.Remove("ER")
-                    if ($null -ne $web) {
-                        $script:erweb = $web
+                    $actualWeb = $webResult | Select-Object -First 1
+                    if ($null -ne $actualWeb -and (-not [string]::IsNullOrWhiteSpace($actualWeb.Content))) {
+                        $script:erweb = $actualWeb
                     }
                 }
                 if ($null -eq $script:erweb) {
@@ -2035,11 +2069,12 @@ function Reload() {
             if ($null -eq $script:nosweb) {
                 if ($null -ne $script:prefetchJobs["NOS"]) {
                     $job = $script:prefetchJobs["NOS"]
-                    $web = $job.PowerShell.EndInvoke($job.AsyncResult)
+                    $webResult = $job.PowerShell.EndInvoke($job.AsyncResult)
                     $job.PowerShell.Dispose()
                     $script:prefetchJobs.Remove("NOS")
-                    if ($null -ne $web) {
-                        $script:nosweb = $web
+                    $actualWeb = $webResult | Select-Object -First 1
+                    if ($null -ne $actualWeb -and (-not [string]::IsNullOrWhiteSpace($actualWeb.Content))) {
+                        $script:nosweb = $actualWeb
                     }
                 }
                 if ($null -eq $script:nosweb) {
@@ -2064,11 +2099,12 @@ function Reload() {
             if ($null -eq $script:snrweb) {
                 if ($null -ne $script:prefetchJobs["SNR"]) {
                     $job = $script:prefetchJobs["SNR"]
-                    $web = $job.PowerShell.EndInvoke($job.AsyncResult)
+                    $webResult = $job.PowerShell.EndInvoke($job.AsyncResult)
                     $job.PowerShell.Dispose()
                     $script:prefetchJobs.Remove("SNR")
-                    if ($null -ne $web) {
-                        $script:snrweb = $web
+                    $actualWeb = $webResult | Select-Object -First 1
+                    if ($null -ne $actualWeb -and (-not [string]::IsNullOrWhiteSpace($actualWeb.Content))) {
+                        $script:snrweb = $actualWeb
                     }
                 }
                 if ($null -eq $script:snrweb) {
@@ -2120,12 +2156,15 @@ function Reload() {
             $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
         }
 
+        if ($null -eq $web -or [string]::IsNullOrWhiteSpace($web.Content)) {
+            $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+        }
         $web2 = ConvertFrom-Json $web.Content
     
         $list2 = @()
         $tmparr = @()
         # コンボボックスに項目を追加
-        $OKButton.Enabled = $True
+        if ($null -ne $OKButton) { $OKButton.Enabled = $True }; if ($null -ne $script:OKButton) { $script:OKButton.Enabled = $True }
         if ($script:aumin -ne "NONE") {
             if ($script:aumax -ne "NONE") {
                 if ($scid -eq "NOS") {
@@ -2285,10 +2324,10 @@ function Reload() {
             }
         }
         else {
-            $OKButton.Enabled = $false
+            if ($null -ne $OKButton) { $OKButton.Enabled = $false }; if ($null -ne $script:OKButton) { $script:OKButton.Enabled = $false }
         }
         if ($list2.length -eq 0) {
-            $OKButton.Enabled = $false
+            if ($null -ne $OKButton) { $OKButton.Enabled = $false }; if ($null -ne $script:OKButton) { $script:OKButton.Enabled = $false }
         }
         <#sort version $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[2])} -Descending
         if(($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "ER") -or ($scid -eq "ER+ES")){
@@ -2337,7 +2376,7 @@ function Reload() {
         $script:scid = $scid
         $script:aumin = $aumin
         $script:tio = $script:tio
-        $script:CheckedBox.ClearSelected()
+        if ($null -ne $script:CheckedBox) { $script:CheckedBox.ClearSelected() }
         for ($cbc = 0; $cbc -lt $script:CheckedBox.Items.Count; $cbc++) {
             $script:CheckedBox.SetItemChecked($cbc, $false)
         }
@@ -2472,10 +2511,38 @@ function Reload() {
                 # インストール完了の待機 (最大600秒ポーリング)
                 $waitSec = 0
                 while (!(Test-Path "$script:aupatho\Among Us.exe") -and ($waitSec -lt 600)) {
+                    if ($script:platform -eq "epic") {
+                        if (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe") {
+                            $script:aupatho = "C:\Program Files\Epic Games\Among Us"
+                            $aupatho = $script:aupatho
+                            $au_path_epic_org = $script:aupatho
+                            break
+                        }
+                        elseif (Test-Path "C:\Program Files\Epic Games\AmongUs\Among Us.exe") {
+                            $script:aupatho = "C:\Program Files\Epic Games\AmongUs"
+                            $aupatho = $script:aupatho
+                            $au_path_epic_org = $script:aupatho
+                            break
+                        }
+                    }
                     Start-Sleep -Seconds 5
                     $waitSec += 5
                     Write-Log "本体の配置待機中... (${waitSec}s/600s)"
                 }
+
+                $aupatho = $script:aupatho
+                if ($script:platform -eq "epic") {
+                    $au_path_epic_org = $script:aupatho
+                }
+                $parentPath = Split-Path $script:aupatho -Parent
+                $aupathm = Join-Path $parentPath "Among Us $script:scid Mod"
+                $script:aupathm = $aupathm
+                if ($script:platform -eq "epic") {
+                    $aupathb = Join-Path $parentPath "AmongUsBackup"
+                } else {
+                    $aupathb = Join-Path $parentPath "Among Us Backup"
+                }
+                $script:aupathb = $aupathb
 
                 # バージョン再検出
                 if (Test-Path "$script:aupatho\Among Us_Data\globalgamemanagers") {
@@ -2542,6 +2609,9 @@ if ($null -eq $Args1) {
     })
     $RbPlatformEpic.Add_Checked({
         $script:platform = "epic"
+        if (!(Test-Path "$au_path_epic_org\Among Us.exe") -and (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe")) {
+            $au_path_epic_org = "C:\Program Files\Epic Games\Among Us"
+        }
         $script:aupatho = $au_path_epic_org
         if (Test-Path "$script:aupatho\Among Us_Data\globalgamemanagers") {
             $tt = [System.IO.File]::ReadAllBytes("$script:aupatho\Among Us_Data\globalgamemanagers")
@@ -2672,7 +2742,7 @@ else {
         $RadioButton116.Checked = $True
     }
     else {
-        Write-Log "Critical:Latest Flag"
+        $RadioButton114.Checked = $True
     }
     $combo.SelectedIndex = $Args1
     Reload
@@ -3677,6 +3747,9 @@ if ($tio) {
             if ($rn -eq "epic") {
                 $script:platform = "epic"
                 $platform = "epic"
+                if (!(Test-Path "$au_path_epic_org\Among Us.exe") -and (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe")) {
+                    $au_path_epic_org = "C:\Program Files\Epic Games\Among Us"
+                }
                 $aupatho = $au_path_epic_org
                 $script:aupatho = $au_path_epic_org
                 Write-Log "プラットフォームを Epic に切り替えました: $aupatho"
@@ -3724,6 +3797,32 @@ if ($tio) {
                 $cleanProc = Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -PassThru
                 $cleanProc.WaitForExit()
                 Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
+                Start-Sleep -Seconds 5
+
+                # 本体再配置待機 (最大600秒ポーリング)
+                $waitLimitSec = 600
+                $waitElapsedSec = 0
+                while (!(Test-Path "$aupatho\Among Us.exe") -and ($waitElapsedSec -lt $waitLimitSec)) {
+                    if (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe") {
+                        $aupatho = "C:\Program Files\Epic Games\Among Us"
+                        $script:aupatho = $aupatho
+                        $au_path_epic_org = $aupatho
+                        break
+                    }
+                    elseif (Test-Path "C:\Program Files\Epic Games\AmongUs\Among Us.exe") {
+                        $aupatho = "C:\Program Files\Epic Games\AmongUs"
+                        $script:aupatho = $aupatho
+                        $au_path_epic_org = $aupatho
+                        break
+                    }
+                    Start-Sleep -Seconds 5
+                    $waitElapsedSec += 5
+                    Write-Log "本体の配置待機中... (${waitElapsedSec}s/${waitLimitSec}s)"
+                }
+                if (!(Test-Path "$aupatho\Among Us.exe")) {
+                    Write-Log "警告: 本体の再インストールがタイムアウトしました。"
+                    if (-not $Args1) { Pause }
+                }
                 Remove-Item $fpth2 -Force -ErrorAction SilentlyContinue
             }
             else {
@@ -3771,7 +3870,19 @@ if ($tio) {
                 }
             }
             else {
-                robocopy "$aupatho" "$aupathm" /E /MT:8 /R:1 /W:1 /NP /unilog:C:\Temp\temp.log >nul 2>&1
+                            if ($platform -eq "epic" -or $script:platform -eq "epic") {
+                if (!(Test-Path "$aupatho\Among Us.exe")) {
+                    if (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe") {
+                        $aupatho = "C:\Program Files\Epic Games\Among Us"
+                        $script:aupatho = $aupatho
+                    }
+                    elseif (Test-Path "C:\Program Files\Epic Games\AmongUs\Among Us.exe") {
+                        $aupatho = "C:\Program Files\Epic Games\AmongUs"
+                        $script:aupatho = $aupatho
+                    }
+                }
+            }
+            robocopy "$aupatho" "$aupathm" /E /MT:8 /R:1 /W:1 /NP /unilog:C:\Temp\temp.log >nul 2>&1
                 if (Test-Path "C:\Temp\temp.log") {
                     $content = Get-Content "C:\Temp\temp.log" -Raw -Encoding Unicode
                     Write-Log "`r`n $content"
@@ -3830,6 +3941,18 @@ if ($tio) {
             }
         }
         else {
+                        if ($platform -eq "epic" -or $script:platform -eq "epic") {
+                if (!(Test-Path "$aupatho\Among Us.exe")) {
+                    if (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe") {
+                        $aupatho = "C:\Program Files\Epic Games\Among Us"
+                        $script:aupatho = $aupatho
+                    }
+                    elseif (Test-Path "C:\Program Files\Epic Games\AmongUs\Among Us.exe") {
+                        $aupatho = "C:\Program Files\Epic Games\AmongUs"
+                        $script:aupatho = $aupatho
+                    }
+                }
+            }
             robocopy "$aupatho" "$aupathm" /E /MT:8 /R:1 /W:1 /NP /unilog:C:\Temp\temp.log >nul 2>&1
             if (Test-Path "C:\Temp\temp.log") {
                 $content = Get-Content "C:\Temp\temp.log" -Raw -Encoding Unicode

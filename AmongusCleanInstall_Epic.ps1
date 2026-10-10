@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     $Args1, #modnum
     [switch]$DebugMode
 )
@@ -127,7 +127,7 @@ function Write-Log($logstring){
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
     # ログ出力
-    Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding UTF8 -Append
+    try { Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding UTF8 -Append -ErrorAction SilentlyContinue } catch {}
     # echo させるために出力したログを戻す
     Return $(Get-Translate($Log))
 }
@@ -145,8 +145,11 @@ Write-Log "-----------------------------------------------------------------"
 
 #Among Us Original Epic Path
 $au_path_epic_org = "C:\Program Files\Epic Games\AmongUs"
+if (!(Test-Path "$au_path_epic_org\Among Us.exe") -and (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe")) {
+    $au_path_epic_org = "C:\Program Files\Epic Games\Among Us"
+}
 #Among Us Backup ：Backup用フォルダ
-$au_path_epic_back = "C:\Program Files\Epic Games\AmongUsBackup"
+$au_path_epic_back = Join-Path (Split-Path $au_path_epic_org -Parent) "AmongUsBackup"
 $spath = ""
 
 $epicProc = Get-Process -Name "EpicGamesLauncher" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -163,12 +166,17 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
     $epicinfo = legendary.exe info AmongUs
     $epicpath = $epicinfo | Select-String "Install path"
     $epicrow = $($epicpath.ToString()).Split(": ")
-    $epicreal = Split-Path -Path "$($epicrow[1])"
-    $epicreal = "$epicreal/AmongUs"
-    if(Test-Path $epicreal){
-        $spath = $epicreal        
-        $sback = "$($epicreal)Backup"                
-    }    
+    $epicbase = Split-Path -Path "$($epicrow[1])"
+    if (Test-Path "$epicbase\Among Us\Among Us.exe") {
+        $spath = "$epicbase\Among Us"
+        $sback = "$epicbase\AmongUsBackup"
+    } elseif (Test-Path "$epicbase\AmongUs\Among Us.exe") {
+        $spath = "$epicbase\AmongUs"
+        $sback = "$epicbase\AmongUsBackup"
+    } else {
+        $spath = "$epicbase\AmongUs"
+        $sback = "$epicbase\AmongUsBackup"
+    }
 }else{
     $fileName = Join-path $npl "\AmongUsModDeployScript.conf"
     ### Load
@@ -176,6 +184,9 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
         $spath = Get-content "$fileName"
     }elseif($Args1){
         # 非対話モード時はダイアログを出さずに既定のEpicパスを採用
+        if (!(Test-Path "$au_path_epic_org\Among Us.exe") -and (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe")) {
+            $au_path_epic_org = "C:\Program Files\Epic Games\Among Us"
+        }
         Write-Log "非対話モード (-Args1): 既定のEpicパス $au_path_epic_org を使用します"
         $spath = $au_path_epic_org
     }else{
@@ -227,6 +238,8 @@ catch{
     Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco install legendary -y" -Verb RunAs -Wait   
 }
 
+# Epic Games Launcher から認証情報を自動インポート
+legendary auth --import
 
 Set-Location $spath
 Set-Location ../
@@ -236,10 +249,20 @@ Write-Log $instpath
 if (Test-Path $spath) {
     Remove-Item -Path $spath -Recurse -Force -ErrorAction SilentlyContinue
 }
+if (Test-Path "$instpath\AmongUs") {
+    Remove-Item -Path "$instpath\AmongUs" -Recurse -Force -ErrorAction SilentlyContinue
+}
+if (Test-Path "$instpath\Among Us") {
+    Remove-Item -Path "$instpath\Among Us" -Recurse -Force -ErrorAction SilentlyContinue
+}
 Start-Sleep -Seconds 1
-legendary uninstall Among Us --keep-files -y 
+legendary uninstall "Among Us" --keep-files -y 
 Start-Sleep -Seconds 1
-legendary install Among Us -y --base-path "$instpath"
+legendary install "Among Us" -y --base-path "$instpath"
+if (!(Test-Path "$instpath\Among Us\Among Us.exe") -and !(Test-Path "$instpath\AmongUs\Among Us.exe")) {
+    Write-Log "フォールバック: AppName 指定で再インストールを試行します"
+    legendary install "963137e4c29d4c79a81323b8fab03a40" -y --base-path "$instpath"
+}
 Start-Sleep -Seconds 1
 legendary -y egl-sync
 Stop-Transcript
