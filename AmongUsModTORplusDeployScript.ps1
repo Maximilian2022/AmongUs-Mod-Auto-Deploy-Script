@@ -1,7 +1,9 @@
 ﻿Param(
     $Args1, #skipconfirmation
     [switch]$DebugMode,
-    [string]$DeployPlatform
+    [string]$DeployPlatform,
+    [switch]$BatchChild,
+    [string]$ProgressSyncFile
 )
 $ScriptStartTime = Get-Date
 $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
@@ -1555,12 +1557,24 @@ try {
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <ProgressBar x:Name="ProgBar" Height="14" Value="25" Maximum="100" 
+                        <!-- 全体進捗バー -->
+                        <ProgressBar x:Name="ProgBar" Height="14" Value="0" Maximum="100" 
                                      Background="{DynamicResource InputBg}" Foreground="{DynamicResource BtnPrimaryBg}" BorderThickness="0">
                         </ProgressBar>
-                        <TextBlock x:Name="TxtPercent" Grid.Row="1" Text="25%" HorizontalAlignment="Right" 
+                        <TextBlock x:Name="TxtPercent" Grid.Row="1" Text="0%" HorizontalAlignment="Right" 
                                    FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextAccentGold}" Margin="0,4,0,0"/>
+
+                        <!-- 一括デプロイ用: 各 MOD の詳細進捗バー -->
+                        <StackPanel x:Name="PnlSubProgress" Grid.Row="2" Margin="0,8,0,0" Visibility="Collapsed">
+                            <Grid Margin="0,0,0,3">
+                                <TextBlock x:Name="TxtSubProgressStatus" Text="個別 MOD をデプロイ中..." FontSize="11" Foreground="{DynamicResource TextSecondary}"/>
+                                <TextBlock x:Name="TxtSubPercent" Text="0%" HorizontalAlignment="Right" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextAccentGold}"/>
+                            </Grid>
+                            <ProgressBar x:Name="ProgBarSub" Height="8" Value="0" Maximum="100" 
+                                         Background="{DynamicResource InputBg}" Foreground="{DynamicResource TextAccentGold}" BorderThickness="0"/>
+                        </StackPanel>
                     </Grid>
 
                     <!-- Terminal Console Log -->
@@ -1759,11 +1773,19 @@ $TxtProgressStatus = $window.FindName("TxtProgressStatus")
 $TxtPercent = $window.FindName("TxtPercent")
 $TxtLog = $window.FindName("TxtLog")
 $ScrollLog = $window.FindName("ScrollLog")
+$PnlSubProgress = $window.FindName("PnlSubProgress")
+$ProgBarSub = $window.FindName("ProgBarSub")
+$TxtSubPercent = $window.FindName("TxtSubPercent")
+$TxtSubProgressStatus = $window.FindName("TxtSubProgressStatus")
 $script:ProgBar = $ProgBar
 $script:TxtProgressStatus = $TxtProgressStatus
 $script:TxtPercent = $TxtPercent
 $script:guiTxtLog = $TxtLog
 $script:guiScrollLog = $ScrollLog
+$script:PnlSubProgress = $PnlSubProgress
+$script:ProgBarSub = $ProgBarSub
+$script:TxtSubPercent = $TxtSubPercent
+$script:TxtSubProgressStatus = $TxtSubProgressStatus
 
 $TxtCompleteModDesc = $window.FindName("TxtCompleteModDesc")
 $TxtCompletePath = $window.FindName("TxtCompletePath")
@@ -2957,26 +2979,78 @@ if ($isall) {
         $currentModName = $($combo.items[$iall])
         if ($AAA2.contains($currentModName) -or $AAA2.contains("ALL")) {
             $currentphase++
-            $percent = [math]::Round(($currentphase / [math]::Max($modsel, 1)) * 100)
 
             # Modern GUI (WPF) プログレス表示をリアルタイム更新
             if ($null -ne $script:mainWindow) {
-                if ($script:ProgBar) { $script:ProgBar.Value = $percent }
-                if ($script:TxtPercent) { $script:TxtPercent.Text = "$percent%" }
+                if ($script:PnlSubProgress) { $script:PnlSubProgress.Visibility = [System.Windows.Visibility]::Visible }
+                if ($script:ProgBarSub) { $script:ProgBarSub.Value = 0 }
+                if ($script:TxtSubPercent) { $script:TxtSubPercent.Text = "0%" }
+                if ($script:TxtSubProgressStatus) { $script:TxtSubProgressStatus.Text = "$currentModName のデプロイ準備中..." }
                 if ($script:TxtProgressStatus) {
                     $script:TxtProgressStatus.Text = "[$currentphase/$modsel] $currentModName をデプロイ中..."
                 }
+                $overallPercent = [math]::Round(((($currentphase - 1) * 100) / [math]::Max($modsel * 100, 1)) * 100)
+                if ($script:ProgBar) { $script:ProgBar.Value = $overallPercent }
+                if ($script:TxtPercent) { $script:TxtPercent.Text = "$overallPercent%" }
                 [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
             }
 
             Write-Log "$currentModName のインストールを開始しました。($currentphase/$modsel)"
             
             if ($deployScriptPath) {
+                $syncFile = Join-Path $env:TEMP "aumads_progress_$iall.json"
+                if (Test-Path $syncFile) { Remove-Item $syncFile -Force -ErrorAction SilentlyContinue }
+
                 $platArg = if ($script:platform) { "-DeployPlatform `"$($script:platform)`"" } else { "" }
-                Start-Process $psExe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" -Args1 `"$iall`" $platArg" -Verb RunAs -Wait
+                $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" -Args1 `"$iall`" $platArg -BatchChild -ProgressSyncFile `"$syncFile`""
+
+                $proc = Start-Process $psExe -ArgumentList $childArgs -Verb RunAs -PassThru
+
+                # 子プロセスの完了まで進捗同期ファイルを監視
+                while ($proc -and (-not $proc.HasExited)) {
+                    if (Test-Path $syncFile) {
+                        try {
+                            $rawJson = [System.IO.File]::ReadAllText($syncFile, [System.Text.Encoding]::UTF8)
+                            if ($rawJson) {
+                                $progData = ConvertFrom-Json $rawJson
+                                if ($progData) {
+                                    $subVal = [math]::Max(0, [math]::Min(100, [int]$progData.Value))
+                                    if ($script:ProgBarSub) { $script:ProgBarSub.Value = $subVal }
+                                    if ($script:TxtSubPercent) { $script:TxtSubPercent.Text = "$subVal%" }
+                                    if ($script:TxtSubProgressStatus -and $progData.Status) {
+                                        $cleanStatus = ($progData.Status -split "\r\n|\n")[0].Trim()
+                                        if ($cleanStatus) {
+                                            $script:TxtSubProgressStatus.Text = $cleanStatus
+                                        }
+                                    }
+                                    # 全体進捗 = ((完了MOD数 * 100) + subVal) / (総MOD数 * 100)
+                                    $totalProg = [math]::Round(((($currentphase - 1) * 100 + $subVal) / [math]::Max($modsel * 100, 1)) * 100)
+                                    if ($script:ProgBar) { $script:ProgBar.Value = $totalProg }
+                                    if ($script:TxtPercent) { $script:TxtPercent.Text = "$totalProg%" }
+                                }
+                            }
+                        } catch {}
+                    }
+                    if ($null -ne $script:mainWindow) {
+                        [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Background)
+                    }
+                    Start-Sleep -Milliseconds 80
+                }
+
+                if (Test-Path $syncFile) { Remove-Item $syncFile -Force -ErrorAction SilentlyContinue }
             }
             else {
                 Write-Log "[ERROR] デプロイスクリプトが見つかりません: AmongUsModTORplusDeployScript.ps1"
+            }
+
+            # MOD完了後の表示同期
+            $doneOverallPercent = [math]::Round(($currentphase / [math]::Max($modsel, 1)) * 100)
+            if ($script:ProgBar) { $script:ProgBar.Value = $doneOverallPercent }
+            if ($script:TxtPercent) { $script:TxtPercent.Text = "$doneOverallPercent%" }
+            if ($script:ProgBarSub) { $script:ProgBarSub.Value = 100 }
+            if ($script:TxtSubPercent) { $script:TxtSubPercent.Text = "100%" }
+            if ($null -ne $script:mainWindow) {
+                [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
             }
             Write-Log "$currentModName のインストールが完了しました。($currentphase/$modsel)"
         }
@@ -3391,7 +3465,7 @@ $torgmdll
 $Bar.Value = "0"
 $nosdll = $false
 
-    # Modern GUI とのプログレス同期
+    # Modern GUI とのプログレス同期 (単体実行時)
     if ($null -ne $script:mainWindow -and $null -eq $Args1) {
         $Bar | Add-Member -MemberType ScriptProperty -Name 'Value' -Value {
             $this.GetType().GetProperty('Value').GetValue($this)
@@ -3409,9 +3483,28 @@ $nosdll = $false
         } -Force
     }
 
+    # 一括デプロイ子プロセス時の進捗同期フック (ProgressSyncFile へのリアルタイム書き出し)
+    if ($BatchChild -and $ProgressSyncFile) {
+        $Bar | Add-Member -MemberType ScriptProperty -Name 'Value' -Value {
+            $this.GetType().GetProperty('Value').GetValue($this)
+        } -SecondValue {
+            param($val)
+            $this.GetType().GetProperty('Value').SetValue($this, [int]$val)
+            try {
+                $st = ""
+                if ($label222) { $st = $label222.Text }
+                $jsonObj = @{
+                    Value = [int]$val
+                    Status = $st
+                } | ConvertTo-Json -Compress
+                [System.IO.File]::WriteAllText($ProgressSyncFile, $jsonObj, [System.Text.Encoding]::UTF8)
+            } catch {}
+        } -Force
+    }
+
 if ($tio) {
 
-    if ($null -eq $script:mainWindow -or $null -ne $Args1) { $Form2.Show() }
+    if (!$BatchChild -and ($null -eq $script:mainWindow -or $null -ne $Args1)) { $Form2.Show() }
     $Bar.Value = "10"
     #################################################################################################
     $web = Invoke-WebRequest $releasepage -UseBasicParsing
@@ -4900,7 +4993,7 @@ if ($tio) {
 $Bar.Value = "80"
 
 if ($tio -eq $false) {
-    if ($null -eq $script:mainWindow -or $null -ne $Args1) { $Form2.Show() }
+    if (!$BatchChild -and ($null -eq $script:mainWindow -or $null -ne $Args1)) { $Form2.Show() }
 }
 $Bar.Value = "82"
 
