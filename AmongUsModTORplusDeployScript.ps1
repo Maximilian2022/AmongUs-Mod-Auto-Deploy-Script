@@ -9,7 +9,7 @@ $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
 # Among Us Mod Auto Deploy Script
 #
 $version = "3.0.0"
-$build = "2026101002"
+$build = "2026101003"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
@@ -5002,40 +5002,6 @@ Write-Log "-----------------------------------------------------------------"
 
 Start-Sleep -Seconds 1
 $Bar.Value = "100"
-$Form2.Close()
-    # WPF シングルウィンドウ内の完了画面 (ViewComplete) に遷移
-    $script:ProgBar.Value = 100
-    $script:TxtPercent.Text = "100%"
-    $script:ViewProgress.Visibility = [System.Windows.Visibility]::Collapsed
-    $script:ViewComplete.Visibility = [System.Windows.Visibility]::Visible
-
-    if ($script:TxtCompleteModDesc) {
-        $script:TxtCompleteModDesc.Text = "$mod の導入とショートカット作成が完了しました。"
-    }
-    if ($script:TxtCompletePath) {
-        $script:TxtCompletePath.Text = "$script:aupathm"
-    }
-    if ($script:TxtCompleteShortcut) {
-        $script:TxtCompleteShortcut.Text = "Among Us - $scid"
-    }
-    [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
-
-    # ユーザーが「今すぐゲームを起動」または「完了して閉じる」を押すまで待機
-    $script:completeAction = $null
-    while ($null -eq $script:completeAction -and $script:mainWindow.IsVisible) {
-        [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Background)
-        Start-Sleep -Milliseconds 100
-    }
-
-    if ($script:completeAction -eq "Launch") {
-        if (Test-Path "$script:aupathm\Among Us.exe") {
-            Start-Process "$script:aupathm\Among Us.exe"
-        }
-    }
-    $script:mainWindow.Close()
-}
-else {
-    $Form2.Close()
-}
+if ($null -ne $script:mainWindow -and $null -eq $Args1) {
 
 exit
