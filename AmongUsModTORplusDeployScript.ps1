@@ -1,4 +1,4 @@
-﻿Param(
+Param(
     $Args1, #skipconfirmation
     [switch]$DebugMode
 )
@@ -13,6 +13,9 @@ $build = "20260907001"
 #
 #################################################################################################
 Write-Output "$Log PS1 Loading Start $version -$build"
+
+### 未確認Modについては　"NONE"で統一する
+
 ### Minimum versions (currently active)
 $ermin = "v2026.10.1.0"
 $esmin = "v2026.10.1.0"
@@ -182,7 +185,7 @@ if (!$hasPwsh) {
     Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command choco upgrade pwsh powershell-core aria2 legendary -y" -Verb RunAs -Wait   
     Write-Output "`r`n"
     # PATHを再読み込み
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
     $pwshExe = if (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe") { "$env:ProgramFiles\PowerShell\7\pwsh.exe" } else { "pwsh.exe" }
     $pwshArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`""
     if ($null -ne $Args1) { $pwshArgs += " $Args1" }
@@ -831,7 +834,7 @@ $w32tmJob = [powershell]::Create().AddScript({
             # Ignore errors quietly in the background
         }
     })
-$w32tmAsync = $w32tmJob.BeginInvoke()
+[void]$w32tmJob.BeginInvoke()
 
 $platform = ""
 $scid = "TOR GMH"
@@ -914,7 +917,7 @@ function Initialize-GameEnvironment {
 
     $spath = $null
     $hasSteam = (Test-Path "$au_path_steam_org\Among Us.exe")
-    $hasEpic  = (Test-Path "$au_path_epic_org\Among Us.exe")
+    $hasEpic = (Test-Path "$au_path_epic_org\Among Us.exe")
 
     if ($hasSteam -and $hasEpic) {
         Write-Log "Both Steam and Epic installations of Among Us were detected."
@@ -922,7 +925,8 @@ function Initialize-GameEnvironment {
         if ($null -eq $Args1) {
             $msg = $(Get-Translate("Steam版とEpic版の両方のAmong Usが検出されました。`nSteam版を使用しますか？`n（「はい」=Steam版 / 「いいえ」=Epic版）"))
             $selectedIsSteam = ([System.Windows.Forms.MessageBox]::Show($msg, "Among Us Mod Auto Deploy Tool", 4) -eq "Yes")
-        } elseif ($env:TARGET_PLATFORM -eq "Epic") {
+        }
+        elseif ($env:TARGET_PLATFORM -eq "Epic") {
             $selectedIsSteam = $false
         }
 
@@ -930,7 +934,8 @@ function Initialize-GameEnvironment {
             Write-Log "User/Config selected Steam"
             $spath = $au_path_steam_org
             $script:platform = "steam"
-        } else {
+        }
+        else {
             Write-Log "User/Config selected Epic"
             $spath = $au_path_epic_org
             $script:platform = "epic"
@@ -2068,81 +2073,96 @@ function Reload() {
     else {
         Write-Log "Unknown ERROR:本体バージョン"
     }
-    <#if($indeedcleaninstall){
-        Write-Log "最新のAmongUsがインストールされていません。クリーンインストールが実行されます。"
-        if (Test-Path "C:\Program Files (x86)\Steam\Steam.exe"){
-            $rn = "steam"
-            Write-Log "$rn が検知されました。"
-            $stm = $true
-        }
-
-        if (Test-Path "C:\Program Files (x86)\Epic Games"){
-            $rn = "epic"
-            Write-Log "$rn が検知されました。"
-            $epc = $true
-        }
-        
-        if($stm -and $epc){
-            Write-Log $(Get-Translate("SteamとEpic両方のインストールが確認されました。ユーザーに確認します。"))
-            if([System.Windows.Forms.MessageBox]::Show($(Get-Translate("最新のAmongUsがインストールされていません。クリーンインストールが実行されます。`nSteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。`n$version $build")), "Among Us Mod Auto Deploy Tool",4) -eq "Yes"){
-                $rn = "steam"
-            }else{
-                $rn = "epic"
-            }                
-            Write-Log "$rn が選択されました。"
-        }
-
-        # 選択されたプラットフォームに合わせてパスとプラットフォーム変数を同期
-        if ($rn -eq "epic") {
-            $script:platform = "epic"
-            $platform = "epic"
-            $aupatho = $au_path_epic_org
-            $script:aupatho = $au_path_epic_org
-            Write-Log "プラットフォームを Epic に切り替えました: $aupatho"
-        } else {
-            $script:platform = "steam"
-            $platform = "steam"
-            $aupatho = $au_path_steam_org
-            $script:aupatho = $au_path_steam_org
-            Write-Log "プラットフォームを Steam に切り替えました: $aupatho"
-        }
-
-        Write-Log "クリーンインストールプロセス開始"
-        if($rn -eq "steam"){
-            Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
-            $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
-            Unblock-File $fpth2
-            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-            Write-Log "クリーンインストールプロセス終了"
-            Start-Sleep -Seconds 10
-            while (!(test-path "$aupatho\Among Us.exe")){
-                Start-Sleep -Seconds 10
-                Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
-                write-log (test-path "$aupatho\Among Us.exe")
-                write-log "$aupathm\Among Us.exe"                  
-                Pause
+    # 本体バージョンの旧世代判定と自動クリーンインストール
+    $needCleanInstall = $false
+    try {
+        if ($script:amver -and $script:prever0) {
+            $verCurrent = $script:amver -as [version]
+            $verTarget = $script:prever0 -as [version]
+            if ($null -ne $verCurrent -and $null -ne $verTarget) {
+                if ($verCurrent -lt $verTarget) {
+                    $needCleanInstall = $true
+                }
             }
-            Remove-Item $fpth2 -Force
-        }elseif($rn -eq "epic"){
-            Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
-            $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
-            Unblock-File $fpth2
-            Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-            Write-Log "クリーンインストールプロセス終了"
-            Remove-Item $fpth2 -Force
-        }else{
-            Write-Log "Critical Platform Selection"
-            Pause
-            Exit
+            elseif ($script:amver -lt $script:prever0) {
+                $needCleanInstall = $true
+            }
         }
-        #version detect
-        $tt = (Format-Hex -Path "$script:aupatho\Among Us_Data\globalgamemanagers").Bytes
-        $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
-        $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
-        $script:amver = $tt3[0].Value
-        $RadioButton114.Text = $(Get-Translate("$script:amver"))
-        Start-Sleep -Seconds 10
-    }#>
+    }
+    catch {
+        Write-Log "Version compare warning: $_"
+    }
+
+    if ($needCleanInstall) {
+        Write-Log "本体バージョン ($script:amver) が最新 ($script:prever0) より古いため、クリーンインストールの実行対象です。"
+        
+        $doClean = $false
+        if ($null -ne $Args1) {
+            # 自動テスト / 非対話実行時は自動で実行
+            Write-Log "非対話モード (-Args1) のため、自動でクリーンインストールを実行します。"
+            $doClean = $true
+        }
+        else {
+            # 対話実行時はユーザーに確認
+            $msg = $(Get-Translate("本体バージョン ($script:amver) が最新 ($script:prever0) より古いです。`n最新の Among Us にクリーンインストールしますか？"))
+            if ([System.Windows.Forms.MessageBox]::Show($msg, "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
+                $doClean = $true
+            }
+            else {
+                Write-Log "ユーザーによってクリーンインストールがキャンセルされました。"
+            }
+        }
+
+        if ($doClean) {
+            $rn = if ($script:platform -eq "epic") { "epic" } else { "steam" }
+            Write-Log "クリーンインストールプロセス開始 (プラットフォーム: $rn)"
+
+            $cleanScriptName = if ($rn -eq "epic") { "AmongusCleanInstall_Epic.ps1" } else { "AmongusCleanInstall_Steam.ps1" }
+            $cleanScriptLocal = Join-Path $npl $cleanScriptName
+            if (!(Test-Path $cleanScriptLocal)) {
+                $cleanScriptLocal = Join-Path $dsk $cleanScriptName
+            }
+
+            if (!(Test-Path $cleanScriptLocal)) {
+                $cleanScriptLocal = "$npl\$cleanScriptName"
+                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/$cleanScriptName" -OutFile $cleanScriptLocal -UseBasicParsing
+            }
+
+            if (Test-Path $cleanScriptLocal) {
+                Unblock-File $cleanScriptLocal -ErrorAction SilentlyContinue
+                $psCleanExe = if (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe") { "$env:ProgramFiles\PowerShell\7\pwsh.exe" } else { "powershell.exe" }
+                $cleanProc = Start-Process -FilePath $psCleanExe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$cleanScriptLocal`" -Args1 `"Yes`"" -PassThru
+                $cleanProc.WaitForExit()
+                Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
+                
+                # インストール完了の待機 (最大300秒ポーリング)
+                $waitSec = 0
+                while (!(Test-Path "$script:aupatho\Among Us.exe") -and ($waitSec -lt 300)) {
+                    Start-Sleep -Seconds 5
+                    $waitSec += 5
+                    Write-Log "本体の配置待機中... (${waitSec}s/300s)"
+                }
+
+                # バージョン再検出
+                if (Test-Path "$script:aupatho\Among Us_Data\globalgamemanagers") {
+                    $tt = [System.IO.File]::ReadAllBytes("$script:aupatho\Among Us_Data\globalgamemanagers")
+                    $tt2 = [System.Text.Encoding]::UTF8.GetString($tt)
+                    $tt3 = [regex]::Matches($tt2, "(19|20)[0-9][2-9][- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|1[0-9]|2[0-9]|3[01]|[1-9])")
+                    if ($null -eq $tt3[1]) {
+                        $script:amver = $tt3[0].Value
+                    }
+                    else {
+                        $script:amver = $tt3[1].Value
+                    }
+                    $RadioButton114.Text = $(Get-Translate("$script:amver"))
+                    Write-Log "本体が $script:amver にアップデートされました。"
+                }
+            }
+            else {
+                Write-Log "Error: クリーンインストールスクリプトが見つかりませんでした。"
+            }
+        }
+    }
 }
 
 $Combo_SelectedIndexChanged = {
@@ -2448,11 +2468,12 @@ Write-Log $releasepage
 $jsondata = "{`"date`":`"$Log`", `"mod`":`"$scid`", `"version`":`"$torpv`", `"main`":`"$amver`"}"
 try {
     [powershell]::Create().AddScript({
-        param($payload)
-        try {
-            curl.exe -s --max-time 3 -X POST -H "Content-Type: application/json" -d $payload -L "https://script.google.com/macros/s/AKfycbyr8P-sfWEgG9IdYNeillASu7dtnnnhV607XimGh3NXJY8OiWm51_LvP6VPU79zfvx0/exec" | Out-Null
-        } catch {}
-    }).AddArgument($jsondata).BeginInvoke() | Out-Null
+            param($payload)
+            try {
+                curl.exe -s --max-time 3 -X POST -H "Content-Type: application/json" -d $payload -L "https://script.google.com/macros/s/AKfycbyr8P-sfWEgG9IdYNeillASu7dtnnnhV607XimGh3NXJY8OiWm51_LvP6VPU79zfvx0/exec" | Out-Null
+            }
+            catch {}
+        }).AddArgument($jsondata).BeginInvoke() | Out-Null
 }
 catch {
     # 統計送信エラーは無視
@@ -2970,12 +2991,14 @@ if ($tio) {
         }
         if (!$nosdll -or $tordlptmp.Count -eq 0) {
             $tordlp = "https://github.com/Dolly1016/Nebula/releases/latest/download/Nebula.zip"
-        } else {
+        }
+        else {
             $targetKeyword = if ($platform -eq "Steam") { "Steam" } else { "Epic" }
             $matched = $tordlptmp | Where-Object { $_.IndexOf($targetKeyword, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 } | Select-Object -First 1
             if ($matched) {
                 $tordlp = $matched
-            } else {
+            }
+            else {
                 $tordlp = $tordlptmp[0]
             }
         }
@@ -3187,7 +3210,8 @@ if ($tio) {
                 $aupatho = $au_path_epic_org
                 $script:aupatho = $au_path_epic_org
                 Write-Log "プラットフォームを Epic に切り替えました: $aupatho"
-            } else {
+            }
+            else {
                 $script:platform = "steam"
                 $platform = "steam"
                 $aupatho = $au_path_steam_org
@@ -3197,28 +3221,40 @@ if ($tio) {
 
             Write-Log "クリーンインストールプロセス開始"
             if ($rn -eq "steam") {
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile "$npl\AmongusCleanInstall_Steam.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
-                Unblock-File $fpth2
-                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-                Write-Log "クリーンインストールプロセス終了"
-                Start-Sleep -Seconds 10
-                while (!(test-path "$aupatho\Among Us.exe")) {
-                    Start-Sleep -Seconds 10
-                    Write-Log "再インストールが完了したことを確認してから以下の動作を実行してください"
-                    write-log (test-path "$aupatho\Among Us.exe")
-                    write-log "$aupathm\Among Us.exe"                  
-                    Pause
+                if (!(Test-Path $fpth2)) {
+                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile $fpth2 -UseBasicParsing
                 }
-                Remove-Item $fpth2 -Force
+                Unblock-File $fpth2
+                $cleanProc = Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -PassThru
+                $cleanProc.WaitForExit()
+                Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
+                Start-Sleep -Seconds 5
+
+                # 本体再配置待機 (最大300秒ポーリング)
+                $waitLimitSec = 300
+                $waitElapsedSec = 0
+                while (!(Test-Path "$aupatho\Among Us.exe") -and ($waitElapsedSec -lt $waitLimitSec)) {
+                    Start-Sleep -Seconds 5
+                    $waitElapsedSec += 5
+                    Write-Log "本体の配置待機中... (${waitElapsedSec}s/${waitLimitSec}s)"
+                }
+                if (!(Test-Path "$aupatho\Among Us.exe")) {
+                    Write-Log "警告: 本体の再インストールがタイムアウトしました。"
+                    if (-not $Args1) { Pause }
+                }
+                Remove-Item $fpth2 -Force -ErrorAction SilentlyContinue
             }
             elseif ($rn -eq "epic") {
-                Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile "$npl\AmongusCleanInstall_Epic.ps1" -UseBasicParsing
                 $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
+                if (!(Test-Path $fpth2)) {
+                    Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile $fpth2 -UseBasicParsing
+                }
                 Unblock-File $fpth2
-                Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -Verb RunAs -Wait
-                Write-Log "クリーンインストールプロセス終了"
-                Remove-Item $fpth2 -Force
+                $cleanProc = Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -PassThru
+                $cleanProc.WaitForExit()
+                Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
+                Remove-Item $fpth2 -Force -ErrorAction SilentlyContinue
             }
             else {
                 Write-Log "Critical Platform Selection"
@@ -4763,7 +4799,8 @@ $delayedCmds = @()
 if (Test-Path (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat")) {
     # 既に存在する場合は cmd.exe 終了後に遅延置換
     $delayedCmds += "move /y `"$newBatDsk`" `"$dsk\StartAmongUsModTORplusDeployScript.bat`" >nul"
-} else {
+}
+else {
     # 初回実行で未存在の場合は直ちに配置
     Move-Item -Path $newBatDsk -Destination (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat") -Force
 }

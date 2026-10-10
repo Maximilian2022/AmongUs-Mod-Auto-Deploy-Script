@@ -1,4 +1,4 @@
-﻿Param(
+Param(
     $Args1, #skipconfirmation
     [switch]$DebugMode
 )
@@ -185,24 +185,40 @@ if (Test-Path $steampth) {
 
 #操作したいウィンドウのタイトル
 $MAIN_WINDOW_TITLE="Steam"
-#Get-Processで取得できた1つ目のハンドルを対象とする。
 $steamruncheck = $true
 $steamrunner = $true
+$steamWaitCount = 0
 
 while($steamruncheck){
-    try{
-        $hwnd=(Get-Process |Where-Object{$_.MainWindowTitle -like $MAIN_WINDOW_TITLE})[0].MainWindowHandle
-    }catch{
-        Write-Log "Steam.exe 起動チェック。ログインできていない場合はログインしてください。"       
-    }
-    if($null -eq $hwnd){
+    $steamProc = Get-Process -Name "steam" -ErrorAction SilentlyContinue
+    if ($steamProc) {
+        # Steam プロセス自体は既に起動している
+        try {
+            $matchingProcs = Get-Process | Where-Object { $_.MainWindowTitle -like "*$MAIN_WINDOW_TITLE*" }
+            if ($matchingProcs -and $matchingProcs[0].MainWindowHandle -ne 0) {
+                $hwnd = $matchingProcs[0].MainWindowHandle
+            }
+        } catch {}
+        
+        # ウィンドウがなくてもプロセスが動いていれば最大30秒(6回)で進行許可
+        if ($hwnd -or ($steamWaitCount -ge 6)) {
+            $steamruncheck = $false
+            break
+        }
+    } else {
         if($steamrunner){
             Start-Process $steampth 
             $steamrunner = $false
         }
-    }else{
-        $steamruncheck = $false
     }
+
+    $steamWaitCount++
+    if ($steamWaitCount -ge 24) { # 最大120秒でタイムアウトして進行
+        Write-Log "Steam.exe 起動待機がタイムアウトしました。処理を継続します。"
+        break
+    }
+
+    Write-Log "Steam.exe 起動チェック中 (${steamWaitCount}/24)..."
     Start-Sleep -Seconds 5
 }
 Start-Sleep -Seconds 3
@@ -260,4 +276,5 @@ Stop-Transcript
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Clean Installation Ends"
 Write-Log "-----------------------------------------------------------------"
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 5
+exit 0

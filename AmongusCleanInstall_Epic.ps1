@@ -1,4 +1,4 @@
-﻿Param(
+Param(
     $Args1, #modnum
     [switch]$DebugMode
 )
@@ -241,5 +241,7 @@ Stop-Transcript
 Write-Log "-----------------------------------------------------------------"
 Write-Log "Clean Installation Ends"
 Write-Log "-----------------------------------------------------------------"
+Start-Sleep -Seconds 5
+exit 0
 
 
