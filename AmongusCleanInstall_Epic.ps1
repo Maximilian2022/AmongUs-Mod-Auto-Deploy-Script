@@ -174,6 +174,10 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
     ### Load
     if(test-path "$fileName"){
         $spath = Get-content "$fileName"
+    }elseif($Args1){
+        # 非対話モード時はダイアログを出さずに既定のEpicパスを採用
+        Write-Log "非対話モード (-Args1): 既定のEpicパス $au_path_epic_org を使用します"
+        $spath = $au_path_epic_org
     }else{
         #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
         Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
@@ -183,7 +187,7 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
     }
     if($null -eq $spath){
         Write-Log "Failed $spath"
-        pause
+        if (-not $Args1) { pause }
         Exit
     }
     if(test-path "$spath\Among Us.exe"){
@@ -229,7 +233,9 @@ Set-Location ../
 $instpath = Get-Location
 write-log $spath
 Write-Log $instpath
-Remove-Item -Path $spath -Recurse -Force
+if (Test-Path $spath) {
+    Remove-Item -Path $spath -Recurse -Force -ErrorAction SilentlyContinue
+}
 Start-Sleep -Seconds 1
 legendary uninstall Among Us --keep-files -y 
 Start-Sleep -Seconds 1

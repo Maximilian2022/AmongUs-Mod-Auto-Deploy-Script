@@ -16,41 +16,41 @@ Write-Output "$Log PS1 Loading Start $version -$build"
 
 ### 未確認Modについては　"NONE"で統一する
 
-### Minimum versions (currently active)
-$ermin = "v2026.10.1.0"
-$esmin = "v2026.10.1.0"
-$tormin = "v4.8.0"
-$tourmin = "v5.3.1"
-$tohmin = "v5.1.14"
+### Minimum versions (currently active)　v19
+$ermin = "v2026.9.30.0"
+$esmin = "v2026.9.30.0"
+$tormin = "NONE"
+$tourmin = "NONE"
+$tohmin = "NONE"
 $snrmin = "3.3.0.0"
 $lmmin = "4.0.1"
 $nosmin = "110"
-$toymin = "v519.27"
-$sramin = "v2025.5.12"
+$toymin = "NONE"
+$sramin = "v2026.10.8"
 
-### minimum version for 2026.8.18 
+### minimum version for 2026.8.18 v18
 $ermin1 = "v2026.8.19.0"
 $esmin1 = "v2026.8.19.0"
-$tormin1 = "v4.8.0"
-$tourmin1 = "v5.3.1"
-$tohmin1 = "v5.1.14"
+$tormin1 = "NONE"
+$tourmin1 = "NONE"
+$tohmin1 = "NONE"
 $snrmin1 = "3.2.0.0"
 $lmmin1 = "3.9.3"
 $nosmin1 = "109"
-$toymin1 = "v519.27"
-$sramin1 = "v2025.5.12"
+$toymin1 = "NONE"
+$sramin1 = "v2025.6.11"
 
-### minimum version for 2026.6.5
+### minimum version for 2026.6.5 v17
 $ermin2 = "v2025.9.10.0"
 $esmin2 = "v2025.9.10.0"
-$tormin2 = "v4.8.0"
-$tourmin2 = "v5.0.6"
+$tormin2 = "NONE"
+$tourmin2 = "NONE"
 $tohmin2 = "v5.1.13"
 $snrmin2 = "3.1.0.0"
 $lmmin2 = "3.9.0"
 $nosmin2 = "107"
-$toymin2 = "v519.27"
-$sramin2 = "v2025.5.12"
+$toymin2 = "NONE"
+$sramin2 = "v2025.6.8"
 
 #Frequent changing parameter https://steamdb.info/depot/945361/manifests/
 # Current versions:
@@ -71,7 +71,7 @@ $gmhbool = $false #flag for Test
 $debugform = $false
 $icorenew = $false
 
-#TOR plus, TOR GM, TOR GMH, AUM is depricated.
+#TOR plus, TOR GM, TOR GMH, AUM ,TOR, TOU-R, TOYis depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $ProgressPreference = 'SilentlyContinue'
 
@@ -1372,6 +1372,9 @@ $form.Icon = "$dsk\AUMADS.ico"
 #[void] $Combo.Items.Add("AMS :AUModS/AUModS")
 #[void] $Combo.Items.Add("TOR MR :miru-y/TheOtherRoles-MR")
 #[void] $Combo.Items.Add("RHR :sansaaaaai/RevolutionaryHostRoles")
+#[void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
+#[void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
+#[void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
 if ($gmhbool) {
     [void] $Combo.Items.Add("NOT :Dolly1016/Nebula on the Test")
 }
@@ -1379,12 +1382,9 @@ if ($gmhbool) {
 [void] $Combo.Items.Add("SNR :ykundesu/SuperNewRoles")
 [void] $Combo.Items.Add("ER :yukieiji/ExtremeRoles")
 [void] $Combo.Items.Add("ER+ES :yukieiji/ExtremeRoles")
-[void] $Combo.Items.Add("TOR :TheOtherRolesAU/TheOtherRoles")
-[void] $Combo.Items.Add("TOU-R :eDonnes124/Town-Of-Us-R")
 [void] $Combo.Items.Add("SRA :Mr-Fluuff/StellarRolesAU")
 [void] $Combo.Items.Add("LM :KiraYamato94/LasMonjas")
 [void] $Combo.Items.Add("TOH :tukasa0001/TownOfHost")
-[void] $Combo.Items.Add("TOY :Yumenopai/TownOfHost_Y")
 [void] $Combo.Items.Add("Install/Update Selected")
 [void] $Combo.Items.Add("Tool Install Only")
 $Combo.SelectedIndex = 0
@@ -2135,12 +2135,12 @@ function Reload() {
                 $cleanProc.WaitForExit()
                 Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
                 
-                # インストール完了の待機 (最大300秒ポーリング)
+                # インストール完了の待機 (最大600秒ポーリング)
                 $waitSec = 0
-                while (!(Test-Path "$script:aupatho\Among Us.exe") -and ($waitSec -lt 300)) {
+                while (!(Test-Path "$script:aupatho\Among Us.exe") -and ($waitSec -lt 600)) {
                     Start-Sleep -Seconds 5
                     $waitSec += 5
-                    Write-Log "本体の配置待機中... (${waitSec}s/300s)"
+                    Write-Log "本体の配置待機中... (${waitSec}s/600s)"
                 }
 
                 # バージョン再検出
@@ -3231,8 +3231,8 @@ if ($tio) {
                 Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
                 Start-Sleep -Seconds 5
 
-                # 本体再配置待機 (最大300秒ポーリング)
-                $waitLimitSec = 300
+                # 本体再配置待機 (最大600秒ポーリング)
+                $waitLimitSec = 600
                 $waitElapsedSec = 0
                 while (!(Test-Path "$aupatho\Among Us.exe") -and ($waitElapsedSec -lt $waitLimitSec)) {
                     Start-Sleep -Seconds 5

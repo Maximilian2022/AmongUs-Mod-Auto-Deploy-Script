@@ -63,7 +63,10 @@ if ($PSVersionTable.PSVersion.major -eq 5) {
 }
 
 if ($v5run -and !$isDebugger -and !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) {
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Steam.ps1`"" -Verb RunAs -Wait
+    $argList = "-NoProfile -ExecutionPolicy Bypass -File `"$npl\AmongusCleanInstall_Steam.ps1`""
+    if ($Args1) { $argList += " -Args1 `"$Args1`"" }
+    Start-Process (if ($PSVersionTable.PSVersion.major -gt 5) { "pwsh.exe" } else { "powershell.exe" }) -ArgumentList $argList -Verb RunAs -Wait
+    exit
 }
 #################################################################################################
 # Folder用Function
@@ -237,6 +240,10 @@ if(Test-path "$au_path_steam_org\Among Us.exe"){
     ### Load
     if(test-path "$fileName"){
         $spath = Get-content "$fileName"
+    }elseif($Args1){
+        # 非対話モード時はダイアログを出さずに既定のSteamパスを採用
+        Write-Log "非対話モード (-Args1): 既定のSteamパス $au_path_steam_org を使用します"
+        $spath = $au_path_steam_org
     }else{
         #デフォルトパスになかったら、ウインドウを出してユーザー選択させる
         Write-Log "デフォルトフォルダにAmongUsを見つけることに失敗しました"      
@@ -246,7 +253,7 @@ if(Test-path "$au_path_steam_org\Among Us.exe"){
     }
     if($null -eq $spath){
         Write-Log "Failed $spath"
-        pause
+        if (-not $Args1) { pause }
         Exit
     }
     if(test-path "$spath\Among Us.exe"){
@@ -265,7 +272,9 @@ if($null -eq $Args1){
     }    
 }
 
-Remove-Item -Path $spath -Recurse -Force
+if (Test-Path $spath) {
+    Remove-Item -Path $spath -Recurse -Force -ErrorAction SilentlyContinue
+}
 Start-Sleep -Seconds 1
 
 Write-Log "Validate AmongUs"
