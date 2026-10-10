@@ -6,9 +6,14 @@ pushd "%~dp0"
 echo %date% %time% Script Start >> "%~dp0lastruntime.txt"
 echo %date% %time%   Loading...
 
-echo %date% %time%   Downloading Latest Powershell Script
-
-curl.exe -k -s -S -L --retry 2 -o "%~dp0AmongUsModTORplusDeployScript.ps1" https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongUsModTORplusDeployScript.ps1
+set "DOWNLOADED=0"
+if not exist "%~dp0AmongUsModTORplusDeployScript.ps1" (
+    echo %date% %time%   Downloading Latest Powershell Script
+    curl.exe -k -s -S -L --retry 2 -o "%~dp0AmongUsModTORplusDeployScript.ps1" https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongUsModTORplusDeployScript.ps1
+    set "DOWNLOADED=1"
+) else (
+    echo %date% %time%   Using local AmongUsModTORplusDeployScript.ps1
+)
 
 if not exist "%~dp0AmongUsModTORplusDeployScript.ps1" (
     echo [ERROR] Failed to download AmongUsModTORplusDeployScript.ps1
@@ -33,9 +38,10 @@ echo %date% %time%   Running Script with %PS_EXE%
 
 "%PS_EXE%" -NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File "%~dp0AmongUsModTORplusDeployScript.ps1"
 
-echo %date% %time%   Delete Powershell Script
-
-del /F /Q "%~dp0AmongUsModTORplusDeployScript.ps1"
+if "%DOWNLOADED%"=="1" (
+    echo %date% %time%   Delete Powershell Script
+    del /F /Q "%~dp0AmongUsModTORplusDeployScript.ps1"
+)
 
 echo %date% %time% Script End >> "%~dp0lastruntime.txt"
 popd

@@ -126,10 +126,13 @@ function Write-Log($logstring){
     # Log 出力文字列に時刻を付加(YYYY/MM/DD HH:MM:SS.MMM $LogString)
     $Log = $Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "
     $Log += $LogString
-    # ログ出力
-    try { Write-Output $(Get-Translate($Log)) | Out-File -FilePath $LogFileName -Encoding UTF8 -Append -ErrorAction SilentlyContinue } catch {}
+    $transLog = $(Get-Translate($Log))
+    # ログ出力 (トランスクリプト中の排他ロック例外を完全に防ぐため AppendAllText を使用)
+    try {
+        [System.IO.File]::AppendAllText($LogFileName, "$transLog`r`n", [System.Text.Encoding]::UTF8)
+    } catch {}
     # echo させるために出力したログを戻す
-    Return $(Get-Translate($Log))
+    Return $transLog
 }
 #################################################################################################
 
@@ -165,8 +168,16 @@ if(Test-path "$au_path_epic_org\Among Us.exe"){
     #detect epic path
     $epicinfo = legendary.exe info AmongUs
     $epicpath = $epicinfo | Select-String "Install path"
-    $epicrow = $($epicpath.ToString()).Split(": ")
-    $epicbase = Split-Path -Path "$($epicrow[1])"
+    $epicbase = $null
+    if ($epicpath) {
+        $epicrow = $($epicpath.ToString()).Split(": ")
+        if ($epicrow.Length -gt 1 -and ![string]::IsNullOrEmpty($epicrow[1])) {
+            $epicbase = Split-Path -Path "$($epicrow[1])"
+        }
+    }
+    if ([string]::IsNullOrEmpty($epicbase)) {
+        $epicbase = "C:\Program Files\Epic Games"
+    }
     if (Test-Path "$epicbase\Among Us\Among Us.exe") {
         $spath = "$epicbase\Among Us"
         $sback = "$epicbase\AmongUsBackup"
@@ -244,11 +255,11 @@ legendary auth --import
 $instpath = $null
 if (![string]::IsNullOrEmpty($spath)) {
     $parentPath = Split-Path $spath -Parent
-    if (![string]::IsNullOrEmpty($parentPath)) {
+    if (![string]::IsNullOrEmpty($parentPath) -and $parentPath -ne "\" -and (Test-Path $parentPath)) {
         $instpath = $parentPath
     }
 }
-if ([string]::IsNullOrEmpty($instpath)) {
+if ([string]::IsNullOrEmpty($instpath) -or $instpath -eq "\") {
     $instpath = "C:\Program Files\Epic Games"
 }
 if (!(Test-Path $instpath)) {

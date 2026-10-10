@@ -1207,7 +1207,7 @@ try {
 }
 
 # XAML 定義
-[xml]$xaml = @'
+[xml]$xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Among Us Mod Auto Deploy Tool"
@@ -1373,7 +1373,7 @@ try {
                         <TextBlock x:Name="TxtPlatformBadge" Text="🟢 Steam 選択中 (v2026.9.29)" FontSize="11" Foreground="#6EE7B7" FontWeight="SemiBold"/>
                     </Border>
                     <Border Background="{DynamicResource BadgeBg}" BorderBrush="{DynamicResource BorderCard}" BorderThickness="1" CornerRadius="12" Padding="8,3">
-                        <TextBlock Text="v2.2.0" FontSize="11" Foreground="{DynamicResource TextSecondary}"/>
+                        <TextBlock x:Name="TxtAppVersion" Text="v$version ($build)" FontSize="11" Foreground="{DynamicResource TextSecondary}"/>
                     </Border>
                 </StackPanel>
             </Grid>
@@ -1412,12 +1412,35 @@ try {
                                 <ComboBoxItem Content="Tool Install Only (ツールのみ)"/>
                             </ComboBox>
 
-                            <TextBlock Text="MOD のバージョン" FontSize="12" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,4"/>
-                            <ComboBox x:Name="CmbVersion" Margin="0,0,0,14">
-                                <ComboBoxItem Content="最新版: v110 (本体 2026.9.29 対応)" IsSelected="True"/>
-                                <ComboBoxItem Content="v109 (本体 2026.8.18 対応)"/>
-                                <ComboBoxItem Content="v107 (本体 2026.6.5 対応)"/>
-                            </ComboBox>
+                            <!-- MOD のバージョン (単体 MOD 選択時のみ表示) -->
+                            <StackPanel x:Name="PnlVersionGroup" Margin="0,0,0,14">
+                                <TextBlock Text="MOD のバージョン" FontSize="12" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="CmbVersion">
+                                    <ComboBoxItem Content="最新版: v110 (本体 2026.9.29 対応)" IsSelected="True"/>
+                                    <ComboBoxItem Content="v109 (本体 2026.8.18 対応)"/>
+                                    <ComboBoxItem Content="v107 (本体 2026.6.5 対応)"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- 一括インストール対象 MOD 選択カード (Install/Update Selected 選択時のみ表示) -->
+                            <Border x:Name="PnlBatchMods" Background="{DynamicResource InputBg}" BorderBrush="{DynamicResource BorderCard}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,14" Visibility="Collapsed">
+                                <StackPanel>
+                                    <TextBlock Text="一括インストール対象 MOD" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextAccentGold}" Margin="0,0,0,6"/>
+                                    <CheckBox x:Name="ChkBatchAll" Content="✨ すべて選択 (ALL)" IsChecked="True" FontWeight="Bold" Margin="0,0,0,6"/>
+                                    <Separator Background="{DynamicResource SeparatorBg}" Margin="0,2,0,6"/>
+                                    <ScrollViewer MaxHeight="140" VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <CheckBox x:Name="ChkBatch_NOS" Content="NOS : Dolly1016/Nebula on the Ship" IsChecked="True"/>
+                                            <CheckBox x:Name="ChkBatch_SNR" Content="SNR : ykundesu/SuperNewRoles" IsChecked="True"/>
+                                            <CheckBox x:Name="ChkBatch_ER" Content="ER : yukieiji/ExtremeRoles" IsChecked="True"/>
+                                            <CheckBox x:Name="ChkBatch_ERES" Content="ER+ES : yukieiji/ExtremeRoles" IsChecked="True"/>
+                                            <CheckBox x:Name="ChkBatch_SRA" Content="SRA : Mr-Fluuff/StellarRolesAU" IsChecked="True"/>
+                                            <CheckBox x:Name="ChkBatch_LM" Content="LM : KiraYamato94/LasMonjas" IsChecked="True"/>
+                                            <CheckBox x:Name="ChkBatch_TOH" Content="TOH : tukasa0001/TownOfHost" IsChecked="True"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </Border>
 
                             <Separator Background="{DynamicResource SeparatorBg}" Margin="0,4,0,12"/>
 
@@ -1594,7 +1617,7 @@ try {
         </Border>
     </Grid>
 </Window>
-'@
+"@
 
 $reader = New-Object System.Xml.XmlNodeReader $xaml
 $window = [System.Windows.Markup.XamlReader]::Load($reader)
@@ -1637,8 +1660,82 @@ $script:TxtPlatformBadge = $TxtPlatformBadge
 
 $CmbMod = $window.FindName("CmbMod")
 $CmbVersion = $window.FindName("CmbVersion")
+$PnlVersionGroup = $window.FindName("PnlVersionGroup")
+$PnlBatchMods = $window.FindName("PnlBatchMods")
+$ChkBatchAll = $window.FindName("ChkBatchAll")
+$ChkBatch_NOS = $window.FindName("ChkBatch_NOS")
+$ChkBatch_SNR = $window.FindName("ChkBatch_SNR")
+$ChkBatch_ER = $window.FindName("ChkBatch_ER")
+$ChkBatch_ERES = $window.FindName("ChkBatch_ERES")
+$ChkBatch_SRA = $window.FindName("ChkBatch_SRA")
+$ChkBatch_LM = $window.FindName("ChkBatch_LM")
+$ChkBatch_TOH = $window.FindName("ChkBatch_TOH")
+$TxtAppVersion = $window.FindName("TxtAppVersion")
+
 $script:CmbMod = $CmbMod
 $script:CmbVersion = $CmbVersion
+$script:PnlVersionGroup = $PnlVersionGroup
+$script:PnlBatchMods = $PnlBatchMods
+$script:ChkBatchAll = $ChkBatchAll
+
+# 右上のバージョン・ビルド番号表示を動的設定
+if ($TxtAppVersion) {
+    $TxtAppVersion.Text = "v$version ($build)"
+}
+
+# 一括インストール用チェックボックスマッピング
+$script:batchCheckBoxMap = [ordered]@{
+    "NOS :Dolly1016/Nebula on the Ship" = $ChkBatch_NOS
+    "SNR :ykundesu/SuperNewRoles"       = $ChkBatch_SNR
+    "ER :yukieiji/ExtremeRoles"         = $ChkBatch_ER
+    "ER+ES :yukieiji/ExtremeRoles"      = $ChkBatch_ERES
+    "SRA :Mr-Fluuff/StellarRolesAU"     = $ChkBatch_SRA
+    "LM :KiraYamato94/LasMonjas"        = $ChkBatch_LM
+    "TOH :tukasa0001/TownOfHost"        = $ChkBatch_TOH
+}
+
+# 一括選択チェックボックスの連動ハンドラ
+if ($ChkBatchAll) {
+    $script:updatingBatchChecks = $false
+    $ChkBatchAll.Add_Checked({
+        if ($script:updatingBatchChecks) { return }
+        $script:updatingBatchChecks = $true
+        foreach ($chk in $script:batchCheckBoxMap.Values) {
+            if ($chk) { $chk.IsChecked = $true }
+        }
+        $script:updatingBatchChecks = $false
+    })
+    $ChkBatchAll.Add_Unchecked({
+        if ($script:updatingBatchChecks) { return }
+        $script:updatingBatchChecks = $true
+        foreach ($chk in $script:batchCheckBoxMap.Values) {
+            if ($chk) { $chk.IsChecked = $false }
+        }
+        $script:updatingBatchChecks = $false
+    })
+
+    $updateBatchAllCheck = {
+        if ($script:updatingBatchChecks) { return }
+        $script:updatingBatchChecks = $true
+        $allChecked = $true
+        foreach ($chk in $script:batchCheckBoxMap.Values) {
+            if ($chk -and (-not $chk.IsChecked)) {
+                $allChecked = $false
+                break
+            }
+        }
+        if ($ChkBatchAll) { $ChkBatchAll.IsChecked = $allChecked }
+        $script:updatingBatchChecks = $false
+    }
+
+    foreach ($chk in $script:batchCheckBoxMap.Values) {
+        if ($chk) {
+            $chk.Add_Checked($updateBatchAllCheck)
+            $chk.Add_Unchecked($updateBatchAllCheck)
+        }
+    }
+}
+
 
 $RbShortcutYes = $window.FindName("RbShortcutYes")
 $RbShortcutNo = $window.FindName("RbShortcutNo")
@@ -2463,17 +2560,37 @@ function Reload() {
 
     # Modern GUI がアクティブな場合、WPF 画面へ同期反映
     if ($null -ne $script:mainWindow) {
-        if ($script:CmbVersion -and $combo2.DataSource) {
-            $script:CmbVersion.Items.Clear()
-            foreach ($item in $combo2.DataSource) {
-                [void]$script:CmbVersion.Items.Add($item)
-            }
-            if ($script:CmbVersion.Items.Count -gt 0) {
-                $script:CmbVersion.SelectedIndex = 0
+        $curScid = if ($script:scid) { $script:scid } else { $scid }
+        if ($curScid -eq "IUS") {
+            if ($script:PnlVersionGroup) { $script:PnlVersionGroup.Visibility = [System.Windows.Visibility]::Collapsed }
+            if ($script:CmbVersion) { $script:CmbVersion.IsEnabled = $false }
+            if ($script:PnlBatchMods) { $script:PnlBatchMods.Visibility = [System.Windows.Visibility]::Visible }
+            if ($script:TxtModPath) { $script:TxtModPath.Text = "（一括デプロイ: 選択した各 MOD フォルダへ展開）" }
+        }
+        elseif ($curScid -eq "TIO") {
+            if ($script:PnlVersionGroup) { $script:PnlVersionGroup.Visibility = [System.Windows.Visibility]::Collapsed }
+            if ($script:CmbVersion) { $script:CmbVersion.IsEnabled = $false }
+            if ($script:PnlBatchMods) { $script:PnlBatchMods.Visibility = [System.Windows.Visibility]::Collapsed }
+            if ($script:TxtModPath) { $script:TxtModPath.Text = "（ツールのみインストールの設定）" }
+        }
+        else {
+            if ($script:PnlVersionGroup) { $script:PnlVersionGroup.Visibility = [System.Windows.Visibility]::Visible }
+            if ($script:CmbVersion) { $script:CmbVersion.IsEnabled = $true }
+            if ($script:PnlBatchMods) { $script:PnlBatchMods.Visibility = [System.Windows.Visibility]::Collapsed }
+            if ($script:TxtModPath) { $script:TxtModPath.Text = $script:aupathm }
+
+            if ($script:CmbVersion -and $combo2.DataSource) {
+                $script:CmbVersion.Items.Clear()
+                foreach ($item in $combo2.DataSource) {
+                    [void]$script:CmbVersion.Items.Add($item)
+                }
+                if ($script:CmbVersion.Items.Count -gt 0) {
+                    $script:CmbVersion.SelectedIndex = 0
+                }
             }
         }
+
         if ($script:TxtVanillaPath) { $script:TxtVanillaPath.Text = $script:aupatho }
-        if ($script:TxtModPath) { $script:TxtModPath.Text = $script:aupathm }
         if ($script:TxtPlatformBadge) {
             $badgePlat = if ($script:platform -eq "epic") { "Epic" } else { "Steam" }
             $script:TxtPlatformBadge.Text = "🟢 $badgePlat 選択中 (v$script:amver)"
@@ -2666,6 +2783,25 @@ if ($null -eq $Args1) {
 
     $script:actionToTake = $null
     $BtnStartDeploy.Add_Click({
+        # 一括インストール時のチェック状態検証
+        if ($Combo.Text -eq "Install/Update Selected" -or $script:scid -eq "IUS") {
+            $selectedBatch = @()
+            if ($script:ChkBatchAll -and $script:ChkBatchAll.IsChecked) {
+                $selectedBatch += "ALL"
+            }
+            if ($script:batchCheckBoxMap) {
+                foreach ($entry in $script:batchCheckBoxMap.GetEnumerator()) {
+                    if ($entry.Value -and $entry.Value.IsChecked) {
+                        $selectedBatch += $entry.Key
+                    }
+                }
+            }
+            if ($selectedBatch.Count -eq 0) {
+                [System.Windows.MessageBox]::Show("一括インストール対象の MOD を少なくとも1つ選択してください。", "Among Us Mod Auto Deploy Tool", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Warning) | Out-Null
+                return
+            }
+            $script:batchSelectedMods = $selectedBatch
+        }
         $script:actionToTake = "Deploy"
     })
     $BtnCancel.Add_Click({
@@ -2780,109 +2916,19 @@ $wdh = $($screensize[$prime]).Bounds.Width
 $hgt = $($screensize[$prime]).Bounds.Height
 
 if ($isall) {
-    # フォームの作成
-    $form0 = New-Object System.Windows.Forms.Form
-    $form0.Size = "400,450"
-    $form0.Startposition = "CenterScreen"
-    $form0.Text = "Among Us Mod Auto Deploy Tool"
-    $form0.FormBorderStyle = "Fixed3D"
-    $form0.Icon = "$dsk\AUMADS.ico"
-    $form0.font = $Font
-    $form0.TopLevel = $true
-
-    # ラベルを作成
-    $label0 = New-Object System.Windows.Forms.Label
-    $label0.Location = "5,5"
-    $label0.Size = "340,20"
-    $label0.Text = "InstallするModを選択してください"
-
-    # チェックボックスを作成
-    $CheckedBox0 = New-Object System.Windows.Forms.CheckedListBox
-    $CheckedBox0.Location = "5,30"
-    $CheckedBox0.Size = "370,350"
-    #Modの数-2(ALL)
+    # Modの数-2 (後ろの「一括インストール」と「ツールのみ」を除く)
     $modnum = $($combo.items.count) - 2
 
-    $RETU2 = @("ALL")
-    # 配列を作成
-    for ($ial = 0; $ial -lt $modnum; $ial++) {
-        $RETU2 += $($combo.items[$ial])
-    }
-
-    # チェックボックスに10項目を追加
-    $CheckedBox0.Items.AddRange($RETU2)
-
-    # すべての既存の選択をクリア
-    $CheckedBox0.ClearSelected()
-
-    # OKボタンの設定
-    $OKButton0 = New-Object System.Windows.Forms.Button
-    $OKButton0.Location = "170,375"
-    $OKButton0.Size = "75,30"
-    $OKButton0.Text = "OK"
-    $OKButton0.DialogResult = [System.Windows.Forms.DialogResult]::OK
-
-    # キャンセルボタンの設定
-    $CancelButton0 = New-Object System.Windows.Forms.Button
-    $CancelButton0.Location = "270,375"
-    $CancelButton0.Size = "75,30"
-    $CancelButton0.Text = "Cancel"
-    $CancelButton0.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
-
-    # フォームにアイテムを追加
-    $form0.Controls.Add($label0)
-    $form0.Controls.Add($OKButton0)
-    $form0.Controls.Add($CancelButton0)
-    $form0.Controls.Add($CheckedBox0)
-
-    # キーとボタンの関係
-    $form0.AcceptButton = $OKButton0
-    $form0.CancelButton = $CancelButton0
-
-    # 最前面に表示：する
-    $form0.Topmost = $false
-
-    # フォームを表示
-    $result0 = $form0.ShowDialog()
-
-    # 処理分岐
-    if ( $result0 -eq "OK" ) {
-        $AAA2 = @($CheckedBox0.CheckedItems)
+    # モダン GUI (WPF) で選択された MOD リストを取得
+    if ($null -ne $script:batchSelectedMods -and $script:batchSelectedMods.Count -gt 0) {
+        $AAA2 = $script:batchSelectedMods
     }
     else {
-        exit
+        # フォールバック (非GUI実行等)
+        $AAA2 = @("ALL")
     }
 
-    # プログレスバー
-    $Form22 = New-Object System.Windows.Forms.Form
-    $Form22.Size = "520,270"
-    $Form22.Text = "Among Us Mod Auto Deploy Tool"
-    $form22.Icon = "$dsk\AUMADS.ico"
-    $form22.FormBorderStyle = "Fixed3D"
-    $Form22.font = $Font
-
-    $form22.StartPosition = "Manual"
-    $form22.Left = ($wdh / 2) - ($form22.Width / 2)
-    $form22.Top = ($hgt / 2) - 3 * ($form22.Height / 2)
-
-    $label2222 = New-Object System.Windows.Forms.Label
-    $label2222.Location = New-Object System.Drawing.Point(10, 10)
-    $label2222.Size = New-Object System.Drawing.Size(500, 120)
-    $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected`r`n Deploy中です。`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
-    $form22.Controls.Add($label2222)
-
-    # プログレスバー
-    $Bar2 = New-Object System.Windows.Forms.ProgressBar
-    $Bar2.Location = "10,190"
-    $Bar2.Size = "480,30"
-    $Bar2.Maximum = "$($modnum + 1)"
-    $Bar2.Minimum = "0"
-    $Bar2.Style = "Continuous"
-    $Form22.Controls.Add($Bar2)
-    $Bar2.Value = "0"
-    $Form22.Show()
-
-    #選択されたModの数
+    # 選択されたModの数
     if ($AAA2.contains("ALL")) {
         $modsel = $modnum
     }
@@ -2890,29 +2936,77 @@ if ($isall) {
         $modsel = $AAA2.Count
     }
     $currentphase = 0
-    Write-Log "SAL: $modnum $modsel"
-    Write-Log "SAL: $AAA2"
+    Write-Log "一括デプロイ開始: 合計 $modnum 種中 $modsel 種をインストール対象として認識"
+    Write-Log "選択された MOD: $($AAA2 -join ', ')"
+
+    # スクリプト本体のパスを特定
+    $deployScriptPath = $null
+    if (Test-Path "$PSScriptRoot\AmongUsModTORplusDeployScript.ps1") {
+        $deployScriptPath = "$PSScriptRoot\AmongUsModTORplusDeployScript.ps1"
+    }
+    elseif (Test-Path "$npl\AmongUsModTORplusDeployScript.ps1") {
+        $deployScriptPath = "$npl\AmongUsModTORplusDeployScript.ps1"
+    }
+    elseif (Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1") {
+        $deployScriptPath = "$dsk\AmongUsModTORplusDeployScript.ps1"
+    }
+
+    $psExe = if (Test-Path "$env:ProgramFiles\PowerShell\7\pwsh.exe") { "pwsh.exe" } else { "powershell.exe" }
+
     for ($iall = 0; $iall -lt $modnum; $iall++) {
-        $Bar2.Value = "$($iall + 1)"
-        if ($AAA2.contains("$($combo.items[$iall])") -OR $AAA2.contains("ALL")) {
+        $currentModName = $($combo.items[$iall])
+        if ($AAA2.contains($currentModName) -or $AAA2.contains("ALL")) {
             $currentphase++
-            Write-Log "$($combo.items[$iall]) のインストールを開始しました。$currentphase/$modsel"
-            $label2222.Text = $(Get-Translate("Among Us Mod $($combo.items[$iall])`r`nDeploy中です。 $currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
-            if (Test-Path "$npl\AmongUsModTORplusDeployScript.ps1") {
-                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$npl\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+            $percent = [math]::Round(($currentphase / [math]::Max($modsel, 1)) * 100)
+
+            # Modern GUI (WPF) プログレス表示をリアルタイム更新
+            if ($null -ne $script:mainWindow) {
+                if ($script:ProgBar) { $script:ProgBar.Value = $percent }
+                if ($script:TxtPercent) { $script:TxtPercent.Text = "$percent%" }
+                if ($script:TxtProgressStatus) {
+                    $script:TxtProgressStatus.Text = "[$currentphase/$modsel] $currentModName をデプロイ中..."
+                }
+                [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
             }
-            elseif (Test-Path "$dsk\AmongUsModTORplusDeployScript.ps1") {
-                Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$dsk\AmongUsModTORplusDeployScript.ps1`" -Args1 `"$iall`" " -Verb RunAs -Wait
+
+            Write-Log "$currentModName のインストールを開始しました。($currentphase/$modsel)"
+            
+            if ($deployScriptPath) {
+                $platArg = if ($script:platform) { "-DeployPlatform `"$($script:platform)`"" } else { "" }
+                Start-Process $psExe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" -Args1 `"$iall`" $platArg" -Verb RunAs -Wait
             }
             else {
-                Write-Log "何かがおかしい。"
+                Write-Log "[ERROR] デプロイスクリプトが見つかりません: AmongUsModTORplusDeployScript.ps1"
             }
-            Write-Log "$($combo.items[$iall]) のインストールが完了しました。 $currentphase/$modsel"    
-            $label2222.Text = $(Get-Translate("Among Us Mod のInstall/Update Selected が進行中です。`r`n$currentphase/$modsel`r`nこの画面が消えるまでできるだけ何も触らず待ってください"))
+            Write-Log "$currentModName のインストールが完了しました。($currentphase/$modsel)"
         }
     }
 
-    $Form22.Close()
+    # 一括デプロイ完了処理 (モダン GUI の完了画面を表示)
+    if ($null -ne $script:mainWindow -and $null -ne $script:ViewProgress -and $null -ne $script:ViewComplete) {
+        $script:isDeploying = $false
+        $script:ViewProgress.Visibility = [System.Windows.Visibility]::Collapsed
+        $script:ViewComplete.Visibility = [System.Windows.Visibility]::Visible
+        if ($script:TxtCompleteModDesc) {
+            $script:TxtCompleteModDesc.Text = "一括インストール ($modsel 個の MOD) が正常に完了しました。"
+        }
+        if ($script:TxtCompletePath) {
+            $script:TxtCompletePath.Text = if ($script:platform -eq "epic") { "Epic Games 版各 MOD フォルダ" } else { "Steam 版各 MOD フォルダ" }
+        }
+        if ($script:TxtCompleteShortcut) {
+            $script:TxtCompleteShortcut.Text = "選択した各 MOD のデスクトップショートカットが作成されました"
+        }
+        [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
+
+        # 完了画面でのユーザー操作待機
+        $script:completeAction = $null
+        while ($null -eq $script:completeAction -and $window.IsVisible) {
+            [System.Windows.Threading.Dispatcher]::CurrentDispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Background)
+            Start-Sleep -Milliseconds 50
+        }
+        $window.Close()
+        exit
+    }
 }
 
 $prefpth = ""
