@@ -241,11 +241,21 @@ catch{
 # Epic Games Launcher から認証情報を自動インポート
 legendary auth --import
 
-Set-Location $spath
-Set-Location ../
-$instpath = Get-Location
-write-log $spath
-Write-Log $instpath
+$instpath = $null
+if (![string]::IsNullOrEmpty($spath)) {
+    $parentPath = Split-Path $spath -Parent
+    if (![string]::IsNullOrEmpty($parentPath)) {
+        $instpath = $parentPath
+    }
+}
+if ([string]::IsNullOrEmpty($instpath)) {
+    $instpath = "C:\Program Files\Epic Games"
+}
+if (!(Test-Path $instpath)) {
+    New-Item -Path $instpath -ItemType Directory -Force | Out-Null
+}
+Write-Log "Target spath: $spath"
+Write-Log "Target instpath: $instpath"
 if (Test-Path $spath) {
     Remove-Item -Path $spath -Recurse -Force -ErrorAction SilentlyContinue
 }
