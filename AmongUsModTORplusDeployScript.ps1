@@ -5002,6 +5002,6 @@ Write-Log "-----------------------------------------------------------------"
 
 Start-Sleep -Seconds 1
 $Bar.Value = "100"
-if ($null -ne $script:mainWindow -and $null -eq $Args1) {
+$Form2.Close()
 
 exit
