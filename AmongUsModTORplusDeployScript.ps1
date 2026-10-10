@@ -1,6 +1,7 @@
 ﻿Param(
     $Args1, #skipconfirmation
-    [switch]$DebugMode
+    [switch]$DebugMode,
+    [string]$DeployPlatform
 )
 $ScriptStartTime = Get-Date
 $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
@@ -946,7 +947,20 @@ function Initialize-GameEnvironment {
     $script:hasEpic = $hasEpic
     $script:bothPlatformsDetected = ($hasSteam -and $hasEpic)
 
-    if ($hasSteam -and $hasEpic) {
+    $targetPlatform = if (![string]::IsNullOrEmpty($DeployPlatform)) { $DeployPlatform } elseif (![string]::IsNullOrEmpty($env:TARGET_PLATFORM)) { $env:TARGET_PLATFORM } else { $null }
+    if (![string]::IsNullOrEmpty($targetPlatform)) {
+        if ($targetPlatform -ieq "Epic") {
+            Write-Log "Target platform explicitly set to Epic via argument/environment variable."
+            $spath = $au_path_epic_org
+            $script:platform = "epic"
+        }
+        elseif ($targetPlatform -ieq "Steam") {
+            Write-Log "Target platform explicitly set to Steam via argument/environment variable."
+            $spath = $au_path_steam_org
+            $script:platform = "steam"
+        }
+    }
+    elseif ($hasSteam -and $hasEpic) {
         Write-Log "Both Steam and Epic installations of Among Us were detected."
         $selectedIsSteam = $true
         if ($null -ne $Args1 -and $env:TARGET_PLATFORM -eq "Epic") {
@@ -1107,6 +1121,8 @@ function Initialize-GameEnvironment {
         $confcont = $spath + "_:_" + $script:platform
         Write-Output "$confcont" > $fileName
     }
+    $script:aupatho = $spath
+    $aupatho = $spath
 
     # バージョン検出 (globalgamemanagers)
     if (Test-Path "$script:aupatho\Among Us_Data\globalgamemanagers") {
@@ -2353,8 +2369,8 @@ function Reload() {
         $platform = $script:platform
         
         if ([string]::IsNullOrEmpty($aupatho)) {
-            Write-Log "Error: $scid のパス構築をスキップします。Among Usのインストールパスが設定されていません。"
-            return
+            $aupatho = if ($script:aupatho) { $script:aupatho } elseif ($script:platform -eq "epic") { "C:\Program Files\Epic Games\Among Us" } else { "C:\Program Files (x86)\Steam\steamapps\common\Among Us" }
+            $script:aupatho = $aupatho
         }
         
         # 選択された Mod ($scid) に応じて、パスを自動構成する（I/Oアクセスを伴わず一瞬で完了）
@@ -2428,7 +2444,11 @@ function Reload() {
     # 本体バージョンの旧世代判定と自動クリーンインストール
     $needCleanInstall = $false
     try {
-        if ($script:amver -and $script:prever0) {
+        if (!(Test-Path "$script:aupatho\Among Us.exe")) {
+            Write-Log "Among Us 本体が存在しないため、新規クリーンインストールを実行します。"
+            $needCleanInstall = $true
+        }
+        elseif ($script:amver -and $script:prever0) {
             $verCurrent = $script:amver -as [version]
             $verTarget = $script:prever0 -as [version]
             if ($null -ne $verCurrent -and $null -ne $verTarget) {
@@ -3733,13 +3753,18 @@ if ($tio) {
             }
             
             if ($stm -and $epc) {
-                Write-Log $(Get-Translate("SteamとEpic両方のインストールが確認されました。ユーザーに確認します。"))
-                if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
-                    $rn = "steam"
+                if ($null -ne $Args1 -or ![string]::IsNullOrEmpty($DeployPlatform) -or ![string]::IsNullOrEmpty($env:TARGET_PLATFORM)) {
+                    $rn = if (($DeployPlatform -ieq "epic") -or ($env:TARGET_PLATFORM -ieq "epic") -or ($script:platform -eq "epic")) { "epic" } else { "steam" }
                 }
                 else {
-                    $rn = "epic"
-                }                
+                    Write-Log $(Get-Translate("SteamとEpic両方のインストールが確認されました。ユーザーに確認します。"))
+                    if ([System.Windows.Forms.MessageBox]::Show($(Get-Translate("SteamとEpic両方のインストールが確認されました。`nどちらのAmongusをクリーンインストールしますか？`nSteamの場合は「はい」を、Epicの場合は「いいえ」を押してください。")), "Among Us Mod Auto Deploy Tool", 4) -eq "Yes") {
+                        $rn = "steam"
+                    }
+                    else {
+                        $rn = "epic"
+                    }                
+                }
                 Write-Log "$rn が選択されました。"
             }
 
