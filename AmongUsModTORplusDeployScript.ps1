@@ -364,7 +364,7 @@ function ToHex([byte[]] $hashBytes) {
 Add-Type -AssemblyName UIAutomationClient
 $oldtype = $true
 
-if ((Test-Path "C:\Program Files\Epic Games\AmongUs") -or (Test-Path "C:\Program Files\Epic Games\Among Us")) {
+if (($script:platform -eq "epic" -or $DeployPlatform -eq "epic" -or $env:TARGET_PLATFORM -eq "Epic") -and ((Test-Path "C:\Program Files\Epic Games\AmongUs") -or (Test-Path "C:\Program Files\Epic Games\Among Us"))) {
     $legver = legendary.exe -V            
     if ($legver -ge 'legendary version "0.20.29", codename "Dark Energy (hotfix #3)"') {
     }
@@ -387,10 +387,12 @@ if ((Test-Path "C:\Program Files\Epic Games\AmongUs") -or (Test-Path "C:\Program
                 Write-Log "Legendaryのバージョンが古いため、最新に更新しました。"
             }
         }
-        Write-Log "重要ファイルの更新がありました。"
-        Write-Log "再度Batファイルを実行してください。"
-        Pause
-        Exit
+        if (!$BatchChild -and !$isall) {
+            Write-Log "重要ファイルの更新がありました。"
+            Write-Log "再度Batファイルを実行してください。"
+            Pause
+            Exit
+        }
     }
 }
 
