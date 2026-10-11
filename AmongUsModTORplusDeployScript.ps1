@@ -3113,7 +3113,7 @@ if ($isall) {
 
                 $platArg = if ($script:platform) { "-DeployPlatform `"$($script:platform)`"" } else { "" }
                 $latestArg = if ($script:latestflag) { "-TargetLatestFlag $($script:latestflag)" } else { "-TargetLatestFlag 1" }
-                $childScriptCmd = "& `"$deployScriptPath`" `"$iall`" $platArg $latestArg -BatchChild -ProgressSyncFile `"$syncFile`" -ChildLogPath `"$childLogFile`""
+                $childScriptCmd = "& '$deployScriptPath' $iall $platArg $latestArg -BatchChild -ProgressSyncFile '$syncFile' -ChildLogPath '$childLogFile'"
                 $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command `"$childScriptCmd`""
 
                 $proc = Start-Process $psExe -ArgumentList $childArgs -PassThru
@@ -5758,47 +5758,49 @@ if(($scid -eq "NOS") -OR ($scid -eq "NOT")){
 ####################
 #bat file auto update
 ####################
-try {
-    choco -v
-}
-catch {
-    Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
-}
-# 最新の BAT ファイルを一時ファイル (.bat.new) としてダウンロード
-$batUrl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat"
-$newBatDsk = Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat.new"
-Invoke-WebRequest $batUrl -OutFile $newBatDsk -UseBasicParsing
+if (!$BatchChild -and !$isall) {
+    try {
+        choco -v
+    }
+    catch {
+        Start-Process powershell -ArgumentList "-Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Verb RunAs -Wait
+    }
+    # 最新の BAT ファイルを一時ファイル (.bat.new) としてダウンロード
+    $batUrl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/StartAmongUsModTORplusDeployScript.bat"
+    $newBatDsk = Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat.new"
+    Invoke-WebRequest $batUrl -OutFile $newBatDsk -UseBasicParsing
 
-# 実行中 BAT への直接上書きを避け、cmd.exe 終了後に安全に置換するコマンド群を構築
-$delayedCmds = @()
+    # 実行中 BAT への直接上書きを避け、cmd.exe 終了後に安全に置換するコマンド群を構築
+    $delayedCmds = @()
 
-if (Test-Path (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat")) {
-    # 既に存在する場合は cmd.exe 終了後に遅延置換
-    $delayedCmds += "move /y `"$newBatDsk`" `"$dsk\StartAmongUsModTORplusDeployScript.bat`" >nul"
-}
-else {
-    # 初回実行で未存在の場合は直ちに配置
-    Move-Item -Path $newBatDsk -Destination (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat") -Force
-}
+    if (Test-Path (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat")) {
+        # 既に存在する場合は cmd.exe 終了後に遅延置換
+        $delayedCmds += "move /y `"$newBatDsk`" `"$dsk\StartAmongUsModTORplusDeployScript.bat`" >nul"
+    }
+    else {
+        # 初回実行で未存在の場合は直ちに配置
+        Move-Item -Path $newBatDsk -Destination (Join-Path $dsk "StartAmongUsModTORplusDeployScript.bat") -Force
+    }
 
-# ユーザーが別の場所 ($npl2) で古い BAT を実行していた場合、元の場所の BAT も最新に遅延更新
-if ($npl2.Path -ne $dsk -and (Test-Path "$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat")) {
-    $newBatNpl = Join-Path $npl2.Path "StartAmongUsModTORplusDeployScript.bat.new"
-    $sourceBat = if (Test-Path $newBatDsk) { $newBatDsk } else { "$dsk\StartAmongUsModTORplusDeployScript.bat" }
-    Copy-Item -Path $sourceBat -Destination $newBatNpl -Force
-    $delayedCmds += "move /y `"$newBatNpl`" `"$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat`" >nul"
-}
+    # ユーザーが別の場所 ($npl2) で古い BAT を実行していた場合、元の場所の BAT も最新に遅延更新
+    if ($npl2.Path -ne $dsk -and (Test-Path "$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat")) {
+        $newBatNpl = Join-Path $npl2.Path "StartAmongUsModTORplusDeployScript.bat.new"
+        $sourceBat = if (Test-Path $newBatDsk) { $newBatDsk } else { "$dsk\StartAmongUsModTORplusDeployScript.bat" }
+        Copy-Item -Path $sourceBat -Destination $newBatNpl -Force
+        $delayedCmds += "move /y `"$newBatNpl`" `"$($npl2.Path)\StartAmongUsModTORplusDeployScript.bat`" >nul"
+    }
 
-# 万が一 BAT 側での削除がスキップされた場合のセーフティネット（PS1 の遅延クリーンアップ）
-$delayedCmds += "del /f /q `"$dsk\AmongUsModTORplusDeployScript.ps1`" >nul 2>&1"
-if ($npl2.Path -ne $dsk) {
-    $delayedCmds += "del /f /q `"$($npl2.Path)\AmongUsModTORplusDeployScript.ps1`" >nul 2>&1"
-}
+    # 万が一 BAT 側での削除がスキップされた場合のセーフティネット（PS1 の遅延クリーンアップ）
+    $delayedCmds += "del /f /q `"$dsk\AmongUsModTORplusDeployScript.ps1`" >nul 2>&1"
+    if ($npl2.Path -ne $dsk) {
+        $delayedCmds += "del /f /q `"$($npl2.Path)\AmongUsModTORplusDeployScript.ps1`" >nul 2>&1"
+    }
 
-# 親の cmd.exe が正常終了（del 等完了）した2秒後に、安全に move とクリーンアップを実行するバックグラウンドタスク
-if ($delayedCmds.Count -gt 0) {
-    $delayedScript = "ping 127.0.0.1 -n 3 >nul & " + ($delayedCmds -join " & ")
-    Start-Process cmd.exe -ArgumentList "/c $delayedScript" -WindowStyle Hidden
+    # 親の cmd.exe が正常終了（del 等完了）した2秒後に、安全に move とクリーンアップを実行するバックグラウンドタスク
+    if ($delayedCmds.Count -gt 0) {
+        $delayedScript = "ping 127.0.0.1 -n 3 >nul & " + ($delayedCmds -join " & ")
+        Start-Process cmd.exe -ArgumentList "/c $delayedScript" -WindowStyle Hidden
+    }
 }
 
 # ログ取得用バッチの生成（変数汚染を防止し、初期化して出力）
