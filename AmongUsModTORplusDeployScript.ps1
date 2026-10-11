@@ -2284,7 +2284,7 @@ function Reload() {
                 }
             }
             catch {
-                Write-Log "$scid リリース一覧取得スキップ (API制限または通信エラー): $_"
+                Write-Log "$scid リリース一覧取得スキップ (API制限または通信エラーのためフォールバックへ移行)"
                 $web = $null
             }
         }
@@ -3542,8 +3542,35 @@ if ($tio) {
     if (!$BatchChild -and ($null -eq $script:mainWindow -or $null -ne $Args1)) { $Form2.Show() }
     $Bar.Value = "10"
     #################################################################################################
-    $web = Invoke-WebRequest $releasepage -UseBasicParsing
-    $web2 = ConvertFrom-Json $web.Content
+    $web = switch ($scid) {
+        "NOS" { $script:nosweb }
+        "NOT" { $script:nosweb }
+        "SNR" { $script:snrweb }
+        "ER" { $script:erweb }
+        "ER+ES" { $script:erweb }
+        "SRA" { $script:sraweb }
+        "LM" { $script:lmweb }
+        "TOH" { $script:tohweb }
+        "TOY" { $script:toyweb }
+        "TOR" { $script:torweb }
+        "TOU-R" { $script:tourweb }
+        "TOR GMH" { $script:gmhweb }
+        "TOR MR" { $script:mrweb }
+        "RHR" { $script:rhrweb }
+        "AMS" { $script:amsweb }
+        default { $null }
+    }
+    if ($null -eq $web -or [string]::IsNullOrWhiteSpace($web.Content)) {
+        try {
+            $web = Invoke-WebRequest $releasepage -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop
+        } catch {
+            Write-Log "$scid リリース情報取得スキップ (API制限または通信状況によるフォールバック移行)"
+            $web = $null
+        }
+    }
+    $web2 = if ($null -ne $web -and -not [string]::IsNullOrWhiteSpace($web.Content)) {
+        try { ConvertFrom-Json $web.Content } catch { $null }
+    } else { $null }
     $Bar.Value = "15"
     $torv = $torpv
     Write-Log "$scid Version $torv が選択されました"
@@ -4268,13 +4295,21 @@ if ($tio) {
 
     #mini.regioninstall
     $miniri = "https://api.github.com/repos/miniduikboot/Mini.RegionInstall/releases"        
-    $mweb = Invoke-WebRequest $miniri -UseBasicParsing
-    $mweb2 = ConvertFrom-Json $mweb.Content   
-    for ($aii = 0; $aii -lt $($mweb2.assets.browser_download_url).Length; $aii++) {
-        if ($($mweb2.assets.browser_download_url[$aii]).IndexOf("Mini.RegionInstall.dll") -gt 0) {
-            $mdl = $mweb2.assets.browser_download_url[$aii]
-            break
+    $mweb = try { Invoke-WebRequest $miniri -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop } catch { $null }
+    $mweb2 = if ($mweb -and -not [string]::IsNullOrWhiteSpace($mweb.Content)) {
+        try { ConvertFrom-Json $mweb.Content } catch { $null }
+    } else { $null }
+    $mdl = $null
+    if ($null -ne $mweb2 -and $null -ne $mweb2.assets) {
+        for ($aii = 0; $aii -lt $($mweb2.assets.browser_download_url).Length; $aii++) {
+            if ($($mweb2.assets.browser_download_url[$aii]).IndexOf("Mini.RegionInstall.dll") -gt 0) {
+                $mdl = $mweb2.assets.browser_download_url[$aii]
+                break
+            }
         }
+    }
+    if ([string]::IsNullOrEmpty($mdl)) {
+        $mdl = "https://github.com/miniduikboot/Mini.RegionInstall/releases/latest/download/Mini.RegionInstall.dll"
     }
 
     if (Test-Path "$aupathm\BepInEx\plugins\Mini.RegionInstall.dll") {
@@ -4765,19 +4800,37 @@ if ($tio) {
 
 
         $addonpage = "https://api.github.com/repos/Maximilian2022/Nebula-in-the-library/releases/latest"
-        $addon = Invoke-WebRequest $addonpage -UseBasicParsing
-        $addon2 = ConvertFrom-Json $addon.Content
-        #v2.11
-        $langdata = ($addon2.assets.browser_download_url | Select-String "Localization_the_Nebula").ToString()
+        $addon = try { Invoke-WebRequest $addonpage -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop } catch { $null }
+        $addon2 = if ($addon -and -not [string]::IsNullOrWhiteSpace($addon.Content)) {
+            try { ConvertFrom-Json $addon.Content } catch { $null }
+        } else { $null }
+        $langdata = if ($addon2 -and $addon2.assets) {
+            ($addon2.assets.browser_download_url | Select-String "Localization_the_Nebula").ToString()
+        } else { $null }
+        if ([string]::IsNullOrEmpty($langdata)) {
+            $langdata = "https://github.com/Maximilian2022/Nebula-in-the-library/releases/latest/download/Localization_the_Nebula.zip"
+        }
         aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "Localization_the_Nebula.zip" $langdata --allow-overwrite=true 
-        $cfsnr = ($addon2.assets.browser_download_url | Select-String "Colors_from_SNR").ToString()
+        $cfsnr = if ($addon2 -and $addon2.assets) {
+            ($addon2.assets.browser_download_url | Select-String "Colors_from_SNR").ToString()
+        } else { $null }
+        if ([string]::IsNullOrEmpty($cfsnr)) {
+            $cfsnr = "https://github.com/Maximilian2022/Nebula-in-the-library/releases/latest/download/Colors_from_SNR.zip"
+        }
         aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "Colors_from_SNR.zip" $cfsnr --allow-overwrite=true 
         Write-Log "日本語 データ Download 完了"
 
         $mdnpage = "https://api.github.com/repos/Mido-otosae/Midohat-For-Nos/releases/latest"
-        $mdn = Invoke-WebRequest $mdnpage -UseBasicParsing
-        $mdn2 = ConvertFrom-Json $mdn.Content
-        $mdnr = ($mdn2.assets.browser_download_url | Select-String ".zip").ToString()
+        $mdn = try { Invoke-WebRequest $mdnpage -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop } catch { $null }
+        $mdn2 = if ($mdn -and -not [string]::IsNullOrWhiteSpace($mdn.Content)) {
+            try { ConvertFrom-Json $mdn.Content } catch { $null }
+        } else { $null }
+        $mdnr = if ($mdn2 -and $mdn2.assets) {
+            ($mdn2.assets.browser_download_url | Select-String ".zip").ToString()
+        } else { $null }
+        if ([string]::IsNullOrEmpty($mdnr)) {
+            $mdnr = "https://github.com/Mido-otosae/Midohat-For-Nos/releases/latest/download/mdngus01.zip"
+        }
         aria2c -x16 -s16 -j16 -V --dir "$aupathm\Addons" -o "mdngus01.zip" $mdnr --allow-overwrite=true 
         Write-Log "Midohat Download 完了"
 
