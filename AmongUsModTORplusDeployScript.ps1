@@ -1248,32 +1248,34 @@ function Initialize-GameEnvironment {
 # 起動時の初期検出を実行
 Initialize-GameEnvironment
 
-# GitHub API の非同期プレフェッチ (NOS, SNR, ER用)
-Write-Log "GitHub API Async Prefetching started..."
+# GitHub API の非同期プレフェッチ (NOS, SNR, ER用 - 子プロセス時は不要なため親のみ実行)
 $script:prefetchJobs = @{}
-$prefetchUrls = @{
-    "NOS" = "https://api.github.com/repos/Dolly1016/Nebula/releases"
-    "SNR" = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
-    "ER"  = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
-}
+if (!$BatchChild) {
+    Write-Log "GitHub API Async Prefetching started..."
+    $prefetchUrls = @{
+        "NOS" = "https://api.github.com/repos/Dolly1016/Nebula/releases"
+        "SNR" = "https://api.github.com/repos/ykundesu/SuperNewRoles/releases"
+        "ER"  = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases"
+    }
 
-foreach ($key in $prefetchUrls.Keys) {
-    $url = $prefetchUrls[$key]
-    $ps = [powershell]::Create().AddScript({
-            param($targetUrl)
-            try {
-                $response = Invoke-WebRequest $targetUrl -UseBasicParsing -TimeoutSec 10
-                return $response
-            }
-            catch {
-                return $null
-            }
-        }).AddArgument($url)
-    
-    $asyncResult = $ps.BeginInvoke()
-    $script:prefetchJobs[$key] = @{
-        PowerShell  = $ps
-        AsyncResult = $asyncResult
+    foreach ($key in $prefetchUrls.Keys) {
+        $url = $prefetchUrls[$key]
+        $ps = [powershell]::Create().AddScript({
+                param($targetUrl)
+                try {
+                    $response = Invoke-WebRequest $targetUrl -UseBasicParsing -TimeoutSec 10
+                    return $response
+                }
+                catch {
+                    return $null
+                }
+            }).AddArgument($url)
+        
+        $asyncResult = $ps.BeginInvoke()
+        $script:prefetchJobs[$key] = @{
+            PowerShell  = $ps
+            AsyncResult = $asyncResult
+        }
     }
 }
 
@@ -2377,14 +2379,18 @@ function Reload() {
                 $web = $script:amsweb 
             }
         }
-        else {
-            $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-        }
-
         if ($null -eq $web -or [string]::IsNullOrWhiteSpace($web.Content)) {
-            $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
+            try {
+                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop
+            }
+            catch {
+                Write-Log "リリース一覧取得スキップ (API制限または通信エラー): $_"
+                $web = $null
+            }
         }
-        $web2 = ConvertFrom-Json $web.Content
+        $web2 = if ($null -ne $web -and $web.Content) {
+            try { ConvertFrom-Json $web.Content } catch { $null }
+        } else { $null }
     
         $list2 = @()
         $tmparr = @()
@@ -2552,7 +2558,14 @@ function Reload() {
             if ($null -ne $OKButton) { $OKButton.Enabled = $false }; if ($null -ne $script:OKButton) { $script:OKButton.Enabled = $false }
         }
         if ($list2.length -eq 0) {
-            if ($null -ne $OKButton) { $OKButton.Enabled = $false }; if ($null -ne $script:OKButton) { $script:OKButton.Enabled = $false }
+            if ($script:aumin -ne "NONE" -and ![string]::IsNullOrEmpty($script:aumin)) {
+                $fallbackTag = if ($scid -eq "NOS") { "v3.5.3.6" } else { $script:aumin }
+                Write-Log "リリース一覧取得不可のため最小対応バージョン ($fallbackTag) をフォールバックとして採用します"
+                $list2 = @($fallbackTag)
+            }
+            else {
+                if ($null -ne $OKButton) { $OKButton.Enabled = $false }; if ($null -ne $script:OKButton) { $script:OKButton.Enabled = $false }
+            }
         }
         <#sort version $list2 = $list2 | Sort-Object -Property {$([INT]$_.split('.')[2])} -Descending
         if(($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "ER") -or ($scid -eq "ER+ES")){
