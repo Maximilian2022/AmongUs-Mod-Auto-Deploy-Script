@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     $Args1, #skipconfirmation
     [switch]$DebugMode
 )
@@ -279,6 +279,13 @@ Start-Sleep -Seconds 1
 
 Write-Log "Validate AmongUs"
 Start-Transcript -Append -Path "$LogFileName"
+# Steam プロトコル URI による即時検証・ダウンロード強制発火
+try {
+    Start-Process "steam://validate/945360"
+    Write-Log "Sent steam://validate/945360 protocol command"
+} catch {
+    Write-Log "Warning: Failed to launch steam://validate protocol: $_"
+}
 Start-Process $steampth -argument "+app_start_validation 945360" 
 Stop-Transcript
 

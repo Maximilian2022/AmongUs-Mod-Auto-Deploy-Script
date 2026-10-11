@@ -4,7 +4,8 @@
     [string]$DeployPlatform,
     [switch]$BatchChild,
     [string]$ProgressSyncFile,
-    [string]$ChildLogPath
+    [string]$ChildLogPath,
+    [int]$TargetLatestFlag = 0
 )
 $ScriptStartTime = Get-Date
 $Log = $ScriptStartTime.ToString("yyyy/MM/dd HH:mm:ss.fff") + " "    
@@ -25,7 +26,7 @@ $ermin = "v2026.9.30.0"
 $esmin = "v2026.9.30.0"
 $tormin = "NONE"
 $tourmin = "NONE"
-$tohmin = "NONE"
+$tohmin = "v5.1.13"
 $snrmin = "3.3.0.0"
 $lmmin = "4.0.1"
 $nosmin = "110"
@@ -872,6 +873,89 @@ $latestflag = 0
 $isall = $false
 $opflag = $false
 $ym = Get-Date -Format yyyyMM
+
+
+#################################################################################################
+# Steam 版 Among Us 配置待機 & ダウンロード進捗監視・フェイルセーフ関数
+#################################################################################################
+function Wait-ForSteamAmongUsInstall([string]$aupath, [int]$timeoutSec = 600) {
+    $elapsed = 0
+    $lastDownloaded = -1
+    $stallCount = 0
+    $restartedSteam = $false
+    $acfPath = "C:\Program Files (x86)\Steam\steamapps\appmanifest_945360.acf"
+    $steampth = "C:\Program Files (x86)\Steam\Steam.exe"
+    if (Test-Path "HKCU:\Software\Valve\Steam") {
+        $regExe = (Get-ItemProperty -Path "HKCU:\Software\Valve\Steam" -Name "SteamExe" -ErrorAction SilentlyContinue).SteamExe
+        if ($regExe -and (Test-Path $regExe)) { $steampth = $regExe.Replace('/', '\') }
+    }
+
+    Write-Log "Steam 版 Among Us 本体の配置待機およびダウンロード監視を開始します (最大 ${timeoutSec}秒)..."
+    
+    # 初回即時トリガー
+    try { Start-Process "steam://validate/945360" } catch {}
+
+    while ($elapsed -lt $timeoutSec) {
+        if (Test-Path "$aupath\Among Us.exe") {
+            Write-Log "Among Us 本体の配置完了を検知しました: $aupath\Among Us.exe"
+            return $true
+        }
+
+        # appmanifest から DL 進捗を取得
+        $dlBytes = 0
+        $totalBytes = 0
+        $dlPercentStr = ""
+        if (Test-Path $acfPath) {
+            try {
+                $acfContent = [System.IO.File]::ReadAllText($acfPath, [System.Text.Encoding]::UTF8)
+                if ($acfContent -match '"BytesDownloaded"\s+"(\d+)"') { $dlBytes = [int64]$matches[1] }
+                if ($acfContent -match '"BytesToDownload"\s+"(\d+)"') { $totalBytes = [int64]$matches[1] }
+                if ($totalBytes -gt 0) {
+                    $pct = [math]::Round(($dlBytes / $totalBytes) * 100)
+                    $dlMB = [math]::Round($dlBytes / 1MB)
+                    $totMB = [math]::Round($totalBytes / 1MB)
+                    $dlPercentStr = " [DL進捗: ${pct}% (${dlMB}MB / ${totMB}MB)]"
+                }
+            } catch {}
+        }
+
+        # 進捗停止（ストール）検知
+        if ($totalBytes -gt 0 -and $dlBytes -eq $lastDownloaded) {
+            $stallCount += 5
+        } else {
+            $stallCount = 0
+            $lastDownloaded = $dlBytes
+        }
+
+        # 保険①: 45秒間進捗が止まっている場合、validate プロトコルを再送信
+        if ($stallCount -eq 45 -or ($dlBytes -eq 0 -and $elapsed -eq 45)) {
+            Write-Log "⚠️ Steam ダウンロード保留/停止を検知 (45秒間進捗なし)。steam://validate/945360 を再送信します..."
+            try { Start-Process "steam://validate/945360" } catch {}
+        }
+
+        # 保険②: 90秒間進捗が完全に止まっている場合、Steam プロセスを再起動して復旧
+        if ($stallCount -ge 90 -and (-not $restartedSteam)) {
+            Write-Log "🚨 Steam プロセスのハングを検知 (90秒間進捗なし)。Steam を再起動してダウンロードを強制再開します..."
+            $restartedSteam = $true
+            try {
+                Stop-Process -Name steam -Force -ErrorAction SilentlyContinue
+                Start-Sleep -Seconds 3
+                Start-Process $steampth -ArgumentList "+app_start_validation 945360"
+                Start-Sleep -Seconds 5
+                Start-Process "steam://validate/945360"
+            } catch {
+                Write-Log "Warning: Steam 再起動失敗: $_"
+            }
+            $stallCount = 0
+        }
+
+        Start-Sleep -Seconds 5
+        $elapsed += 5
+        Write-Log "本体の配置待機中... (${elapsed}s/${timeoutSec}s)$dlPercentStr"
+    }
+
+    return (Test-Path "$aupath\Among Us.exe")
+}
 
 #################################################################################################
 # ゲーム環境・バージョンの初期検出（起動時1回のみ実行）
@@ -2654,7 +2738,10 @@ function Reload() {
             Write-Log "クリーンインストールプロセス開始 (プラットフォーム: $rn)"
 
             $cleanScriptName = if ($rn -eq "epic") { "AmongusCleanInstall_Epic.ps1" } else { "AmongusCleanInstall_Steam.ps1" }
-            $cleanScriptLocal = Join-Path $npl $cleanScriptName
+            $cleanScriptLocal = Join-Path $PSScriptRoot $cleanScriptName
+            if (!(Test-Path $cleanScriptLocal)) {
+                $cleanScriptLocal = Join-Path $npl $cleanScriptName
+            }
             if (!(Test-Path $cleanScriptLocal)) {
                 $cleanScriptLocal = Join-Path $dsk $cleanScriptName
             }
@@ -2671,10 +2758,13 @@ function Reload() {
                 $cleanProc.WaitForExit()
                 Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
                 
-                # インストール完了の待機 (最大600秒ポーリング)
-                $waitSec = 0
-                while (!(Test-Path "$script:aupatho\Among Us.exe") -and ($waitSec -lt 600)) {
-                    if ($script:platform -eq "epic") {
+                # インストール完了の待機 (最大600秒ポーリング & Steam進捗監視・フェイルセーフ)
+                if ($script:platform -eq "steam") {
+                    [void](Wait-ForSteamAmongUsInstall -aupath $script:aupatho -timeoutSec 600)
+                }
+                else {
+                    $waitSec = 0
+                    while (!(Test-Path "$script:aupatho\Among Us.exe") -and ($waitSec -lt 600)) {
                         if (Test-Path "C:\Program Files\Epic Games\Among Us\Among Us.exe") {
                             $script:aupatho = "C:\Program Files\Epic Games\Among Us"
                             $aupatho = $script:aupatho
@@ -2687,10 +2777,10 @@ function Reload() {
                             $au_path_epic_org = $script:aupatho
                             break
                         }
+                        Start-Sleep -Seconds 5
+                        $waitSec += 5
+                        Write-Log "本体の配置待機中... (${waitSec}s/600s)"
                     }
-                    Start-Sleep -Seconds 5
-                    $waitSec += 5
-                    Write-Log "本体の配置待機中... (${waitSec}s/600s)"
                 }
 
                 $aupatho = $script:aupatho
@@ -2914,6 +3004,10 @@ else {
     # -------------------------------------------------------------
     # 非対話モード: 従来通りのバックグラウンド処理
     # -------------------------------------------------------------
+    if ($TargetLatestFlag -gt 0) {
+        $latestflag = $TargetLatestFlag
+        $script:latestflag = $TargetLatestFlag
+    }
     if ($latestflag -eq 1) {
         $RadioButton114.Checked = $True
     }
@@ -3018,9 +3112,10 @@ if ($isall) {
                 if (Test-Path $childLogFile) { Remove-Item $childLogFile -Force -ErrorAction SilentlyContinue }
 
                 $platArg = if ($script:platform) { "-DeployPlatform `"$($script:platform)`"" } else { "" }
-                $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" -Args1 `"$iall`" $platArg -BatchChild -ProgressSyncFile `"$syncFile`" -ChildLogPath `"$childLogFile`""
+                $latestArg = if ($script:latestflag) { "-TargetLatestFlag $($script:latestflag)" } else { "-TargetLatestFlag 1" }
+                $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" `"$iall`" $platArg $latestArg -BatchChild -ProgressSyncFile `"$syncFile`" -ChildLogPath `"$childLogFile`""
 
-                $proc = Start-Process $psExe -ArgumentList $childArgs -Verb RunAs -PassThru
+                $proc = Start-Process $psExe -ArgumentList $childArgs -PassThru
 
                 $lastLogLength = 0
 
@@ -3076,7 +3171,8 @@ if ($isall) {
                     Start-Sleep -Milliseconds 80
                 }
 
-                # 子プロセス終了直後の最終ログ反映
+                # 子プロセス終了直後の最終ログ反映 & 恒久保存
+                $childExit = if ($proc) { $proc.ExitCode } else { -1 }
                 if (Test-Path $childLogFile) {
                     try {
                         $fs = [System.IO.FileStream]::new($childLogFile, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite)
@@ -3088,9 +3184,17 @@ if ($isall) {
                             $script:guiTxtLog.Text = "=== [$currentphase/$modsel] $currentModName デプロイ実行中 ===`r`n" + $childContent
                             if ($script:guiScrollLog) { $script:guiScrollLog.ScrollToEnd() }
                         }
+
+                        # ログファイルを C:\Temp\AUM_Deploy へ恒久保存
+                        $childLogDir = "C:\Temp\AUM_Deploy"
+                        if (!(Test-Path $childLogDir)) { New-Item $childLogDir -ItemType Directory -Force | Out-Null }
+                        $safeModName = $currentModName -replace '[:\\/*?"<>|]', '_'
+                        $childLogDest = Join-Path $childLogDir "AmongUsMod_DeployLog_Child_${currentphase}_${safeModName}.log"
+                        Copy-Item $childLogFile $childLogDest -Force
                     } catch {}
-                    Remove-Item $childLogFile -Force -ErrorAction SilentlyContinue
                 }
+
+                Write-Log "[$currentphase/$modsel] $currentModName 子プロセス完了 (ExitCode: $childExit)"
 
                 if (Test-Path $syncFile) { Remove-Item $syncFile -Force -ErrorAction SilentlyContinue }
             }
@@ -3142,6 +3246,14 @@ if ($isall) {
         }
         $window.Close()
         exit
+    }
+    else {
+        # 非対話モード (CLI / 自動テスト等) の一括完了
+        Write-Log "一括デプロイが完了しました。($currentphase/$modsel 個の MOD)"
+        Write-Log "-----------------------------------------------------------------"
+        Write-Log "MOD Installation Ends"
+        Write-Log "-----------------------------------------------------------------"
+        exit 0
     }
 }
 
@@ -3601,72 +3713,64 @@ if ($tio) {
         $tordlp = "https://github.com/eDonnes124/Town-Of-Us-R/releases/download/${torv}/ToU.${torv}.zip"
     }
     elseif ($scid -eq "SRA") {
-        #ZIPが無いときに一個前のZIPあるとこまでさかのぼる必要あり
-        $langd = @()
-        $langz = @()
+        # ZIPが無いときに一個前のZIPあるとこまでさかのぼる必要あり
         $sradllc = $false
         $srazipc = $false
 
-        for ($aii = 0; $aii -lt $($web2.assets.browser_download_url).Length; $aii++) {
-            if ($($web2.assets.browser_download_url[$aii]).IndexOf(".zip") -gt 0) {
-                $langz += $web2.assets.browser_download_url[$aii]
-            }
-        }
-        for ($aiiii = 0; $aiiii -lt $langz.Length; $aiiii++) {
-            if ($($web2.tag_name[$aiiii]) -eq "$torv") {
-                $srazip = $($langz[$aiiii])
+        # releases 配列から $torv に一致するリリースを検索
+        $targetRelease = $web2 | Where-Object { $_.tag_name -eq "$torv" } | Select-Object -First 1
+        if ($targetRelease) {
+            $zipAsset = $targetRelease.assets | Where-Object { $_.name -like "*.zip" } | Select-Object -First 1
+            if ($zipAsset) {
+                $srazip = $zipAsset.browser_download_url
                 $srazipc = $true
+            } else {
+                $dllAsset = $targetRelease.assets | Where-Object { $_.name -like "*.dll" } | Select-Object -First 1
+                if ($dllAsset) {
+                    $sradll = $dllAsset.browser_download_url
+                    $sradllc = $true
+                }
             }
         }
 
-        if (!$srazipc) {
-            for ($aii = 0; $aii -lt $($web2.assets.browser_download_url).Length; $aii++) {
-                if ($($web2.assets.browser_download_url[$aii]).IndexOf(".dll") -gt 0) {
-                    $langd += $web2.assets.browser_download_url[$aii]
+        # 見つからない場合は全リリースから探索
+        if (!$srazipc -and !$sradllc) {
+            foreach ($rel in $web2) {
+                if ($rel.tag_name -eq "$torv") {
+                    foreach ($ast in $rel.assets) {
+                        if ($ast.name -like "*.zip") {
+                            $srazip = $ast.browser_download_url
+                            $srazipc = $true
+                            break
+                        } elseif ($ast.name -like "*.dll") {
+                            $sradll = $ast.browser_download_url
+                            $sradllc = $true
+                        }
+                    }
+                    if ($srazipc) { break }
                 }
             }
-            for ($aiiii = 0; $aiiii -lt $langd.Length; $aiiii++) {
-                if ($($web2.tag_name[$aiiii]) -eq "$torv") {
-                    $sradll = $($langd[$aiiii])
-                    $sradllc = $true
-                }
-            }    
         }
 
         if ($srazipc) {
             $tordlp = $srazip
         }
         elseif ($sradllc) {
-            $detzip = $true
-            $temptorv = $torv
-            $retryCount = 0
-            while ($detzip -and ($retryCount -lt 20)) {
-                $retryCount++
-                if ($temptorv.Length -ge 5) {
-                    if ($($temptorv.Substring($temptorv.Length - 1, 1)) -eq 0) {
-                        $temptorv = "$($temptorv.Substring(0, 2))$($temptorv.Substring(2, 1)-1).9"
-                    }
-                    else {
-                        $temptorv = "$($temptorv.Substring(0, 4))$($temptorv.Substring(4, 1)-1)"
-                    }
-                    for ($aiiii = 0; $aiiii -lt $langz.Length; $aiiii++) {
-                        if ($($web2.tag_name[$aiiii]) -eq "$temptorv") {
-                            $srazip = $($langz[$aiiii])
-                            $detzip = $false
-                        }
-                    }
-                }
-                else {
+            # dll のみの場合、過去のリリースから zip を探す
+            foreach ($rel in $web2) {
+                $pastZip = $rel.assets | Where-Object { $_.name -like "*.zip" } | Select-Object -First 1
+                if ($pastZip) {
+                    $tordlp = $pastZip.browser_download_url
                     break
                 }
             }
-            $tordlp = $srazip
-            $sradll
         }
         else {
-            Write-Log "Critical Error: File Not Found."
+            # 最終フォールバック
+            $tordlp = "https://github.com/Mr-Fluuff/StellarRolesAU/releases/download/${torv}/StellarRoles.zip"
+            $srazipc = $true
         }
-
+        Write-Log "SRA ダウンロードURL: $tordlp"
     }
     elseif ($scid -eq "ER") {
         $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
@@ -3677,39 +3781,26 @@ if ($tio) {
         $exve = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeVoiceEngine.dll"
     }
     elseif ($scid -eq "TOH") {
-        $tohver = $torv.Substring(1)
-        Write-Log $tohver
-        if ($platform -eq "Steam") {
-            for ($aii = 0; $aii -lt $($web2.assets.browser_download_url).Length; $aii++) {
-                if ($($web2.assets.browser_download_url[$aii]).IndexOf("${tohver}_Steam.zip") -gt 0) {
-                    $langd += $web2.assets.browser_download_url[$aii]
-                }
-            }
-            for ($aii = 0; $aii -lt $langd.Length; $aii++) {
-                if ($($langd[$aii]).IndexOf("${tohver}") -gt 0) {
-                    $tordlp = $langd[$aii]
-                }
-            }
-            if ($tordlp.Indexof("${torv}_Steam.zip") -gt 0) {
-                $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}_Steam.zip"
+        $tohver = $torv.TrimStart('v')
+        Write-Log "TOH バージョン: $torv (tohver: $tohver)"
+        $isSteam = ($script:platform -ieq "steam" -or $platform -ieq "steam")
+        $targetKeyword = if ($isSteam) { "Steam" } else { "Epic" }
+
+        # releases 配列から $torv に一致するリリースのアセットを検索
+        $targetRelease = $web2 | Where-Object { $_.tag_name -eq "$torv" } | Select-Object -First 1
+        if ($targetRelease) {
+            $matchAsset = $targetRelease.assets | Where-Object { $_.name -like "*${targetKeyword}*.zip" } | Select-Object -First 1
+            if ($matchAsset) {
+                $tordlp = $matchAsset.browser_download_url
             }
         }
-        else {
-            for ($aii = 0; $aii -lt $($web2.assets.browser_download_url).Length; $aii++) {
-                if ($($web2.assets.browser_download_url[$aii]).IndexOf("${tohver}_Epic.zip") -gt 0) {
-                    $langd += $web2.assets.browser_download_url[$aii]
-                }
-            }
-            for ($aii = 0; $aii -lt $langd.Length; $aii++) {
-                if ($($langd[$aii]).IndexOf("${tohver}") -gt 0) {
-                    $tordlp = $langd[$aii]
-                }
-            }
-            if ($tordlp.Indexof("${torv}_Epic.zip") -gt 0) {
-                $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${torv}_Epic.zip"
-            }
+
+        # フォールバック: 直接 URL 組み立て
+        if ([string]::IsNullOrEmpty($tordlp)) {
+            $platSuffix = if ($isSteam) { "Steam" } else { "Epic" }
+            $tordlp = "https://github.com/tukasa0001/TownOfHost/releases/download/${torv}/TownOfHost-${tohver}_${platSuffix}.zip"
         }
-        Write-Log $tordlp
+        Write-Log "TOH ダウンロードURL: $tordlp"
         $exfoldn = [IO.Path]::GetFileNameWithoutExtension($(Split-Path $tordlp -Leaf));
     }
     elseif ($scid -eq "TOY") {
@@ -3731,15 +3822,24 @@ if ($tio) {
         $tordlp = "https://github.com/KiraYamato94/LasMonjas/releases/download/${torv}/Las.Monjas.${torv}.zip"
     }
     elseif ($scid -eq "SNR") {
-        if ($platform -eq "Steam") {
-            $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}_Steam.zip"
-        }
-        else {
-            $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${torv}_Epic.zip"
-        }
-        #$Agartha = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/Agartha.dll"
+        $snrver = $torv.TrimStart('v')
+        $isSteam = ($script:platform -ieq "steam" -or $platform -ieq "steam")
+        $targetKeyword = if ($isSteam) { "Steam" } else { "Epic" }
 
+        # releases 配列から $torv または v$torv に一致するリリースのアセットを検索
+        $targetRelease = $web2 | Where-Object { $_.tag_name -eq "$torv" -or $_.tag_name -eq "v$torv" } | Select-Object -First 1
+        if ($targetRelease) {
+            $matchAsset = $targetRelease.assets | Where-Object { $_.name -like "*${targetKeyword}*.zip" } | Select-Object -First 1
+            if ($matchAsset) {
+                $tordlp = $matchAsset.browser_download_url
+            }
+        }
 
+        # フォールバック: 直接 URL 組み立て
+        if ([string]::IsNullOrEmpty($tordlp)) {
+            $tordlp = "https://github.com/ykundesu/SuperNewRoles/releases/download/${torv}/SuperNewRoles-v${snrver}_${targetKeyword}.zip"
+        }
+        Write-Log "SNR ダウンロードURL: $tordlp"
     }
     elseif ($scid -eq "AMS") {
         $tordlp = "https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityIL2CPP_x86_6.0.0-pre.1.zip"
@@ -4038,9 +4138,14 @@ if ($tio) {
 
             Write-Log "クリーンインストールプロセス開始"
             if ($rn -eq "steam") {
-                $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
+                $fpth2 = Join-Path $PSScriptRoot "AmongusCleanInstall_Steam.ps1"
+                $downloadedClean = $false
+                if (!(Test-Path $fpth2)) {
+                    $fpth2 = "$npl\AmongusCleanInstall_Steam.ps1"
+                }
                 if (!(Test-Path $fpth2)) {
                     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Steam.ps1" -OutFile $fpth2 -UseBasicParsing
+                    $downloadedClean = $true
                 }
                 Unblock-File $fpth2
                 $cleanProc = Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Unrestricted -File ""$fpth2"" -Args1 `"Yes`"" -PassThru
@@ -4048,24 +4153,25 @@ if ($tio) {
                 Write-Log "クリーンインストールプロセス終了 (ExitCode: $($cleanProc.ExitCode))"
                 Start-Sleep -Seconds 5
 
-                # 本体再配置待機 (最大600秒ポーリング)
-                $waitLimitSec = 600
-                $waitElapsedSec = 0
-                while (!(Test-Path "$aupatho\Among Us.exe") -and ($waitElapsedSec -lt $waitLimitSec)) {
-                    Start-Sleep -Seconds 5
-                    $waitElapsedSec += 5
-                    Write-Log "本体の配置待機中... (${waitElapsedSec}s/${waitLimitSec}s)"
-                }
+                # 本体再配置待機 (最大600秒ポーリング & Steam進捗監視・フェイルセーフ)
+                [void](Wait-ForSteamAmongUsInstall -aupath $aupatho -timeoutSec 600)
                 if (!(Test-Path "$aupatho\Among Us.exe")) {
                     Write-Log "警告: 本体の再インストールがタイムアウトしました。"
                     if (-not $Args1) { Pause }
                 }
-                Remove-Item $fpth2 -Force -ErrorAction SilentlyContinue
+                if ($downloadedClean) {
+                    Remove-Item $fpth2 -Force -ErrorAction SilentlyContinue
+                }
             }
             elseif ($rn -eq "epic") {
-                $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
+                $fpth2 = Join-Path $PSScriptRoot "AmongusCleanInstall_Epic.ps1"
+                $downloadedClean = $false
+                if (!(Test-Path $fpth2)) {
+                    $fpth2 = "$npl\AmongusCleanInstall_Epic.ps1"
+                }
                 if (!(Test-Path $fpth2)) {
                     Invoke-WebRequest "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/AmongusCleanInstall_Epic.ps1" -OutFile $fpth2 -UseBasicParsing
+                    $downloadedClean = $true
                 }
                 Unblock-File $fpth2
                 $cleanProc = Start-Process pwsh.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File ""$fpth2"" -Args1 `"Yes`"" -PassThru
@@ -4097,7 +4203,9 @@ if ($tio) {
                     Write-Log "警告: 本体の再インストールがタイムアウトしました。"
                     if (-not $Args1) { Pause }
                 }
-                Remove-Item $fpth2 -Force -ErrorAction SilentlyContinue
+                if ($downloadedClean) {
+                    Remove-Item $fpth2 -Force -ErrorAction SilentlyContinue
+                }
             }
             else {
                 Write-Log "Critical Platform Selection"
