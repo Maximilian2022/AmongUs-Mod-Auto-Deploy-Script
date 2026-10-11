@@ -3113,7 +3113,8 @@ if ($isall) {
 
                 $platArg = if ($script:platform) { "-DeployPlatform `"$($script:platform)`"" } else { "" }
                 $latestArg = if ($script:latestflag) { "-TargetLatestFlag $($script:latestflag)" } else { "-TargetLatestFlag 1" }
-                $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -File `"$deployScriptPath`" `"$iall`" $platArg $latestArg -BatchChild -ProgressSyncFile `"$syncFile`" -ChildLogPath `"$childLogFile`""
+                $childScriptCmd = "& `"$deployScriptPath`" `"$iall`" $platArg $latestArg -BatchChild -ProgressSyncFile `"$syncFile`" -ChildLogPath `"$childLogFile`""
+                $childArgs = "-NoProfile -ExecutionPolicy Unrestricted -WindowStyle Minimized -Command `"$childScriptCmd`""
 
                 $proc = Start-Process $psExe -ArgumentList $childArgs -PassThru
 
