@@ -2225,166 +2225,66 @@ function Reload() {
     }
 
     if ($tio) {
-        #GithubのRelease一覧からぶっこぬく
-        if (($scid -eq "TOR GMH") -or ($scid -eq "TOR GMT")) {
-            if ($null -eq $script:gmhweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:gmhweb = $web 
-            }
-            else {
-                $web = $script:gmhweb 
-            }
-        }
-        elseif ($scid -eq "TOR MR") {
-            if ($null -eq $script:mrweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:mrweb = $web 
-            }
-            else {
-                $web = $script:mrweb 
-            }
-        }
-        elseif ($scid -eq "TOR") {
-            if ($null -eq $script:torweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:torweb = $web 
-            }
-            else {
-                $web = $script:torweb 
-            }
-        }
-        elseif ($scid -eq "TOU-R") {
-            if ($null -eq $script:tourweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:tourweb = $web 
-            }
-            else {
-                $web = $script:tourweb 
-            }
-        }
-        elseif ($scid -eq "SRA") {
-            if ($null -eq $script:sraweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:sraweb = $web 
-            }
-            else {
-                $web = $script:sraweb 
-            }
-        }
-        elseif (($scid -eq "ER") -or ($scid -eq "ER+ES")) {
-            if ($null -eq $script:erweb) {
-                if ($null -ne $script:prefetchJobs["ER"]) {
-                    $job = $script:prefetchJobs["ER"]
-                    $webResult = $job.PowerShell.EndInvoke($job.AsyncResult)
-                    $job.PowerShell.Dispose()
-                    $script:prefetchJobs.Remove("ER")
-                    $actualWeb = $webResult | Select-Object -First 1
-                    if ($null -ne $actualWeb -and (-not [string]::IsNullOrWhiteSpace($actualWeb.Content))) {
-                        $script:erweb = $actualWeb
-                    }
+        # Github の Release 一覧取得 (プレフェッチ回収・キャッシュ照合・安全な try-catch)
+        $web = $null
+        # 1. プレフェッチジョブがあれば回収
+        if ($null -ne $script:prefetchJobs -and $null -ne $script:prefetchJobs[$scid]) {
+            try {
+                $job = $script:prefetchJobs[$scid]
+                $webResult = $job.PowerShell.EndInvoke($job.AsyncResult)
+                $job.PowerShell.Dispose()
+                $script:prefetchJobs.Remove($scid)
+                $actualWeb = $webResult | Select-Object -First 1
+                if ($null -ne $actualWeb -and (-not [string]::IsNullOrWhiteSpace($actualWeb.Content))) {
+                    $web = $actualWeb
                 }
-                if ($null -eq $script:erweb) {
-                    $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                    $script:erweb = $web 
-                }
-            }
-            else {
-                $web = $script:erweb 
+            } catch {}
+        }
+        # 2. キャッシュから取得
+        if ($null -eq $web) {
+            $web = switch ($scid) {
+                "NOS" { $script:nosweb }
+                "NOT" { $script:nosweb }
+                "SNR" { $script:snrweb }
+                "ER" { $script:erweb }
+                "ER+ES" { $script:erweb }
+                "SRA" { $script:sraweb }
+                "LM" { $script:lmweb }
+                "TOH" { $script:tohweb }
+                "TOY" { $script:toyweb }
+                "TOR" { $script:torweb }
+                "TOU-R" { $script:tourweb }
+                "TOR GMH" { $script:gmhweb }
+                "TOR MR" { $script:mrweb }
+                "RHR" { $script:rhrweb }
+                "AMS" { $script:amsweb }
+                default { $null }
             }
         }
-        elseif (($scid -eq "NOS") -or ($scid -eq "NOT")) {
-            if ($null -eq $script:nosweb) {
-                if ($null -ne $script:prefetchJobs["NOS"]) {
-                    $job = $script:prefetchJobs["NOS"]
-                    $webResult = $job.PowerShell.EndInvoke($job.AsyncResult)
-                    $job.PowerShell.Dispose()
-                    $script:prefetchJobs.Remove("NOS")
-                    $actualWeb = $webResult | Select-Object -First 1
-                    if ($null -ne $actualWeb -and (-not [string]::IsNullOrWhiteSpace($actualWeb.Content))) {
-                        $script:nosweb = $actualWeb
-                    }
-                }
-                if ($null -eq $script:nosweb) {
-                    $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                    $script:nosweb = $web 
-                }
-            }
-            else {
-                $web = $script:nosweb 
-            }
-        }
-        elseif ($scid -eq "LM") {
-            if ($null -eq $script:lmweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:lmweb = $web 
-            }
-            else {
-                $web = $script:lmweb 
-            }
-        }
-        elseif ($scid -eq "SNR") {
-            if ($null -eq $script:snrweb) {
-                if ($null -ne $script:prefetchJobs["SNR"]) {
-                    $job = $script:prefetchJobs["SNR"]
-                    $webResult = $job.PowerShell.EndInvoke($job.AsyncResult)
-                    $job.PowerShell.Dispose()
-                    $script:prefetchJobs.Remove("SNR")
-                    $actualWeb = $webResult | Select-Object -First 1
-                    if ($null -ne $actualWeb -and (-not [string]::IsNullOrWhiteSpace($actualWeb.Content))) {
-                        $script:snrweb = $actualWeb
-                    }
-                }
-                if ($null -eq $script:snrweb) {
-                    $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                    $script:snrweb = $web 
-                }
-            }
-            else {
-                $web = $script:snrweb 
-            }
-        }
-        elseif ($scid -eq "TOH") {
-            if ($null -eq $script:tohweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:tohweb = $web 
-            }
-            else {
-                $web = $script:tohweb 
-            }
-        }
-        elseif ($scid -eq "TOY") {
-            if ($null -eq $script:toyweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:toyweb = $web 
-            }
-            else {
-                $web = $script:toyweb 
-            }
-        }
-        elseif ($scid -eq "RHR") {
-            if ($null -eq $script:rhrweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:rhrweb = $web 
-            }
-            else {
-                $web = $script:rhrweb 
-            }
-        }
-        elseif ($scid -eq "AMS") {
-            if ($null -eq $script:amsweb) {
-                $web = Invoke-WebRequest $releasepage2 -UseBasicParsing
-                $script:amsweb = $web 
-            }
-            else {
-                $web = $script:amsweb 
-            }
-        }
+        # 3. 未取得の場合は Web リクエスト実行 (try-catch で 403 / タイムアウトを完全保護)
         if ($null -eq $web -or [string]::IsNullOrWhiteSpace($web.Content)) {
             try {
                 $web = Invoke-WebRequest $releasepage2 -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop
+                switch ($scid) {
+                    "NOS" { $script:nosweb = $web }
+                    "NOT" { $script:nosweb = $web }
+                    "SNR" { $script:snrweb = $web }
+                    "ER" { $script:erweb = $web }
+                    "ER+ES" { $script:erweb = $web }
+                    "SRA" { $script:sraweb = $web }
+                    "LM" { $script:lmweb = $web }
+                    "TOH" { $script:tohweb = $web }
+                    "TOY" { $script:toyweb = $web }
+                    "TOR" { $script:torweb = $web }
+                    "TOU-R" { $script:tourweb = $web }
+                    "TOR GMH" { $script:gmhweb = $web }
+                    "TOR MR" { $script:mrweb = $web }
+                    "RHR" { $script:rhrweb = $web }
+                    "AMS" { $script:amsweb = $web }
+                }
             }
             catch {
-                Write-Log "リリース一覧取得スキップ (API制限または通信エラー): $_"
+                Write-Log "$scid リリース一覧取得スキップ (API制限または通信エラー): $_"
                 $web = $null
             }
         }
@@ -2421,41 +2321,21 @@ function Reload() {
                         }
                     }            
                 }
-                elseif ($scid -eq "ER") {
+                elseif (($scid -eq "ER") -or ($scid -eq "ER+ES")) {
+                    $minV = try { [version]($script:aumin.TrimStart('v')) } catch { $null }
+                    $maxV = try { [version]($script:aumax.TrimStart('v')) } catch { $null }
                     for ($ai = 0; $ai -lt $web2.tag_name.Length; $ai++) {
-                        $temptag = $($web2.tag_name[$ai])
-                        $tempmin = $script:aumin
-                        $tempmax = $script:aumax
-                        if ($temptag.IndexOf("v1") -lt 0) {
-                            $temptag = $temptag.Replace("v", "v0")
+                        $rawTag = $($web2.tag_name[$ai])
+                        $curV = try { [version]($rawTag.TrimStart('v')) } catch { $null }
+                        if ($null -ne $minV -and $null -ne $maxV -and $null -ne $curV) {
+                            if (($curV -ge $minV) -and ($curV -lt $maxV)) {
+                                $list2 += $rawTag
+                            }
                         }
-                        if ($tempmin.IndexOf("v1") -lt 0) {
-                            $tempmin = $tempmin.Replace("v", "v0")
-                        }
-                        if ($tempmax.IndexOf("v1") -lt 0) {
-                            $tempmax = $tempmax.Replace("v", "v0")
-                        }
-                        if (($temptag -ge $tempmin) -and ($temptag -lt $tempmax)) {
-                            $list2 += $($web2.tag_name[$ai])
-                        }
-                    }
-                }
-                elseif ($scid -eq "ER+ES") {
-                    for ($ai = 0; $ai -lt $web2.tag_name.Length; $ai++) {
-                        $temptag = $($web2.tag_name[$ai])
-                        $tempmin = $script:aumin
-                        $tempmax = $script:aumax
-                        if ($temptag.IndexOf("v1") -lt 0) {
-                            $temptag = $temptag.Replace("v", "v0")
-                        }
-                        if ($tempmin.IndexOf("v1") -lt 0) {
-                            $tempmin = $tempmin.Replace("v", "v0")
-                        }
-                        if ($tempmax.IndexOf("v1") -lt 0) {
-                            $tempmax = $tempmax.Replace("v", "v0")
-                        }
-                        if (($temptag -ge $tempmin) -and ($temptag -lt $tempmax)) {
-                            $list2 += $($web2.tag_name[$ai])
+                        else {
+                            if (($rawTag -ge $script:aumin) -and ($rawTag -lt $script:aumax)) {
+                                $list2 += $rawTag
+                            }
                         }
                     }
                 }
@@ -2488,33 +2368,20 @@ function Reload() {
                         }
                     }            
                 }
-                elseif ($scid -eq "ER") {
+                elseif (($scid -eq "ER") -or ($scid -eq "ER+ES")) {
+                    $minV = try { [version]($script:aumin.TrimStart('v')) } catch { $null }
                     for ($ai = 0; $ai -lt $web2.tag_name.Length; $ai++) {
-                        $temptag = $($web2.tag_name[$ai])
-                        $tempmin = $script:aumin
-                        if ($temptag.IndexOf("v1") -lt 0) {
-                            $temptag = $temptag.Replace("v", "v0")
+                        $rawTag = $($web2.tag_name[$ai])
+                        $curV = try { [version]($rawTag.TrimStart('v')) } catch { $null }
+                        if ($null -ne $minV -and $null -ne $curV) {
+                            if ($curV -ge $minV) {
+                                $list2 += $rawTag
+                            }
                         }
-                        if ($tempmin.IndexOf("v1") -lt 0) {
-                            $tempmin = $tempmin.Replace("v", "v0")
-                        }
-                        if ($temptag -ge $tempmin) {
-                            $list2 += $($web2.tag_name[$ai])
-                        }
-                    }
-                }
-                elseif ($scid -eq "ER+ES") {
-                    for ($ai = 0; $ai -lt $web2.tag_name.Length; $ai++) {
-                        $temptag = $($web2.tag_name[$ai])
-                        $tempmin = $script:aumin
-                        if ($temptag.IndexOf("v1") -lt 0) {
-                            $temptag = $temptag.Replace("v", "v0")
-                        }
-                        if ($tempmin.IndexOf("v1") -lt 0) {
-                            $tempmin = $tempmin.Replace("v", "v0")
-                        }
-                        if ($temptag -ge $tempmin) {
-                            $list2 += $($web2.tag_name[$ai])
+                        else {
+                            if ($rawTag -ge $script:aumin) {
+                                $list2 += $rawTag
+                            }
                         }
                     }
                 }
@@ -2525,33 +2392,11 @@ function Reload() {
                         }
                     }
                 }    
-                #Write-Log "Version List"
-                #Write-Log $list2
-                $templist2 = @()
-                $templist3 = @()
-                $venable = $false
-                if (($scid -eq "NOS") -or ($scid -eq "NOT") -or ($scid -eq "ER") -or ($scid -eq "ER+ES") -or ($scid -eq "SRA") -or ($scid -eq "TOH") -or ($scid -eq "TOY")) {
-                    $venable = $true
-                    for ($aa = 0; $aa -lt $list2.length; $aa++) {
-                        #Write-Log $list2[$aa] 
-                        #Write-Log $list2[$aa].TrimStart("v") 
-                        $templist2 += $($list2[$aa]).TrimStart("v") 
-                    }
-                    $list2 = $templist2 | Sort-Object { $_ -as [version] } -Descending
-                    #Write-Log $list2
-                }
-                if ($venable) {
-                    for ($aa = 0; $aa -lt $list2.length; $aa++) {
-                        $templist3 += "v$($list2[$aa])" 
-                    }
-                    $list2 = $templist3
-                }
-                else {
-                    if ($list2.Length -gt 1) {
-                        $list2 = $list2 | Sort-Object { $_ -as [version] } -Descending
-                    }
-                }
-                #Write-Log $list2
+                # バージョン降順ソート (@() で配列型を厳密に保持し、要素数1個での文字分解バグを完全防止)
+                $list2 = @($list2 | Sort-Object {
+                    $clean = "$_".TrimStart('v')
+                    try { [version]$clean } catch { [version]'0.0.0.0' }
+                } -Descending)
             }
         }
         else {
@@ -3789,12 +3634,34 @@ if ($tio) {
         Write-Log "SRA ダウンロードURL: $tordlp"
     }
     elseif ($scid -eq "ER") {
-        $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
+        # releases 配列から $torv に一致するリリースのアセットを検索
+        $targetRelease = $web2 | Where-Object { $_.tag_name -eq "$torv" } | Select-Object -First 1
+        if ($targetRelease) {
+            $matchAsset = $targetRelease.assets | Where-Object { $_.name -like "ExtremeRoles*.zip" -and $_.name -notlike "*with.Extreme.Skins*" } | Select-Object -First 1
+            if ($matchAsset) {
+                $tordlp = $matchAsset.browser_download_url
+            }
+        }
+        if ([string]::IsNullOrEmpty($tordlp)) {
+            $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.zip"
+        }
         $exve = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeVoiceEngine.dll"
+        Write-Log "ER ダウンロードURL: $tordlp"
     }
     elseif ($scid -eq "ER+ES") {
-        $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
+        # releases 配列から $torv に一致するリリースのアセットを検索
+        $targetRelease = $web2 | Where-Object { $_.tag_name -eq "$torv" } | Select-Object -First 1
+        if ($targetRelease) {
+            $matchAsset = $targetRelease.assets | Where-Object { $_.name -like "*with.Extreme.Skins*.zip" } | Select-Object -First 1
+            if ($matchAsset) {
+                $tordlp = $matchAsset.browser_download_url
+            }
+        }
+        if ([string]::IsNullOrEmpty($tordlp)) {
+            $tordlp = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeRoles-${torv}.with.Extreme.Skins.zip"
+        }
         $exve = "https://github.com/yukieiji/ExtremeRoles/releases/download/${torv}/ExtremeVoiceEngine.dll"
+        Write-Log "ER+ES ダウンロードURL: $tordlp"
     }
     elseif ($scid -eq "TOH") {
         $tohver = $torv.TrimStart('v')
@@ -5413,6 +5280,10 @@ if ($ckbci.Count -gt 0) {
             }
         }
         elseif ($ckbci[$aa] -eq "VOICEVOX") {
+            if ($BatchChild -or $isall) {
+                Write-Log "一括デプロイ実行中のため、VOICEVOX の対話インストールはスキップします。"
+                continue
+            }
             try {
                 choco -v
             }
@@ -5421,21 +5292,22 @@ if ($ckbci.Count -gt 0) {
             }
             #https://github.com/VOICEVOX/voicevox/releases/tag/0.14.6
             Start-Process pwsh -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -Command choco upgrade aria2 dotnet-desktopruntime dotnet-5.0-desktopruntime dotnet-6.0-desktopruntime dotnet-7.0-desktopruntime dotnet-8.0-desktopruntime dotnet-9.0-desktopruntime dotnet -y" -Verb RunAs -Wait   
-            $aucap = (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/VOICEVOX/voicevox/releases/latest" -UseBasicParsing)).assets.browser_download_url
+            $aucap = try { (ConvertFrom-Json (Invoke-WebRequest "https://api.github.com/repos/VOICEVOX/voicevox/releases/latest" -UseBasicParsing -TimeoutSec 10)).assets.browser_download_url } catch { $null }
             #GPU check
             # ビデオカード
+            $videoName = ""
             try {
-                $VideoController = Get-WmiObject Win32_VideoController
-                Write-log "ビデオカード:" $VideoController.Name    
+                $VideoController = Get-WmiObject Win32_VideoController -ErrorAction SilentlyContinue
+                if ($VideoController -and $VideoController.Name) {
+                    $videoName = "$($VideoController.Name)"
+                }
+                Write-log "ビデオカード: $videoName"    
             }
             catch {
-                for ($vve = 0; $vve -lt $aucap.count; $vve++) {
-                    if ($($aucap[$vve]).contains("VOICEVOX.Web.Setup")) {
-                        $vvexe = $($aucap[$vve])
-                    }
-                }    
+                $videoName = ""
             }
-            if ($($VideoController.Name).contains("nvidia")) {
+            $vvexe = $null
+            if ($videoName.ToLower().Contains("nvidia")) {
                 for ($vve = 0; $vve -lt $aucap.count; $vve++) {
                     if ($($aucap[$vve]).contains("VOICEVOX-CUDA.Web.Setup")) {
                         $vvexe = $($aucap[$vve])
@@ -5449,10 +5321,12 @@ if ($ckbci.Count -gt 0) {
                     }
                 }    
             }
-            Write-Log $vvexe          
-            aria2c -x16 -s16 -j16 -V --allow-overwrite=true --dir "$dsk" -o "VOICEVOX.Web.Setup.exe" $vvexe                
-            Start-process "$dsk\VOICEVOX.Web.Setup.exe" -Verb RunAs -Wait
-            Remove-Item "$dsk\VOICEVOX*" -Force
+            if ($vvexe) {
+                Write-Log $vvexe          
+                aria2c -x16 -s16 -j16 -V --allow-overwrite=true --dir "$dsk" -o "VOICEVOX.Web.Setup.exe" $vvexe                
+                Start-process "$dsk\VOICEVOX.Web.Setup.exe" -Verb RunAs -Wait
+                Remove-Item "$dsk\VOICEVOX*" -Force
+            }
             $Bar.Value = "85"
         }
         elseif ($ckbci[$aa] -eq "VC Redist") {

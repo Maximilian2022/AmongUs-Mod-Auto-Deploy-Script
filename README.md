@@ -11,12 +11,9 @@
  ・Extreme Roles (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
  ・Extreme Roles with Extreme Skins (<a rel="noreferrer noopener" href="https://github.com/yukieiji/ExtremeRoles" target="_blank">yukieiji/ExtremeRoles</a>)<br>
  ・SuperNewRoles (<a rel="noreferrer noopener" href="https://github.com/ykundesu/SuperNewRoles" target="_blank">ykundesu/SuperNewRoles</a>)<br>
- ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
- ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
  ・StellarRoles (<a rel="noreferrer noopener" href="https://github.com/Mr-Fluuff/StellarRolesAU" target="_blank">Mr-Fluuff/StellarRolesAU</a>)<br>
  ・Las Monjas (<a rel="noreferrer noopener" href="https://github.com/KiraYamato94/LasMonjas" target="_blank">KiraYamato94/LasMonjas</a>)<br>
  ・TownOfHost (<a rel="noreferrer noopener" href="https://github.com/tukasa0001/TownOfHost" target="_blank">tukasa0001/TownOfHost</a>)<br>
- ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
 </p>
 <p>Option<br>
   ・Submerged (<a rel="noreferrer noopener" href="https://github.com/SubmergedAmongUs/Submerged" target="_blank">SubmergedAmongUs/Submerged</a>)<br>
@@ -121,6 +118,15 @@ EpicはGame Launcherにインストールパスを都度変更する形での実
  <br>
  Q. 多言語対応していますか？ <br>
  A. OS言語で動作します。 <br>
+ <br>
+ Q. 「GitHub の制限」でダウンロードやバージョン一覧の取得に失敗します <br>
+ A. 同じネットワーク(IPアドレス)から短時間に GitHub API / ダウンロードを繰り返すと、GitHub 側で一時的に制限されます（未認証 API は 1 時間あたり 60 回まで）。<br>
+ 　一括インストールや連続テスト直後に発生しやすく、制限が解除されるまで（目安 1 時間程度）時間を空けて再実行してください。<br>
+ 　バージョン一覧が取得できない場合でも、本Scriptは各 MOD の最小対応バージョンへ自動的にフォールバックして処理を継続します。<br>
+ 　別の回線（別のデフォルトゲートウェイ等）から実行すると、すぐに再開できる場合があります。<br>
+ <br>
+ Q. 一括インストールの途中で「エラー 112」(ディスク容量不足) になります <br>
+ A. 1 MOD あたり約 1.1GB のゲーム本体コピーが作成されるため、全 MOD を一括導入すると 8GB 以上を消費します。C ドライブに十分な空き容量（目安 20GB 以上）を確保してください。<br>
 </p>
 <!-- /wp:paragraph -->
 
@@ -184,6 +190,9 @@ EpicはGame Launcherにインストールパスを都度変更する形での実
  ・AUMod (<a rel="noreferrer noopener" href="https://github.com/tomarai/AUMod" target="_blank">tomarai/AUMod</a>)<br>
  ・The Other Roles: MR Edition (<a rel="noreferrer noopener" href="https://github.com/miru-y/TheOtherRoles-MR" target="_blank">miru-y/TheOtherRoles-MR</a>)<br>
  ・AUModS (<a rel="noreferrer noopener" href="https://github.com/AUModS/AUModS" target="_blank">AUModS/AUModS</a>)<br>
+ ・The Other Roles (<a rel="noreferrer noopener" href="https://github.com/Eisbison/TheOtherRoles" target="_blank">Eisbison/TheOtherRoles</a>)<br>
+ ・Town of Us Reactivated (<a rel="noreferrer noopener" href="https://github.com/eDonnes124/Town-Of-Us-R" target="_blank">eDonnes124/Town-Of-Us-R</a>)<br>
+ ・TownOfHost_Y (<a rel="noreferrer noopener" href="https://github.com/Yumenopai/TownOfHost_Y" target="_blank">Yumenopai/TownOfHost_Y</a>)<br>
 
 <br>
 </p>
