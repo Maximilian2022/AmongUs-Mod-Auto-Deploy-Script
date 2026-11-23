@@ -1,4 +1,4 @@
-﻿Param(
+Param(
     $Args1, #skipconfirmation
     [switch]$DebugMode,
     [string]$DeployPlatform,
@@ -70,6 +70,7 @@ $prevtargetid1 = "7623608153396667062"
 $prever0 = "2026.8.18"
 $prevtargetid0 = "1397756378225229500"
 #2026.9.29 990035194164819049 v19
+$script:nosFallbackTag = "v3.5.3.6"
 $gmhbool = $false #flag for Test
 #Testdll: Snapshot 22.11.21c
 #$torgmdll = "https://github.com/Dolly1016/Nebula/releases/download/snapshot/Nebula.dll"
@@ -79,6 +80,112 @@ $icorenew = $false
 #TOR plus, TOR GM, TOR GMH, AUM ,TOR, TOU-R, TOYis depricated.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $ProgressPreference = 'SilentlyContinue'
+
+#################################################################################################
+# Version Manifest Loader (GitHub Raw / Local Fallback)
+#################################################################################################
+function Initialize-VersionManifest {
+    $manifestUrl = "https://raw.githubusercontent.com/Maximilian2022/AmongUs-Mod-Auto-Deploy-Script/main/config/version_manifest.json"
+    $baseDir = if ($PSScriptRoot) { $PSScriptRoot } elseif ($PSCommandPath) { Split-Path -Parent $PSCommandPath } else { (Get-Location).Path }
+    $localManifestPath = if ($baseDir) { Join-Path $baseDir "config\version_manifest.json" } else { $null }
+    $rawJson = $null
+    $sourceLabel = "Built-in Fallback"
+
+    if (-not [string]::IsNullOrWhiteSpace($env:AUMADS_MANIFEST_JSON)) {
+        $rawJson = $env:AUMADS_MANIFEST_JSON
+        $sourceLabel = "Parent Cache"
+    }
+    elseif (($env:AUMADS_USE_LOCAL_MANIFEST -eq "1") -and ($localManifestPath) -and (Test-Path $localManifestPath)) {
+        try {
+            $rawJson = [System.IO.File]::ReadAllText($localManifestPath, [System.Text.Encoding]::UTF8)
+            $sourceLabel = "Local File ($localManifestPath)"
+        }
+        catch {}
+    }
+    else {
+        try {
+            $resp = Invoke-WebRequest -Uri $manifestUrl -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
+            if (($null -ne $resp) -and (-not [string]::IsNullOrWhiteSpace($resp.Content))) {
+                $rawJson = $resp.Content
+                $sourceLabel = "GitHub Raw"
+            }
+        }
+        catch {
+            if (($localManifestPath) -and (Test-Path $localManifestPath)) {
+                try {
+                    $rawJson = [System.IO.File]::ReadAllText($localManifestPath, [System.Text.Encoding]::UTF8)
+                    $sourceLabel = "Local Fallback ($localManifestPath)"
+                }
+                catch {}
+            }
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($rawJson)) {
+        Write-Output "$Log Version Manifest: $sourceLabel"
+        return
+    }
+
+    try {
+        $manifest = $rawJson | ConvertFrom-Json -ErrorAction Stop
+        if ($null -eq $manifest) { return }
+
+        if ($manifest.amongUs) {
+            if (($manifest.amongUs.prev0) -and (-not [string]::IsNullOrWhiteSpace($manifest.amongUs.prev0.gameVer))) {
+                $script:prever0 = [string]$manifest.amongUs.prev0.gameVer
+            }
+            if (($manifest.amongUs.prev0) -and (-not [string]::IsNullOrWhiteSpace($manifest.amongUs.prev0.manifestId))) {
+                $script:prevtargetid0 = [string]$manifest.amongUs.prev0.manifestId
+            }
+            if (($manifest.amongUs.prev1) -and (-not [string]::IsNullOrWhiteSpace($manifest.amongUs.prev1.gameVer))) {
+                $script:prever1 = [string]$manifest.amongUs.prev1.gameVer
+            }
+            if (($manifest.amongUs.prev1) -and (-not [string]::IsNullOrWhiteSpace($manifest.amongUs.prev1.manifestId))) {
+                $script:prevtargetid1 = [string]$manifest.amongUs.prev1.manifestId
+            }
+        }
+
+        if ($manifest.mods) {
+            $modVarMap = @{
+                "ER"    = @("ermin", "ermin1", "ermin2")
+                "ER+ES" = @("esmin", "esmin1", "esmin2")
+                "TOR"   = @("tormin", "tormin1", "tormin2")
+                "TOU-R" = @("tourmin", "tourmin1", "tourmin2")
+                "TOH"   = @("tohmin", "tohmin1", "tohmin2")
+                "SNR"   = @("snrmin", "snrmin1", "snrmin2")
+                "LM"    = @("lmmin", "lmmin1", "lmmin2")
+                "NOS"   = @("nosmin", "nosmin1", "nosmin2")
+                "TOY"   = @("toymin", "toymin1", "toymin2")
+                "SRA"   = @("sramin", "sramin1", "sramin2")
+            }
+            foreach ($modKey in $modVarMap.Keys) {
+                $modCfg = $manifest.mods.$modKey
+                if ($null -ne $modCfg) {
+                    $varNames = $modVarMap[$modKey]
+                    if (-not [string]::IsNullOrWhiteSpace($modCfg.latest)) {
+                        Set-Variable -Name $varNames[0] -Value ([string]$modCfg.latest) -Scope Script
+                    }
+                    if (-not [string]::IsNullOrWhiteSpace($modCfg.prev0)) {
+                        Set-Variable -Name $varNames[1] -Value ([string]$modCfg.prev0) -Scope Script
+                    }
+                    if (-not [string]::IsNullOrWhiteSpace($modCfg.prev1)) {
+                        Set-Variable -Name $varNames[2] -Value ([string]$modCfg.prev1) -Scope Script
+                    }
+                    if (($modKey -eq "NOS") -and (-not [string]::IsNullOrWhiteSpace($modCfg.fallbackTag))) {
+                        $script:nosFallbackTag = [string]$modCfg.fallbackTag
+                    }
+                }
+            }
+        }
+
+        $env:AUMADS_MANIFEST_JSON = $rawJson
+        Write-Output "$Log Version Manifest Loaded ($sourceLabel / updatedAt=$($manifest.updatedAt))"
+    }
+    catch {
+        Write-Output "$Log Version Manifest Parse Fallback: $_"
+    }
+}
+Initialize-VersionManifest
 
 #################################################################################################
 # Translate Function with Caching
@@ -2404,7 +2511,7 @@ function Reload() {
         }
         if ($list2.length -eq 0) {
             if ($script:aumin -ne "NONE" -and ![string]::IsNullOrEmpty($script:aumin)) {
-                $fallbackTag = if ($scid -eq "NOS") { "v3.5.3.6" } else { $script:aumin }
+                $fallbackTag = if ($scid -eq "NOS") { if ($script:nosFallbackTag) { $script:nosFallbackTag } else { "v3.5.3.6" } } else { $script:aumin }
                 Write-Log "リリース一覧取得不可のため最小対応バージョン ($fallbackTag) をフォールバックとして採用します"
                 $list2 = @($fallbackTag)
             }

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-11T00:00:00Z",
+  "amongUs": {
+    "latest": {
+      "major": "v19",
+      "gameVer": "2026.9.29",
+      "manifestId": "990035194164819049",
+      "buildId": "25134893",
+      "releaseDate": "2026-09-29",
+      "nosGeneration": "110",
+      "notes": "The Influencer update / Among Us v19.0.0"
+    },
+    "prev0": {
+      "major": "v18",
+      "gameVer": "2026.8.18",
+      "manifestId": "1397756378225229500",
+      "buildId": "24302054",
+      "releaseDate": "2026-08-18",
+      "nosGeneration": "109",
+      "notes": "Among Us v18.0.0"
+    },
+    "prev1": {
+      "major": "v17",
+      "gameVer": "2026.6.5",
+      "manifestId": "7623608153396667062",
+      "buildId": "",
+      "releaseDate": "2026-06-05",
+      "nosGeneration": "107",
+      "notes": "Among Us v17.0.0"
+    },
+    "history": [
+      {
+        "major": "v16",
+        "gameVer": "2026.2.17",
+        "manifestId": "8416065559776121687",
+        "releaseDate": "2026-02-17",
+        "nosGeneration": null,
+        "notes": "Historical manifest entry"
+      },
+      {
+        "major": "v15",
+        "gameVer": "2025.9.9",
+        "manifestId": "4146372421172743268",
+        "releaseDate": "2025-09-09",
+        "nosGeneration": null,
+        "notes": "Historical manifest entry"
+      },
+      {
+        "major": "v14",
+        "gameVer": "2025.6.10",
+        "manifestId": "1298083356997541927",
+        "releaseDate": "2025-06-10",
+        "nosGeneration": null,
+        "notes": "Historical manifest entry"
+      }
+    ]
+  },
+  "mods": {
+    "ER": {
+      "repo": "yukieiji/ExtremeRoles",
+      "latest": "v2026.9.30.0",
+      "prev0": "v2026.8.19.0",
+      "prev1": "v2025.9.10.0",
+      "deprecated": false
+    },
+    "ER+ES": {
+      "repo": "yukieiji/ExtremeRoles",
+      "latest": "v2026.9.30.0",
+      "prev0": "v2026.8.19.0",
+      "prev1": "v2025.9.10.0",
+      "deprecated": false
+    },
+    "SNR": {
+      "repo": "ykundesu/SuperNewRoles",
+      "latest": "3.3.0.0",
+      "prev0": "3.2.0.0",
+      "prev1": "3.1.0.0",
+      "deprecated": false
+    },
+    "LM": {
+      "repo": "KiraYamato94/LasMonjas",
+      "latest": "4.0.1",
+      "prev0": "3.9.3",
+      "prev1": "3.9.0",
+      "deprecated": false
+    },
+    "NOS": {
+      "repo": "Dolly1016/Nebula",
+      "latest": "110",
+      "prev0": "109",
+      "prev1": "107",
+      "fallbackTag": "v3.5.3.6",
+      "deprecated": false
+    },
+    "SRA": {
+      "repo": "Mr-Fluuff/StellarRolesAU",
+      "latest": "v2026.10.8",
+      "prev0": "v2025.6.11",
+      "prev1": "v2025.6.8",
+      "deprecated": false
+    },
+    "TOH": {
+      "repo": "tukasa0001/TownOfHost",
+      "latest": "v5.1.13",
+      "prev0": "NONE",
+      "prev1": "v5.1.13",
+      "deprecated": false,
+      "keepExistingWhenNoNewRelease": true
+    },
+    "TOR": {
+      "repo": "TheOtherRolesAU/TheOtherRoles",
+      "latest": "NONE",
+      "prev0": "NONE",
+      "prev1": "NONE",
+      "deprecated": true
+    },
+    "TOU-R": {
+      "repo": "eDonnes124/Town-Of-Us-R",
+      "latest": "NONE",
+      "prev0": "NONE",
+      "prev1": "NONE",
+      "deprecated": true
+    },
+    "TOY": {
+      "repo": "Yumenopai/TownOfHost_Y",
+      "latest": "NONE",
+      "prev0": "NONE",
+      "prev1": "NONE",
+      "deprecated": true
+    }
+  }
+}

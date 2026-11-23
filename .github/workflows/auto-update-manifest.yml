@@ -1,0 +1,114 @@
+name: Auto Update Version Manifest
+
+on:
+  schedule:
+    # Check every 6 hours (UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (do not commit changes)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-update-version-manifest
+  cancel-in-progress: false
+
+jobs:
+  update-manifest:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run version manifest updater
+        id: updater
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $argsList = @(".github/scripts/update_version_manifest.py", "--verify-urls")
+          if ("${{ inputs.dry_run }}" -eq "true") {
+            $argsList += "--dry-run"
+          }
+          $output = & python @argsList 2>&1 | Out-String
+          Write-Host $output
+          $output | Out-File -FilePath "$env:RUNNER_TEMP\updater_log.txt" -Encoding utf8
+
+      - name: Validate JSON and PowerShell manifest loading
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          # 1. Validate JSON schema and required keys
+          $m = Get-Content -Path "config/version_manifest.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          if ((-not $m.amongUs.prev0.manifestId) -or (-not $m.amongUs.prev1.manifestId)) {
+            throw "Missing required amongUs prev0/prev1 manifestId"
+          }
+          if (-not $m.mods.NOS.latest -or -not $m.mods.ER.latest) {
+            throw "Missing required active mod entries"
+          }
+
+          # 2. Validate PS1 syntax and UTF-8 BOM
+          $psPath = (Resolve-Path "AmongUsModTORplusDeployScript.ps1").Path
+          $bytes = [System.IO.File]::ReadAllBytes($psPath)
+          if (-not (($bytes[0] -eq 0xEF) -and ($bytes[1] -eq 0xBB) -and ($bytes[2] -eq 0xBF))) {
+            throw "AmongUsModTORplusDeployScript.ps1 must have UTF-8 BOM"
+          }
+          $errs = $null
+          $ast = [System.Management.Automation.Language.Parser]::ParseFile($psPath, [ref]$null, [ref]$errs)
+          if ($errs -and ($errs.Count -gt 0)) {
+            throw "PS1 ParseErrors: $($errs.Count)"
+          }
+
+          # 3. Validate Initialize-VersionManifest loads config/version_manifest.json cleanly
+          $loaderFn = $ast.FindAll({ param($n) ($n -is [System.Management.Automation.Language.FunctionDefinitionAst]) -and ($n.Name -eq "Initialize-VersionManifest") }, $true) | Select-Object -First 1
+          if (-not $loaderFn) {
+            throw "Initialize-VersionManifest function not found"
+          }
+          $env:AUMADS_USE_LOCAL_MANIFEST = "1"
+          $env:AUMADS_MANIFEST_JSON = ""
+          $Log = "CI "
+          . ([ScriptBlock]::Create($loaderFn.Extent.Text))
+          Initialize-VersionManifest
+          if ($script:prevtargetid0 -ne [string]$m.amongUs.prev0.manifestId) {
+            throw "Manifest loader prevtargetid0 mismatch"
+          }
+          Write-Host "[OK] All sanity checks passed."
+
+      - name: Commit and push updated manifest
+        if: ${{ inputs.dry_run != true }}
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          $status = git status --porcelain config/version_manifest.json
+          if ([string]::IsNullOrWhiteSpace($status)) {
+            Write-Host "No changes to commit."
+            "changed=false" >> $env:GITHUB_OUTPUT
+          } else {
+            git add config/version_manifest.json
+            $verSummary = (Get-Content "config/version_manifest.json" -Raw -Encoding UTF8 | ConvertFrom-Json).amongUs.latest
+            git commit -m "chore(manifest): auto-update version manifest ($($verSummary.major) / $($verSummary.gameVer)) [skip ci]"
+            git push
+            "changed=true" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Write job summary
+        if: always()
+        shell: pwsh
+        run: |
+          $log = if (Test-Path "$env:RUNNER_TEMP\updater_log.txt") { Get-Content "$env:RUNNER_TEMP\updater_log.txt" -Raw -Encoding UTF8 } else { "No log" }
+          $summary = "### Version Manifest Auto-Update Summary`n``````text`n$log`n``````"
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding UTF8
