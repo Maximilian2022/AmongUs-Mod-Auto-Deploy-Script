@@ -24,17 +24,18 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
       - name: Run version manifest updater
         id: updater
+        shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -42,9 +43,8 @@ jobs:
           if ("${{ inputs.dry_run }}" -eq "true") {
             $argsList += "--dry-run"
           }
-          $output = & python @argsList 2>&1 | Out-String
-          Write-Host $output
-          $output | Out-File -FilePath "$env:RUNNER_TEMP\updater_log.txt" -Encoding utf8
+          & python @argsList 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP\updater_log.txt"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Validate JSON and PowerShell manifest loading
         shell: pwsh

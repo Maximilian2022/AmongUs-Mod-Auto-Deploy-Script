@@ -7,7 +7,9 @@ lastruntime.txt
 *.log
 *.log.*
 logs/
-scripts/
+/scripts/
+__pycache__/
+*.pyc
 *.transcript.txt
 
 # --- ダウンロード・アーカイブ・一時展開キャッシュ ---
