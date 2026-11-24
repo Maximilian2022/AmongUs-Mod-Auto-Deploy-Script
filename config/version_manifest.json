@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-11T00:00:00Z",
+  "updatedAt": "2026-11-24T22:50:46Z",
   "amongUs": {
     "latest": {
       "major": "v19",
@@ -90,7 +90,7 @@
       "latest": "110",
       "prev0": "109",
       "prev1": "107",
-      "fallbackTag": "v3.5.3.6",
+      "fallbackTag": "v3.7.2.1",
       "deprecated": false
     },
     "SRA": {
